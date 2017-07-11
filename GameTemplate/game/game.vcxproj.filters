@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\myEngine">
+      <UniqueIdentifier>{cf71c2d7-86a3-4324-b23c-562f3630fba6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\myEngine\Graphics">
+      <UniqueIdentifier>{06578e99-1462-452d-9e13-0656e1071d84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\myEngine\Physics">
+      <UniqueIdentifier>{24b08cc4-989a-4ce6-8812-a1108fd4dd90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\myEngine\HID">
+      <UniqueIdentifier>{eb51f13c-4c51-4798-b6cc-97f71ded64a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Map">
+      <UniqueIdentifier>{9f303c51-fcc3-4864-99e8-e84adfe0c377}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="myEngine\Graphics\SkinModelData.cpp">
+      <Filter>ソース ファイル\myEngine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="myEngine\Graphics\Animation.cpp">
+      <Filter>ソース ファイル\myEngine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="myEngine\Graphics\Camera.cpp">
+      <Filter>ソース ファイル\myEngine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="myEngine\Graphics\EffectManager.cpp">
+      <Filter>ソース ファイル\myEngine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="myEngine\Graphics\SkinModel.cpp">
+      <Filter>ソース ファイル\myEngine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="myEngine\Physics\RigidBody.cpp">
+      <Filter>ソース ファイル\myEngine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="myEngine\Physics\CapsuleCollider.cpp">
+      <Filter>ソース ファイル\myEngine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="myEngine\Physics\CharacterController.cpp">
+      <Filter>ソース ファイル\myEngine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="myEngine\Physics\MeshCollider.cpp">
+      <Filter>ソース ファイル\myEngine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="myEngine\Physics\Physics.cpp">
+      <Filter>ソース ファイル\myEngine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="myEngine\System.cpp">
+      <Filter>ソース ファイル\myEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="myEngine\HID\Pad.cpp">
+      <Filter>ソース ファイル\myEngine\HID</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>ソース ファイル\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="MapChip.cpp">
+      <Filter>ソース ファイル\Map</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="game.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="myEngine\Graphics\SkinModelData.h">
+      <Filter>ソース ファイル\myEngine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="myEngine\Graphics\Animation.h">
+      <Filter>ソース ファイル\myEngine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="myEngine\Graphics\Camera.h">
+      <Filter>ソース ファイル\myEngine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="myEngine\Graphics\EffectManager.h">
+      <Filter>ソース ファイル\myEngine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="myEngine\Graphics\Light.h">
+      <Filter>ソース ファイル\myEngine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="myEngine\Graphics\SkinModel.h">
+      <Filter>ソース ファイル\myEngine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="myEngine\Physics\Physics.h">
+      <Filter>ソース ファイル\myEngine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="myEngine\Physics\RigidBody.h">
+      <Filter>ソース ファイル\myEngine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="myEngine\Physics\CapsuleCollider.h">
+      <Filter>ソース ファイル\myEngine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="myEngine\Physics\CharacterController.h">
+      <Filter>ソース ファイル\myEngine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="myEngine\Physics\CollisionAttr.h">
+      <Filter>ソース ファイル\myEngine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="myEngine\Physics\ICollider.h">
+      <Filter>ソース ファイル\myEngine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="myEngine\Physics\MeshCollider.h">
+      <Filter>ソース ファイル\myEngine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="myEngine\system.h">
+      <Filter>ソース ファイル\myEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="myEngine\HID\Pad.h">
+      <Filter>ソース ファイル\myEngine\HID</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MapChip.h">
+      <Filter>ソース ファイル\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>ソース ファイル\Map</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,136 @@
+fileFormatVersion: 2
+guid: ca24370b909b8914baacc098afbbc5d5
+timeCreated: 1487579146
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Building_a
+    100002: Building_b
+    100004: Building_e
+    100006: commanders_hill
+    100008: //RootNode
+    100010: Cube
+    100012: Cube_003
+    100014: Fence_a
+    100016: Fence_c
+    100018: Plane001
+    100020: Plane001_MeshPart0
+    100022: Plane001_MeshPart1
+    100024: Staircase_1
+    100026: Well
+    400000: Building_a
+    400002: Building_b
+    400004: Building_e
+    400006: //RootNode
+    400008: commanders_hill
+    400010: Cube
+    400012: Cube_003
+    400014: Fence_a
+    400016: Fence_c
+    400018: Plane001
+    400020: Plane001_MeshPart0
+    400022: Plane001_MeshPart1
+    400024: Staircase_1
+    400026: Well
+    2300000: Building_a
+    2300002: Building_b
+    2300004: Building_e
+    2300006: commanders_hill
+    2300008: Cube
+    2300010: Cube_003
+    2300012: Fence_a
+    2300014: Plane001_MeshPart0
+    2300016: Plane001_MeshPart1
+    2300018: Staircase_1
+    2300020: Well
+    2300022: //RootNode
+    3300000: Building_a
+    3300002: Building_b
+    3300004: Building_e
+    3300006: commanders_hill
+    3300008: Cube
+    3300010: Cube_003
+    3300012: Fence_a
+    3300014: Plane001_MeshPart0
+    3300016: Plane001_MeshPart1
+    3300018: Staircase_1
+    3300020: Well
+    3300022: //RootNode
+    4300000: Cube_003
+    4300002: Staircase_1
+    4300004: Plane001_MeshPart0
+    4300006: Plane001_MeshPart1
+    4300008: Building_a
+    4300010: Building_b
+    4300012: Building_e
+    4300014: Well
+    4300016: Fence_a
+    4300018: Cube
+    4300020: commanders_hill
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
