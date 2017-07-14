@@ -9,7 +9,8 @@
 #include "Bullet.h"
 #include "Enemy.h"
 #include "Map.h"
-
+//#include "IGameObject.h"
+//#include "GameObjectManager.h"
 
 /*!
  * @brief	ゲームクラス。
@@ -42,15 +43,20 @@ public:
 		return &camera;
 	}
 
-	Bullet* GetBullet()
+	/*Bullet* GetBullet()
 	{
 		return &bullet;
-	}
+	}*/
 
 	Player* GetPlayer()
 	{
 		return &player;
 	}
+
+	/*Enemy* GetEnemy()
+	{
+		return &enemy;
+	}*/
 	void AddBullets(Bullet* bullet)
 	{
 
@@ -61,14 +67,21 @@ public:
 	{
 		return Bullets;
 	}
+
+	std::vector<Enemy*>& Getenem()
+	{
+		return enem;
+	}
 private:
 	D3DXVECTOR3 toCameraPos;
 	Camera camera;
 	Player player;
-	Enemy enemy;
+	//Enemy enemy;
 	Map map;
-	Bullet bullet;
+	//Bullet bullet;
+	//GameObjectManager GoMgr;
 	std::vector<Bullet*> Bullets;
+	std::vector<Enemy*> enem;
 };
 
 extern Game* game;

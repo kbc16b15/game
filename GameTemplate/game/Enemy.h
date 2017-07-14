@@ -1,34 +1,52 @@
 #pragma once
 
 #include "myEngine/Physics/CharacterController.h"
-class Enemy
+//#include "IGameObject.h"
+
+class Enemy/*:public IGameObject*/
 {
 public:
 	Enemy();
 	~Enemy();
-	void Start(D3DXVECTOR3 pos);
+	void Start(D3DXVECTOR3 pos,int No);
 	void Update();
 	void Move();
-	void Render();
+	void Draw();
 	void EnemyBullet();
+	void Dead();
 
 	D3DXVECTOR3 Getpos()
 	{
 		return position;
 	}
 
+
+	bool GetDeathflg()
+	{
+		return IsDeath;
+	}
+
+	bool GetDeadflg()
+	{
+		return IsDead;
+	}
+
+	int GetNo()
+	{
+		return Enemynum;
+	}
+private:
+
 	void Setpos(D3DXVECTOR3 pos)
 	{
 		position = pos;
 	}
-
-private:
 	enum EnemyMove
 	{
-		left,
-		right,
+		UP,
+		DOWN,
 	};
-	EnemyMove			move = left;
+	EnemyMove			move = UP;
 	SkinModel			skinModel;
 	SkinModelData		skinModelData;
 
@@ -38,10 +56,12 @@ private:
 	CharacterController	characterController;
 	Light				light;
 
-	int					BulletTime = 60;
+	int					BulletTime = 80;
+	int					Enemynum = 0;
+	int					bulletnum = 3;
 
 	bool				IsDead = false;
-
+	bool				IsDeath = false;
 
 };
 

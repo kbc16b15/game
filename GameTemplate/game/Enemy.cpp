@@ -12,8 +12,9 @@ Enemy::~Enemy()
 {
 }
 
-void Enemy::Start(D3DXVECTOR3 pos)
+void Enemy::Start(D3DXVECTOR3 pos,int No)
 {
+	Enemynum = No;
 	position = pos;
 	light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
 	skinModelData.LoadModelData("Assets/modelData/Enemy.X", NULL);
@@ -40,74 +41,80 @@ void Enemy::Update()
 
 	EnemyBullet();
 	Move();
-	D3DXQUATERNION addRot;
 
-	D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 0.1f);
-	rotation *= addRot;
+	//D3DXQUATERNION addRot;
+	//D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 0.1f);
+	//rotation *= addRot;
 
-	D3DXVECTOR3 toPos;
-	position.y += 1.0f;
-	D3DXVec3Subtract(&toPos, &position, &game->GetPlayer()->Getpos());
+	D3DXVECTOR3 toPos=position;
+	toPos.y += 1.0f;
+	D3DXVec3Subtract(&toPos, &toPos, &game->GetPlayer()->Getpos());
 	float len = D3DXVec3Length(&toPos);
-
-	if (len < 1.0f)
+	if (len < 0.5f&&!IsDead)
 	{
 		game->GetPlayer()->SetJumpflg(true);
 		IsDead = true;
 	}
-	position.y -= 1.0f;
 
-	if(IsDead)
-	{
-		position.y -= 0.02f;
-	}
-	skinModel.UpdateWorldMatrix(position, rotation/*D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0)*/, scale);
+	skinModel.UpdateWorldMatrix(position, /*rotation*/D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0), scale);
+	Dead();
 }
 
 void Enemy::Move()
 {
+	if (IsDead) { return; }
 	switch (move)
 	{
-	case left:
-		position.x += 0.05f;
+	case UP:
+		position.y += 0.02f;
 		break;
-	case right:
-		position.x -= 0.05f;
+	case DOWN:
+		position.y += -0.02f;
 		break;
 	}
-	if (position.x <-8.0f)
+	if (position.y <3.0f)
 	{
-		move = left;
+		move =UP;
 	}
-	else if (position.x>0.0)
+	if (position.y>6.0f)
 	{
-		move = right;
+		move = DOWN;
 	}
 }
 
 void Enemy::EnemyBullet()
 {
+	D3DXVECTOR3 pos=game->GetPlayer()->Getpos();
+	//D3DXVec3Subtract(&pos, &position, &game->GetPlayer()->Getpos());
+	//float length = D3DXVec3Length(&pos);
+	if (pos.x<=position.x) { return; }	//プレイヤーが左側にいる時だけ？
 	if (IsDead) { return; }
-	//std::list<Bullet*>& Blist = game->GetBullets();
-	//for (auto bullet : Blist)
-	//{
-
-	//}
-
+	
 	BulletTime--;
-	if (BulletTime < 0)
+	if (BulletTime < 0/*&&bulletnum>-1*/)
 	{
-		//std::vector<Bullet*> bulletstl = game->GetBullets();
 		Bullet* bullet = new Bullet();
 		position.y += 0.5f;
-		bullet->Start(position);
+		bullet->Start(position,Enemynum);
 		position.y -= 0.5f;
 		game->AddBullets(bullet);
-		BulletTime = 60;
+		BulletTime = 80;
+		bulletnum--;
 	}
 }
 
-void Enemy::Render()
+void Enemy::Dead()
+{
+	if (!IsDead){ return; }
+	position.y -= 0.02f;
+	if (position.y < -4.0f)
+	{
+		IsDeath = true;
+	}
+
+}
+
+void Enemy::Draw()
 {
 	skinModel.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
 }

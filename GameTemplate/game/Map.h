@@ -1,7 +1,8 @@
 #pragma once
+//#include "IGameObject.h"
 class MapChip;
 
-class Map
+class Map/*:public IGameObject*/
 {
 public:
 	Map();

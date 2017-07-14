@@ -2,15 +2,15 @@
 
 #include "myEngine/Physics/CharacterController.h"
 #include "myEngine\HID\Pad.h"
-
-class Player
+//#include "IGameObject.h"
+class Player/*:public IGameObject*/
 {
 public:
 	Player();
 	~Player();
 	void Start();
 	void Update();
-	void Render();
+	void Draw();
 	void AnimationSet();
 	void move();
 	void Key();

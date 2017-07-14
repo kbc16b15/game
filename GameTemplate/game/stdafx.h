@@ -8,6 +8,7 @@
 #include <memory>
 #include <vector>
 #include <list>
+#include <algorithm>
 #include <map>
 
 #include "btBulletDynamicsCommon.h"

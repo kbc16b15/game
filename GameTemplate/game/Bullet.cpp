@@ -2,22 +2,26 @@
 #include "game.h"
 #include "Bullet.h"
 
+//SkinModelData* Bullet::skinModelData = NULL;
 
 Bullet::Bullet()
 {
+	
 }
 
 
 Bullet::~Bullet()
 {
+	//delete skinModelData;
+	//skinModelData = NULL;
 }
 
-void Bullet::Start(D3DXVECTOR3 pos)
+void Bullet::Start(D3DXVECTOR3 pos,int No)
 {
+	Number = No;
 	position = pos;
 	light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
 	skinModelData.LoadModelData("Assets/modelData/Bullet.X", NULL);
-	skinModel.Init(&skinModelData);
 
 	//ライトを初期化。
 	light.SetDiffuseLightDirection(0, D3DXVECTOR4(0.707f, 0.0f, -0.707f, 1.0f));
@@ -31,56 +35,97 @@ void Bullet::Start(D3DXVECTOR3 pos)
 	light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
 	light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
 
-	skinModel.SetLight(&light);
+	
 	targetpos = game->GetPlayer()->Getpos();
+
+	//if (skinModelData == NULL) {
+	//	//モデルをロード。
+	//	skinModelData = new SkinModelData;
+	//	skinModelData->LoadModelData("Assets/model/Bullet.X", NULL);
+	//}
+	skinModel.Init(&skinModelData);
+	skinModel.SetLight(&light);
+	//direction = { 0.0f, 0.0f, 1.0f };
 
 	//float PI = 3.14159265358979323846f;
 	//float angle = ((rand() % 100) - 50) / 50.0f;
 	//angle *= PI;
 
-	/*D3DXVECTOR3 direction;
-	D3DXMATRIX matrix = skinModel.GetOrgMeshFirst;
-	D3DXMatrixRotationY(&matrix, angle);
-	direction.x = matrix.m[2][0];
-	direction.y = matrix.m[2][1];
-	direction.z = matrix.m[2][2];*/
+	//
+	//D3DXMATRIX matrix;
+	//D3DXMatrixRotationY(&matrix, angle);
+	//direction.x = matrix.m[2][0];
+	//direction.y = matrix.m[2][1];
+	//direction.z = matrix.m[2][2];
+	//D3DXQuaternionRotationAxis(&rotation, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), angle);
+
 }
 
 void Bullet::Update()
 {
+	
 
-	//D3DXVec3Normalize(&direction, &direction);
-	//D3DXVECTOR3 Pos;
-	//D3DXVec3Subtract(&Pos, &game->GetPlayer()->Getpos(), &position);
-	//D3DXVec3Normalize(&Pos, &Pos);
-	//float angles = 0.0f;
-	//angles = D3DXVec3Dot(&direction,&direction);
-	//angles = acos(angles);
+	//std::vector<Enemy*>::iterator enemit;
+	/*for (enemit= enemstl.begin();enemit!=enemstl.end();enemit++)
+	{
+		if ()
+		{
+			enemit
+		}
+	}*/
+
+	//position += direction * 0.05f;
+	//D3DXVECTOR3 toPlayer =  position- game->GetPlayer()->Getpos();
+	//D3DXVec3Normalize(&toPlayer, &toPlayer);
+	//float angle = D3DXVec3Dot(&toPlayer, &direction);
+	//angle = acos(angle);
+
+	//D3DXVECTOR3 toPosition =  position- game->GetPlayer()->Getpos();
+	//float tolen=D3DXVec3Length(&toPosition);
 
 
+	//if (fabsf(angle)<D3DXToRadian(45.0f)&&tolen<3.0f)
+	//{
+	//	Hitflg = true;
+	//}
 	TargetBullet();
+
 	//position.x += 0.1f;
-	skinModel.UpdateWorldMatrix(position, D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0), scale);
+	skinModel.UpdateWorldMatrix(position,/* rotation*/D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0), scale);
 }
 
 void Bullet::TargetBullet()
 {
-
+	//追従バレット
 	D3DXVECTOR3 toPos = targetpos - position;
 	D3DXVec3Normalize(&toPos, &toPos);
-	position += toPos*0.05;
+	position += toPos*0.05f;
 	D3DXVECTOR3 Pos = targetpos - position;
 	float len = D3DXVec3Length(&Pos);
-
+	//直進バレット
+	//position.x += 0.1;
 	Btime--;
-	if (Btime < 0 || len<0.5f)
+	if (Btime < 0 || len<1.0f)
 	{
 		Bulletflg = false;
-		Btime = 200;
+		/*std::vector<Enemy*> enemstl = game->Getenem();
+		for (auto enemy : enemstl)
+		{
+			if (enemy->GetNo() == Number)
+			{
+				position = enemy->Getpos();
+
+				if (enemy->GetDeadflg())
+				{
+					Bulletflg = false;
+				}
+			}
+		}*/
+		Btime = 90;
 	}
 }
 
-void Bullet::Render()
+void Bullet::Draw()
 {
 	skinModel.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
 }

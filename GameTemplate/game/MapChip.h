@@ -1,7 +1,7 @@
 #pragma once
 #include "myEngine/Physics/MeshCollider.h"
 #include "myEngine/Physics/RigidBody.h"
-
+//#include "IGameObject.h"
 //マップチップの配置情報。
 struct SMapChipLocInfo {
 	const char* modelName;		//モデル。
@@ -9,7 +9,7 @@ struct SMapChipLocInfo {
 	D3DXQUATERNION	rotation;		//回転。
 };
 
-class MapChip
+class MapChip/*:public IGameObject*/
 {
 public:
 	MapChip();

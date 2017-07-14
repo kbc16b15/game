@@ -252,10 +252,10 @@ void Player::Key()
 
 	}
 
-	if (GetAsyncKeyState('I') && !characterController.IsJump()) {
+	/*if (GetAsyncKeyState('I') && !characterController.IsJump()) {
 
 		game->GetBullet()->Setpos({ 0.0f,0.0f,0.0f });
-	}
+	}*/
 }
 
 void Player::BulletHit()
@@ -270,9 +270,11 @@ void Player::BulletHit()
 		D3DXVec3Subtract(&toPos, &Bulletpos, &characterController.GetPosition());
 
 		float Attacklen = D3DXVec3Length(&toPos);
-		if (Attacklen < 1.0f)
+
+		if (/*game->GetBullet()->GetHitflg()*/Attacklen<1.0f)
 		{
-			characterController.SetPosition({ 0.0f, 0.0f, 0.0f });
+			//characterController.SetPosition({ 0.0f, 0.0f, 0.0f});
+			//game->GetBullet()->SetHitflg(false);
 		}
 
 		//プレイヤーとバレットの上の当たり判定
@@ -288,9 +290,9 @@ void Player::BulletHit()
 			//ジャンプしたことをキャラクタコントローラーに通知。
 			characterController.Jump();
 			JumpTime = 80;
-			D3DXVECTOR3 Addpos = { -10.0f,2.0f,0.0 };
-			D3DXVec3Add(&Addpos, &Addpos, &bullet->Getpos());
-			game->GetBullet()->Setpos(Addpos);
+			//D3DXVECTOR3 Addpos = { -10.0f,2.0f,0.0 };
+			//D3DXVec3Add(&Addpos, &Addpos, &bullet->Getpos());
+			//game->GetBullet()->Setpos(Addpos);
 			Isjump = true;
 		}
 
@@ -308,7 +310,7 @@ void Player::BulletHit()
 	}
 }
 
-void Player::Render()
+void Player::Draw()
 {
 	skinModel.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
 
