@@ -12,6 +12,7 @@ Player::Player()
 Player::~Player()
 {
 	delete pad;
+	characterController.RemoveRigidBoby();
 }
 
 void Player::Start(){
@@ -33,7 +34,7 @@ void Player::Start(){
 	//キャラクタコントローラを初期化。
 
 	characterController.Init(0.3f, 0.2f, position);
-	characterController.SetGravity(-20.0f);	//重力強め。
+	characterController.SetGravity(-15.0f);
 
 	animation.PlayAnimation(Stand, 0.3f);
 	//animation.SetAnimationLoopFlag(Jump, false);
@@ -49,12 +50,12 @@ void Player::Update()
 
 	//キャラクタが動く速度を設定。
 	characterController.SetMoveSpeed(moveSpeed);
-
+	//characterController.SetPosition(characterController.GetPosition());
 	//キャラクタコントローラーを実行。
 	characterController.Execute();
 	move();
 	AnimationSet();
-
+	DamageTime--;
 	skinModel.UpdateWorldMatrix(characterController.GetPosition(), rotation, scale);
 
 	
@@ -73,11 +74,17 @@ void Player::move()
 	//moveXZ.y = 0.0f;
 
 
-	if (GetAsyncKeyState('J') && animation.GetNumAnimationSet() != Jump)
-	{
-		Isjump = true;
-	}
-	else if (moveSpeed.x != 0.0f || moveSpeed.z != 0.0f)
+	//if (/*GetAsyncKeyState('J')*/pad->IsTrigger(pad->enButtonA) && animation.GetNumAnimationSet() != Jump)
+	//{
+	//	Isjump = true;
+	//}
+	//else
+	//{
+	//	Isjump = false;
+	//}
+
+
+	if (moveSpeed.x != 0.0f || moveSpeed.z != 0.0f)
 	{
 		Ismove = true;
 
@@ -108,7 +115,7 @@ void Player::AnimationSet()
 	}
 	if (JumpTime <= 0)
 	{
-		JumpTime = 75;
+		JumpTime = 85;
 		Isrun = true;
 		Isjump = false;
 	}
@@ -191,7 +198,7 @@ void Player::Key()
 
 	D3DXQUATERNION addRot = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
 
-	if (GetAsyncKeyState(VK_DOWN) && GetAsyncKeyState(VK_RIGHT) || pad->GetLStickXF()>0.0f&&pad->GetLStickYF()<0.0f) {
+	/*if (GetAsyncKeyState(VK_DOWN) && GetAsyncKeyState(VK_RIGHT) || pad->GetLStickXF()>0.0f&&pad->GetLStickYF()<0.0f) {
 		fMoveSpeed = 4.0f;
 		moveSpeed.x = -fMoveSpeed;
 		moveSpeed.z = fMoveSpeed;
@@ -218,24 +225,47 @@ void Player::Key()
 		moveSpeed.z = -fMoveSpeed;
 		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 10.0f);
 		rotation = addRot;
-	}
-	else if (pad->GetLStickXF()<0.0f) {//左方向
+	}*/
+	//if (pad->GetLStickXF()<0.0f) {//左方向
+	//	moveSpeed.x = fMoveSpeed;
+	//	D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), -5.0f);
+	//	rotation = addRot;
+
+	//}
+	//else if(pad->GetLStickXF()>0.0f) {//右方向
+	//	moveSpeed.x = -fMoveSpeed;
+	//	D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 5.0f);
+	//	rotation = addRot;
+	//}
+	//else if(pad->GetLStickYF()>0.0f) {//上方向
+	//	moveSpeed.z = -fMoveSpeed;
+	//	D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 60.0f);
+	//	rotation = addRot;
+	//}
+	//else if(pad->GetLStickYF()<0.0f){//下方向
+
+	//	moveSpeed.z = fMoveSpeed;
+	//	D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 0.0f);
+	//	rotation = addRot;
+	//}
+
+	if (pad->IsPress(pad->enButtonLeft)) {//左方向
 		moveSpeed.x = fMoveSpeed;
 		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), -5.0f);
 		rotation = addRot;
-
 	}
-	else if (pad->GetLStickXF()>0.0f) {//右方向
+	else if (pad->IsPress(pad->enButtonRight)) {//右方向
 		moveSpeed.x = -fMoveSpeed;
 		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 5.0f);
 		rotation = addRot;
+		
 	}
-	else if (pad->GetLStickYF()>0.0f) {//上方向
+	else if (pad->IsPress(pad->enButtonUp)) {//上方向
 		moveSpeed.z = -fMoveSpeed;
 		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 60.0f);
 		rotation = addRot;
 	}
-	else if (pad->GetLStickYF()<0.0f) {//下方向
+	else if (pad->IsPress(pad->enButtonDown)) {//下方向
 
 		moveSpeed.z = fMoveSpeed;
 		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 0.0f);
@@ -243,13 +273,12 @@ void Player::Key()
 	}
 
 
-	if (GetAsyncKeyState('J') &&!characterController.IsJump()) {
+	if (pad->IsTrigger(pad->enButtonA)&&!characterController.IsJump() /*&& animation.GetNumAnimationSet() != Jump*/) {
 		//ジャンプ
 		moveSpeed.y = 9.0f;
 		//ジャンプしたことをキャラクタコントローラーに通知。
 		characterController.Jump();
-		//Isjump = true;
-
+		Isjump = true;
 	}
 
 	/*if (GetAsyncKeyState('I') && !characterController.IsJump()) {
@@ -260,7 +289,8 @@ void Player::Key()
 
 void Player::BulletHit()
 {
-	std::vector<Bullet*> bulletstl = game->GetBullets();
+
+	std::list<Bullet*> bulletstl = game->GetBullets();
 	for (auto bullet : bulletstl)
 	{
 		//プレイヤーとバレット前方の当たり判定
@@ -271,10 +301,14 @@ void Player::BulletHit()
 
 		float Attacklen = D3DXVec3Length(&toPos);
 
-		if (/*game->GetBullet()->GetHitflg()*/Attacklen<1.0f)
+		if (/*game->GetBullet()->GetHitflg()*/Attacklen<0.5f&&DamageTime<0)
 		{
 			//characterController.SetPosition({ 0.0f, 0.0f, 0.0f});
-			//game->GetBullet()->SetHitflg(false);
+			bullet->SetHitflg(false);
+			game->Damage(1);
+			DamageTime = 300;
+			
+			
 		}
 
 		//プレイヤーとバレットの上の当たり判定

@@ -15,7 +15,6 @@ Game::Game()
 {
 	srand((unsigned int)time(NULL));
 
-
 }
 /*!
  * @brief	デストラクタ。
@@ -47,13 +46,19 @@ void Game::Start()
 	camera.SetFar(1000.0f);
 	camera.Update();
 	toCameraPos = camera.GetEyePt() - camera.GetLookatPt();
-
 	//プレイヤーを初期化。
 	player.Start();
-	//enemy.Start({ -20.0f,3.0f,0.0f });
 	//マップを初期化。
 	map.Init();
-
+	float pp = 0;
+	for (int i = 0;i < Hpnum;i++)
+	{
+		m_Hud[i].Addpos(pp);
+		m_Hud[i].Initialize();
+		pp += 100;
+		
+	}
+	CreateSprite();
 	//Player* pl = new Player();
 	//GoMgr.AddGameObject(pl);
 	//Enemy* en = new Enemy();
@@ -61,32 +66,27 @@ void Game::Start()
 	//Map* map = new Map();
 	//GoMgr.AddGameObject(map);
 
-	enem.reserve(10);
-	for (int i = 0; i < 10; i++) {
-		int Ran = rand() % 3;
-		Enemy* enemy = new Enemy;
-		enem.push_back(enemy);
-		float EZpos = 0.0f;
-		if (Ran == 0)
-		{
-			 EZpos = 0.0f;
-		}
-		else if(Ran == 1)
-		{
-			 EZpos =2.0f;
-		}
-		else if (Ran == 2)
-		{
-			EZpos = -2.0f;
-		}
-		enemy->Start(D3DXVECTOR3(-3.5f + 4.8f * -i, 7.0f, EZpos),i);
-	/*	for (int i = 0; i < 4; i++){
-			Bullet* bullet = new Bullet;
-			Bullets.push_back(bullet);
-
-			bullet->Start(enemy->Getpos(),i);
-		}*/
-	}
+//	enem.reserve(10);
+//	for (int i = 0; i < 5; i++) {
+//		int Ran = rand() % 3;
+//		Enemy* enemy = new Enemy;
+//		enem.push_back(enemy);
+//		float EZpos = 0.0f;
+//		float EXpos = 0.0f;
+//		if (Ran == 0)
+//		{
+//			 EZpos = 0.0f;
+//		}
+//		else if(Ran == 1)
+//		{
+//			 EZpos =2.0f;
+//		}
+//		else if (Ran == 2)
+//		{
+//			EZpos = -2.0f;
+//		}
+//		enemy->Start(D3DXVECTOR3(6.0f * -i, 4.0f, EZpos),i);
+//	}
 }
 /*!
  * @brief	更新。
@@ -104,7 +104,7 @@ void Game::Update()
 	}
 
 	auto bulletIt = Bullets.begin();
-	while (bulletIt != Bullets.end()) {
+	while (bulletIt != Bullets.end()){
 		if (!(*bulletIt)->GetBulletflg()) {
 			bulletIt = Bullets.erase(bulletIt);
 		}
@@ -113,7 +113,6 @@ void Game::Update()
 		}
 	}
 
-	player.Update();
 	for (auto enemy : enem)
 	{
 		enemy->Update();
@@ -129,19 +128,25 @@ void Game::Update()
 	{
 		targetPos.y = 0.0f;
 	}
+	
 	D3DXVECTOR3 eyePos = targetPos + toCameraPos;
 	camera.SetLookatPt(targetPos);
 	camera.SetEyePt(eyePos);
+	player.Update();
 	camera.Update();
 	//GoMgr.Update();
 	map.Update();
-
+	for (int i = 0;i < Hpnum;i++)
+	{
+		m_Hud[i].Update();
+	}
 }
 /*!
  * @brief	描画。
  */
 void Game::Render()
 {
+	
 	//GoMgr.Draw();
 	player.Draw();
 	for (auto enemy : enem)
@@ -153,4 +158,19 @@ void Game::Render()
 	{
 		bullet->Draw();
 	}
+	for (int i = 0;i < Hpnum;i++)
+	{
+		m_Hud[i].Draw(m_Sprite);
+	}
+}
+
+
+HRESULT Game::CreateSprite()
+{
+	if (FAILED(D3DXCreateSprite(g_pd3dDevice, &m_Sprite)))
+	{
+		MessageBox(0, TEXT("スプライト作成失敗"), NULL, MB_OK);
+		return E_FAIL;//失敗返却
+	}
+	return S_OK;
 }

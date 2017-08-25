@@ -5,7 +5,7 @@ class Bullet/*:public IGameObject*/
 public:
 	Bullet();
 	~Bullet();
-	void Start(D3DXVECTOR3 pos,int No);
+	void Start(D3DXVECTOR3 pos/*,int No*/);
 	void Update();
 	void Draw();
 	void TargetBullet();
@@ -38,13 +38,15 @@ private:
 
 	SkinModel			skinModel;
 	SkinModelData		skinModelData;
+	//static SkinModelData* ModelData;
+	
 	D3DXVECTOR3			position = { 0.0f,0.0f,0.0f };
 	D3DXVECTOR3			scale = { 0.3f,0.3f,0.3f };
 	D3DXQUATERNION		rotation=D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0);
 
 	Light				light;
 
-	int					Btime = 200;
+	int					Btime = 300;
 	//int				bulletnumber = 0;
 	bool				Bulletflg = true;
 	bool				Hitflg = false;

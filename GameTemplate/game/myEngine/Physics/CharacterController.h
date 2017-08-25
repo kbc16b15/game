@@ -5,6 +5,7 @@
 #pragma once
 
 #include "myEngine/Physics/CapsuleCollider.h"
+#include "myEngine/Physics/MeshCollider.h"
 #include "myEngine/Physics/RigidBody.h"
 
 /*!
@@ -81,9 +82,9 @@ public:
 	/*!
 	* @brief	コライダーを取得。
 	*/
-	CapsuleCollider* GetCollider()
+	/*CapsuleCollider**/MeshCollider* GetCollider()
 	{
-		return &m_collider;
+		return &m_mcollider;
 	}
 	/*!
 	* @brief	重力を取得。
@@ -109,6 +110,7 @@ private:
 	bool 				m_isJump = false;				//ジャンプ中？
 	bool				m_isOnGround = true;			//地面の上にいる？
 	CapsuleCollider		m_collider;						//コライダー。
+	MeshCollider		m_mcollider;
 	float				m_radius = 0.0f;
 	float				m_height = 0.0f;		
 	RigidBody			m_rigidBody;					//剛体。

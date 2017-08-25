@@ -10,11 +10,13 @@ Enemy::Enemy()
 
 Enemy::~Enemy()
 {
+	
 }
 
-void Enemy::Start(D3DXVECTOR3 pos,int No)
+void Enemy::Start(D3DXVECTOR3 pos/*,int No*/)
 {
-	Enemynum = No;
+
+	//Enemynum = No;
 	position = pos;
 	light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
 	skinModelData.LoadModelData("Assets/modelData/Enemy.X", NULL);
@@ -32,6 +34,10 @@ void Enemy::Start(D3DXVECTOR3 pos,int No)
 	light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
 	light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
 
+	//characterController.Init(0.5f, 0.3f, position);
+
+	//characterController.SetGravity(0.0f);
+
 	skinModel.SetLight(&light);
 
 }
@@ -39,6 +45,8 @@ void Enemy::Start(D3DXVECTOR3 pos,int No)
 void Enemy::Update()
 {
 
+	//characterController.SetMoveSpeed(moveSpeed);
+	//characterController.Execute();
 	EnemyBullet();
 	Move();
 
@@ -55,24 +63,34 @@ void Enemy::Update()
 		game->GetPlayer()->SetJumpflg(true);
 		IsDead = true;
 	}
-
-	skinModel.UpdateWorldMatrix(position, /*rotation*/D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0), scale);
+	
+	skinModel.UpdateWorldMatrix(/*characterController.GetPosition()*/position, /*rotation*/D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0), scale);
 	Dead();
 }
 
 void Enemy::Move()
 {
+	
 	if (IsDead) { return; }
-	switch (move)
-	{
-	case UP:
-		position.y += 0.02f;
-		break;
-	case DOWN:
-		position.y += -0.02f;
-		break;
-	}
-	if (position.y <3.0f)
+
+	//moveSpeed = characterController.GetMoveSpeed();
+	//if (Enemynum == 1 || Enemynum == 3)//移動するエネミー番号
+	//{
+	//	switch (move)
+	//	{
+	//	case UP:
+	//		//moveSpeed.y = 0.7f;
+	//		position.y += 0.02f;
+	//		break;
+	//	case DOWN:
+	//		//moveSpeed.y = -0.7f;
+	//		position.y += -0.02f;
+	//		break;
+	//	}
+	//}
+
+	//position = characterController.GetPosition();
+	if (position.y<2.0f)
 	{
 		move =UP;
 	}
@@ -86,35 +104,42 @@ void Enemy::EnemyBullet()
 {
 	D3DXVECTOR3 pos=game->GetPlayer()->Getpos();
 	//D3DXVec3Subtract(&pos, &position, &game->GetPlayer()->Getpos());
+	//pos = position - pos;
 	//float length = D3DXVec3Length(&pos);
-	if (pos.x<=position.x) { return; }	//プレイヤーが左側にいる時だけ？
+	if (pos.x<position.x){ return; }//プレイヤーが左側にいる時だけ？
 	if (IsDead) { return; }
 	
 	BulletTime--;
 	if (BulletTime < 0/*&&bulletnum>-1*/)
 	{
 		Bullet* bullet = new Bullet();
-		position.y += 0.5f;
-		bullet->Start(position,Enemynum);
-		position.y -= 0.5f;
+		//position.y += 0.5f;
+		//bullet->Start(position,Enemynum);
+		bullet->Start(position);
+		//position.y -= 0.5f;
 		game->AddBullets(bullet);
-		BulletTime = 80;
-		bulletnum--;
+		BulletTime = 150;
+		//bulletnum--;
 	}
 }
 
-void Enemy::Dead()
-{
-	if (!IsDead){ return; }
-	position.y -= 0.02f;
-	if (position.y < -4.0f)
-	{
-		IsDeath = true;
-	}
-
-}
 
 void Enemy::Draw()
 {
 	skinModel.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
+}
+
+void Enemy::Dead()
+{
+	if (!IsDead) { return; }
+	position.y -= 0.02f;
+	DeadTime--;
+	if (DeadTime<0)
+	{
+		//characterController.RemoveRigidBoby();
+		IsDeath = true;
+	}
+
+	//IsDeath = true;
+
 }

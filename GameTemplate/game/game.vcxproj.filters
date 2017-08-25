@@ -90,6 +90,15 @@
     <ClCompile Include="MapChip.cpp">
       <Filter>ソース ファイル\Map</Filter>
     </ClCompile>
+    <ClCompile Include="MoveObject.cpp">
+      <Filter>ソース ファイル\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>ソース ファイル\myEngine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -157,6 +166,15 @@
     </ClInclude>
     <ClInclude Include="Map.h">
       <Filter>ソース ファイル\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveObject.h">
+      <Filter>ソース ファイル\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="myEngine\Graphics\Sprite.h">
+      <Filter>ソース ファイル\myEngine\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 #pragma once
 //#include "IGameObject.h"
 class MapChip;
+class MoveObject;
 
 class Map/*:public IGameObject*/
 {
@@ -12,4 +13,6 @@ public:
 	void Update();
 private:
 	std::vector<MapChip*>	mapChipList;	//マップチップのリスト。
+	std::vector<MoveObject*> moveList;
+
 };

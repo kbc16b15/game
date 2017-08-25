@@ -49,7 +49,8 @@ private:
 	Pad*				pad;
 
 	bool				Jumpflg = false;
-	//Bullet			bullet;
-	int JumpTime = 75;
+	int					JumpTime = 75;
+	int					DamageTime = 0;
+	
 };
 

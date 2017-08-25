@@ -156,9 +156,11 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapChip.cpp" />
+    <ClCompile Include="MoveObject.cpp" />
     <ClCompile Include="myEngine\Graphics\Animation.cpp" />
     <ClCompile Include="myEngine\Graphics\Camera.cpp" />
     <ClCompile Include="myEngine\Graphics\EffectManager.cpp" />
@@ -172,6 +174,7 @@
     <ClCompile Include="myEngine\Physics\RigidBody.cpp" />
     <ClCompile Include="myEngine\System.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -183,14 +186,17 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapChip.h" />
+    <ClInclude Include="MoveObject.h" />
     <ClInclude Include="myEngine\Graphics\Animation.h" />
     <ClInclude Include="myEngine\Graphics\Camera.h" />
     <ClInclude Include="myEngine\Graphics\EffectManager.h" />
     <ClInclude Include="myEngine\Graphics\Light.h" />
     <ClInclude Include="myEngine\Graphics\SkinModel.h" />
     <ClInclude Include="myEngine\Graphics\SkinModelData.h" />
+    <ClInclude Include="myEngine\Graphics\Sprite.h" />
     <ClInclude Include="myEngine\HID\Pad.h" />
     <ClInclude Include="myEngine\Physics\CapsuleCollider.h" />
     <ClInclude Include="myEngine\Physics\CharacterController.h" />

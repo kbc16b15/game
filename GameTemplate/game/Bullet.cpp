@@ -2,23 +2,22 @@
 #include "game.h"
 #include "Bullet.h"
 
-//SkinModelData* Bullet::skinModelData = NULL;
+//SkinModelData* Bullet::ModelData = NULL;
 
 Bullet::Bullet()
 {
 	
 }
 
-
 Bullet::~Bullet()
 {
-	//delete skinModelData;
-	//skinModelData = NULL;
+	//delete ModelData;
+	//ModelData = NULL;
 }
 
-void Bullet::Start(D3DXVECTOR3 pos,int No)
+void Bullet::Start(D3DXVECTOR3 pos/*,int No*/)
 {
-	Number = No;
+	//Number = No;
 	position = pos;
 	light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
 	skinModelData.LoadModelData("Assets/modelData/Bullet.X", NULL);
@@ -35,13 +34,12 @@ void Bullet::Start(D3DXVECTOR3 pos,int No)
 	light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
 	light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
 
-	
 	targetpos = game->GetPlayer()->Getpos();
 
-	//if (skinModelData == NULL) {
+	//if (ModelData == NULL){
 	//	//モデルをロード。
-	//	skinModelData = new SkinModelData;
-	//	skinModelData->LoadModelData("Assets/model/Bullet.X", NULL);
+	//	ModelData = new SkinModelData;
+	//	ModelData->LoadModelData("Assets/modelData/Bullet.X", NULL);
 	//}
 	skinModel.Init(&skinModelData);
 	skinModel.SetLight(&light);
@@ -63,7 +61,6 @@ void Bullet::Start(D3DXVECTOR3 pos,int No)
 
 void Bullet::Update()
 {
-	
 
 	//std::vector<Enemy*>::iterator enemit;
 	/*for (enemit= enemstl.begin();enemit!=enemstl.end();enemit++)
@@ -92,6 +89,7 @@ void Bullet::Update()
 
 	//position.x += 0.1f;
 	skinModel.UpdateWorldMatrix(position,/* rotation*/D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0), scale);
+
 }
 
 void Bullet::TargetBullet()
@@ -102,10 +100,15 @@ void Bullet::TargetBullet()
 	position += toPos*0.05f;
 	D3DXVECTOR3 Pos = targetpos - position;
 	float len = D3DXVec3Length(&Pos);
+	/*if (targetpos == position||len<3.0f)
+	{
+		Btime = 0;
+	}*/
 	//直進バレット
 	//position.x += 0.1;
 	Btime--;
-	if (Btime < 0 || len<1.0f)
+	
+	if (Btime <= 0 || len<0.5f)
 	{
 		Bulletflg = false;
 		/*std::vector<Enemy*> enemstl = game->Getenem();
@@ -121,7 +124,7 @@ void Bullet::TargetBullet()
 				}
 			}
 		}*/
-		Btime = 90;
+		Btime = 300;
 	}
 }
 

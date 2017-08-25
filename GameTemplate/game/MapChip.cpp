@@ -15,11 +15,11 @@ MapChip::~MapChip()
 {
 	g_physicsWorld->RemoveRigidBody(&rigidBody);
 }
-void MapChip::Init(SMapChipLocInfo& locInfo)
+void MapChip::Init(/*SMapChipLocInfo& locInfo*/const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 {
 	//読み込むモデルのファイルパスを作成。
 	char modelPath[256];
-	sprintf(modelPath, "Assets/modelData/%s.x", locInfo.modelName);
+	sprintf(modelPath, "Assets/modelData/%s.x", /*locInfo.*/modelName);
 	//モデルをロード。
 	modelData.LoadModelData(modelPath, NULL);
 	//ロードしたモデルデータを使ってSkinModelを初期化。
@@ -38,19 +38,19 @@ void MapChip::Init(SMapChipLocInfo& locInfo)
 	light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
 
 	model.SetLight(&light);
-	position = locInfo.pos;
-	rotation = locInfo.rotation;
+	position =/* locInfo.*/pos;
+	rotation =/* locInfo.*/rot;
 
 	model.UpdateWorldMatrix(position, rotation, { 1.0f, 1.0f, 1.0f });
 	//ここから衝突判定絡みの初期化。
 	//スキンモデルからメッシュコライダーを作成する。
-	D3DXMATRIX* rootBoneMatrix = modelData.GetRootBoneWorldMatrix();
+	/*D3DXMATRIX**/ rootBoneMatrix = modelData.GetRootBoneWorldMatrix();
 	meshCollider.CreateFromSkinModel(&model, rootBoneMatrix);
 	//続いて剛体を作成する。
 	//まずは剛体を作成するための情報を設定。
-	RigidBodyInfo rbInfo;
-	rbInfo.collider = &meshCollider;	//剛体のコリジョンを設定する。
-	rbInfo.mass = 0.0f;					//質量を0にすると動かない剛体になる。
+
+	rbInfo.collider = &meshCollider;//剛体のコリジョンを設定する。
+	rbInfo.mass = 0.0f;				//質量を0にすると動かない剛体になる。
 	rbInfo.pos = position;
 	rbInfo.rot = rotation;
 	//剛体を作成。
@@ -59,9 +59,18 @@ void MapChip::Init(SMapChipLocInfo& locInfo)
 	g_physicsWorld->AddRigidBody(&rigidBody);
 
 }
+
 void MapChip::Update()
 {
 }
+
+void MapChip::MoveObject()
+{
+
+	model.UpdateWorldMatrix(position, rotation, { 1.0f,1.0f,1.0f, });
+
+}
+
 void MapChip::Draw()
 {
 	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
@@ -72,6 +81,7 @@ bool MapChip::Rend(bool Rendflg)
 	if (Rendflg)
 	{
 		Render = true;
+		
 	}
 	return Render;
 }
