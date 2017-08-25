@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Sprite.h"
+#include "myEngine\Graphics\Sprite.h"
 
 
 Sprite::Sprite()
@@ -9,7 +9,7 @@ Sprite::Sprite()
 
 Sprite::~Sprite()
 {
-	
+
 
 }
 
@@ -26,9 +26,9 @@ void Sprite::Initialize()
 
 void Sprite::SetupMatrices()
 {
+
 	D3DXMatrixIdentity(&m_transformMatrix);
 	D3DXMatrixTransformation2D(&m_transformMatrix, NULL, 0.0f, &m_scale, NULL, D3DXToRadian(m_angle), &m_position);
-
 
 }
 
@@ -36,7 +36,7 @@ void Sprite::Draw(LPD3DXSPRITE pSprite)
 {
 	pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 	pSprite->SetTransform(&m_transformMatrix);
-	pSprite->Draw(m_pTexture, &m_rect, &D3DXVECTOR3(m_texCenter.x, m_texCenter.y, 0.0f), NULL, m_backColor);
+	pSprite->Draw(m_pTexture, &m_rect, &D3DXVECTOR3(m_texCenter.x, m_texCenter.y, 0.0f), NULL, m_backColor);//テクスチャの位置
 	pSprite->End();
 
 }

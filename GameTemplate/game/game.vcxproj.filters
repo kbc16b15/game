@@ -93,11 +93,11 @@
     <ClCompile Include="MoveObject.cpp">
       <Filter>ソース ファイル\Map</Filter>
     </ClCompile>
-    <ClCompile Include="Sprite.cpp">
-      <Filter>ソース ファイル\myEngine\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="HUD.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="myEngine\Graphics\Sprite.cpp">
+      <Filter>ソース ファイル\myEngine\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
