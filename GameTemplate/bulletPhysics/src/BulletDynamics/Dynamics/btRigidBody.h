@@ -533,7 +533,6 @@ public:
 	}
 
 
-	
 
 	///perform implicit force computation in world space
 	btVector3 computeGyroscopicImpulseImplicit_World(btScalar dt) const;

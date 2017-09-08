@@ -34,7 +34,6 @@ void Map::Init()
 			mapChip->Init(mapChipInfo[i].modelName, mapChipInfo[i].pos, mapChipInfo[i].rotation);
 			//動的配列にプッシュ。
 			mapChipList.push_back(mapChip);
-
 			mapChip->Rend(true);
 		}
 		else if (strcmp(mapChipInfo[i].modelName, "MCube") == 0)
@@ -42,7 +41,6 @@ void Map::Init()
 
 			MoveObject* moveChip = new MoveObject;
 			//マップチップの情報を渡して初期化。
-
 			moveChip->Init(mapChipInfo[i].modelName, mapChipInfo[i].pos, mapChipInfo[i].rotation);
 			//動的配列にプッシュ。
 			moveList.push_back(moveChip);
@@ -54,7 +52,6 @@ void Map::Init()
 			Enemy* enemy = new Enemy;
 			game->AddEnemy(enemy);
 			enemy->Start(mapChipInfo[i].pos);
-
 
 		}
 		else {
@@ -75,14 +72,12 @@ void Map::Update()
 	//マップチップを一個ずつ更新。
 	for (int i = 0; i < mapChipList.size(); i++)
 	{
-
 		mapChipList[i]->Update();
 	
 	}
 
 	for (int i = 0; i < moveList.size(); i++)
 	{
-
 		moveList[i]->Update();
 
 	}
@@ -108,6 +103,5 @@ void Map::Draw()
 		moveList[i]->Draw();
 
 	}
-
 }
 

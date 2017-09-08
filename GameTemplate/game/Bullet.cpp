@@ -1,27 +1,27 @@
 #include "stdafx.h"
 #include "game.h"
 #include "Bullet.h"
+#include "CubeCollision.h"
 
-//SkinModelData* Bullet::ModelData = NULL;
+SkinModelData* Bullet::skinModelData = NULL;
 
 Bullet::Bullet()
 {
-	
+
 }
 
 Bullet::~Bullet()
 {
-	//delete ModelData;
-	//ModelData = NULL;
+	//delete skinModelData;
+	//skinModelData = NULL;
 }
 
-void Bullet::Start(D3DXVECTOR3 pos/*,int No*/)
+void Bullet::Start(D3DXVECTOR3 pos)
 {
+	
 	//Number = No;
 	position = pos;
-	light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
-	skinModelData.LoadModelData("Assets/modelData/Bullet.X", NULL);
-
+	//skinModelData.LoadModelData("Assets/modelData/Bullet.X", NULL);
 	//ライトを初期化。
 	light.SetDiffuseLightDirection(0, D3DXVECTOR4(0.707f, 0.0f, -0.707f, 1.0f));
 	light.SetDiffuseLightDirection(1, D3DXVECTOR4(-0.707f,0.0f,-0.707f,1.0f));
@@ -32,103 +32,108 @@ void Bullet::Start(D3DXVECTOR3 pos/*,int No*/)
 	light.SetDiffuseLightColor(1, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
 	light.SetDiffuseLightColor(2, D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
 	light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
+	light.SetAmbientLight(D3DXVECTOR4(0.8f, 0.8f, 0.8f, 1.0f));
 
 	targetpos = game->GetPlayer()->Getpos();
 
-	//if (ModelData == NULL){
-	//	//モデルをロード。
-	//	ModelData = new SkinModelData;
-	//	ModelData->LoadModelData("Assets/modelData/Bullet.X", NULL);
-	//}
-	skinModel.Init(&skinModelData);
+	if (skinModelData == NULL){
+		//モデルをロード。
+		
+		skinModelData = new SkinModelData;
+		skinModelData->LoadModelData("Assets/modelData/Bullet.X", NULL);
+	}
+	skinModel.Init(skinModelData);
 	skinModel.SetLight(&light);
+	
+	D3DXQuaternionRotationAxis(&rotation, &D3DXVECTOR3(0.0f, 1.0f, 0.0f),-5.0f);
 	//direction = { 0.0f, 0.0f, 1.0f };
 
-	//float PI = 3.14159265358979323846f;
-	//float angle = ((rand() % 100) - 50) / 50.0f;
-	//angle *= PI;
-
-	//
-	//D3DXMATRIX matrix;
-	//D3DXMatrixRotationY(&matrix, angle);
-	//direction.x = matrix.m[2][0];
-	//direction.y = matrix.m[2][1];
-	//direction.z = matrix.m[2][2];
-	//D3DXQuaternionRotationAxis(&rotation, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), angle);
-
+	//state = eState_Search;
 }
+
 
 void Bullet::Update()
 {
-
-	//std::vector<Enemy*>::iterator enemit;
-	/*for (enemit= enemstl.begin();enemit!=enemstl.end();enemit++)
-	{
-		if ()
-		{
-			enemit
-		}
-	}*/
-
-	//position += direction * 0.05f;
-	//D3DXVECTOR3 toPlayer =  position- game->GetPlayer()->Getpos();
-	//D3DXVec3Normalize(&toPlayer, &toPlayer);
-	//float angle = D3DXVec3Dot(&toPlayer, &direction);
-	//angle = acos(angle);
-
-	//D3DXVECTOR3 toPosition =  position- game->GetPlayer()->Getpos();
-	//float tolen=D3DXVec3Length(&toPosition);
-
-
-	//if (fabsf(angle)<D3DXToRadian(45.0f)&&tolen<3.0f)
+	//if (state == eState_Search)
 	//{
-	//	Hitflg = true;
+	//	const float PI = 3.14159265358979323846f;
+	//	float angle = ((rand() % 100) - 50) / 50.0f;
+	//	angle *= PI;
+
+	//	D3DXMATRIX matrix;
+	//	D3DXMatrixRotationY(&matrix, angle);
+	//	direction.x = matrix.m[2][0];
+	//	direction.y = matrix.m[2][1];
+	//	direction.z = matrix.m[2][2];
+
+
+
+	//	position += direction * 0.05f;
+	//	D3DXVECTOR3 toPlayer = position- game->GetPlayer()->Getpos() ;
+	//	D3DXVec3Normalize(&toPlayer, &toPlayer);
+	//	angle = D3DXVec3Dot(&toPlayer, &direction);
+	//	angle = acos(angle);
+
+	//	D3DXVECTOR3 toPosition = position - game->GetPlayer()->Getpos();
+	//	float tolen = D3DXVec3Length(&toPosition);
+
+	//	if (fabsf(angle) < D3DXToRadian(40.0f)&&tolen<1.0f)
+	//	{
+	//		state = eState_Find;
+	//		//Hitflg = true;
+	//	}
+
+	//	
+	//}
+	//else if(state==eState_Find)
+	//{
+	//	//Find = true;
+	//	//Bulletflg = false;
+	//	game->GetPlayer()->SetDamage();
+	//	Bulletflg = false;
 	//}
 	TargetBullet();
-
-	//position.x += 0.1f;
-	skinModel.UpdateWorldMatrix(position,/* rotation*/D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0), scale);
+	skinModel.UpdateWorldMatrix(position,rotation, scale);
 
 }
 
 void Bullet::TargetBullet()
 {
+
 	//追従バレット
-	D3DXVECTOR3 toPos = targetpos - position;
+	/*D3DXVECTOR3 toPos = targetpos - position;
 	D3DXVec3Normalize(&toPos, &toPos);
 	position += toPos*0.05f;
 	D3DXVECTOR3 Pos = targetpos - position;
 	float len = D3DXVec3Length(&Pos);
-	/*if (targetpos == position||len<3.0f)
+	if (targetpos == position||len<0.3f)
 	{
 		Btime = 0;
 	}*/
 	//直進バレット
-	//position.x += 0.1;
+	position.x += 0.1f;
 	Btime--;
-	
-	if (Btime <= 0 || len<0.5f)
+	CubeCollision Cubemass;
+	D3DXVECTOR3 Ppos = game->GetPlayer()->Getpos();
+	//バレットの当たり判定
+	if (Cubemass.Cubemass(position, Ppos, 0.3f, 0.3f))
+	{
+		game->GetPlayer()->SetDamage();
+		Bulletflg = false;
+	}
+
+
+	//バレットの寿命
+	if (Btime <= 0 /*|| len<0.5f*/)
 	{
 		Bulletflg = false;
-		/*std::vector<Enemy*> enemstl = game->Getenem();
-		for (auto enemy : enemstl)
-		{
-			if (enemy->GetNo() == Number)
-			{
-				position = enemy->Getpos();
-
-				if (enemy->GetDeadflg())
-				{
-					Bulletflg = false;
-				}
-			}
-		}*/
 		Btime = 300;
 	}
 }
 
 void Bullet::Draw()
 {
+	skinModel.UpdateWorldMatrix(position, rotation/*D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0)*/, scale);
+
 	skinModel.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
 }

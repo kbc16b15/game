@@ -12,8 +12,8 @@ class MoveObject
 public:
 	MoveObject();
 	~MoveObject();
-
-	void Init(/*SMapChipLocInfo& locInfo*/const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rotation);
+	void Start();
+	void Init(/*SMapChipLocInfo& locInfo*/const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rotation);
 	void Update();
 	void Draw();
 
@@ -21,29 +21,37 @@ public:
 	{
 		MState = mstate;
 	}*/
+	D3DXVECTOR3 Getpos()
+	{
+		return position;
+
+	}
+	bool GetRide()
+	{
+		return Rideflg;
+	}
+
+
 private:
 
-	bool Render = false;
-	SkinModel model;
-	SkinModelData modelData;
-	D3DXVECTOR3	position;
-	D3DXQUATERNION Rotation;
-	D3DXVECTOR3			moveSpeed = { 0.0f,0.0f,0.0f };
-	Light light;
-	MeshCollider meshCollider;	//メッシュコライダー
-	RigidBody rigidBody;		//剛体。
-
+	bool			Render = false;
+	SkinModel		model;
+	SkinModelData	modelData;
+	D3DXVECTOR3		position;
+	D3DXQUATERNION	Rotation;
+	D3DXVECTOR3		moveSpeed = { 0.0f,0.0f,0.0f };
+	Light			light;
+	MeshCollider	meshCollider;	//メッシュコライダー
+	RigidBody		rigidBody;		//剛体。	
 	CharacterController	characterController;
 
-	RigidBodyInfo rbInfo;
+	RigidBodyInfo	rbInfo;
+	D3DXVECTOR3		UMovelenge = position;
+	/*D3DXVECTOR3	RMovelenge = position;
+	D3DXVECTOR3		LMovelenge = position;
+	D3DXVECTOR3		DMovelenge = position;*/
 
-	D3DXMATRIX* rootBoneMatrix = modelData.GetRootBoneWorldMatrix();
+	bool			Rideflg = false;
 
-	D3DXVECTOR3 UMovelenge = position;
-	D3DXVECTOR3 RMovelenge = position;
-	D3DXVECTOR3 LMovelenge = position;
-	D3DXVECTOR3 DMovelenge = position;
-
-	bool		Rideflg = false;
 };
 

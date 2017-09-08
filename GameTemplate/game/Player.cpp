@@ -1,13 +1,12 @@
 #include "stdafx.h"
 #include "game.h"
 #include "Player.h"
-
+#include "CubeCollision.h"
 
 Player::Player()
 {
 	pad = new Pad();
 }
-
 
 Player::~Player()
 {
@@ -16,7 +15,6 @@ Player::~Player()
 }
 
 void Player::Start(){
-	
 	light.SetDiffuseLightDirection(0, D3DXVECTOR4(0.707f, 0.0f, -0.707f, 1.0f));
 	light.SetDiffuseLightDirection(1, D3DXVECTOR4(-0.707f, 0.0f, -0.707f, 1.0f));
 	light.SetDiffuseLightDirection(2, D3DXVECTOR4(0.0f, 0.707f, -0.707f, 1.0f));
@@ -27,7 +25,7 @@ void Player::Start(){
 	light.SetDiffuseLightColor(2, D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
 	light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
 	light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
-	skinModelData.LoadModelData("Assets/modelData/Unity.X", &animation);
+	skinModelData.LoadModelData("Assets/modelData/Unity2.X", &animation);
 	skinModel.Init(&skinModelData);
 	skinModel.SetLight(&light);
 	animation.PlayAnimation(0);
@@ -39,8 +37,12 @@ void Player::Start(){
 	animation.PlayAnimation(Stand, 0.3f);
 	//animation.SetAnimationLoopFlag(Jump, false);
 	animation.SetAnimationEndTime(Dash,0.8f);
-	//animation.SetAnimationEndTime(Jump, 1.0f);
+	//animation.SetAnimationEndTime(Jump, 0.8f);
+	//animation.SetAnimationEndTime(Damage,0.8f);
+	//animation.SetAnimationEndTime(Dead, 0.8f);
+	scale *= 0.01f;
 }
+
 void Player::Update()
 {
 	pad->Update();
@@ -50,23 +52,24 @@ void Player::Update()
 
 	//キャラクタが動く速度を設定。
 	characterController.SetMoveSpeed(moveSpeed);
-	//characterController.SetPosition(characterController.GetPosition());
 	//キャラクタコントローラーを実行。
 	characterController.Execute();
 	move();
 	AnimationSet();
 	DamageTime--;
+
+	//アニメーションの更新
+	animation.Update(1.0f / 60.0f);
 	skinModel.UpdateWorldMatrix(characterController.GetPosition(), rotation, scale);
 
-	
 }
 
 void Player::move()
 {
 
 	//D3DXVECTOR3 move = characterController.GetMoveSpeed();
-	//move.x = -Pad(0).GetLStickXF() * 5.0f;
-	//move.z = -Pad(0).GetLStickYF() * 5.0f;
+	//move.x = -pad->GetLStickXF() * 5.0f;
+	//move.z = -pad->GetLStickYF() * 5.0f;
 
 	//D3DXVECTOR3 old_move = move;
 
@@ -82,12 +85,15 @@ void Player::move()
 	//{
 	//	Isjump = false;
 	//}
+	/*if (!characterController.IsOnGround())
+	{
+		moveSpeed = { 0.0f,0.0f,0.0f };
+	}*/
 
 
 	if (moveSpeed.x != 0.0f || moveSpeed.z != 0.0f)
 	{
 		Ismove = true;
-
 	}
 	else
 	{
@@ -98,29 +104,14 @@ void Player::move()
 
 void Player::AnimationSet()
 {
-
+	if (IsDead&&game->GetImage()->GetHp() <= 0)
+	{
+		animation.PlayAnimation(Dead, 0.5f);
+		IsDead = false;
+		//standflg = true;
+	}
 	//キャラの移動
-	//ジャンプアニメーション再生
-	if (Isjump)
-	{
-		animation.PlayAnimation(Jump,0.5f);
-		
-		Isjump = false;
-		Testflg = true;
-
-	}
-	if (JumpTime > 0)
-	{
-		JumpTime--;
-	}
-	if (JumpTime <= 0)
-	{
-		JumpTime = 85;
-		Isrun = true;
-		Isjump = false;
-	}
-
-	if(!Isrun)
+	if (!Isrun)
 	{
 		if (Ismove) {
 
@@ -137,17 +128,44 @@ void Player::AnimationSet()
 	if (!animation.IsPlay())
 	{
 		Isrun = false;
-		animation.PlayAnimation(Stand,0.3f);
+		animation.PlayAnimation(Stand, 0.3f);
 	}
 
-
-	if (characterController.IsOnGround() && Testflg)
+	if (IsDamage)
 	{
-		//animation.PlayAnimation(Stand, 0.3f);
+
+		animation.PlayAnimation(Damage, 0.5f);
+		IsDamage = false;
+		//Isrun = true;
+		IsStand = true;
+	}
+	//ジャンプアニメーション再生
+	else if (Isjump)
+	{
+		animation.PlayAnimation(Jump,0.5f);
+		Isjump = false;
+		//Isrun = true;
+		IsStand = true;
+
+	}
+	else if (characterController.IsOnGround() &&IsStand)
+	{
 		Isrun = false;
-		Testflg = false;
+		IsStand = false;
+		animation.PlayAnimation(Stand, 0.3f);
 	}
 
+	/*if (JumpTime > 0)
+	{
+		JumpTime--;
+	}
+	if (JumpTime <= 0)
+	{
+		JumpTime = 106;
+		Isrun = true;
+		Isjump = false;
+	}*/
+	
 	//if (!IsStand) {
 
 	//	//ジャンプ時
@@ -183,71 +201,16 @@ void Player::AnimationSet()
 	//	
 	//}
 
-
-	//アニメーションの更新
-	animation.Update(1.0f / 60.0f);
 }
 
 void Player::Key()
 {
-	//パッドの入力で動かす。
 	moveSpeed = characterController.GetMoveSpeed();
 	float fMoveSpeed = 8.0f;
 	moveSpeed.x = 0.0f;
 	moveSpeed.z = 0.0f;
 
 	D3DXQUATERNION addRot = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
-
-	/*if (GetAsyncKeyState(VK_DOWN) && GetAsyncKeyState(VK_RIGHT) || pad->GetLStickXF()>0.0f&&pad->GetLStickYF()<0.0f) {
-		fMoveSpeed = 4.0f;
-		moveSpeed.x = -fMoveSpeed;
-		moveSpeed.z = fMoveSpeed;
-		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), -1.0f);
-		rotation = addRot;
-	}
-	else if (GetAsyncKeyState(VK_DOWN) && GetAsyncKeyState(VK_LEFT) || pad->GetLStickXF()<0.0f&&pad->GetLStickYF()<0.0f) {
-		fMoveSpeed = 4.0f;
-		moveSpeed.x = fMoveSpeed;
-		moveSpeed.z = fMoveSpeed;
-		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 1.0f);
-		rotation = addRot;
-	}
-	else if (GetAsyncKeyState(VK_UP) && GetAsyncKeyState(VK_LEFT)|| pad->GetLStickXF()<0.0f&&pad->GetLStickYF()>0.0f) {
-		fMoveSpeed = 4.0f;
-		moveSpeed.x = fMoveSpeed;
-		moveSpeed.z = -fMoveSpeed;
-		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), -10.0f);
-		rotation = addRot;
-	}
-	else if (GetAsyncKeyState(VK_UP) && GetAsyncKeyState(VK_RIGHT)|| pad->GetLStickXF()>0.0f&&pad->GetLStickYF()>0.0f) {
-		fMoveSpeed = 4.0f;
-		moveSpeed.x = -fMoveSpeed;
-		moveSpeed.z = -fMoveSpeed;
-		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 10.0f);
-		rotation = addRot;
-	}*/
-	//if (pad->GetLStickXF()<0.0f) {//左方向
-	//	moveSpeed.x = fMoveSpeed;
-	//	D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), -5.0f);
-	//	rotation = addRot;
-
-	//}
-	//else if(pad->GetLStickXF()>0.0f) {//右方向
-	//	moveSpeed.x = -fMoveSpeed;
-	//	D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 5.0f);
-	//	rotation = addRot;
-	//}
-	//else if(pad->GetLStickYF()>0.0f) {//上方向
-	//	moveSpeed.z = -fMoveSpeed;
-	//	D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 60.0f);
-	//	rotation = addRot;
-	//}
-	//else if(pad->GetLStickYF()<0.0f){//下方向
-
-	//	moveSpeed.z = fMoveSpeed;
-	//	D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 0.0f);
-	//	rotation = addRot;
-	//}
 
 	if (pad->IsPress(pad->enButtonLeft)) {//左方向
 		moveSpeed.x = fMoveSpeed;
@@ -273,63 +236,33 @@ void Player::Key()
 	}
 
 
-	if (pad->IsTrigger(pad->enButtonA)&&!characterController.IsJump() /*&& animation.GetNumAnimationSet() != Jump*/) {
+	if (pad->IsTrigger(pad->enButtonA) && characterController.IsOnGround() /*&& animation.GetNumAnimationSet() != Jump*/) {
 		//ジャンプ
 		moveSpeed.y = 9.0f;
 		//ジャンプしたことをキャラクタコントローラーに通知。
 		characterController.Jump();
 		Isjump = true;
 	}
-
-	/*if (GetAsyncKeyState('I') && !characterController.IsJump()) {
-
-		game->GetBullet()->Setpos({ 0.0f,0.0f,0.0f });
-	}*/
 }
 
 void Player::BulletHit()
 {
-
-	std::list<Bullet*> bulletstl = game->GetBullets();
-	for (auto bullet : bulletstl)
+	//std::list<Bullet*> bulletstl = game->GetBullets();
+	//for (auto bullet : bulletstl)
+	//{
+	//プレイヤーとバレット前方の当たり判定
+	if (Damageflg&&DamageTime<0)
 	{
-		//プレイヤーとバレット前方の当たり判定
-		D3DXVECTOR3 toPos;
-		D3DXVECTOR3 Bulletpos = bullet->Getpos();
-		Bulletpos.x += 1.0f;
-		D3DXVec3Subtract(&toPos, &Bulletpos, &characterController.GetPosition());
-
-		float Attacklen = D3DXVec3Length(&toPos);
-
-		if (/*game->GetBullet()->GetHitflg()*/Attacklen<0.5f&&DamageTime<0)
+		if (game->GetImage()->GetHp() <= 0)
 		{
-			//characterController.SetPosition({ 0.0f, 0.0f, 0.0f});
-			bullet->SetHitflg(false);
-			game->Damage(1);
-			DamageTime = 300;
-			
-			
+			IsDead = true;
 		}
-
-		//プレイヤーとバレットの上の当たり判定
-		Bulletpos = bullet->Getpos();
-		Bulletpos.y += 1.0f;
-		D3DXVec3Subtract(&toPos, &Bulletpos, &characterController.GetPosition());
-		float Uplen = D3DXVec3Length(&toPos);
-
-		if (Uplen < 1.0f)//エネミーを踏んでジャンプする
+		else
 		{
-			//ジャンプ
-			moveSpeed.y = 12.0f;
-			//ジャンプしたことをキャラクタコントローラーに通知。
-			characterController.Jump();
-			JumpTime = 80;
-			//D3DXVECTOR3 Addpos = { -10.0f,2.0f,0.0 };
-			//D3DXVec3Add(&Addpos, &Addpos, &bullet->Getpos());
-			//game->GetBullet()->Setpos(Addpos);
-			Isjump = true;
+			IsDamage = true;
+			game->GetImage()->Damage(1);
 		}
-
+		Damageflg = false;
 	}
 
 	if (Jumpflg)
@@ -338,7 +271,7 @@ void Player::BulletHit()
 		moveSpeed.y = 12.0f;
 		//ジャンプしたことをキャラクタコントローラーに通知。
 		characterController.Jump();
-		JumpTime = 80;
+		//JumpTime = 80;
 		Jumpflg = false;
 		Isjump = true;
 	}
@@ -346,6 +279,7 @@ void Player::BulletHit()
 
 void Player::Draw()
 {
+
 	skinModel.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
 
 }

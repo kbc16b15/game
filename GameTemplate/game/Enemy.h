@@ -8,48 +8,25 @@ class Enemy/*:public IGameObject*/
 public:
 	Enemy();
 	~Enemy();
-	void Start(D3DXVECTOR3 pos/*,int No*/);
+	void Start(D3DXVECTOR3 pos);
 	void Update();
 	void Move();
 	void Draw();
 	void EnemyBullet();
 	void Dead();
 
-	D3DXVECTOR3 Getpos()
-	{
-		return position;
-	}
-
-
 	bool GetDeathflg()
 	{
 		return IsDeath;
 	}
-
-	//bool GetDeadflg()
-	//{
-	//	return IsDead;
-	//}
-
-	/*int GetNo()
-	{
-		return Enemynum;
-	}*/
-
-	void Setpos(D3DXVECTOR3 pos)
-	{
-		position = pos;
-	}
 private:
+	//enum EnemyMove
+	//{
+	//	UP,
+	//	DOWN,
+	//};
 
-
-	enum EnemyMove
-	{
-		UP,
-		DOWN,
-	};
-
-	EnemyMove			move = UP;
+	//EnemyMove			move = UP;
 	SkinModel			skinModel;
 	SkinModelData		skinModelData;
 
@@ -60,8 +37,8 @@ private:
 	Light				light;
 	D3DXVECTOR3			moveSpeed = { 0.0f,0.0f,0.0f };
 	int					BulletTime = 150;
-	int					Enemynum = 0;
-	int					bulletnum = 3;
+	/*int					Enemynum = 0;
+	int					bulletnum = 3;*/
 
 	bool				IsDead = false;
 	bool				IsDeath = false;

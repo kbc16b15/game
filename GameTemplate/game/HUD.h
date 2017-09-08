@@ -6,15 +6,7 @@ class HUD :public Sprite
 public:
 	HUD();
 	~HUD();
-	void Initialize()override;
+	void Initialize(LPCTSTR modelName,D3DXVECTOR2 position,int Alfa)override;
 	void Update()override;
-
-	void Addpos(float pos)
-	{
-		Hppos.x += pos;
-	}
-
-private:
-	D3DXVECTOR2 Hppos = { 120.0f,80.0f };
 };
 

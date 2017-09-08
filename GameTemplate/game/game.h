@@ -8,8 +8,10 @@
 #include "Player.h"
 #include "Bullet.h"
 #include "Enemy.h"
-#include "HUD.h"
 #include "Map.h"
+#include "Image.h"
+ //#include "HUD.h"
+//#include "MoveObject.h"
 //#include "IGameObject.h"
 //#include "GameObjectManager.h"
 
@@ -44,64 +46,34 @@ public:
 		return &camera;
 	}
 
-	/*Bullet* GetBullet()
-	{
-		return &bullet;
-	}*/
-
 	Player* GetPlayer()
 	{
 		return &player;
 	}
-
-	/*Enemy* GetEnemy()
+	Image* GetImage()
 	{
-		return &enemy;
-	}*/
+		return &image;
+	}
+
 	void AddBullets(Bullet* bullet)
 	{
-
 		Bullets.push_back(bullet);
-
 	}
 
 	void AddEnemy(Enemy* enemy)
 	{
-
 		enem.push_back(enemy);
-
-	}
-	std::list<Bullet*>& GetBullets()
-	{
-		return Bullets;
 	}
 
-	std::vector<Enemy*>& Getenem()
-	{
-		return enem;
-	}
-
-	HRESULT CreateSprite();		//スプライト生成関数
-
-	void Damage(int dame)
-	{
-		Hpnum -= dame;
-	}
 private:
-	D3DXVECTOR3 toCameraPos;
-	Camera camera;
-	Player player;
-	//Enemy enemy;
-	HUD m_Hud[3];
-	LPD3DXSPRITE m_Sprite;
-	Map map;
-	//Bullet bullet;
 	//GameObjectManager GoMgr;
 	std::list<Bullet*> Bullets;
 	std::vector<Enemy*> enem;
-	//bool ride = false;
-
-	int Hpnum = 3;
+	D3DXVECTOR3		toCameraPos;
+	Camera			camera;
+	Player			player;
+	Map				map;
+	Image			image;
 };
 
 extern Game* game;

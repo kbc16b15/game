@@ -106,7 +106,7 @@ void btRigidBody::predictIntegratedTransform(btScalar timeStep,btTransform& pred
 	btTransformUtil::integrateTransform(m_worldTransform,m_linearVelocity,m_angularVelocity,timeStep,predictedTransform);
 }
 
-void			btRigidBody::saveKinematicState(btScalar timeStep)
+void btRigidBody::saveKinematicState(btScalar timeStep)
 {
 	//todo: clamp to some (user definable) safe minimum timestep, to limit maximum angular/linear velocities
 	if (timeStep != btScalar(0.))

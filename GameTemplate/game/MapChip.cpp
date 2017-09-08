@@ -17,6 +17,9 @@ MapChip::~MapChip()
 }
 void MapChip::Init(/*SMapChipLocInfo& locInfo*/const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 {
+	//this->skelton = skelton;
+	//this->jointNo = jointNo;
+
 	//読み込むモデルのファイルパスを作成。
 	char modelPath[256];
 	sprintf(modelPath, "Assets/modelData/%s.x", /*locInfo.*/modelName);
@@ -51,8 +54,8 @@ void MapChip::Init(/*SMapChipLocInfo& locInfo*/const char* modelName, D3DXVECTOR
 
 	rbInfo.collider = &meshCollider;//剛体のコリジョンを設定する。
 	rbInfo.mass = 0.0f;				//質量を0にすると動かない剛体になる。
-	rbInfo.pos = position;
-	rbInfo.rot = rotation;
+	rbInfo.pos = {0.0f, 0.0f, 0.0f};
+	rbInfo.rot = {0.0f, 0.0f, 0.0f, 1.0f};
 	//剛体を作成。
 	rigidBody.Create(rbInfo);
 	//作成した剛体を物理ワールドに追加。

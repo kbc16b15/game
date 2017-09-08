@@ -251,7 +251,7 @@ void CharacterController::Execute()
 		}
 		else {
 			//’n–Êã‚É‚¢‚éê‡‚Í1m‰º‚ğŒ©‚éB
-			endPos.y -= 1.0f;
+			endPos.y -= 0.5f;//’i·‚Ì—‚¿‚é‚â‚Â
 		}
 		end.setOrigin(btVector3(endPos.x, endPos.y, endPos.z));
 		SweepResultGround callback;

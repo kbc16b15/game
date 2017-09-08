@@ -101,18 +101,18 @@ public:
 		return &m_rigidBody;
 	}
 	/*!
-	* @brief	剛体を物理エンジンから削除。。
+	* @brief	剛体を物理エンジンから削除。
 	*/
 	void RemoveRigidBoby();
 private:
 	D3DXVECTOR3 		m_position;						//座標。
-	D3DXVECTOR3 		m_moveSpeed ;					//移動速度。 
+	D3DXVECTOR3 		m_moveSpeed ;					//移動速度。
 	bool 				m_isJump = false;				//ジャンプ中？
 	bool				m_isOnGround = true;			//地面の上にいる？
 	CapsuleCollider		m_collider;						//コライダー。
 	MeshCollider		m_mcollider;
 	float				m_radius = 0.0f;
-	float				m_height = 0.0f;		
+	float				m_height = 0.0f;
 	RigidBody			m_rigidBody;					//剛体。
 	float				m_gravity = -9.8f;				//重力。
 };

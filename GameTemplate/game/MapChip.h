@@ -10,7 +10,7 @@
 //	D3DXVECTOR3	pos;			//座標。
 //	D3DXQUATERNION	rotation;		//回転。
 //};
-
+class Skelton;
 class MapChip/*:public IGameObject*/
 {
 public:
@@ -32,28 +32,31 @@ private:
 	};
 
 	int MState = Normal;*/
-	bool Render = false;
-	SkinModel model;
-	SkinModelData modelData;
-	D3DXVECTOR3	position;
-	D3DXQUATERNION rotation;
+	bool				Render = false;
+	SkinModel			model;
+	SkinModelData		modelData;
+	D3DXVECTOR3			position;
+	D3DXQUATERNION		rotation;
 	D3DXVECTOR3			moveSpeed = { 0.0f,0.0f,0.0f };
-	Light light;
-	MeshCollider meshCollider;	//メッシュコライダー
-	//CapsuleCollider capsuleCollider; //カプセルコライダー
-	RigidBody rigidBody;		//剛体。
+	Light				light;
+	MeshCollider		meshCollider;	//メッシュコライダー
+	//CapsuleCollider	capsuleCollider; //カプセルコライダー
+	RigidBody			rigidBody;		//剛体。
 
 	CharacterController	characterController;
 
-	RigidBodyInfo rbInfo;
+	RigidBodyInfo		rbInfo;
 
-	D3DXMATRIX* rootBoneMatrix = modelData.GetRootBoneWorldMatrix();
+	D3DXMATRIX*			rootBoneMatrix = modelData.GetRootBoneWorldMatrix();
 
 	//D3DXVECTOR3 UMovelenge = position;
 	//D3DXVECTOR3 RMovelenge = position;
 	//D3DXVECTOR3 LMovelenge = position;
 	//D3DXVECTOR3 DMovelenge = position;
 
-	//bool			Rideflg = false;
+	//bool				Rideflg = false;
+
+	Skelton*			skelton;
+	int					jointNo;
 };
 

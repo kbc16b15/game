@@ -11,6 +11,11 @@ public:
 	void Init();
 	void Draw();
 	void Update();
+	
+	std::vector<MoveObject*>& GetMobject()
+	{
+		return moveList;
+	}
 private:
 	std::vector<MapChip*>	mapChipList;	//マップチップのリスト。
 	std::vector<MoveObject*> moveList;

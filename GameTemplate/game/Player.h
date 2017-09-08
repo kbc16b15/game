@@ -3,6 +3,7 @@
 #include "myEngine/Physics/CharacterController.h"
 #include "myEngine\HID\Pad.h"
 //#include "IGameObject.h"
+
 class Player/*:public IGameObject*/
 {
 public:
@@ -18,24 +19,47 @@ public:
 
 	D3DXVECTOR3 Getpos()
 	{
-		return /*position*/characterController.GetPosition();
+		return characterController.GetPosition();
 	}
+
+	/*void setpos(D3DXVECTOR3 pos)
+	{
+		characterController.SetPosition(pos);
+	}*/
 
 	void SetJumpflg(bool Jump)
 	{
 		Jumpflg = Jump;
 	}
+	void AddSpeed(D3DXVECTOR3 addpos)
+	{
+		characterController.SetMoveSpeed(addpos);
+		characterController.Execute();
+	}
+
+	D3DXVECTOR3 GetSpeed()
+	{
+		return characterController.GetMoveSpeed();
+	}
+
+	void SetDamage()
+	{
+		Damageflg = true;
+
+	}
 private:
 	enum PlayerState
-	{Stand, Move, Dash, Jump,};
+	{Stand, Move, Dash, Jump,Damage,Dead};
+	bool				IsDead = false;
 	bool				Isrun=false;
 	bool				Ismove=false;
 	bool				Isjump=false;
-
-	//bool				IsStand = true;
+	bool				Jumpflg = false;
+	bool				IsDamage = false;
+	bool				IsStand = false;
 	//bool				IsAnimend = true;
-
-	bool				Testflg = false;
+	bool				Damageflg = false;
+	int					DamageTime = 200;
 	SkinModel			skinModel;
 	SkinModelData		skinModelData;
 	Light				light;
@@ -44,13 +68,8 @@ private:
 	D3DXVECTOR3			position = { 0.0f,0.0f,0.0f };
 	D3DXVECTOR3			scale = { 1.0f,1.0f,1.0f };
 	D3DXQUATERNION		rotation = { 0.0f,0.0f,0.0f,1.0f };
-
 	D3DXVECTOR3			moveSpeed = { 0.0f,0.0f,0.0f };
 	Pad*				pad;
 
-	bool				Jumpflg = false;
-	int					JumpTime = 75;
-	int					DamageTime = 0;
-	
 };
 
