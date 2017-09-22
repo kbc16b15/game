@@ -1,8 +1,6 @@
 #include "stdafx.h"
-#include "game.h"
 #include "MoveObject.h"
 
-//Skelton MoveSkelton;
 MoveObject::MoveObject()
 {
 }
@@ -10,6 +8,9 @@ MoveObject::MoveObject()
 
 MoveObject::~MoveObject()
 {
+	g_physicsWorld->RemoveRigidBody(&rigidBody);
+	rigidBody.Release();
+	modelData.Release();
 }
 
 void MoveObject::Init(const char* modelName,D3DXVECTOR3	pos,D3DXQUATERNION	rotation)
@@ -46,7 +47,6 @@ void MoveObject::Init(const char* modelName,D3DXVECTOR3	pos,D3DXQUATERNION	rotat
 	meshCollider.CreateFromSkinModel(&model, rootBoneMatrix);
 	//続いて剛体を作成する。
 	//まずは剛体を作成するための情報を設定。
-
 	
 	rbInfo.collider = &meshCollider;//剛体のコリジョンを設定する。
 	rbInfo.mass = 0.0f;				//質量を0にすると動かない剛体になる。
@@ -61,10 +61,9 @@ void MoveObject::Init(const char* modelName,D3DXVECTOR3	pos,D3DXQUATERNION	rotat
 	g_physicsWorld->AddRigidBody(&rigidBody);
 
 	UMovelenge.x = position.x - 20.0f;
-	//RMovelenge.x = position.z + 2.0f;
-	//LMovelenge.x = position.z - 2.0f;
-	//DMovelenge.x = position.x;
-
+	LMovelenge.x = position.z - 2.0f;
+	RMovelenge.x = position.z + 2.0f;
+	DMovelenge.x = position.x;
 
 }
 
@@ -72,101 +71,115 @@ void MoveObject::Init(const char* modelName,D3DXVECTOR3	pos,D3DXQUATERNION	rotat
 void MoveObject::Update()
 {
 	D3DXVECTOR3 toPos;
-	//D3DXVECTOR3 LPos = position;
-	//D3DXVECTOR3 RPos = position;
-	//D3DXVECTOR3 UPos = position;
-	//D3DXVECTOR3 DPos = position;
-	//LPos.z += 2.4f;
-	//RPos.z -= 2.4f;
-	//UPos.x -= 2.8f;
-	//DPos.x += 2.4f;
+	D3DXVECTOR3 LPos = position;
+	D3DXVECTOR3 RPos = position;
+	D3DXVECTOR3 UPos = position;
+	D3DXVECTOR3 DPos = position;
+	LPos.z -= 2.4f;
+	RPos.z += 2.4f;
+	UPos.x -= 2.4f;
+	DPos.x += 2.4f;
 
-	D3DXVec3Subtract(&toPos, &position, &game->GetPlayer()->Getpos());
-	float len = D3DXVec3Length(&toPos);
-	if (len < 1.5f&&position.x >= UMovelenge.x)
+	D3DXVec3Subtract(&toPos, &LPos, &game->GetPlayer()->Getpos());
+	float Llen = D3DXVec3Length(&toPos);
+
+	if (Llen < 1.5f&&position.z>LMovelenge.x)
 	{
-		Rideflg = true;
+		Lflg = true;
 	}
 	else
 	{
-		Rideflg = false;
+		Lflg = false;
 	}
 
-	if (Rideflg&&position.x >= UMovelenge.x)
+	if (Lflg)
 	{
+		//moveSpeed.x = 4.0f;
+		position.z -= 0.02f;
+		D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
+		speed.z = -1.2f;
+		game->GetPlayer()->AddSpeed(speed);
+	}
+
+	//toPos = position;
+	D3DXVec3Subtract(&toPos, &RPos, &game->GetPlayer()->Getpos());
+	float Rlen = D3DXVec3Length(&toPos);
+
+	if (Rlen < 1.5f&&position.z<RMovelenge.x)
+	{
+		Rflg = true;
+
+	}
+	else
+	{
+		Rflg = false;
+	}
+
+	if (Rflg)
+	{
+		//moveSpeed.x = 4.0f;
+		position.z += 0.02f;
+		D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
+		speed.z = +1.2f;
+		game->GetPlayer()->AddSpeed(speed);
+	}
+
+
+	D3DXVec3Subtract(&toPos, &DPos, &game->GetPlayer()->Getpos());
+	float Dlen = D3DXVec3Length(&toPos);
+
+	if (Dlen < 1.0f&&position.x<DMovelenge.x)
+	{
+		Dflg = true;
+	}
+	else
+	{
+		Dflg = false;
+	}
+
+	if (Dflg)
+	{
+		//moveSpeed.x = 4.0f;
+		position.x += 0.02f;
+		D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
+		speed.x = +1.2f;
+		game->GetPlayer()->AddSpeed(speed);
+	}
+
+	D3DXVec3Subtract(&toPos, &game->GetPlayer()->Getpos(), &UPos);
+	float Ulen = D3DXVec3Length(&toPos);
+	
+	if (Ulen < 1.0f&&position.x > UMovelenge.x)
+	{
+		Uflg = true;
+	}
+	else {
+		Uflg = false;
+	}
+
+	if (Uflg)
+	{
+
+		//moveSpeed.x = 4.0f;
 		position.x -= 0.02f;
-		D3DXVECTOR3 speed=game->GetPlayer()->GetSpeed();
+		D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
 		speed.x = -1.2f;
 		game->GetPlayer()->AddSpeed(speed);
 	}
-	//int count = 1;
-	/*if (Rideflg&&count>=1)
-	{
-		Joint joint;
-		joint.position.x = position.x;
-		joint.position.y = position.y;
-		joint.position.z = position.z;
-		game->GetSkelton()->AddJoint(0, &joint);
-		Start(game->GetSkelton(), 1);
-		count--;
-	}*/
 
-
-	//D3DXVec3Subtract(&toPos, &LPos, &game->GetPlayer()->Getpos());
-	//float Llen = D3DXVec3Length(&toPos);
-
-	//if (Llen < 1.5f&&position.z<RMovelenge.x)
-	//{
-	//	//moveSpeed.x = 4.0f;
-	//	position.z += 0.1f;
-
-	//}
-
-	//D3DXVec3Subtract(&toPos, &RPos, &game->GetPlayer()->Getpos());
-	//float Rlen = D3DXVec3Length(&toPos);
-
-	//if (Rlen < 1.5f&&position.z>LMovelenge.x)
-	//{
-	//	//moveSpeed.x = 4.0f;
-	//	position.z -= 0.1f;
-
-	//}
-
-
-	//D3DXVec3Subtract(&toPos, &DPos, &game->GetPlayer()->Getpos());
-	//float Dlen = D3DXVec3Length(&toPos);
-
-	//if (Dlen < 1.0f&&position.x<DMovelenge.x)
-	//{
-	//	//moveSpeed.x = 4.0f;
-	//	position.x += 0.1f;
-
-	//}
-
-	//D3DXVec3Subtract(&toPos, &game->GetPlayer()->Getpos(), &UPos);
-	//float Ulen = D3DXVec3Length(&toPos);
-
-	//if (Ulen < 1.0f&&position.x >= UMovelenge.x)
-	//{
-	//	//moveSpeed.x = 4.0f;
-	//	position.x -= 0.1f;
-
-	//}
-
-
-	//rigidBody.GetBody()->setActivationState(DISABLE_DEACTIVATION);
-	//btTransform& trans = rigidBody.GetBody()->getWorldTransform();
-	//btVector3 btPos;
-	//btPos.setX( position.x );
-	//btPos.setY(position.y);
-	//btPos.setZ(position.z);
-	//trans.setOrigin(btPos);
-	//btQuaternion btRot;
-	//btRot.setX(Rotation.x);
-	//btRot.setY(Rotation.y);
-	//btRot.setZ(Rotation.z);
-	//btRot.setW(Rotation.w);
-	//trans.setRotation(btRot);
+	/*rigidBody.GetBody()->setActivationState(DISABLE_DEACTIVATION);
+	btTransform& trans = rigidBody.GetBody()->getWorldTransform();
+	btVector3 btPos;
+	btPos.setX(position.x);
+	btPos.setY(position.y);
+	btPos.setZ(position.z);
+	trans.setOrigin(btPos);
+	btQuaternion btRot;
+	btRot.setX(Rotation.x);
+	btRot.setY(Rotation.y);
+	btRot.setZ(Rotation.z);
+	btRot.setW(Rotation.w);
+	trans.setRotation(btRot);*/
 
 	btTransform& Ttra = rigidBody.GetBody()->getWorldTransform();//剛体の移動処理
 	Ttra.setOrigin({ position.x,position.y,position.z });

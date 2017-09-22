@@ -14,8 +14,10 @@ float4x4	g_worldMatrix;			//!<ワールド行列。
 float4x4	g_rotationMatrix;		//!<回転行列。
 float4x4	g_viewMatrixRotInv;		//!<カメラの回転行列の逆行列。
 
-bool g_isHasNormalMap;			//法線マップ保持している？
 
+float3 Eye;				//カメラ座標
+bool g_isHasNormalMap;			//法線マップ保持している？
+bool g_isHasSpecularMap;		//スペキュラマップ保持？
 texture g_diffuseTexture;		//ディフューズテクスチャ。
 sampler g_diffuseTextureSampler = 
 sampler_state
@@ -41,7 +43,18 @@ sampler_state
 	AddressV = Wrap;
 };
 
-
+//スペキュラマップ
+texture g_specularTexture;
+sampler g_specularMapSampler=
+sampler_state
+{
+	Texture=<g_specularTexture>;
+	MipFilter=LINEAR;
+	MinFilter=LINEAR;
+	MagFilter=LINEAR;
+	AddressU=Wrap;
+	AddressV=Wrap;
+};
 /*!
  * @brief	入力頂点
  */
@@ -64,6 +77,7 @@ struct VS_OUTPUT
     float3  Normal			: NORMAL;
     float2  Tex0   			: TEXCOORD0;
     float3	Tangent			: TEXCOORD1;	//接ベクトル
+    float3 world			: TEXCOORD2;	//ワールドの変換座標
 };
 /*!
  *@brief	ワールド座標とワールド法線をスキン行列から計算する。
@@ -127,25 +141,43 @@ VS_OUTPUT VSMain( VS_INPUT In, uniform bool hasSkin )
 		//スキンなし。
 		CalcWorldPosAndNormal( In, Pos, Normal, Tangent );
 	}
+    o.world=Pos;
     o.Pos = mul(float4(Pos.xyz, 1.0f), g_mViewProj);
     o.Normal = normalize(Normal);
     o.Tangent = normalize(Tangent);
     o.Tex0 = In.Tex0;
-	return o;
+    //float3 N = mul(Normal,g_worldMatrix);
+    //N = normalize(N);
+    return o;
 }
 /*!
  * @brief	ピクセルシェーダー。
  */
 float4 PSMain( VS_OUTPUT In ) : COLOR
 {
+
+	
 	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0);
 	float3 normal = In.Normal;
-		
 	float4 lig = DiffuseLight(normal);
+
+	float3 eye=normalize(Eye-In.world.xyz);//カメラからオブジェクトへの方向？
+	float3 L = -g_light.diffuseLightDir[0];//ライト
+	float3 N = normal.xyz;//法線
+	float3 R = -L+2.0f*dot(L,N)*N;
+	lig+=pow(max(0.0f,dot(R,eye)),2.0f);//累乗計算	
 	color *= lig;
+
+	//if (g_isHasSpecularMap)
+	//{
+	//	float3 spe = CalcSpecular(In.worldPos, normal);
+	//	spe *= tex2D(g_specularMapSamoler, In.Tex0).a;
+	//	lig.xyz += spe;
+	//}
 	
 	return color;
 }
+
 /*!
  *@brief	スキンありモデル用のテクニック。
  */

@@ -27,10 +27,16 @@ C:\Users\kbc16b15\Documents\github\game\GameTemplate\\BulletPhysics\src\BulletDy
   btSimpleDynamicsWorld.cpp
   コードを生成中...
   コンパイル中...
+  btMultiBody.cpp
   btMultiBodyConstraint.cpp
   btMultiBodyConstraintSolver.cpp
   btMultiBodyDynamicsWorld.cpp
+  btMultiBodyJointLimitConstraint.cpp
+Featherstone\btMultiBodyJointLimitConstraint.cpp(114): warning C4244: '初期化中': 'int' から 'btScalar' への変換です。データが失われる可能性があります。
+  btMultiBodyJointMotor.cpp
   btMultiBodyPoint2Point.cpp
+  btDantzigLCP.cpp
+  btLemkeAlgorithm.cpp
   btMLCPSolver.cpp
   btRaycastVehicle.cpp
 C:\Users\kbc16b15\Documents\github\game\GameTemplate\\BulletPhysics\src\BulletDynamics/ConstraintSolver/btContactConstraint.h(25): warning C4359: 'btContactConstraint': アライメント指定子は実際のアラインメント (128) より小さいため、無視されます。

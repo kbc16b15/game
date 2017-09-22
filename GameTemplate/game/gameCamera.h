@@ -1,31 +1,28 @@
 #pragma once
-#include "myEngine/Graphics/Camera.h"
+#include "myEngine\HID\Pad.h"
 class gameCamera
 {
 public:
+	//コンストラクタ
 	gameCamera();
+	//デストラクタ
 	~gameCamera();
-	void Start();
+	//初期化
+	void Init();
+	//更新
 	void Update();
-
-	D3DXMATRIX& GetViewMatrix()
+	//カメラの取得
+	Camera Getcamera()
 	{
-		return camera.GetViewMatrix();
-	}
-	D3DXMATRIX& GetProjectionMatrix()
-	{
-		return camera.GetProjectionMatrix();
-	}
-	Camera& GetCamera()
-	{
-		return camera;
+		return m_camera;
 	}
 private:
-	Camera camera;
-
-	D3DXVECTOR3 pos = { 0.0f,  2.0f,  3.0f };
-	D3DXVECTOR3 tag = { 1.0,1.0,1.0 };
-
-
+	Pad			pad;			//パッド
+	Camera		m_camera;		//カメラ
+	D3DXVECTOR3 position;		//座標
+	float		angleX = 0.0f;	//カメラ上下上限
+	D3DXVECTOR3	toCameraPos;	//カメラ座標
+	float angle = 0.0f;			//角度
+	//bool	CameraTypeflg = false;
 };
 

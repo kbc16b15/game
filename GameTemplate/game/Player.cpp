@@ -1,17 +1,17 @@
 #include "stdafx.h"
-#include "game.h"
 #include "Player.h"
 #include "CubeCollision.h"
 
+
 Player::Player()
 {
-	pad = new Pad();
 }
 
 Player::~Player()
 {
-	delete pad;
+	//delete skinModelData;
 	characterController.RemoveRigidBoby();
+	skinModelData.Release();
 }
 
 void Player::Start(){
@@ -41,21 +41,32 @@ void Player::Start(){
 	//animation.SetAnimationEndTime(Damage,0.8f);
 	//animation.SetAnimationEndTime(Dead, 0.8f);
 	scale *= 0.01f;
+	
+	HRESULT hr = D3DXCreateTextureFromFileA(g_pd3dDevice,
+		"Assets/model/utc_spec.tga",
+		&specularMap);
+	
+	if (specularMap != NULL)
+	{
+		skinModel.SetSpecularMap(specularMap);
+	}
+	//characterController.GetRigidBody()->GetBody()->getCollisionShape()->setUserIndex(enCollisionAttr_User);
+
 }
 
 void Player::Update()
 {
-	pad->Update();
+	
 	Key();
-
+	pad.Update();
 	BulletHit();
 
 	//キャラクタが動く速度を設定。
 	characterController.SetMoveSpeed(moveSpeed);
 	//キャラクタコントローラーを実行。
 	characterController.Execute();
-	move();
 	AnimationSet();
+	move();
 	DamageTime--;
 
 	//アニメーションの更新
@@ -76,7 +87,6 @@ void Player::move()
 	//D3DXVECTOR3 moveXZ = move;						//方向ベクトル
 	//moveXZ.y = 0.0f;
 
-
 	//if (/*GetAsyncKeyState('J')*/pad->IsTrigger(pad->enButtonA) && animation.GetNumAnimationSet() != Jump)
 	//{
 	//	Isjump = true;
@@ -89,7 +99,10 @@ void Player::move()
 	{
 		moveSpeed = { 0.0f,0.0f,0.0f };
 	}*/
-
+	/*if (IsDamage || IsDead)
+	{
+		moveSpeed = { 0.0f,0.0f,0.0f };
+	}*/
 
 	if (moveSpeed.x != 0.0f || moveSpeed.z != 0.0f)
 	{
@@ -104,7 +117,7 @@ void Player::move()
 
 void Player::AnimationSet()
 {
-	if (IsDead&&game->GetImage()->GetHp() <= 0)
+	if (IsDead&&game->GetHp() <= 0)
 	{
 		animation.PlayAnimation(Dead, 0.5f);
 		IsDead = false;
@@ -212,23 +225,23 @@ void Player::Key()
 
 	D3DXQUATERNION addRot = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
 
-	if (pad->IsPress(pad->enButtonLeft)) {//左方向
+	if (pad.IsPress(pad.enButtonLeft)|| GetAsyncKeyState('A')||pad.GetLStickXF()<0.0) {//左方向
 		moveSpeed.x = fMoveSpeed;
 		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), -5.0f);
 		rotation = addRot;
 	}
-	else if (pad->IsPress(pad->enButtonRight)) {//右方向
+	else if (pad.IsPress(pad.enButtonRight)||GetAsyncKeyState('D')||pad.GetLStickXF()>0.0) {//右方向
 		moveSpeed.x = -fMoveSpeed;
 		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 5.0f);
 		rotation = addRot;
 		
 	}
-	else if (pad->IsPress(pad->enButtonUp)) {//上方向
+	else if (pad.IsPress(pad.enButtonUp)|| GetAsyncKeyState('W') || pad.GetLStickYF()>0.0) {//上方向
 		moveSpeed.z = -fMoveSpeed;
 		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 60.0f);
 		rotation = addRot;
 	}
-	else if (pad->IsPress(pad->enButtonDown)) {//下方向
+	else if (pad.IsPress(pad.enButtonDown)|| GetAsyncKeyState('S') || pad.GetLStickYF()<0.0) {//下方向
 
 		moveSpeed.z = fMoveSpeed;
 		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 0.0f);
@@ -236,7 +249,7 @@ void Player::Key()
 	}
 
 
-	if (pad->IsTrigger(pad->enButtonA) && characterController.IsOnGround() /*&& animation.GetNumAnimationSet() != Jump*/) {
+	if (pad.IsTrigger(pad.enButtonA) && characterController.IsOnGround() /*&& animation.GetNumAnimationSet() != Jump*/) {
 		//ジャンプ
 		moveSpeed.y = 9.0f;
 		//ジャンプしたことをキャラクタコントローラーに通知。
@@ -253,14 +266,15 @@ void Player::BulletHit()
 	//プレイヤーとバレット前方の当たり判定
 	if (Damageflg&&DamageTime<0)
 	{
-		if (game->GetImage()->GetHp() <= 0)
+		if (game->GetHp() <= 0)
 		{
 			IsDead = true;
 		}
 		else
 		{
 			IsDamage = true;
-			game->GetImage()->Damage(1);
+			game->Damage(1);
+			DamageTime = 200;
 		}
 		Damageflg = false;
 	}

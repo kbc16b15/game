@@ -6,15 +6,23 @@
 class Enemy/*:public IGameObject*/
 {
 public:
+	//コンストラクタ
 	Enemy();
+	//デストラクタ
 	~Enemy();
+	//初期化　座標の設定
 	void Start(D3DXVECTOR3 pos);
+	//更新
 	void Update();
+	//エネミーの移動の仕方
 	void Move();
+	//描画
 	void Draw();
+	//Enemyのバレットの発射タイミング
 	void EnemyBullet();
+	//Enemyの死亡処理
 	void Dead();
-
+	//Enemyの死亡フラグの取得
 	bool GetDeathflg()
 	{
 		return IsDeath;
@@ -25,24 +33,21 @@ private:
 	//	UP,
 	//	DOWN,
 	//};
-
 	//EnemyMove			move = UP;
-	SkinModel			skinModel;
-	SkinModelData		skinModelData;
 
-	D3DXVECTOR3			position = { -20.0f,0.0f,0.0f };
-	D3DXVECTOR3			scale = { 0.5f,0.5f,0.5f };
-	D3DXQUATERNION		rotation= D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
-	CharacterController	characterController;
-	Light				light;
-	D3DXVECTOR3			moveSpeed = { 0.0f,0.0f,0.0f };
-	int					BulletTime = 150;
-	/*int					Enemynum = 0;
-	int					bulletnum = 3;*/
-
-	bool				IsDead = false;
-	bool				IsDeath = false;
-	int					DeadTime = 100;
+	SkinModel			skinModel;											//スキンモデル
+	SkinModelData		skinModelData;										//スキンモデルデータ
+	D3DXVECTOR3			position = { -20.0f,0.0f,0.0f };					//座標
+	D3DXVECTOR3			scale = { 0.5f,0.5f,0.5f };							//拡大
+	D3DXQUATERNION		rotation= D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);	//回転
+	Light				light;												//ライト
+	int					BulletTime = 150;									//バレットの発射間隔
+	bool				IsDead = false;										//死亡処理フラグ
+	bool				IsDeath = false;									//死亡フラグ
+	int					DeadTime = 100;										//死亡タイム
+	int					BulletDir = 0;										//バレット打つ方向
+	//CharacterController	characterController;								//キャラクターコントローラー
+	//D3DXVECTOR3			moveSpeed = { 0.0f,0.0f,0.0f };						//移動速度
 
 };
 

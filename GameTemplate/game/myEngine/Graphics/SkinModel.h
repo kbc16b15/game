@@ -5,7 +5,6 @@
 
 #include "myEngine/Graphics/Animation.h"
 
-
 class SkinModelData;
 class RenderContext;
 class Light;
@@ -41,6 +40,10 @@ public:
 	{
 		this->light = light;
 	}
+	void SetSpecularMap(LPDIRECT3DTEXTURE9 specMap)
+	{
+		specularMap = specMap;
+	}
 	/*!
 	*@brief	オリジナルメッシュの先頭を取得する。
 	*/
@@ -52,4 +55,6 @@ private:
 	ID3DXEffect*		pEffect = nullptr;			//!<エフェクト。
 	Animation			animation;					//!<アニメーション。
 	Light*				light = nullptr;			//!<ライト。
+	LPDIRECT3DTEXTURE9	normalMap = NULL;			//!法線マップ
+	LPDIRECT3DTEXTURE9	specularMap = NULL;			//!スペキュラマップ
 };

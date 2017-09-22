@@ -2,6 +2,8 @@
 #include "myEngine/Graphics/SkinModel.h"
 #include "myEngine/Graphics/SkinModelData.h"
 #include "myEngine/Graphics/Light.h"
+#include <d3d9types.h>
+
 
 extern UINT                 g_NumBoneMatricesMax;
 extern D3DXMATRIXA16*       g_pBoneMatrices ;
@@ -15,7 +17,9 @@ namespace {
 		D3DXMATRIX* rotationMatrix,
 		D3DXMATRIX* viewMatrix,
 		D3DXMATRIX* projMatrix,
-		Light* light
+		Light* light,
+		LPDIRECT3DTEXTURE9 normalMap,
+		LPDIRECT3DTEXTURE9 specularMap
 	)
 	{
 		D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
@@ -50,6 +54,15 @@ namespace {
 			);
 
 		}
+
+		if (specularMap != NULL)
+		{
+			//スペキュラマップがあるから、シェーダーに転送
+			pEffect->SetTexture("g_specularTexture", specularMap);
+			//スペキュラマップのフラグをtrueにする。
+			pEffect->SetBool("g_isHasSpecularMap",true);
+		}
+
 		if (pMeshContainer->pSkinInfo != NULL)
 		{
 			//スキン情報有り。
@@ -70,8 +83,9 @@ namespace {
 						//D3DXMatrixMultiply(&g_pBoneMatrices[iPaletteEntry], &matTemp, &g_matView);
 					}
 				}
-			
-				
+				D3DXVECTOR4 CameraEye = game->GetCamera()->GetEyePt();//カメラの視点の座標
+				CameraEye.w = 1.0f;
+				pEffect->SetVector("Eye", &CameraEye);
 				pEffect->SetMatrixArray("g_mWorldMatrixArray", g_pBoneMatrices, pMeshContainer->NumPaletteEntries);
 				pEffect->SetInt("g_numBone", pMeshContainer->NumInfl);
 				// ディフューズテクスチャ。
@@ -106,7 +120,6 @@ namespace {
 			else {
 				mWorld = *worldMatrix;
 			}
-			
 			pEffect->SetMatrix("g_worldMatrix", &mWorld);
 			pEffect->SetMatrix("g_rotationMatrix", rotationMatrix);
 			pEffect->Begin(0, D3DXFX_DONOTSAVESTATE);
@@ -114,6 +127,7 @@ namespace {
 
 			for (DWORD i = 0; i < pMeshContainer->NumMaterials; i++) {
 				pEffect->SetTexture("g_diffuseTexture", pMeshContainer->ppTextures[i]);
+				//pEffect->SetTexture("g_speTexture", pMeshContainer->ppTextures[i]);
 				pEffect->CommitChanges();
 				pMeshContainer->MeshData.pMesh->DrawSubset(i);
 			}
@@ -129,7 +143,10 @@ namespace {
 		D3DXMATRIX* rotationMatrix,
 		D3DXMATRIX* viewMatrix, 
 		D3DXMATRIX* projMatrix,
-		Light* light)
+		Light* light,
+		LPDIRECT3DTEXTURE9 normalMap,
+		LPDIRECT3DTEXTURE9 specularMap
+	)
 	{
 		LPD3DXMESHCONTAINER pMeshContainer;
 
@@ -145,7 +162,9 @@ namespace {
 				rotationMatrix,
 				viewMatrix,
 				projMatrix,
-				light
+				light,
+				normalMap,
+				specularMap
 				);
 
 			pMeshContainer = pMeshContainer->pNextMeshContainer;
@@ -161,7 +180,9 @@ namespace {
 				rotationMatrix,
 				viewMatrix,
 				projMatrix,
-				light
+				light,
+				normalMap,
+				specularMap
 				);
 		}
 
@@ -175,7 +196,9 @@ namespace {
 				rotationMatrix,
 				viewMatrix,
 				projMatrix,
-				light
+				light,
+				normalMap,
+				specularMap
 				);
 		}
 	}
@@ -193,7 +216,11 @@ SkinModel::~SkinModel()
 
 void SkinModel::Init(SkinModelData* modelData)
 {
+
+
 	pEffect = g_effectManager->LoadEffect("Assets/Shader/Model.fx");
+
+
 	skinModelData = modelData;
 }
 void SkinModel::UpdateWorldMatrix(const D3DXVECTOR3& trans, const D3DXQUATERNION& rot, const D3DXVECTOR3& scale)
@@ -221,7 +248,9 @@ void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)
 			&rotationMatrix,
 			viewMatrix,
 			projMatrix,
-			light
+			light,
+			normalMap,
+			specularMap
 		);
 	}
 }

@@ -14,12 +14,21 @@ class Skelton;
 class MapChip/*:public IGameObject*/
 {
 public:
+	//コンストラクタ
 	MapChip();
+	//デストラクタ
 	~MapChip();
+	//初期化
+	//modelName モデル名
+	//pos		モデルの座標
+	//rotation	モデルの回転
 	void Init(/*SMapChipLocInfo& locInfo*/const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rotation);
+	//更新
 	void Update();
-	void MoveObject();
+	//描画
 	void Draw();
+	//描画の無効を設定
+	//Resndflg　描画フラグ
 	bool Rend(bool Rendflg);
 
 
@@ -32,31 +41,17 @@ private:
 	};
 
 	int MState = Normal;*/
-	bool				Render = false;
-	SkinModel			model;
-	SkinModelData		modelData;
-	D3DXVECTOR3			position;
-	D3DXQUATERNION		rotation;
-	D3DXVECTOR3			moveSpeed = { 0.0f,0.0f,0.0f };
-	Light				light;
-	MeshCollider		meshCollider;	//メッシュコライダー
-	//CapsuleCollider	capsuleCollider; //カプセルコライダー
-	RigidBody			rigidBody;		//剛体。
+	SkinModel			model;							//スキンモデル
+	SkinModelData		modelData;						//スキンモデルデータ
+	D3DXVECTOR3			position;						//座標
+	D3DXQUATERNION		rotation;						//回転
+	Light				light;							//ライト
+	MeshCollider		meshCollider;					//メッシュコライダー
+	//CapsuleCollider	capsuleCollider;				//カプセルコライダー
+	RigidBody			rigidBody;						//剛体。
+	RigidBodyInfo		rbInfo;							//剛体情報
+	CharacterController	characterController;			//キャラクターコントローラー
+	bool				Render = false;					//描画フラグ
 
-	CharacterController	characterController;
-
-	RigidBodyInfo		rbInfo;
-
-	D3DXMATRIX*			rootBoneMatrix = modelData.GetRootBoneWorldMatrix();
-
-	//D3DXVECTOR3 UMovelenge = position;
-	//D3DXVECTOR3 RMovelenge = position;
-	//D3DXVECTOR3 LMovelenge = position;
-	//D3DXVECTOR3 DMovelenge = position;
-
-	//bool				Rideflg = false;
-
-	Skelton*			skelton;
-	int					jointNo;
 };
 

@@ -6,7 +6,6 @@
 #include "myEngine/Physics/CharacterController.h"
 #include "myEngine/Physics/CollisionAttr.h"
 
-
 namespace {
 	const float cPI = 3.14159265358979323846f;
 	//衝突したときに呼ばれる関数オブジェクト(地面用)
@@ -28,6 +27,8 @@ namespace {
 				//自分に衝突した。or キャラクタ属性のコリジョンと衝突した。
 				return 0.0f;
 			}
+
+
 			//衝突点の法線を引っ張ってくる。
 			D3DXVECTOR3 hitNormalTmp = *(D3DXVECTOR3*)&convexResult.m_hitNormalLocal;
 			//上方向と法線のなす角度を求める。
@@ -61,7 +62,7 @@ namespace {
 		D3DXVECTOR3 hitPos = {0.0f, 0.0f, 0.0f};		//衝突点。
 		D3DXVECTOR3 startPos = {0.0f, 0.0f, 0.0f};		//レイの始点。
 		float dist = FLT_MAX;							//衝突点までの距離。一番近い衝突点を求めるため。FLT_MAXは単精度の浮動小数点が取りうる最大の値。
-		D3DXVECTOR3 hitNormal = {0.0f, 0.0f, 0.0f};	//衝突点の法線。
+		D3DXVECTOR3 hitNormal = {0.0f, 0.0f, 0.0f};		//衝突点の法線。
 		btCollisionObject* me = NULL;					//自分自身。自分自身との衝突を除外するためのメンバ。
 		/*!
 		 * @brief	/衝突したときに呼ばれるコールバック関数。
@@ -71,6 +72,10 @@ namespace {
 			if (convexResult.m_hitCollisionObject == me) {
 				//自分に衝突した。or 地面に衝突した。
 				return 0.0f;
+			}
+			else if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_User)//ユーザー定義のコリジョン属性
+			{
+				game->GetPlayer()->SetDamage();//プレイヤーにダメージ
 			}
 			//衝突点の法線を引っ張ってくる。
 			D3DXVECTOR3 hitNormalTmp;

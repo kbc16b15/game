@@ -3,13 +3,21 @@
 class Bullet/*:public IGameObject*/
 {
 public:
+	//コンストラクタ
 	Bullet();
+	//デストラクタ
 	~Bullet();
+	//初期化　座標の設定
 	void Start(D3DXVECTOR3 pos);
+	//更新
 	void Update();
+	//描画
 	void Draw();
+
+	//バレットの寿命と追従
 	void TargetBullet();
 
+	//死亡フラグの取得
 	bool GetBulletflg()
 	{
 		return Bulletflg;
@@ -17,26 +25,24 @@ public:
 
 private:
 
-	//enum EState {
-	//	eState_Search,	//索敵状態。
-	//	eState_Find,	//発見状態。
-	//};
+	enum EState {
+		eState_Search,	//索敵状態。
+		eState_Find,	//発見状態。
+	};
+	EState state;		//敵の状態。
 
 
-	//EState state;		//敵の状態。
-
-	SkinModel			skinModel;
+	SkinModel			skinModel;										//スキンモデル
 	//SkinModelData		skinModelData;
-	static SkinModelData* skinModelData;
-	Light				light;
-	D3DXVECTOR3			position = { 0.0f,0.0f,0.0f };
-	D3DXVECTOR3			scale = { 0.3f,0.3f,0.3f };
-	D3DXQUATERNION		rotation=D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0);
-	D3DXVECTOR3			targetpos;
-	D3DXVECTOR3			direction;
-
-	//bool				Find = false;
-	int					Btime = 300;
-	bool				Bulletflg = true;
+	static SkinModelData* skinModelData;								//スキンモデルデータ
+	Light				light;											//ライト
+	D3DXVECTOR3			position = { 0.0f,0.0f,0.0f };					//座標
+	D3DXVECTOR3			scale = { 0.3f,0.3f,0.3f };						//拡大
+	D3DXQUATERNION		rotation=D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0);	//回転
+	D3DXVECTOR3			targetpos;										//プレイヤーの座標の格納変数
+	D3DXVECTOR3			direction;										//バレットの向き
+	int					Btime = 300;									//バレットの寿命
+	bool				Bulletflg = true;								//バレットの死亡フラグ
+	bool				Find = false;									//発見フラグ
 };
 

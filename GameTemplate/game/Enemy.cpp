@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "game.h"
 #include "Enemy.h"
 #include "Bullet.h"
 #include "CubeCollision.h"
@@ -10,7 +9,7 @@ Enemy::Enemy()
 
 Enemy::~Enemy()
 {
-	
+	skinModelData.Release();
 }
 
 void Enemy::Start(D3DXVECTOR3 pos)
@@ -37,10 +36,9 @@ void Enemy::Start(D3DXVECTOR3 pos)
 
 void Enemy::Update()
 {
-
 	EnemyBullet();
 	Move();
-
+	//scale.y -= 0.02f;
 	CubeCollision Cmass;
 	//position.y += 0.1f;
 	if (Cmass.Cubemass(position, game->GetPlayer()->Getpos(),0.3f,0.3f))
@@ -92,13 +90,13 @@ void Enemy::Draw()
 void Enemy::Dead()
 {
 	if (!IsDead) { return; }
-	//position.y -= 0.02f;
+	scale.y -= 0.01f;
 	DeadTime--;
-	//if (DeadTime<0)
-	//{
+	if (scale.y < 0.0f)
+	{
 		//characterController.RemoveRigidBoby();
 		IsDeath = true;
-	//}
+	}
 
 	//IsDeath = true;
 

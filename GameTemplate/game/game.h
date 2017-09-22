@@ -9,9 +9,8 @@
 #include "Bullet.h"
 #include "Enemy.h"
 #include "Map.h"
-#include "Image.h"
- //#include "HUD.h"
-//#include "MoveObject.h"
+#include "HUD.h"
+#include "gameCamera.h"
 //#include "IGameObject.h"
 //#include "GameObjectManager.h"
 
@@ -41,39 +40,55 @@ public:
 	 */
 	void Render();
 
+	//ゲームオーバー
+	void GameEnd();
+
+	//カメラの取得
 	Camera* GetCamera()
 	{
-		return &camera;
+		return &camera.Getcamera();
 	}
-
+	//プレイヤーの取得
 	Player* GetPlayer()
 	{
 		return &player;
 	}
-	Image* GetImage()
-	{
-		return &image;
-	}
-
+	//弾の追加
 	void AddBullets(Bullet* bullet)
 	{
 		Bullets.push_back(bullet);
 	}
-
+	//敵の追加
 	void AddEnemy(Enemy* enemy)
 	{
 		enem.push_back(enemy);
 	}
-
+	//スプライト生成関数
+	HRESULT CreateSprite();
+	//ダメージ処理
+	void Damage(int dame)
+	{
+		Hpnum -= dame;
+	}
+	//HPの取得
+	int GetHp()
+	{
+		return Hpnum;
+	}
 private:
 	//GameObjectManager GoMgr;
-	std::list<Bullet*> Bullets;
-	std::vector<Enemy*> enem;
-	D3DXVECTOR3		toCameraPos;
-	Camera			camera;
-	Player			player;
-	Map				map;
-	Image			image;
+	std::list<Bullet*>	Bullets;				//バレットのリスト
+	std::vector<Enemy*>	enem;					//エネミーのvector
+	//Camera				camera;					//カメラ
+	gameCamera			camera;				//ゲームカメラ
+	Player				player;					//プレイヤー
+	Map					map;					//マップ
+	int				Hpnum = 3;					//HP量
+	HUD				m_Hud[3];					//画像表示の変数
+	HUD				Key;						//鍵
+	LPD3DXSPRITE	m_Sprite;					//スプライト
+	D3DXVECTOR2 Hppos = { 120.0f,80.0f };		//HP座標
+	D3DXVECTOR2 Keypos = { 120.0f, 200.0f };	//鍵座標
 };
 
 extern Game* game;

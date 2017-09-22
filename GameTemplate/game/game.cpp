@@ -2,7 +2,7 @@
  * @brief	ゲーム
  */
 #include "stdafx.h"
-#include "game.h"
+#include "Scene.h"
 #include <stdlib.h>
 #include <time.h>
 
@@ -14,21 +14,13 @@
 Game::Game()
 {
 	srand((unsigned int)time(NULL));
-
 }
 /*!
  * @brief	デストラクタ。
  */
 Game::~Game()
 {
-	for (auto bullet : Bullets) {
-		delete bullet;
-	}
 
-	for (auto Enemynum : enem)
-	{
-		delete Enemynum;
-	}
 }
 /*!
  * @brief	ゲームが起動してから一度だけ呼ばれる関数。
@@ -40,17 +32,19 @@ void Game::Start()
 	g_physicsWorld->Init();
 	//カメラ初期化。
 	camera.Init();
-	camera.SetEyePt(D3DXVECTOR3(5.0f, 7.0f, 10.0f));
-	camera.SetLookatPt(D3DXVECTOR3(0.0f, 2.5f, 0.0f));
-	camera.SetFar(1000.0f);
-	camera.Update();
-	toCameraPos = camera.GetEyePt() - camera.GetLookatPt();
 	//マップを初期化。
 	map.Init();
 	//プレイヤーを初期化。
 	player.Start();
 	//画像表示
-	image.Init();
+	for (int i = 0;i < Hpnum;i++)
+	{
+		m_Hud[i].Initialize("Assets/Sprite/HP.png", Hppos, 210);
+		Hppos.x += 100.0f;
+	}
+
+	Key.Initialize("Assets/Sprite/key.png", Keypos, 210);
+	CreateSprite();
 	//Player* pl = new Player();
 	//GoMgr.AddGameObject(pl);
 	//Enemy* en = new Enemy();
@@ -92,22 +86,22 @@ void Game::Update()
 	{
 		bullet->Update();
 	}
-
-	//プレイヤー追従カメラ。
-	D3DXVECTOR3 targetPos = player.Getpos();
-	if (targetPos.y < 0.0f)
+	//画像のアップデート
+	for (int i = 0;i < Hpnum;i++)
 	{
-		targetPos.y = 0.0f;
+		m_Hud[i].Update();
 	}
+	Key.Update();
 	//GoMgr.Update();
-	image.Update();
 	g_physicsWorld->Update();
-	D3DXVECTOR3 eyePos = targetPos + toCameraPos;
-	camera.SetLookatPt(targetPos);
-	camera.SetEyePt(eyePos);
 	player.Update();
 	camera.Update();
 	map.Update();
+	D3DXVECTOR3 Ppos = player.Getpos();
+	if (Hpnum < 1||Ppos.y<-2.0f)
+	{
+		GameEnd();
+	}
 
 }
 /*!
@@ -118,13 +112,51 @@ void Game::Render()
 	//GoMgr.Draw();
 	player.Draw();
 	map.Draw();
-	image.Render();
 	for (auto enemy : enem)
 	{
 		enemy->Draw();
 	}
+	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+	
 	for (auto bullet : Bullets)
 	{
 		bullet->Draw();
 	}
+	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+	
+	for (int i = 0;i < Hpnum;i++)
+	{
+		m_Hud[i].Draw(m_Sprite);
+	}
+	
+	Key.Draw(m_Sprite);
+	
+}
+
+void Game::GameEnd()
+{
+	for (auto bullet : Bullets) {
+		delete bullet;
+	}
+
+	for (auto Enemynum : enem)
+	{
+		delete Enemynum;
+	}
+	
+	scene->SceneChange();
+	delete game;
+	game = nullptr;
+	delete g_physicsWorld;
+	g_physicsWorld = nullptr;
+}
+
+HRESULT Game::CreateSprite()
+{
+	if (FAILED(D3DXCreateSprite(g_pd3dDevice, &m_Sprite)))
+	{
+		MessageBox(0, TEXT("スプライト作成失敗"), NULL, MB_OK);
+		return E_FAIL;//失敗返却
+	}
+	return S_OK;
 }

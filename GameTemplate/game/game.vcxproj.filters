@@ -28,6 +28,18 @@
     <Filter Include="ソース ファイル\Map">
       <UniqueIdentifier>{9f303c51-fcc3-4864-99e8-e84adfe0c377}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\scene">
+      <UniqueIdentifier>{be987a8b-c367-4b8e-8aa3-16a84005c3d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Player">
+      <UniqueIdentifier>{de0b1208-8401-4c18-a875-c92dd5c61047}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Enemy">
+      <UniqueIdentifier>{ca88e02f-6f9c-432a-b8d7-017b6f1a816b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\HUD">
+      <UniqueIdentifier>{a4b1c45f-4f84-4492-b60b-494356e05a84}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -75,15 +87,6 @@
     <ClCompile Include="myEngine\HID\Pad.cpp">
       <Filter>ソース ファイル\myEngine\HID</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Map.cpp">
       <Filter>ソース ファイル\Map</Filter>
     </ClCompile>
@@ -99,10 +102,34 @@
     <ClCompile Include="CubeCollision.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="HUD.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Scene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
-    <ClCompile Include="Image.cpp">
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>ソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>ソース ファイル\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="TrapObject.cpp">
+      <Filter>ソース ファイル\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="RotObject.cpp">
+      <Filter>ソース ファイル\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="FallObject.cpp">
+      <Filter>ソース ファイル\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="gameCamera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -158,15 +185,6 @@
     <ClInclude Include="myEngine\HID\Pad.h">
       <Filter>ソース ファイル\myEngine\HID</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="MapChip.h">
       <Filter>ソース ファイル\Map</Filter>
     </ClInclude>
@@ -175,9 +193,6 @@
     </ClInclude>
     <ClInclude Include="MoveObject.h">
       <Filter>ソース ファイル\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="HUD.h">
-      <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="myEngine\Graphics\Sprite.h">
       <Filter>ソース ファイル\myEngine\Graphics</Filter>
@@ -188,7 +203,37 @@
     <ClInclude Include="CubeCollision.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Image.h">
+    <ClInclude Include="Scene.h">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ソース ファイル\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>ソース ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>ソース ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>ソース ファイル\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="TrapObject.h">
+      <Filter>ソース ファイル\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="RotObject.h">
+      <Filter>ソース ファイル\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="FallObject.h">
+      <Filter>ソース ファイル\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="locationinfo.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="gameCamera.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
@@ -196,5 +241,8 @@
     <ResourceCompile Include="game.rc">
       <Filter>リソース ファイル</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="game.aps" />
   </ItemGroup>
 </Project>
