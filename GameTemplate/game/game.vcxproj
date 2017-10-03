@@ -155,14 +155,19 @@
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="CubeCollision.cpp" />
+    <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Fade.cpp" />
     <ClCompile Include="FallObject.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="gameCamera.cpp" />
+    <ClCompile Include="GoalObject.cpp" />
+    <ClCompile Include="HealItem.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapChip.cpp" />
+    <ClCompile Include="MoveCube.cpp" />
     <ClCompile Include="MoveObject.cpp" />
     <ClCompile Include="myEngine\Graphics\Animation.cpp" />
     <ClCompile Include="myEngine\Graphics\Camera.cpp" />
@@ -178,8 +183,11 @@
     <ClCompile Include="myEngine\Physics\RigidBody.cpp" />
     <ClCompile Include="myEngine\System.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="RotObject.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Sky.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -188,18 +196,24 @@
     </ClCompile>
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="TrapObject.cpp" />
+    <ClCompile Include="WaveFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="CubeCollision.h" />
+    <ClInclude Include="ResultScene.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Fade.h" />
     <ClInclude Include="FallObject.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gameCamera.h" />
+    <ClInclude Include="GoalObject.h" />
+    <ClInclude Include="HealItem.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="locationinfo.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapChip.h" />
+    <ClInclude Include="MoveCube.h" />
     <ClInclude Include="MoveObject.h" />
     <ClInclude Include="myEngine\Graphics\Animation.h" />
     <ClInclude Include="myEngine\Graphics\Camera.h" />
@@ -218,12 +232,16 @@
     <ClInclude Include="myEngine\Physics\RigidBody.h" />
     <ClInclude Include="myEngine\system.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="RenderTarget.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="RotObject.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Sky.h" />
+    <ClInclude Include="Sound.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="TrapObject.h" />
+    <ClInclude Include="WaveFile.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />

@@ -25,13 +25,19 @@ public:
 	void Key();
 	//バレットの当たり処理
 	void BulletHit();
+	//キャラの向きの設定
+	void Setangle();
 
 	//プレイヤー座標の取得
 	D3DXVECTOR3 Getpos()
 	{
 		return characterController.GetPosition();
 	}
-
+	//座標セット
+	void Setpos(D3DXVECTOR3 pos)
+	{
+		position = pos;
+	}
 	//プレイヤーのジャンプフラグ設定
 	void SetJumpflg(bool Jump)
 	{
@@ -58,6 +64,8 @@ public:
 private:
 	enum PlayerState						//プレイヤーアニメーションの状態
 	{Stand, Move, Dash, Jump,Damage,Dead};
+	PlayerState	m_State=Stand;
+	PlayerState workState = Stand;
 	bool				IsDead = false;		//死亡アニメーションフラグ
 	bool				Isrun=false;		//走るアニメーションフラグ
 	bool				Ismove=false;		//歩行アニメーションフラグ

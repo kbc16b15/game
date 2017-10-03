@@ -43,6 +43,9 @@ public:
 	//ゲームオーバー
 	void GameEnd();
 
+	//次のステージに行く
+	void NextStage();
+
 	//カメラの取得
 	Camera* GetCamera()
 	{
@@ -52,6 +55,10 @@ public:
 	Player* GetPlayer()
 	{
 		return &player;
+	}
+	Map* GetMap()
+	{
+		return &map;
 	}
 	//弾の追加
 	void AddBullets(Bullet* bullet)
@@ -70,6 +77,13 @@ public:
 	{
 		Hpnum -= dame;
 	}
+	//体力の回復
+	void Heal(int healval)
+	{
+		
+		Hpnum += healval;
+		if (Hpnum > 3) { Hpnum = 3; }
+	}
 	//HPの取得
 	int GetHp()
 	{
@@ -79,8 +93,7 @@ private:
 	//GameObjectManager GoMgr;
 	std::list<Bullet*>	Bullets;				//バレットのリスト
 	std::vector<Enemy*>	enem;					//エネミーのvector
-	//Camera				camera;					//カメラ
-	gameCamera			camera;				//ゲームカメラ
+	gameCamera			camera;					//ゲームカメラ
 	Player				player;					//プレイヤー
 	Map					map;					//マップ
 	int				Hpnum = 3;					//HP量

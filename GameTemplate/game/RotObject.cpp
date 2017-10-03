@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "RotObject.h"
 
-
 RotObject::RotObject(D3DXVECTOR3 RDir, D3DXVECTOR3 RSpeed)
 {
 	RotDir = RDir;
@@ -51,7 +50,6 @@ void RotObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rota
 	//続いて剛体を作成する。
 	//まずは剛体を作成するための情報を設定。
 
-
 	rbInfo.collider = &meshCollider;//剛体のコリジョンを設定する。
 	rbInfo.mass = 0.0f;				//質量を0にすると動かない剛体になる。
 	rbInfo.pos = position;
@@ -59,14 +57,10 @@ void RotObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rota
 	//剛体を作成。
 	rigidBody.Create(rbInfo);
 	rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
-	rigidBody.GetBody()->setGravity({ 0.0f,0.0f,0.0f });
-
 	//作成した剛体を物理ワールドに追加。
 	g_physicsWorld->AddRigidBody(&rigidBody);
 
-
 }
-
 
 void RotObject::Update()
 {
@@ -75,7 +69,7 @@ void RotObject::Update()
 
 	float len = D3DXVec3Length(&toPos);
 
-	if (len < 8.0f)
+	if (len <LightDownlength)
 	{
 		Tflg = true;
 	}
@@ -88,19 +82,19 @@ void RotObject::Update()
 	{
 		D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
 		speed.x = RotSpeed.x/*-1.2f*/;
+		speed.z = RotSpeed.z;
 		game->GetPlayer()->AddSpeed(speed);
 	}
 
 	angle += 0.01f;
-	D3DXQUATERNION addRot = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
-	D3DXQuaternionRotationAxis(&addRot, &RotDir, angle);
-	Rotation = addRot;
-
+	//D3DXQUATERNION addRot = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
+	D3DXQuaternionRotationAxis(&Rotation, &RotDir, angle);
+	//Rotation = addRot;
 	btTransform& Ttra = rigidBody.GetBody()->getWorldTransform();//剛体の移動処理
 	Ttra.setOrigin({ position.x,position.y,position.z });
 	Ttra.setRotation({ Rotation.x,Rotation.y,Rotation.z,Rotation.w });
 
-	model.UpdateWorldMatrix(position, Rotation, { 1.0f,1.0f,1.0f, });
+	model.UpdateWorldMatrix(position, Rotation, { 1.0f,1.0f,1.0f});
 
 }
 

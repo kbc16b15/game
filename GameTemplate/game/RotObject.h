@@ -12,7 +12,7 @@ public:
 	//modelName モデル名
 	//pos		モデルの座標
 	//rotation	モデルの回転
-	void Init(/*SMapChipLocInfo& locInfo*/const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rotation);
+	void Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rotation);
 	//更新
 	void Update();
 	//描画
@@ -21,6 +21,11 @@ public:
 	D3DXVECTOR3 Getpos()
 	{
 		return position;
+	}
+
+	D3DXVECTOR3 GetSpeed()
+	{
+		return RotSpeed;
 	}
 
 private:
@@ -37,5 +42,6 @@ private:
 	D3DXVECTOR3		RotSpeed;				//回転速度
 	float angle = 0.0f;						//角度
 	bool Tflg = false;						//プレイヤーとのフラグ
+	const float LightDownlength = 8.0f;
 };
 

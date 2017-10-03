@@ -8,6 +8,7 @@
 
 //gameCamera* g_gameCamera = nullptr;
 
+
 /*!
  * @brief	コンストラクタ。
  */
@@ -27,23 +28,24 @@ Game::~Game()
  */
 void Game::Start()
 {
+	g_fade->StartFadeIn();
 	//物理ワールドを初期化
 	g_physicsWorld = new PhysicsWorld;
 	g_physicsWorld->Init();
 	//カメラ初期化。
 	camera.Init();
 	//マップを初期化。
-	map.Init();
+	map.Init(/*mapChipInfo*/);
 	//プレイヤーを初期化。
 	player.Start();
 	//画像表示
 	for (int i = 0;i < Hpnum;i++)
 	{
-		m_Hud[i].Initialize("Assets/Sprite/HP.png", Hppos, 210);
+		m_Hud[i].Initialize("Assets/Sprite/HP.png", Hppos);
 		Hppos.x += 100.0f;
 	}
-
-	Key.Initialize("Assets/Sprite/key.png", Keypos, 210);
+	Key.Initialize("Assets/Sprite/key.png", Keypos);
+	
 	CreateSprite();
 	//Player* pl = new Player();
 	//GoMgr.AddGameObject(pl);
@@ -51,7 +53,6 @@ void Game::Start()
 	//GoMgr.AddGameObject(en);
 	//Map* map = new Map();
 	//GoMgr.AddGameObject(map);
-
 }
 /*!
  * @brief	更新。
@@ -101,8 +102,12 @@ void Game::Update()
 	if (Hpnum < 1||Ppos.y<-2.0f)
 	{
 		GameEnd();
+		
 	}
-
+	if (GetAsyncKeyState('G'))
+	{
+		NextStage();
+	}
 }
 /*!
  * @brief	描画。
@@ -143,13 +148,27 @@ void Game::GameEnd()
 	{
 		delete Enemynum;
 	}
-	
+	scene->SetScene(scene->CHANGEEND);
 	scene->SceneChange();
-	delete game;
-	game = nullptr;
-	delete g_physicsWorld;
-	g_physicsWorld = nullptr;
+	//g_fade->StartFadeOut();
 }
+
+void Game::NextStage()
+{
+	for (auto bullet : Bullets)
+	{
+		delete bullet;
+	}
+
+	for (auto Enemynum : enem)
+	{
+		delete Enemynum;
+	}
+	scene->SceneChange();
+	//g_fade->StartFadeIn();
+}
+
+
 
 HRESULT Game::CreateSprite()
 {

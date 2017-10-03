@@ -17,12 +17,15 @@ public:
 		return m_camera;
 	}
 private:
-	Pad			pad;			//パッド
-	Camera		m_camera;		//カメラ
-	D3DXVECTOR3 position;		//座標
-	float		angleX = 0.0f;	//カメラ上下上限
-	D3DXVECTOR3	toCameraPos;	//カメラ座標
-	float angle = 0.0f;			//角度
+	Pad			pad;					//パッド
+	Camera		m_camera;				//カメラ
+	D3DXVECTOR3 position;				//座標
+	float		angleX = 0.0f;			//カメラ上下値
+	D3DXVECTOR3	toCameraPos;			//カメラ座標
+	float angle = 0.0f;					//角度
+	const float RotSpeedY = 2.0f;		//Y軸回転速度
+	const float RotSpeedX = 1.0f;		//X軸回転速度
+	const float CameraUpLimit = 10.0f;	//カメラ上下限度
 	//bool	CameraTypeflg = false;
 };
 

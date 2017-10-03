@@ -13,7 +13,7 @@ Sprite::~Sprite()
 
 }
 
-void Sprite::Initialize(LPCTSTR modelName,D3DXVECTOR2 position,int Alfa)
+void Sprite::Initialize(LPCTSTR modelName,D3DXVECTOR2 position)
 {
 	D3DXIMAGE_INFO imgInfo;
 	D3DXCreateTextureFromFileEx(g_pd3dDevice, modelName/*m_texFileName*/, 0, 0, 0, 0, D3DFMT_UNKNOWN,

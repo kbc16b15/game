@@ -5,24 +5,32 @@
 class TrapObject
 {
 public:
-	TrapObject(D3DXVECTOR3 RDir);
+	TrapObject(int Damagetype,D3DXVECTOR3 RDir);
 	~TrapObject();
 	//初期化
 	//modelName モデル名
 	//pos		モデルの座標
 	//rotation	モデルの回転
-	void Init(/*SMapChipLocInfo& locInfo*/const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rotation);
+	void Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rotation);
 	//更新
 	void Update();
 	//描画
 	void Draw();
+
+	void Rot();
 	//座標の取得
 	D3DXVECTOR3 Getpos()
 	{
 		return position;
 	}
 
+	enum DamageObjectType {
+		STAND,
+		ROT,
+		MOVE,
+	};
 private:
+	int DamageType = STAND;
 	SkinModel		model;					//スキンモデル
 	SkinModelData	modelData;				//スキンモデルデータ
 	D3DXVECTOR3		position;				//座標
@@ -34,6 +42,6 @@ private:
 	CharacterController	characterController;//キャラクターコントローラー
 	D3DXVECTOR3		RotDir;					//回転方向
 	D3DXVECTOR3		RotSpeed;				//回転速度
-	float angle = 0.0f;						//角度
+	float			angle = 0.0f;			//角度
 	
 };

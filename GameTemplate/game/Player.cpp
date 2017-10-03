@@ -56,18 +56,12 @@ void Player::Start(){
 
 void Player::Update()
 {
-	
-	Key();
 	pad.Update();
 	BulletHit();
-
-	//キャラクタが動く速度を設定。
-	characterController.SetMoveSpeed(moveSpeed);
-	//キャラクタコントローラーを実行。
-	characterController.Execute();
-	AnimationSet();
+	Setangle();
+	//Key();
 	move();
-	DamageTime--;
+	AnimationSet();
 
 	//アニメーションの更新
 	animation.Update(1.0f / 60.0f);
@@ -117,56 +111,119 @@ void Player::move()
 
 void Player::AnimationSet()
 {
-	if (IsDead&&game->GetHp() <= 0)
+	
+	switch (m_State)
 	{
-		animation.PlayAnimation(Dead, 0.5f);
-		IsDead = false;
-		//standflg = true;
-	}
-	//キャラの移動
-	if (!Isrun)
-	{
-		if (Ismove) {
-
-			animation.PlayAnimation(Dash, 0.5f);
-			Isrun = true;
-		}
-	}
-	else if (!Ismove&&animation.GetNumAnimationSet() != Jump)
-	{
-		Isrun = false;
-		animation.PlayAnimation(Stand, 0.3f);
-	}
-
-	if (!animation.IsPlay())
-	{
-		Isrun = false;
-		animation.PlayAnimation(Stand, 0.3f);
-	}
-
-	if (IsDamage)
-	{
-
-		animation.PlayAnimation(Damage, 0.5f);
-		IsDamage = false;
-		//Isrun = true;
-		IsStand = true;
-	}
-	//ジャンプアニメーション再生
-	else if (Isjump)
-	{
-		animation.PlayAnimation(Jump,0.5f);
+	case Stand:
+		if (workState != Stand){animation.PlayAnimation(Stand, 0.3f);}
+		workState = m_State;
+		if (IsDead&&game->GetHp() <= 0) { m_State = Dead; }
+		else if (IsDamage) { m_State = Damage; }
+		else if (Isjump) { m_State = Jump; }
+		else if (Ismove) { m_State = Dash; }
+		//else{ m_State = Stand;}
+		//m_State=Play;
+		break;
+	case Dash:
+		if (workState != Dash){animation.PlayAnimation(Dash, 0.5f);}
+		workState = m_State;
+		if (IsDead&&game->GetHp() <= 0) { m_State = Dead; }
+		else if (IsDamage) { m_State = Damage; }
+		else if (Isjump) { m_State = Jump; }
+		else if (Ismove) { m_State = Dash; }
+		else { m_State = Stand; }
+		//m_State = Play;
+		break;
+	case Jump:
+		if (workState != Jump){animation.PlayAnimation(Jump, 0.5f);}
+		workState = m_State;
+		if (IsDead&&game->GetHp() <= 0) { m_State = Dead; }
+		else if (IsDamage) { m_State = Damage; }
+		else if (Isjump) { m_State = Jump; }
+		else if (Ismove) { m_State = Dash; }
+		else{ m_State = Stand; }
+		//m_State = Play;
 		Isjump = false;
-		//Isrun = true;
-		IsStand = true;
+		break;
+	case Damage:
+		if (workState != Damage){animation.PlayAnimation(Damage, 0.5f);}
+		workState = m_State;
+		if (IsDead&&game->GetHp() <= 0) { m_State = Dead; }
+		else if (IsDamage) { m_State = Damage; }
+		else if (Isjump) { m_State = Jump; }
+		else if (Ismove) { m_State = Dash; }
+		else{ m_State = Stand; }
+		//m_State = Play;
+		IsDamage = false;
+		break;
+	case Dead:
+		if (workState != Dead){animation.PlayAnimation(Dead, 0.5f);}
+		workState = m_State;
+		if (IsDead&&game->GetHp() <= 0) { m_State = Dead; }
+		else if (IsDamage) { m_State = Damage; }
+		else if (Isjump) { m_State = Jump; }
+		else if (Ismove) { m_State = Dash; }
+		else{ m_State = Stand; }
+		//m_State = Play;
+		break;
+	default:
+		break;
+	}
+	//animation.PlayAnimation(m_State, 0.3f);
 
-	}
-	else if (characterController.IsOnGround() &&IsStand)
-	{
-		Isrun = false;
-		IsStand = false;
-		animation.PlayAnimation(Stand, 0.3f);
-	}
+
+
+
+	//if (IsDead&&game->GetHp() <= 0)
+	//{
+	//	animation.PlayAnimation(Dead, 0.5f);
+	//	IsDead = false;
+	//	//standflg = true;
+	//}
+	////キャラの移動
+	//if (!Isrun)
+	//{
+	//	if (Ismove) {
+
+	//		animation.PlayAnimation(Dash, 0.5f);
+	//		Isrun = true;
+	//	}
+	//}
+	//else if (!Ismove&&animation.GetNumAnimationSet() != Jump)
+	//{
+	//	Isrun = false;
+	//	animation.PlayAnimation(Stand, 0.3f);
+	//}
+
+	//if (!animation.IsPlay())
+	//{
+	//	Isrun = false;
+	//	animation.PlayAnimation(Stand, 0.3f);
+	//}
+
+	//if (IsDamage)
+	//{
+
+	//	animation.PlayAnimation(Damage, 0.5f);
+	//	IsDamage = false;
+	//	//Isrun = true;
+	//	IsStand = true;
+	//}
+	////ジャンプアニメーション再生
+	//else if (Isjump)
+	//{
+	//	animation.PlayAnimation(Jump,0.5f);
+	//	Isjump = false;
+	//	//Isrun = true;
+	//	IsStand = true;
+
+	//}
+	//else if (characterController.IsOnGround() &&IsStand)
+	//{
+	//	Isrun = false;
+	//	IsStand = false;
+	//	animation.PlayAnimation(Stand, 0.3f);
+	//}
 
 	/*if (JumpTime > 0)
 	{
@@ -216,38 +273,48 @@ void Player::AnimationSet()
 
 }
 
-void Player::Key()
+void Player::Setangle()
 {
+
 	moveSpeed = characterController.GetMoveSpeed();
-	float fMoveSpeed = 8.0f;
 	moveSpeed.x = 0.0f;
 	moveSpeed.z = 0.0f;
 
-	D3DXQUATERNION addRot = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
+	D3DXVECTOR3 LocalDir;
+	LocalDir.y = 0.0f;
+	LocalDir.x = pad.GetLStickXF();
+	LocalDir.z = pad.GetLStickYF();
+	D3DXMATRIX m_inv;
+	D3DXMatrixInverse(&m_inv, NULL, &game->GetCamera()->GetViewMatrix());
 
-	if (pad.IsPress(pad.enButtonLeft)|| GetAsyncKeyState('A')||pad.GetLStickXF()<0.0) {//左方向
-		moveSpeed.x = fMoveSpeed;
-		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), -5.0f);
-		rotation = addRot;
-	}
-	else if (pad.IsPress(pad.enButtonRight)||GetAsyncKeyState('D')||pad.GetLStickXF()>0.0) {//右方向
-		moveSpeed.x = -fMoveSpeed;
-		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 5.0f);
-		rotation = addRot;
-		
-	}
-	else if (pad.IsPress(pad.enButtonUp)|| GetAsyncKeyState('W') || pad.GetLStickYF()>0.0) {//上方向
-		moveSpeed.z = -fMoveSpeed;
-		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 60.0f);
-		rotation = addRot;
-	}
-	else if (pad.IsPress(pad.enButtonDown)|| GetAsyncKeyState('S') || pad.GetLStickYF()<0.0) {//下方向
+	D3DXVECTOR3 cameraZ;
+	cameraZ.y = 0.0f;
+	cameraZ.x = m_inv.m[2][0];
+	cameraZ.z = m_inv.m[2][2];
+	D3DXVec3Normalize(&cameraZ, &cameraZ);
+	D3DXVECTOR3 cameraX;
+	cameraX.x = m_inv.m[0][0];
+	cameraX.z = m_inv.m[0][2];
+	cameraX.y = 0.0f;
+	D3DXVec3Normalize(&cameraX, &cameraX);
 
-		moveSpeed.z = fMoveSpeed;
-		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 0.0f);
-		rotation = addRot;
-	}
+	D3DXVECTOR3 moveDir;
+	moveDir.x = cameraX.x * LocalDir.x + cameraZ.x * LocalDir.z;
+	moveDir.y = 0.0f;	
+	moveDir.z = cameraX.z *LocalDir.x + cameraZ.z * LocalDir.z;
+	moveSpeed.x = moveDir.x*6.0f;
+	moveSpeed.z = moveDir.z*6.0f;
 
+	if ((moveDir.x*moveDir.x + moveDir.y*moveDir.y + moveDir.z*moveDir.z) > 0.0001f)
+	{
+		float s;
+		float halfAngle = atan2f(moveDir.x, moveDir.z) * 0.5f;
+		s = sin(halfAngle);
+		rotation.w = cos(halfAngle);
+		rotation.x = 0.0f * s;
+		rotation.y = 1.0f * s;
+		rotation.z = 0.0f * s;
+	}
 
 	if (pad.IsTrigger(pad.enButtonA) && characterController.IsOnGround() /*&& animation.GetNumAnimationSet() != Jump*/) {
 		//ジャンプ
@@ -256,6 +323,52 @@ void Player::Key()
 		characterController.Jump();
 		Isjump = true;
 	}
+
+	if (Jumpflg)
+	{
+		//ジャンプ
+		moveSpeed.y = 12.0f;
+		//ジャンプしたことをキャラクタコントローラーに通知。
+		characterController.Jump();
+		//JumpTime = 80;
+		Jumpflg = false;
+		Isjump = true;
+	}
+	//キャラクタが動く速度を設定。
+	characterController.SetMoveSpeed(moveSpeed);
+	//キャラクタコントローラーを実行。
+	characterController.Execute();
+}
+
+void Player::Key()
+{
+
+	float fMoveSpeed = 8.0f;
+	D3DXQUATERNION addRot = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
+
+	if (pad.IsPress(pad.enButtonLeft)||pad.GetLStickXF()<0.0) {//左方向
+		moveSpeed.x = fMoveSpeed;
+		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), -5.0f);
+		rotation = addRot;
+	}
+	else if (pad.IsPress(pad.enButtonRight)||pad.GetLStickXF()>0.0) {//右方向
+		moveSpeed.x = -fMoveSpeed;
+		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 5.0f);
+		rotation = addRot;
+		
+	}
+	else if (pad.IsPress(pad.enButtonUp)||pad.GetLStickYF()>0.0) {//上方向
+		moveSpeed.z = -fMoveSpeed;
+		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 60.0f);
+		rotation = addRot;
+	}
+	else if (pad.IsPress(pad.enButtonDown)|| pad.GetLStickYF()<0.0) {//下方向
+
+		moveSpeed.z = fMoveSpeed;
+		D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 0.0f);
+		rotation = addRot;
+	}
+	
 }
 
 void Player::BulletHit()
@@ -278,17 +391,8 @@ void Player::BulletHit()
 		}
 		Damageflg = false;
 	}
-
-	if (Jumpflg)
-	{
-		//ジャンプ
-		moveSpeed.y = 12.0f;
-		//ジャンプしたことをキャラクタコントローラーに通知。
-		characterController.Jump();
-		//JumpTime = 80;
-		Jumpflg = false;
-		Isjump = true;
-	}
+	DamageTime--;
+	
 }
 
 void Player::Draw()

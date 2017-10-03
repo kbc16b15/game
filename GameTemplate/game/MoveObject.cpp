@@ -82,7 +82,12 @@ void MoveObject::Update()
 
 	D3DXVec3Subtract(&toPos, &LPos, &game->GetPlayer()->Getpos());
 	float Llen = D3DXVec3Length(&toPos);
-
+	D3DXVec3Subtract(&toPos, &RPos, &game->GetPlayer()->Getpos());
+	float Rlen = D3DXVec3Length(&toPos);
+	D3DXVec3Subtract(&toPos, &DPos, &game->GetPlayer()->Getpos());
+	float Dlen = D3DXVec3Length(&toPos);
+	D3DXVec3Subtract(&toPos, &game->GetPlayer()->Getpos(), &UPos);
+	float Ulen = D3DXVec3Length(&toPos);
 	if (Llen < 1.5f&&position.z>LMovelenge.x)
 	{
 		Lflg = true;
@@ -94,16 +99,11 @@ void MoveObject::Update()
 
 	if (Lflg)
 	{
-		//moveSpeed.x = 4.0f;
-		position.z -= 0.02f;
+		position.z -= MoveSpeed;
 		D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
-		speed.z = -1.2f;
+		speed.z -= PAddSpeed;
 		game->GetPlayer()->AddSpeed(speed);
 	}
-
-	//toPos = position;
-	D3DXVec3Subtract(&toPos, &RPos, &game->GetPlayer()->Getpos());
-	float Rlen = D3DXVec3Length(&toPos);
 
 	if (Rlen < 1.5f&&position.z<RMovelenge.x)
 	{
@@ -117,16 +117,11 @@ void MoveObject::Update()
 
 	if (Rflg)
 	{
-		//moveSpeed.x = 4.0f;
-		position.z += 0.02f;
+		position.z += MoveSpeed;
 		D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
-		speed.z = +1.2f;
+		speed.z += PAddSpeed;
 		game->GetPlayer()->AddSpeed(speed);
 	}
-
-
-	D3DXVec3Subtract(&toPos, &DPos, &game->GetPlayer()->Getpos());
-	float Dlen = D3DXVec3Length(&toPos);
 
 	if (Dlen < 1.0f&&position.x<DMovelenge.x)
 	{
@@ -139,16 +134,12 @@ void MoveObject::Update()
 
 	if (Dflg)
 	{
-		//moveSpeed.x = 4.0f;
-		position.x += 0.02f;
+		position.x += MoveSpeed;
 		D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
-		speed.x = +1.2f;
+		speed.x += PAddSpeed;
 		game->GetPlayer()->AddSpeed(speed);
 	}
 
-	D3DXVec3Subtract(&toPos, &game->GetPlayer()->Getpos(), &UPos);
-	float Ulen = D3DXVec3Length(&toPos);
-	
 	if (Ulen < 1.0f&&position.x > UMovelenge.x)
 	{
 		Uflg = true;
@@ -159,11 +150,10 @@ void MoveObject::Update()
 
 	if (Uflg)
 	{
-
 		//moveSpeed.x = 4.0f;
-		position.x -= 0.02f;
+		position.x -= MoveSpeed;
 		D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
-		speed.x = -1.2f;
+		speed.x -=PAddSpeed;
 		game->GetPlayer()->AddSpeed(speed);
 	}
 

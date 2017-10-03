@@ -30,45 +30,45 @@ void gameCamera::Update()
 
 	if (pad.GetRStickXF()<0.0)
 	{
-		angle += 3.0f;
+		angle += RotSpeedY;
 		D3DXMatrixRotationY(&m_Rot, D3DXToRadian(angle));
 
 	}
 	else if (pad.GetRStickXF()>0.0)
 	{
 			
-		angle -= 3.0f;
+		angle -= RotSpeedY;
 		D3DXMatrixRotationY(&m_Rot, D3DXToRadian(angle));
 	}
 	else if (pad.GetRStickYF()<0.0)
 	{
-		angle += 1.0f;
+		angle += RotSpeedX;
 		D3DXVECTOR3 Axis;
 		D3DXVECTOR3 vUP(0.0f, 1.0f, 0.0f);
 		D3DXVec3Cross(&Axis, &toCameraPos, &vUP);
-		if (angleX > 10.0f)
+		if (angleX > CameraUpLimit)
 		{
 			angle = 0.0f;
 		}
 		else
 		{
-			angleX += 1.0f;
+			angleX += RotSpeedX;
 		}
 		D3DXMatrixRotationAxis(&m_Rot, &Axis, D3DXToRadian(angle));
 	}
 	else if (pad.GetRStickYF()>0.0)
 	{
-		angle -= 1.0f;
+		angle -= RotSpeedX;
 		D3DXVECTOR3 Axis;
 		D3DXVECTOR3 vUP(0.0f, 1.0f, 0.0f);
 		D3DXVec3Cross(&Axis, &toCameraPos, &vUP);
-		if (angleX <-10.0f)
+		if (angleX <-CameraUpLimit)
 		{
 			angle = 0.0f;
 		}
 		else
 		{
-			angleX -= 1.0f;
+			angleX -= RotSpeedX;
 		}
 		D3DXMatrixRotationAxis(&m_Rot, &Axis, D3DXToRadian(angle));
 	}

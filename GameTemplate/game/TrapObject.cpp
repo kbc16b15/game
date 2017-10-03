@@ -2,9 +2,10 @@
 #include "TrapObject.h"
 #include "myEngine/Physics/CollisionAttr.h"
 
-TrapObject::TrapObject(D3DXVECTOR3 RDir)
+TrapObject::TrapObject(int Damagetype,D3DXVECTOR3 RDir)
 {
 	RotDir = RDir;
+	DamageType = Damagetype;
 }
 
 
@@ -49,7 +50,6 @@ void TrapObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rot
 	//続いて剛体を作成する。
 	//まずは剛体を作成するための情報を設定。
 
-
 	rbInfo.collider = &meshCollider;//剛体のコリジョンを設定する。
 	rbInfo.mass = 0.0f;				//質量を0にすると動かない剛体になる。
 	rbInfo.pos = position;
@@ -58,7 +58,6 @@ void TrapObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rot
 	rigidBody.Create(rbInfo);
 	rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 	rigidBody.GetBody()->setGravity({ 0.0f,0.0f,0.0f });
-	//rigidBody.GetBody()->getCollisionShape()->setUserIndex(enCollisionAttr_User);
 	rigidBody.GetBody()->setUserIndex(enCollisionAttr_User);
 	//作成した剛体を物理ワールドに追加。
 	g_physicsWorld->AddRigidBody(&rigidBody);
@@ -69,16 +68,31 @@ void TrapObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rot
 
 void TrapObject::Update()
 {
-	angle += 0.01f;
-	D3DXQUATERNION addRot = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
-	D3DXQuaternionRotationAxis(&addRot, &RotDir, angle);
-	Rotation = addRot;
+
+	switch (DamageType)
+	{
+	case STAND:
+		break;
+	case MOVE:
+		break;
+	case ROT:
+		angle += 0.01f;
+		D3DXQUATERNION addRot = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
+		D3DXQuaternionRotationAxis(&addRot, &RotDir, angle);
+		Rotation = addRot;
+		break;
+	}
 
 	btTransform& Ttra = rigidBody.GetBody()->getWorldTransform();//剛体の移動処理
 	Ttra.setOrigin({ position.x,position.y,position.z });
 	Ttra.setRotation({ Rotation.x,Rotation.y,Rotation.z,Rotation.w });
 	
 	model.UpdateWorldMatrix(position, Rotation, { 1.0f,1.0f,1.0f, });
+
+}
+
+void TrapObject::Rot()
+{
 
 }
 

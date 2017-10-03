@@ -27,8 +27,10 @@ namespace {
 				//自分に衝突した。or キャラクタ属性のコリジョンと衝突した。
 				return 0.0f;
 			}
-
-
+			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_User)//ユーザー定義のコリジョン属性
+			{
+				game->GetPlayer()->SetDamage();//プレイヤーにダメージ
+			}
 			//衝突点の法線を引っ張ってくる。
 			D3DXVECTOR3 hitNormalTmp = *(D3DXVECTOR3*)&convexResult.m_hitNormalLocal;
 			//上方向と法線のなす角度を求める。
@@ -67,16 +69,16 @@ namespace {
 		/*!
 		 * @brief	/衝突したときに呼ばれるコールバック関数。
 		 */
+
+		
 		virtual	btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 		{
-			if (convexResult.m_hitCollisionObject == me) {
+			if (convexResult.m_hitCollisionObject == me){
 				//自分に衝突した。or 地面に衝突した。
 				return 0.0f;
 			}
-			else if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_User)//ユーザー定義のコリジョン属性
-			{
-				game->GetPlayer()->SetDamage();//プレイヤーにダメージ
-			}
+
+			
 			//衝突点の法線を引っ張ってくる。
 			D3DXVECTOR3 hitNormalTmp;
 			hitNormalTmp = { convexResult.m_hitNormalLocal.x(), convexResult.m_hitNormalLocal.y(), convexResult.m_hitNormalLocal.z() };
@@ -89,7 +91,7 @@ namespace {
 				) {
 				isHit = true;
 				D3DXVECTOR3 hitPosTmp;
-				hitPosTmp = { convexResult.m_hitPointLocal.x(), convexResult.m_hitPointLocal.y(), convexResult.m_hitPointLocal.z() };
+				hitPosTmp = { convexResult.m_hitPointLocal.x(),convexResult.m_hitPointLocal.y(), convexResult.m_hitPointLocal.z() };
 				//交点との距離を調べる。
 				D3DXVECTOR3 vDist;
 				vDist = hitPosTmp - startPos;
@@ -101,6 +103,7 @@ namespace {
 					dist = distTmp;
 					hitNormal = hitNormalTmp;
 				}
+				
 			}
 			return 0.0f;
 		}
@@ -143,7 +146,6 @@ void CharacterController::Execute()
 	D3DXVECTOR3 originalXZDir = addPos;
 	originalXZDir.y = 0.0f;
 	D3DXVec3Normalize(&originalXZDir, &originalXZDir);
-	
 	//XZ平面での衝突検出と衝突解決を行う。
 	{
 		int loopCount = 0;
@@ -212,6 +214,12 @@ void CharacterController::Execute()
 					break;
 				}
 			}
+			/*else if (!m_isOnGround)
+			{
+				m_position.x = 0.0f;
+				m_position.z = 0.0f;
+				break;
+			}*/
 			else {
 				//どことも当たらないので終わり。
 				break;

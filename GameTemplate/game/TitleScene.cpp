@@ -9,29 +9,65 @@ TitleScene::TitleScene()
 
 TitleScene::~TitleScene()
 {
-	scene->SceneChange();
+	
 }
 
 void TitleScene::Init()
 {
-	m_Title.Initialize("Assets/Sprite/‚½‚¢‚Æ‚é.jpg", titlepos, 210);
+
+	m_Title.Initialize("Assets/Sprite/‚½‚¢‚Æ‚é.jpg",titlepos);
+	//m_Title.Setalfa(10);
+	//m_Title.SetRGB(0, 0, 0);
 	CreateSprite();
+	//g_fade->StartFadeIn();
+
 }
 
 void TitleScene::Update()
 {
+
 	m_Title.Update();
 	pad.Update();
-	if (GetAsyncKeyState('S')||pad.IsTrigger(pad.enButtonStart))
-	{
-		delete this;
+	/*if (pad.IsTrigger(pad.enButtonStart)) {
+
+		scene->SceneChange();
+	}*/
+
+	switch (GAME){
+	case START:
+		switch (m_state) {
+		case WaitFadeIn:
+			if (!g_fade->isExecute())
+			{
+				m_state = Run;
+			}
+			break;
+		case Run:
+			if (pad.IsTrigger(pad.enButtonStart)) {
+				g_fade->StartFadeOut();
+				m_state = WaitFadeOut;
+			}
+			break;
+		case WaitFadeOut:
+			if (!g_fade->isExecute())
+			{
+				//delete this;
+				scene->SceneChange();
+				return;
+				
+			}
+			break;
+		}
+		break;
 	}
 }
 
+
 void TitleScene::Render()
 {
-	
+	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	m_Title.Draw(m_Sprite);
+	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 	
 }
 

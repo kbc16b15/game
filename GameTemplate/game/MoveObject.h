@@ -18,7 +18,7 @@ public:
 	//modelName モデル名
 	//pos		モデルの座標
 	//rotation	モデルの回転
-	void Init(/*SMapChipLocInfo& locInfo*/const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rotation);
+	void Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rotation);
 	//更新
 	void Update();
 	//描画
@@ -62,5 +62,8 @@ private:
 	bool Lflg = false;
 	bool Uflg = false;
 	bool Dflg = false;
+
+	const float PAddSpeed = 1.2f;
+	const float MoveSpeed = 0.02f;
 };
 

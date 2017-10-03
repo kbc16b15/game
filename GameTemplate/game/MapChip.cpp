@@ -60,6 +60,7 @@ void MapChip::Init(/*SMapChipLocInfo& locInfo*/const char* modelName, D3DXVECTOR
 	rigidBody.Create(rbInfo);
 	//ì¬‚µ‚½„‘Ì‚ð•¨—ƒ[ƒ‹ƒh‚É’Ç‰ÁB
 	g_physicsWorld->AddRigidBody(&rigidBody);
+	rigidBody.GetBody()->getCollisionFlags();
 
 	//rigidBody.GetBody()->setGravity({ 0.0f,0.0f,0.0f });
 }
@@ -75,12 +76,12 @@ void MapChip::Draw()
 	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
 }
 
-bool MapChip::Rend(bool Rendflg)
-{
-	if (Rendflg)
-	{
-		Render = true;
-		
-	}
-	return Render;
-}
+//bool MapChip::Rend(bool Rendflg)
+//{
+//	if (Rendflg)
+//	{
+//		Render = true;
+//		
+//	}
+//	return Render;
+//}

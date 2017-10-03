@@ -1,4 +1,10 @@
-﻿//Cube
+﻿//unity
+{
+	"unity",
+	D3DXVECTOR3(2.16f, 3.95f, 0.04f),             //平行移動
+	D3DXQUATERNION(0.71f, 0.00f, 0.00f, 0.71f ),  //回転
+},
+//Cube
 {
 	"Cube",
 	D3DXVECTOR3(2.20f, 2.00f, 0.00f),             //平行移動
@@ -706,27 +712,15 @@
 	D3DXVECTOR3(-66.62f, 4.00f, -26.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
-//RCube
-{
-	"RCube",
-	D3DXVECTOR3(-54.00f, 0.00f, -27.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
-},
-//RCube
-{
-	"RCube",
-	D3DXVECTOR3(-38.80f, 0.00f, -27.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
-},
 //FCube
 {
 	"FCube",
 	D3DXVECTOR3(-67.00f, 6.00f, -26.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
-//GoalCube
+//Cube
 {
-	"GoalCube",
+	"Cube",
 	D3DXVECTOR3(-83.20f, 6.00f, 0.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
@@ -735,4 +729,28 @@
 	"Box",
 	D3DXVECTOR3(-45.30f, 0.00f, 0.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
+},
+//GoalCube
+{
+	"GoalCube",
+	D3DXVECTOR3(-33.28f, 6.30f, -25.80f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//HealItem
+{
+	"HealItem",
+	D3DXVECTOR3(-32.93f, 4.32f, 0.03f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
+},
+//RCube
+{
+	"RCube",
+	D3DXVECTOR3(-58.06f, 0.00f, -26.97f),             //平行移動
+	D3DXQUATERNION(0.71f, 0.00f, 0.00f, 0.71f ),  //回転
+},
+//RCube
+{
+	"RCube",
+	D3DXVECTOR3(-42.72f, 0.00f, -26.97f),             //平行移動
+	D3DXQUATERNION(0.71f, 0.00f, 0.00f, 0.71f ),  //回転
 },

@@ -4,7 +4,7 @@ class Sprite
 public:
 	Sprite();
 	~Sprite();
-	virtual void Initialize(LPCTSTR modelName,D3DXVECTOR2 position,int Alfa);
+	virtual void Initialize(LPCTSTR modelName,D3DXVECTOR2 position);
 	virtual void Update() = 0;
 	void Draw(LPD3DXSPRITE);
 	void SetupMatrices();

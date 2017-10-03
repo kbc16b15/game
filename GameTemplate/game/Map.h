@@ -5,35 +5,52 @@ class MoveObject;
 class TrapObject;
 class RotObject;
 class FallObject;
+class GoalObject;
+class HealItem;
+class Sky;
+class MoveCube;
+
 class Map/*:public IGameObject*/
 {
 public:
+
+	
 	//コンストラクタ
 	Map();
 	//デストラクタ
 	~Map();
 	//初期化
-	void Init();
+	void Init(/*struct SMapChipLocInfo Info[]*/);
 	//描画
 	void Draw();
 	//更新
 	void Update();
-	
-	//ムーブオブジェクトのリストの取得
-	//戻り値　std::vector<MoveObject*>
-	//std::vector<MoveObject*>& GetMobject()
-	//{
-	//	return moveList;
-	//}
+	enum STAGE
+	{
+		STAGE1,
+		STAGE2,
+	};
+
+	void SetStage(int StageNum)
+	{
+		m_StageNum = StageNum;
+
+	}
 private:
+	int m_Stage = STAGE1;
+	int m_StageNum=0;
+	
 	std::vector<MapChip*>	mapChipList;	//マップチップのリスト。
+	std::vector<Sky*>		skyList;		//空と海
 	std::vector<MoveObject*> moveList;		//ムーブオブジェクトのリスト
 	std::vector<TrapObject*> trapList;		//ダメージオブジェクトのリスト
 	std::vector<RotObject*> rotList;		//回転オブジェクトのリスト
 	std::vector<FallObject*> fallList;		//落下オブジェクトのリスト
+	std::vector<GoalObject*> GoalList;		//ゴール地点
+	std::vector<HealItem*> HealList;		//回復アイテム
+	std::vector<MoveCube*> mCubeList;		//移動床
 
 	D3DXVECTOR3 RDir = { 0.0f,1.0f,0.0f };	//回転の向き
 	D3DXVECTOR3 RSpeed= { 0.0f,1.0f,0.0f };	//回転速度
-
 
 };

@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/LunStage.unity
+- path: Assets/LunStage3.unity
   isLoaded: 1
   isActive: 1

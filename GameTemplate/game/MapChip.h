@@ -3,14 +3,7 @@
 #include "myEngine/Physics/CapsuleCollider.h"
 #include "myEngine/Physics/RigidBody.h"
 #include "myEngine/Physics/CharacterController.h"
-//#include "IGameObject.h"
-//マップチップの配置情報。
-//struct SMapChipLocInfo {
-//	const char* modelName;		//モデル。
-//	D3DXVECTOR3	pos;			//座標。
-//	D3DXQUATERNION	rotation;		//回転。
-//};
-class Skelton;
+//#include "IGameObject.h";
 class MapChip/*:public IGameObject*/
 {
 public:
@@ -29,7 +22,7 @@ public:
 	void Draw();
 	//描画の無効を設定
 	//Resndflg　描画フラグ
-	bool Rend(bool Rendflg);
+	//bool Rend(bool Rendflg);
 
 
 private:
@@ -51,7 +44,7 @@ private:
 	RigidBody			rigidBody;						//剛体。
 	RigidBodyInfo		rbInfo;							//剛体情報
 	CharacterController	characterController;			//キャラクターコントローラー
-	bool				Render = false;					//描画フラグ
+	//bool				Render = false;					//描画フラグ
 
 };
 
