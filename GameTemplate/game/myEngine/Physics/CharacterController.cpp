@@ -7,6 +7,7 @@
 #include "myEngine/Physics/CollisionAttr.h"
 
 namespace {
+	
 	const float cPI = 3.14159265358979323846f;
 	//衝突したときに呼ばれる関数オブジェクト(地面用)
 	struct SweepResultGround : public btCollisionWorld::ConvexResultCallback
@@ -17,7 +18,7 @@ namespace {
 		D3DXVECTOR3 hitNormal ={0.0f, 0.0f, 0.0f};			//衝突点の法線。
 		btCollisionObject* me = nullptr;					//自分自身。自分自身との衝突を除外するためのメンバ。
 		float dist = FLT_MAX;								//衝突点までの距離。一番近い衝突点を求めるため。FLT_MAXは単精度の浮動小数点が取りうる最大の値。
-
+		//bool ObjectHit = false;
 															//衝突したときに呼ばれるコールバック関数。
 		virtual	btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 		{
@@ -27,9 +28,10 @@ namespace {
 				//自分に衝突した。or キャラクタ属性のコリジョンと衝突した。
 				return 0.0f;
 			}
-			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_User)//ユーザー定義のコリジョン属性
+			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_HitActive)//ユーザー定義のコリジョン属性
 			{
 				game->GetPlayer()->SetDamage();//プレイヤーにダメージ
+				//ObjectHit = true;
 			}
 			//衝突点の法線を引っ張ってくる。
 			D3DXVECTOR3 hitNormalTmp = *(D3DXVECTOR3*)&convexResult.m_hitNormalLocal;
@@ -54,9 +56,13 @@ namespace {
 					dist = distTmp;
 				}
 			}
+			
 			return 0.0f;
 		}
+		
+
 	};
+
 	//衝突したときに呼ばれる関数オブジェクト(壁用)
 	struct SweepResultWall : public btCollisionWorld::ConvexResultCallback
 	{
@@ -135,6 +141,7 @@ void CharacterController::Init(float radius, float height, const D3DXVECTOR3& po
 }
 void CharacterController::Execute()
 {
+
 	//速度に重力加速度を加える。
 	m_moveSpeed.y += m_gravity * (1.0f / 60.0f);
 	//次の移動先となる座標を計算する。
@@ -285,6 +292,8 @@ void CharacterController::Execute()
 			//地面上にいない。
 			m_isOnGround = false;
 		}
+		
+		
 	}
 	//移動確定。
 	m_position = nextPosition;

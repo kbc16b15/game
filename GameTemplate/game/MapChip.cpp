@@ -7,6 +7,7 @@ MapChip::MapChip() :
 	position(0.0f, 0.0f, 0.0f),
 	rotation(0.0f, 0.0f, 0.0f, 1.0f)
 {
+
 }
 
 
@@ -19,7 +20,7 @@ MapChip::~MapChip()
 }
 void MapChip::Init(/*SMapChipLocInfo& locInfo*/const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 {
-
+	//mapObject->Init(modelName, pos, rot);
 	//読み込むモデルのファイルパスを作成。
 	char modelPath[256];
 	sprintf(modelPath, "Assets/modelData/%s.x", /*locInfo.*/modelName);
@@ -38,7 +39,7 @@ void MapChip::Init(/*SMapChipLocInfo& locInfo*/const char* modelName, D3DXVECTOR
 	light.SetDiffuseLightColor(1, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
 	light.SetDiffuseLightColor(2, D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
 	light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
+	light.SetAmbientLight(D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.0f));
 
 	model.SetLight(&light);
 	position =/* locInfo.*/pos;
@@ -60,20 +61,16 @@ void MapChip::Init(/*SMapChipLocInfo& locInfo*/const char* modelName, D3DXVECTOR
 	rigidBody.Create(rbInfo);
 	//作成した剛体を物理ワールドに追加。
 	g_physicsWorld->AddRigidBody(&rigidBody);
-	rigidBody.GetBody()->getCollisionFlags();
-
-	//rigidBody.GetBody()->setGravity({ 0.0f,0.0f,0.0f });
 }
 
 void MapChip::Update()
 {
 	model.UpdateWorldMatrix(position, rotation, { 1.0f,1.0f,1.0f, });
-
 }
 
 void MapChip::Draw()
 {
-	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
+	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix(),false,true);
 }
 
 //bool MapChip::Rend(bool Rendflg)

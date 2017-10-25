@@ -4,7 +4,7 @@
 #pragma once
 
 #include "myEngine/Graphics/Animation.h"
-
+#include "ShadowMap.h"
 class SkinModelData;
 class RenderContext;
 class Light;
@@ -22,7 +22,7 @@ public:
 	/*!
 	*@brief	描画。
 	*/
-	void Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix);
+	void Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix,bool Caster,bool Recive);
 	
 	/*!
 	*@brief	ワールド行列を更新。
@@ -44,6 +44,7 @@ public:
 	{
 		specularMap = specMap;
 	}
+
 	/*!
 	*@brief	オリジナルメッシュの先頭を取得する。
 	*/
@@ -57,4 +58,6 @@ private:
 	Light*				light = nullptr;			//!<ライト。
 	LPDIRECT3DTEXTURE9	normalMap = NULL;			//!法線マップ
 	LPDIRECT3DTEXTURE9	specularMap = NULL;			//!スペキュラマップ
+	ShadowMap			shadowMap;
+
 };

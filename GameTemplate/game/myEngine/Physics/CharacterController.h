@@ -103,6 +103,11 @@ public:
 	* @brief	剛体を物理エンジンから削除。
 	*/
 	void RemoveRigidBoby();
+
+	/*bool GetHit()
+	{
+		return m_isHit;
+	}*/
 private:
 	D3DXVECTOR3 		m_position;						//座標。
 	D3DXVECTOR3 		m_moveSpeed ;					//移動速度。
@@ -114,4 +119,5 @@ private:
 	float				m_height = 0.0f;
 	RigidBody			m_rigidBody;					//剛体。
 	float				m_gravity = -9.8f;				//重力。
+	//bool				m_isHit = false;				//オブジェクトとプレイヤーの接触
 };

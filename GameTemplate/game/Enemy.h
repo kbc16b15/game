@@ -28,13 +28,6 @@ public:
 		return IsDeath;
 	}
 private:
-	//enum EnemyMove
-	//{
-	//	UP,
-	//	DOWN,
-	//};
-	//EnemyMove			move = UP;
-
 	SkinModel			skinModel;											//スキンモデル
 	SkinModelData		skinModelData;										//スキンモデルデータ
 	D3DXVECTOR3			position = { -20.0f,0.0f,0.0f };					//座標
@@ -46,8 +39,6 @@ private:
 	bool				IsDeath = false;									//死亡フラグ
 	int					DeadTime = 100;										//死亡タイム
 	int					BulletDir = 0;										//バレット打つ方向
-	//CharacterController	characterController;								//キャラクターコントローラー
-	//D3DXVECTOR3			moveSpeed = { 0.0f,0.0f,0.0f };						//移動速度
 
 };
 

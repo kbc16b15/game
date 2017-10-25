@@ -16,7 +16,7 @@ public:
 	//更新
 	void Update();
 	//描画
-	void Draw();
+	void Draw(D3DXMATRIX viewM, D3DXMATRIX projM,bool Caster,bool Recive);
 	//アニメーション処理
 	void AnimationSet();
 	//移動処理
@@ -59,8 +59,28 @@ public:
 	{
 		if (DamageTime > 0) { return; }
 		Damageflg = true;
-		//DamageTime = 200;
 	}
+
+	//移動の停止
+	void PlayerMoveSet(bool Move)
+	{
+		MoveStop = Move;
+	}
+	////重力の設定
+	//void SetGravity()
+	//{
+	//	if (m_isGravity)
+	//	{
+	//		characterController.SetGravity(-10.0f);
+	//		m_isGravity = false;
+	//	}
+	//	else
+	//	{
+	//		characterController.SetGravity(10.0f);
+	//		m_isGravity = true;
+	//	}
+	//	
+	//}
 private:
 	enum PlayerState						//プレイヤーアニメーションの状態
 	{Stand, Move, Dash, Jump,Damage,Dead};
@@ -75,7 +95,7 @@ private:
 	bool				IsStand = false;	//待機アニメーションフラグ
 	//bool				IsAnimend = true;	//アニメーションエンドフラグ
 	bool				Damageflg = false;	//ダメージアニメーションフラグ
-	int					DamageTime = 200;	//ダメージ間隔
+	int					DamageTime = 0;		//ダメージ間隔
 	SkinModel			skinModel;							//スキンモデル
 	SkinModelData		skinModelData;						//スキンモデルデータ
 	Light				light;								//ライト
@@ -86,8 +106,15 @@ private:
 	CharacterController	characterController;				//キャラクターコントローラー
 	D3DXVECTOR3			moveSpeed = { 0.0f,0.0f,0.0f };		//移動速度
 	Pad					pad;								//パッド
-	LPDIRECT3DTEXTURE9 normalMap = NULL;					//法線マップ。
-	LPDIRECT3DTEXTURE9 specularMap = NULL;					//スペキュラマップ。
+	LPDIRECT3DTEXTURE9	normalMap = NULL;					//法線マップ。
+	LPDIRECT3DTEXTURE9	specularMap = NULL;					//スペキュラマップ。
+	D3DXVECTOR3			Addvector = { 0.0f,0.0f,0.0f };		//加算速度
+	float				m_Gravity = -10.0f;					//重力
+	bool				m_isGravity = false;				//反転フラグ
+	float				gAngle = 0.0f;
+	bool				Grotflg = true;
+	bool				MoveStop = false;
+
 
 };
 

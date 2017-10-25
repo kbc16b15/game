@@ -11,6 +11,7 @@ void Animation::Init(ID3DXAnimationController* anim)
 	blendRateTable.reset( new float[numMaxTracks] );
 	animationEndTime.reset(new double[numAnimSet]);
 	animationSets.reset(new ID3DXAnimationSet*[numAnimSet]);
+	animationLoopFlags.reset(new bool[numAnimSet]);
 	for( int i = 0; i < numMaxTracks; i++ ){
 		blendRateTable[i] = 1.0f;
 	}
@@ -18,6 +19,7 @@ void Animation::Init(ID3DXAnimationController* anim)
 	for (int i = 0; i < numAnimSet; i++) {
 		pAnimController->GetAnimationSet(i, &animationSets[i]);
 		animationEndTime[i] = -1.0;
+		animationLoopFlags[i]=true;
 	}
 	localAnimationTime = 0.0;
 }
@@ -68,19 +70,34 @@ void Animation::PlayAnimation(int animationSetIndex, float interpolateTime)
 }
 void Animation::Update(float deltaTime)
 {
-	if (pAnimController) {
+	if (pAnimController&&!isAnimEnd) {
 		localAnimationTime += deltaTime;
 		
 		if (animationEndTime[currentAnimationSetNo] > 0.0 //アニメーションの終了時間が設定されている。
 			&& localAnimationTime > animationEndTime[currentAnimationSetNo] //アニメーションの終了時間を超えた。
 		) {
-			localAnimationTime -= animationEndTime[currentAnimationSetNo];
-			pAnimController->SetTrackPosition(currentTrackNo, localAnimationTime);
-			pAnimController->AdvanceTime(0, NULL);
+			if (animationLoopFlags[currentAnimationSetNo]) {
+				localAnimationTime -= animationEndTime[currentAnimationSetNo];
+				pAnimController->SetTrackPosition(currentTrackNo, localAnimationTime);
+				pAnimController->AdvanceTime(0, NULL);
+			}
+			else
+			{
+				isAnimEnd = true;
+			}
 		}
 		else {
 			//普通に再生。
-			pAnimController->AdvanceTime(deltaTime, NULL);
+			//pAnimController->AdvanceTime(deltaTime, NULL);
+
+			if (animationSets[currentAnimationSetNo]->GetPeriod() < localAnimationTime
+				&& !animationLoopFlags[currentAnimationSetNo]) {
+				localAnimationTime = animationSets[currentAnimationSetNo]->GetPeriod();
+				isAnimEnd = true;
+			}
+			else {
+				pAnimController->AdvanceTime(deltaTime, NULL);
+			}
 		}
 		if (isInterpolate) {
 			ID3DXAnimationSet* animSet = animationSets[2];
@@ -113,5 +130,6 @@ void Animation::Update(float deltaTime)
 				}
 			}
 		}
+
 	}
 }

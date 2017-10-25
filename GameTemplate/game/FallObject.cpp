@@ -56,7 +56,7 @@ void FallObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rot
 	//剛体を作成。
 	rigidBody.Create(rbInfo);
 	rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
-	rigidBody.GetBody()->setUserIndex(enCollisionAttr_User);
+	rigidBody.GetBody()->setUserIndex(enCollisionAttr_HitActive);
 	//作成した剛体を物理ワールドに追加。
 	g_physicsWorld->AddRigidBody(&rigidBody);
 	//angle = 85.0f;
@@ -84,5 +84,5 @@ void FallObject::Update()
 
 void FallObject::Draw()
 {
-	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
+	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix(), false, false);
 }

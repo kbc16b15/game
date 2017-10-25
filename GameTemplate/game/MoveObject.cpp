@@ -13,7 +13,7 @@ MoveObject::~MoveObject()
 	modelData.Release();
 }
 
-void MoveObject::Init(const char* modelName,D3DXVECTOR3	pos,D3DXQUATERNION	rotation)
+void MoveObject::Init(const char* modelName,D3DXVECTOR3	pos,D3DXQUATERNION	rot)
 {
 
 	//読み込むモデルのファイルパスを作成。
@@ -38,7 +38,7 @@ void MoveObject::Init(const char* modelName,D3DXVECTOR3	pos,D3DXQUATERNION	rotat
 
 	model.SetLight(&light);
 	position =pos;
-	Rotation =rotation;
+	rotation =rot;
 
 	model.UpdateWorldMatrix({ 0.0f, 0.0f, 0.0f }, {0.0f, 0.0, 0.0f, 1.0}, { 1.0f, 1.0f, 1.0f });
 	//ここから衝突判定絡みの初期化。
@@ -51,11 +51,10 @@ void MoveObject::Init(const char* modelName,D3DXVECTOR3	pos,D3DXQUATERNION	rotat
 	rbInfo.collider = &meshCollider;//剛体のコリジョンを設定する。
 	rbInfo.mass = 0.0f;				//質量を0にすると動かない剛体になる。
 	rbInfo.pos = position;
-	rbInfo.rot = Rotation;
+	rbInfo.rot = rotation;
 	//剛体を作成。
 	rigidBody.Create(rbInfo);
 	rigidBody.GetBody()->setCollisionFlags( btCollisionObject::CF_CHARACTER_OBJECT);
-	rigidBody.GetBody()->setGravity({ 0.0f,0.0f,0.0f });
 
 	//作成した剛体を物理ワールドに追加。
 	g_physicsWorld->AddRigidBody(&rigidBody);
@@ -173,13 +172,13 @@ void MoveObject::Update()
 
 	btTransform& Ttra = rigidBody.GetBody()->getWorldTransform();//剛体の移動処理
 	Ttra.setOrigin({ position.x,position.y,position.z });
-	Ttra.setRotation({ Rotation.x,Rotation.y,Rotation.z,Rotation.w });
+	Ttra.setRotation({ rotation.x,rotation.y,rotation.z,rotation.w });
 	
-	model.UpdateWorldMatrix(position, Rotation, { 1.0f,1.0f,1.0f, });
+	model.UpdateWorldMatrix(position, rotation, { 1.0f,1.0f,1.0f, });
 
 }
 
 void MoveObject::Draw()
 {
-	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
+	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix(), false,false);
 }

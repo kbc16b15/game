@@ -37,24 +37,23 @@ void GoalObject::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot
 	light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
 
 	model.SetLight(&light);
-	position =/* locInfo.*/pos;
-	rotation =/* locInfo.*/rot;
+	position =pos;
+	rotation =rot;
 
-	model.UpdateWorldMatrix(position, rotation, { 1.0f, 1.0f, 1.0f });
-	//ここから衝突判定絡みの初期化。
-	//スキンモデルからメッシュコライダーを作成する。
+	model.UpdateWorldMatrix({ 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0, 0.0f, 1.0 }, { 1.0f, 1.0f, 1.0f });
 	D3DXMATRIX* rootBoneMatrix = modelData.GetRootBoneWorldMatrix();
-	meshCollider.CreateFromSkinModel(&model, rootBoneMatrix);
-	//続いて剛体を作成する。
-	//まずは剛体を作成するための情報を設定。
 
-	rbInfo.collider = &meshCollider;//剛体のコリジョンを設定する。
-	rbInfo.mass = 0.0f;				//質量を0にすると動かない剛体になる。
-	rbInfo.pos = { 0.0f, 0.0f, 0.0f };
-	rbInfo.rot = { 0.0f, 0.0f, 0.0f, 1.0f };
-	//剛体を作成。
+	meshCollider.CreateFromSkinModel(&model, rootBoneMatrix);
+
+	rbInfo.collider = &meshCollider;
+	rbInfo.mass = 0.0f;
+	rbInfo.pos = position;
+	rbInfo.rot = rotation;
+
 	rigidBody.Create(rbInfo);
-	//作成した剛体を物理ワールドに追加。
+	rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+	rigidBody.GetBody()->setGravity({ 0.0f,0.0f,0.0f });
+
 	g_physicsWorld->AddRigidBody(&rigidBody);
 }
 
@@ -72,5 +71,5 @@ void GoalObject::Update()
 
 void GoalObject::Draw()
 {
-	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
+	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix(), false,false);
 }

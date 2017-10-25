@@ -5,6 +5,7 @@
 
 ResultScene::ResultScene()
 {
+	g_fade->StartFadeIn();
 }
 
 
@@ -23,10 +24,38 @@ void ResultScene::Update()
 {
 	pad.Update();
 	m_End.Update();
-	if (GetAsyncKeyState('S') || pad.IsTrigger(pad.enButtonStart))
-	{
-		//delete this;
-		scene->SceneChange();
+	//if (GetAsyncKeyState('S') || pad.IsTrigger(pad.enButtonStart))
+	//{
+	//	//delete this;
+	//	scene->SceneChange();
+	//}
+
+	switch (GAME) {
+	case START:
+		switch (m_state) {
+		case WaitFadeIn:
+			if (!g_fade->isExecute())
+			{
+				m_state = Run;
+			}
+			break;
+		case Run:
+			if (pad.IsTrigger(pad.enButtonStart) || GetAsyncKeyState('S')) {
+				g_fade->StartFadeOut();
+				m_state = WaitFadeOut;
+			}
+			break;
+		case WaitFadeOut:
+			if (!g_fade->isExecute())
+			{
+				//delete this;
+				scene->SceneChange();
+				return;
+
+			}
+			break;
+		}
+		break;
 	}
 }
 

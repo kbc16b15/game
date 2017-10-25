@@ -74,17 +74,50 @@ void gameCamera::Update()
 	}
 	angle = 0.0f;
 	D3DXVec3TransformCoord(&toCameraPos, &toCameraPos, &m_Rot);
+	if (!Rockonflg)
 	m_camera.SetEyePt(m_camera.GetLookatPt() + toCameraPos);
-
+	
 	//プレイヤー追従カメラ。
 	D3DXVECTOR3 targetPos = game->GetPlayer()->Getpos();
-	if (targetPos.y < 0.0f)
+	/*if (targetPos.y < 0.0f)
 	{
 		targetPos.y = 0.0f;
-	}
+	}*/
 	D3DXVECTOR3 eyePos = targetPos + toCameraPos;
+	if(!Rockonflg)
 	m_camera.SetLookatPt(targetPos);
 	m_camera.SetEyePt(eyePos);
+
+	if (Rockonflg)
+	{
+
+		eyePos = game->GetPlayer()->Getpos();
+		targetPos = game->GetPlayer()->Getpos();
+		eyePos.x += 1.0f;
+		eyePos.z += 0.8f;
+		eyePos.y += 1.2f;
+		targetPos.x -= 10.0f;
+		
+		if (GetAsyncKeyState('H') || pad.GetRStickXF() < 0.0f)
+		{
+			vec.z += 0.5f;
+		}
+		else if (GetAsyncKeyState('K') || pad.GetRStickXF() > 0.0f)
+		{
+			vec.z -= 0.5f;
+		}
+		else if (GetAsyncKeyState('N') || pad.GetRStickYF() < 0.0f)
+		{
+			vec.y += 0.5f;
+		}
+		else if (GetAsyncKeyState('U') || pad.GetRStickYF() > 0.0f)
+		{
+			vec.y -= 0.5f;
+		}
+		targetPos += vec;
+		m_camera.SetLookatPt(targetPos);
+		m_camera.SetEyePt(eyePos);
+	}
 	m_camera.Update();
 }
 

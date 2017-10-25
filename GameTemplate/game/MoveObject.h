@@ -1,13 +1,6 @@
 #pragma once
-#include "myEngine/Physics/MeshCollider.h"
-#include "myEngine/Physics/RigidBody.h"
-#include "myEngine/Physics/CharacterController.h"
-//struct SMapChipLocInfo {
-//	const char* modelName;		//モデル。
-//	D3DXVECTOR3	pos;			//座標。
-//	D3DXQUATERNION	rotation;		//回転。
-//};
-class MoveObject
+#include "MapObject.h"
+class MoveObject :public MapObject
 {
 public:
 	//コンストラクタ
@@ -45,7 +38,7 @@ private:
 	SkinModel		model;						//スキンモデル
 	SkinModelData	modelData;					//スキンモデルデータ
 	D3DXVECTOR3		position;					//座標
-	D3DXQUATERNION	Rotation;					//回転
+	D3DXQUATERNION	rotation;					//回転
 	Light			light;						//ライト
 	MeshCollider	meshCollider;				//メッシュコライダー
 	RigidBody		rigidBody;					//剛体。

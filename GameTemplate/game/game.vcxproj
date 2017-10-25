@@ -155,6 +155,8 @@
   <ItemGroup>
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="CubeCollision.cpp" />
+    <ClCompile Include="GravityObject.cpp" />
+    <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Fade.cpp" />
@@ -186,8 +188,10 @@
     <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="RotObject.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="ShadowMap.cpp" />
     <ClCompile Include="Sky.cpp" />
     <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="Spring.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -195,12 +199,15 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="trackingEnemy.cpp" />
     <ClCompile Include="TrapObject.cpp" />
     <ClCompile Include="WaveFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="CubeCollision.h" />
+    <ClInclude Include="GravityObject.h" />
+    <ClInclude Include="MapObject.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Fade.h" />
@@ -236,10 +243,13 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="RotObject.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="ShadowMap.h" />
     <ClInclude Include="Sky.h" />
     <ClInclude Include="Sound.h" />
+    <ClInclude Include="Spring.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="trackingEnemy.h" />
     <ClInclude Include="TrapObject.h" />
     <ClInclude Include="WaveFile.h" />
   </ItemGroup>

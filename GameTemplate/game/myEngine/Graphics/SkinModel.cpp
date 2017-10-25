@@ -19,7 +19,10 @@ namespace {
 		D3DXMATRIX* projMatrix,
 		Light* light,
 		LPDIRECT3DTEXTURE9 normalMap,
-		LPDIRECT3DTEXTURE9 specularMap
+		LPDIRECT3DTEXTURE9 specularMap,
+		ShadowMap shadowMap,
+		bool Caster,
+		bool Recive
 	)
 	{
 		D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
@@ -32,18 +35,37 @@ namespace {
 		pd3dDevice->GetDeviceCaps(&d3dCaps);
 		D3DXMATRIX viewProj;
 		D3DXMatrixMultiply(&viewProj, viewMatrix, projMatrix);
-		
 		//テクニックを設定。
 		{
-			if (pMeshContainer->pSkinInfo != NULL) {
+			if (Caster&&pMeshContainer->pSkinInfo != NULL) {
+				pEffect->SetTechnique("ShadowSkinModel");
+			}
+			else if (!Caster&&pMeshContainer->pSkinInfo != NULL)
+			{
 				pEffect->SetTechnique("SkinModel");
+			}
+			else if (Caster&&pMeshContainer->pSkinInfo == NULL) {
+				pEffect->SetTechnique("ShadowNoSkinModel");
 			}
 			else {
 				pEffect->SetTechnique("NoSkinModel");
 			}
+			
 		}
 		//共通の定数レジスタを設定
 		{
+			pEffect->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
+			pEffect->BeginPass(0);
+			pEffect->SetBool("g_Reciver", Recive);
+	
+			pEffect->SetMatrix("g_projectionMatrix", projMatrix);
+			pEffect->SetMatrix("g_viewMatrix", viewMatrix);
+			if (Recive){
+				
+				pEffect->SetMatrix("g_viewlightMatrix", &shadowMap.GetlightViewMatrix());
+				pEffect->SetMatrix("g_projlightMatrix", &shadowMap.GetlightProjectionMatrix());
+				pEffect->SetTexture("g_ShadowMapTexture", shadowMap.GetTexture());
+			}
 			//ビュープロジェクション
 			pEffect->SetMatrix("g_mViewProj", &viewProj);
 			//ライト
@@ -52,7 +74,6 @@ namespace {
 				light,
 				sizeof(Light)
 			);
-
 		}
 
 		if (specularMap != NULL)
@@ -86,6 +107,7 @@ namespace {
 				D3DXVECTOR4 CameraEye = game->GetCamera()->GetEyePt();//カメラの視点の座標
 				CameraEye.w = 1.0f;
 				pEffect->SetVector("Eye", &CameraEye);
+				
 				pEffect->SetMatrixArray("g_mWorldMatrixArray", g_pBoneMatrices, pMeshContainer->NumPaletteEntries);
 				pEffect->SetInt("g_numBone", pMeshContainer->NumInfl);
 				// ディフューズテクスチャ。
@@ -120,6 +142,7 @@ namespace {
 			else {
 				mWorld = *worldMatrix;
 			}
+
 			pEffect->SetMatrix("g_worldMatrix", &mWorld);
 			pEffect->SetMatrix("g_rotationMatrix", rotationMatrix);
 			pEffect->Begin(0, D3DXFX_DONOTSAVESTATE);
@@ -145,7 +168,10 @@ namespace {
 		D3DXMATRIX* projMatrix,
 		Light* light,
 		LPDIRECT3DTEXTURE9 normalMap,
-		LPDIRECT3DTEXTURE9 specularMap
+		LPDIRECT3DTEXTURE9 specularMap,
+		ShadowMap shadowMap,
+		bool Caster,
+		bool Recive
 	)
 	{
 		LPD3DXMESHCONTAINER pMeshContainer;
@@ -164,7 +190,10 @@ namespace {
 				projMatrix,
 				light,
 				normalMap,
-				specularMap
+				specularMap,
+				shadowMap,
+				Caster,
+				Recive
 				);
 
 			pMeshContainer = pMeshContainer->pNextMeshContainer;
@@ -182,7 +211,10 @@ namespace {
 				projMatrix,
 				light,
 				normalMap,
-				specularMap
+				specularMap,
+				shadowMap,
+				Caster,
+				Recive
 				);
 		}
 
@@ -198,7 +230,10 @@ namespace {
 				projMatrix,
 				light,
 				normalMap,
-				specularMap
+				specularMap,
+				shadowMap,
+				Caster,
+				Recive
 				);
 		}
 	}
@@ -237,7 +272,7 @@ void SkinModel::UpdateWorldMatrix(const D3DXVECTOR3& trans, const D3DXQUATERNION
 	}
 }
 
-void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)
+void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix,bool Caster,bool Recive)
 {
 	if (skinModelData) {
 		DrawFrame(
@@ -250,7 +285,10 @@ void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)
 			projMatrix,
 			light,
 			normalMap,
-			specularMap
+			specularMap,
+			shadowMap,
+			Caster,
+			Recive
 		);
 	}
 }

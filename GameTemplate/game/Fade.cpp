@@ -70,8 +70,12 @@ void Fade::Update()
 				break;
 
 			}
-			m_fadetex.Initialize("Assets/Sprite/LL.png", fadepos);
-			//CreateSprite();
+
+			if (!m_fadetex.Getalfa() == 1.0f || !m_fadetex.Getalfa() == 0.0f)
+			{
+				m_fadetex.Initialize("Assets/Sprite/LL.png", fadepos);
+				//CreateSprite();
+			}
 		}
 	}
 }

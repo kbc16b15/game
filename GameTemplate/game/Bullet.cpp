@@ -16,9 +16,10 @@ Bullet::~Bullet()
 
 }
 
-void Bullet::Start(D3DXVECTOR3 pos)
+void Bullet::Start(D3DXVECTOR3 pos, D3DXVECTOR3 targetPos,int cha)
 {
-
+	m_Chara = cha;
+	TargetPos = targetPos;
 	//Number = No;
 	position = pos;
 	//skinModelData.LoadModelData("Assets/modelData/Bullet.X", NULL);
@@ -34,7 +35,7 @@ void Bullet::Start(D3DXVECTOR3 pos)
 	light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
 	light.SetAmbientLight(D3DXVECTOR4(0.8f, 0.8f, 0.8f, 1.0f));
 
-	targetpos = game->GetPlayer()->Getpos();
+	Playerpos = game->GetPlayer()->Getpos();
 
 	if (skinModelData == NULL){
 		//モデルをロード。
@@ -48,7 +49,7 @@ void Bullet::Start(D3DXVECTOR3 pos)
 	D3DXQuaternionRotationAxis(&rotation, &D3DXVECTOR3(0.0f, 1.0f, 0.0f),-5.0f);
 	direction = { 0.0f, 0.0f, 1.0f };
 
-	state = eState_Search;
+	//state = eState_Search;
 }
 
 
@@ -112,23 +113,34 @@ void Bullet::TargetBullet()
 		{
 			Btime = 0;
 		}*/
-	//直進バレット
-		position.x += 0.1f;
-	
-	Btime--;
+
 	CubeCollision Cubemass;
 	D3DXVECTOR3 Ppos = game->GetPlayer()->Getpos();
+	//直進バレット
+	position += TargetPos*0.04f;
+	//position.z += Ppos.z*0.04f;
+	Btime--;
+
 	//バレットの当たり判定
 	if (Cubemass.Cubemass(position, Ppos, 0.3f, 0.3f))
 	{
-		game->GetPlayer()->SetDamage();
-		Bulletflg = false;
+		switch (m_Chara)
+		{
+		case Player:
+			break;
+
+
+		case Enemy:
+			game->GetPlayer()->SetDamage();
+			Bulletflg = false;
+			break;
+		}
 	}
 
 	//バレットの寿命
 	if (Btime <= 0 /*|| len<0.5f*/)
 	{
-		Bulletflg = false;
+		//Bulletflg = false;
 		Btime = 300;
 	}
 }
@@ -137,5 +149,5 @@ void Bullet::Draw()
 {
 	skinModel.UpdateWorldMatrix(position, rotation/*D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0)*/, scale);
 
-	skinModel.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
+	skinModel.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix(), false, false);
 }

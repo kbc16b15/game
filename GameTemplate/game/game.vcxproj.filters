@@ -13,18 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="ソース ファイル\myEngine">
-      <UniqueIdentifier>{cf71c2d7-86a3-4324-b23c-562f3630fba6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\myEngine\Graphics">
-      <UniqueIdentifier>{06578e99-1462-452d-9e13-0656e1071d84}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\myEngine\Physics">
-      <UniqueIdentifier>{24b08cc4-989a-4ce6-8812-a1108fd4dd90}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\myEngine\HID">
-      <UniqueIdentifier>{eb51f13c-4c51-4798-b6cc-97f71ded64a4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Map">
       <UniqueIdentifier>{9f303c51-fcc3-4864-99e8-e84adfe0c377}</UniqueIdentifier>
     </Filter>
@@ -45,6 +33,30 @@
     </Filter>
     <Filter Include="ソース ファイル\Sound">
       <UniqueIdentifier>{7c102ef6-e95f-4e5d-a301-656102d97d40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Fade">
+      <UniqueIdentifier>{be730973-e379-4e61-af11-736069a8c124}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\mass">
+      <UniqueIdentifier>{744be983-6b64-4397-b0f5-b808879651e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Map\Sky">
+      <UniqueIdentifier>{da42494e-e18c-4379-beb1-3cb45871610b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Map\MapChip">
+      <UniqueIdentifier>{4d9b8975-6672-4312-a545-f9f97ad09b3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\myEngine">
+      <UniqueIdentifier>{cf71c2d7-86a3-4324-b23c-562f3630fba6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\myEngine\Graphics">
+      <UniqueIdentifier>{06578e99-1462-452d-9e13-0656e1071d84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\myEngine\Physics">
+      <UniqueIdentifier>{24b08cc4-989a-4ce6-8812-a1108fd4dd90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\myEngine\HID">
+      <UniqueIdentifier>{eb51f13c-4c51-4798-b6cc-97f71ded64a4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -93,17 +105,8 @@
     <ClCompile Include="Map.cpp">
       <Filter>ソース ファイル\Map</Filter>
     </ClCompile>
-    <ClCompile Include="MapChip.cpp">
-      <Filter>ソース ファイル\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="MoveObject.cpp">
-      <Filter>ソース ファイル\Map</Filter>
-    </ClCompile>
     <ClCompile Include="myEngine\Graphics\Sprite.cpp">
       <Filter>ソース ファイル\myEngine\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="CubeCollision.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>ソース ファイル\scene</Filter>
@@ -123,35 +126,11 @@
     <ClCompile Include="HUD.cpp">
       <Filter>ソース ファイル\HUD</Filter>
     </ClCompile>
-    <ClCompile Include="TrapObject.cpp">
-      <Filter>ソース ファイル\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="RotObject.cpp">
-      <Filter>ソース ファイル\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="FallObject.cpp">
-      <Filter>ソース ファイル\Map</Filter>
-    </ClCompile>
     <ClCompile Include="gameCamera.cpp">
       <Filter>ソース ファイル\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="GoalObject.cpp">
-      <Filter>ソース ファイル\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="HealItem.cpp">
-      <Filter>ソース ファイル\Map</Filter>
-    </ClCompile>
     <ClCompile Include="RenderTarget.cpp">
       <Filter>ソース ファイル\myEngine\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Fade.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Sky.cpp">
-      <Filter>ソース ファイル\Map</Filter>
-    </ClCompile>
-    <ClCompile Include="MoveCube.cpp">
-      <Filter>ソース ファイル\Map</Filter>
     </ClCompile>
     <ClCompile Include="Sound.cpp">
       <Filter>ソース ファイル\Sound</Filter>
@@ -164,6 +143,54 @@
     </ClCompile>
     <ClCompile Include="ResultScene.cpp">
       <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Fade.cpp">
+      <Filter>ソース ファイル\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeCollision.cpp">
+      <Filter>ソース ファイル\mass</Filter>
+    </ClCompile>
+    <ClCompile Include="Sky.cpp">
+      <Filter>ソース ファイル\Map\Sky</Filter>
+    </ClCompile>
+    <ClCompile Include="FallObject.cpp">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="GoalObject.cpp">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="MapChip.cpp">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveCube.cpp">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveObject.cpp">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="RotObject.cpp">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="TrapObject.cpp">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="HealItem.cpp">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="MapObject.cpp">
+      <Filter>ソース ファイル\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Spring.cpp">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="GravityObject.cpp">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMap.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="trackingEnemy.cpp">
+      <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -215,13 +242,7 @@
     <ClInclude Include="myEngine\HID\Pad.h">
       <Filter>ソース ファイル\myEngine\HID</Filter>
     </ClInclude>
-    <ClInclude Include="MapChip.h">
-      <Filter>ソース ファイル\Map</Filter>
-    </ClInclude>
     <ClInclude Include="Map.h">
-      <Filter>ソース ファイル\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="MoveObject.h">
       <Filter>ソース ファイル\Map</Filter>
     </ClInclude>
     <ClInclude Include="myEngine\Graphics\Sprite.h">
@@ -229,9 +250,6 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="CubeCollision.h">
-      <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>ソース ファイル\scene</Filter>
@@ -251,38 +269,14 @@
     <ClInclude Include="HUD.h">
       <Filter>ソース ファイル\HUD</Filter>
     </ClInclude>
-    <ClInclude Include="TrapObject.h">
-      <Filter>ソース ファイル\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="RotObject.h">
-      <Filter>ソース ファイル\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="FallObject.h">
-      <Filter>ソース ファイル\Map</Filter>
-    </ClInclude>
     <ClInclude Include="locationinfo.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="gameCamera.h">
       <Filter>ソース ファイル\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="GoalObject.h">
-      <Filter>ソース ファイル\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="HealItem.h">
-      <Filter>ソース ファイル\Map</Filter>
-    </ClInclude>
     <ClInclude Include="RenderTarget.h">
       <Filter>ソース ファイル\myEngine\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Fade.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Sky.h">
-      <Filter>ソース ファイル\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="MoveCube.h">
-      <Filter>ソース ファイル\Map</Filter>
     </ClInclude>
     <ClInclude Include="Sound.h">
       <Filter>ソース ファイル\Sound</Filter>
@@ -295,6 +289,54 @@
     </ClInclude>
     <ClInclude Include="ResultScene.h">
       <Filter>ソース ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Fade.h">
+      <Filter>ソース ファイル\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeCollision.h">
+      <Filter>ソース ファイル\mass</Filter>
+    </ClInclude>
+    <ClInclude Include="Sky.h">
+      <Filter>ソース ファイル\Map\Sky</Filter>
+    </ClInclude>
+    <ClInclude Include="FallObject.h">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="GoalObject.h">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="MapChip.h">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveCube.h">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveObject.h">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="RotObject.h">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="TrapObject.h">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="HealItem.h">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="MapObject.h">
+      <Filter>ソース ファイル\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Spring.h">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="GravityObject.h">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMap.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="trackingEnemy.h">
+      <Filter>ソース ファイル\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

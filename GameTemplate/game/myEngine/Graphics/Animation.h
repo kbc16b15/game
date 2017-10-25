@@ -43,6 +43,15 @@ public:
 		animationEndTime[animationSetIndex] = endTime;
 	}
 
+	//アニメーションのループフラグを設定
+	void SetAnimationLoopFlag(int animationSetIndex, bool loopFlag)
+	{
+		if (animationSetIndex < numAnimSet)
+		{
+			animationLoopFlags[animationSetIndex] = loopFlag;
+		}
+	}
+
 	/*!
 	*@brief	アニメーションの再生。
 	*@param[in]		animationIndex		再生したいアニメーションのインデックス。
@@ -87,7 +96,7 @@ private:
 	std::unique_ptr<ID3DXAnimationSet*[]>	animationSets;			//!<アニメーションセットの配列。
 	std::unique_ptr<float[]>				blendRateTable;			//!<ブレンディングレートのテーブル。
 	std::unique_ptr<double[]>				animationEndTime;		//!<アニメーションの終了タイム。デフォルトは-1.0が入っていて、-1.0が入っている場合はID3DXAnimationSetのアニメーション終了タイムが優先される。
-																	//!<アニメーションのループフラグ。
+	std::unique_ptr<bool[]>					animationLoopFlags;		//!<アニメーションのループフラグ。
 	double									localAnimationTime;		//!<ローカルアニメーションタイム。
 	int										currentAnimationSetNo;	//!<現在再生中のアニメーショントラックの番号。
 	int										currentTrackNo;			//!<現在のトラックの番号。

@@ -10,10 +10,16 @@ float4x3    g_mWorldMatrixArray[MAX_MATRICES] : WORLDMATRIXARRAY;
 float4x4    g_mViewProj : VIEWPROJECTION;
 float		g_numBone;			//骨の数。
 
+float4x4	g_viewMatrix;			//!ビュー
+float4x4	g_projectionMatrix;		//!プロジェクション行列
 float4x4	g_worldMatrix;			//!<ワールド行列。
 float4x4	g_rotationMatrix;		//!<回転行列。
 float4x4	g_viewMatrixRotInv;		//!<カメラの回転行列の逆行列。
 
+float4x4 g_viewlightMatrix;
+float4x4 g_projlightMatrix;
+
+bool g_Reciver;
 
 float3 Eye;				//カメラ座標
 bool g_isHasNormalMap;			//法線マップ保持している？
@@ -28,6 +34,18 @@ sampler_state
     MagFilter = NONE;
     AddressU = Wrap;
 	AddressV = Wrap;
+};
+
+texture g_shadowMapTexture;		//シャドウマップテクスチャ。
+sampler g_shadowMapTextureSampler = 
+sampler_state
+{
+	Texture = <g_shadowMapTexture>;
+    MipFilter = LINEAR;
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
+    AddressU = CLAMP;
+	AddressV = CLAMP;
 };
 
 //法線マップ
@@ -66,6 +84,8 @@ struct VS_INPUT
     float3  Normal          : NORMAL;
     float3	Tangent			: TANGENT;		//接ベクトル
     float3  Tex0            : TEXCOORD0;
+    float4  color		:COLOR0;
+   //float2 uv			:TEXCOORD4;
 };
 
 /*!
@@ -78,6 +98,10 @@ struct VS_OUTPUT
     float2  Tex0   			: TEXCOORD0;
     float3	Tangent			: TEXCOORD1;	//接ベクトル
     float3 world			: TEXCOORD2;	//ワールドの変換座標
+    float4 lightViewPos 		: TEXCOORD3;
+    float4  color		:COLOR0;
+    //float2 uv			:TEXCOORD4;
+
 };
 /*!
  *@brief	ワールド座標とワールド法線をスキン行列から計算する。
@@ -134,22 +158,38 @@ VS_OUTPUT VSMain( VS_INPUT In, uniform bool hasSkin )
 {
 	VS_OUTPUT o = (VS_OUTPUT)0;
 	float3 Pos, Normal, Tangent;
+	
 	if(hasSkin){
 		//スキンあり。
 	    CalcWorldPosAndNormalFromSkinMatrix( In, Pos, Normal, Tangent );
+
 	}else{
 		//スキンなし。
 		CalcWorldPosAndNormal( In, Pos, Normal, Tangent );
 	}
-    o.world=Pos;
-    o.Pos = mul(float4(Pos.xyz, 1.0f), g_mViewProj);
-    o.Normal = normalize(Normal);
-    o.Tangent = normalize(Tangent);
-    o.Tex0 = In.Tex0;
-    //float3 N = mul(Normal,g_worldMatrix);
-    //N = normalize(N);
+
+        o.Pos = mul(float4(Pos.xyz, 1.0f), g_mViewProj);
+        o.Normal = normalize(Normal);
+        o.Tangent = normalize(Tangent);
+        o.Tex0 = In.Tex0;
+
+	float4 worldPos;
+	worldPos=mul(In.Pos,g_worldMatrix);
+	//o.Pos=mul(worldPos,g_viewMatrix);
+	//o.Pos=mul(o.Pos,g_projectionMatrix);
+	//o.color=In.color;
+	//o.uv=In.uv;
+	
+       if(g_Reciver)
+       {
+	   o.lightViewPos=mul(worldPos,g_viewlightMatrix);
+	   o.lightViewPos=mul(o.lightViewPos,g_projlightMatrix);
+       }
+
     return o;
 }
+
+
 /*!
  * @brief	ピクセルシェーダー。
  */
@@ -159,14 +199,14 @@ float4 PSMain( VS_OUTPUT In ) : COLOR
 	
 	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0);
 	float3 normal = In.Normal;
-	float4 lig = DiffuseLight(normal);
+	
 
-	float3 eye=normalize(Eye-In.world.xyz);//カメラからオブジェクトへの方向？
-	float3 L = -g_light.diffuseLightDir[0];//ライト
-	float3 N = normal.xyz;//法線
-	float3 R = -L+2.0f*dot(L,N)*N;
-	lig+=pow(max(0.0f,dot(R,eye)),2.0f);//累乗計算	
-	color *= lig;
+	//float3 eye=normalize(Eye-In.world.xyz);//カメラからオブジェクトへの方向？
+	//float3 L = -g_light.diffuseLightDir[0];//ライト
+	//float3 N = normal.xyz;//法線
+	//float3 R = -L+2.0f*dot(L,N)*N;
+	//lig+=pow(max(0.0f,dot(R,eye)),2.0f);//累乗計算	
+	//color *= lig;
 
 	//if (g_isHasSpecularMap)
 	//{
@@ -174,8 +214,29 @@ float4 PSMain( VS_OUTPUT In ) : COLOR
 	//	spe *= tex2D(g_specularMapSamoler, In.Tex0).a;
 	//	lig.xyz += spe;
 	//}
-	
+
+	if(g_Reciver)
+	{
+		float2 shadowMapUV=In.lightViewPos.xy/In.lightViewPos.w;
+		shadowMapUV*=float2(0.5f,-0.5f);
+		
+		shadowMapUV+=float2(0.5f,0.5f);
+		
+		float4 shadowVal=tex2D(g_shadowMapTextureSampler,shadowMapUV);
+		//color*=shadowVal;
+	}
+
+	float4 lig = DiffuseLight(normal);
+	color*=lig;
 	return color;
+}
+
+/*!
+ * @brief	シャドマップ用ピクセルシェーダー？
+ */
+float4 PSShadowMain( VS_OUTPUT In ) : COLOR
+{
+	return float4(0.5f,0.5f,0.5f,1.0f);
 }
 
 /*!
@@ -198,5 +259,29 @@ technique NoSkinModel
 	{
 		VertexShader = compile vs_3_0 VSMain(false);
 		PixelShader = compile ps_3_0 PSMain();
+	}
+}
+
+/*!
+ *@brief	シャドウマップスキンあり用のテクニック。
+ */
+technique ShadowSkinModel
+{
+	pass p0
+	{
+		VertexShader = compile vs_3_0 VSMain(true);
+		PixelShader = compile ps_3_0 PSShadowMain();
+	}
+}
+
+/*!
+ *@brief	シャドウマップスキンなし用のテクニック。
+ */
+technique ShadowNoSkinModel
+{
+	pass p0
+	{
+		VertexShader = compile vs_3_0 VSMain(false);
+		PixelShader = compile ps_3_0 PSShadowMain();
 	}
 }

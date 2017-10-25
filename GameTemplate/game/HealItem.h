@@ -1,9 +1,6 @@
 #pragma once
-#include "myEngine/Physics/MeshCollider.h"
-#include "myEngine/Physics/CapsuleCollider.h"
-#include "myEngine/Physics/RigidBody.h"
-#include "myEngine/Physics/CharacterController.h"
-class HealItem
+#include "MapObject.h"
+class HealItem :public MapObject
 {
 public:
 	//コンストラクタ
@@ -35,7 +32,6 @@ private:
 	MeshCollider		meshCollider;					//メッシュコライダー
 	RigidBody			rigidBody;						//剛体。
 	RigidBodyInfo		rbInfo;							//剛体情報
-	CharacterController	characterController;			//キャラクターコントローラー
 	bool				Healflg = false;				//回復アイテムの入手
 };
 

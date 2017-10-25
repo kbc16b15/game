@@ -133,7 +133,6 @@ void Scene::SceneChange()
 		m_Scene = CHANGEGAME2;
 		break;
 	case GAME2:
-		
 		m_Scene = CHANGETITLE;
 		break;
 	case END:

@@ -1,9 +1,6 @@
 #pragma once
-#include "myEngine/Physics/MeshCollider.h"
-#include "myEngine/Physics/CapsuleCollider.h"
-#include "myEngine/Physics/RigidBody.h"
-#include "myEngine/Physics/CharacterController.h"
-class GoalObject
+#include "MapObject.h"
+class GoalObject :public MapObject
 {
 public:
 	//コンストラクタ
@@ -19,7 +16,6 @@ public:
 	void Update();
 	//描画
 	void Draw();
-	//描画の無効を設定
 
 private:
 	SkinModel			model;							//スキンモデル
@@ -30,6 +26,5 @@ private:
 	MeshCollider		meshCollider;					//メッシュコライダー
 	RigidBody			rigidBody;						//剛体。
 	RigidBodyInfo		rbInfo;							//剛体情報
-	CharacterController	characterController;			//キャラクターコントローラー
 };
 

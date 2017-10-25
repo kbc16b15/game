@@ -7,6 +7,7 @@ CRenderTarget::CRenderTarget()
 	m_surface = NULL;
 	m_texture = NULL;
 	m_depthSurface = NULL;
+	m_texture = NULL;
 }
 
 
@@ -15,7 +16,8 @@ CRenderTarget::~CRenderTarget()
 	Release();
 }
 
-void CRenderTarget::Create(int w,
+void CRenderTarget::Create(
+	int w,
 	int h,
 	int mipLevel,
 	D3DFORMAT colorFormat,

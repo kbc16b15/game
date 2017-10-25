@@ -76,7 +76,7 @@ void Enemy::EnemyBullet()
 	if (BulletTime < 0)
 	{
 		Bullet* bullet = new Bullet();
-		bullet->Start(position);
+		bullet->Start(position, {10.0f,0.0f,0.0f},1);
 		game->AddBullets(bullet);
 		BulletTime = 150;
 	}
@@ -84,7 +84,7 @@ void Enemy::EnemyBullet()
 
 void Enemy::Draw()
 {
-	skinModel.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
+	skinModel.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix(), false, true);
 }
 
 void Enemy::Dead()
@@ -97,7 +97,5 @@ void Enemy::Dead()
 		//characterController.RemoveRigidBoby();
 		IsDeath = true;
 	}
-
 	//IsDeath = true;
-
 }

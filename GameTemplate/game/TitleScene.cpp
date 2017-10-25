@@ -14,7 +14,7 @@ TitleScene::~TitleScene()
 
 void TitleScene::Init()
 {
-
+	g_fade->StartFadeIn();
 	m_Title.Initialize("Assets/Sprite/‚½‚¢‚Æ‚é.jpg",titlepos);
 	//m_Title.Setalfa(10);
 	//m_Title.SetRGB(0, 0, 0);
@@ -43,7 +43,7 @@ void TitleScene::Update()
 			}
 			break;
 		case Run:
-			if (pad.IsTrigger(pad.enButtonStart)) {
+			if (pad.IsTrigger(pad.enButtonStart)||GetAsyncKeyState('S')) {
 				g_fade->StartFadeOut();
 				m_state = WaitFadeOut;
 			}

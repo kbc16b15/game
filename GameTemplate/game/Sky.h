@@ -1,5 +1,6 @@
 #pragma once
-class Sky
+#include "MapObject.h"
+class Sky:public MapObject
 {
 public:
 	//コンストラクタ

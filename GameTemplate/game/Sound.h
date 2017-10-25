@@ -5,7 +5,7 @@ class Sound
 public:
 	Sound();
 	~Sound();
-	void Start();
+	void Start(char* name);
 	void Update();
 private:
 	IXAudio2SourceVoice*	SourceVoice = NULL;

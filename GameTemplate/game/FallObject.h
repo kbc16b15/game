@@ -1,8 +1,6 @@
 #pragma once
-#include "myEngine/Physics/MeshCollider.h"
-#include "myEngine/Physics/RigidBody.h"
-#include "myEngine/Physics/CharacterController.h"
-class FallObject
+#include "MapObject.h"
+class FallObject:public MapObject
 {
 public:
 	FallObject();
@@ -31,10 +29,8 @@ private:
 	D3DXQUATERNION	Rotation;						//回転
 	Light			light;							//ライト
 	MeshCollider	meshCollider;					//メッシュコライダー
-	//CapsuleCollider	capsuleCollider;			//カプセルコライダー
 	RigidBody		rigidBody;						//剛体。
 	RigidBodyInfo	rbInfo;							//剛体情報
-	CharacterController	characterController;		//キャラクターコントローラー
 	D3DXVECTOR3		RotDir = {0.0f, 0.0f, 1.0f};	//回転方向
 	D3DXVECTOR3		RotSpeed;						//回転速度
 	float			angle = 0.0f;					//角度

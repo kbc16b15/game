@@ -1,12 +1,17 @@
 #include "stdafx.h"
 #include "RotObject.h"
 
+RotObject::RotObject(D3DXVECTOR3 RDir, D3DXVECTOR3 RSpeed,int Rottype)
+{
+	RotDir = RDir;
+	RotSpeed = RSpeed;
+	RotType = Rottype;
+}
 RotObject::RotObject(D3DXVECTOR3 RDir, D3DXVECTOR3 RSpeed)
 {
 	RotDir = RDir;
 	RotSpeed = RSpeed;
 }
-
 
 RotObject::~RotObject()
 {
@@ -16,7 +21,7 @@ RotObject::~RotObject()
 }
 
 
-void RotObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rotation)
+void RotObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rot)
 {
 	//読み込むモデルのファイルパスを作成。
 	char modelPath[256];
@@ -40,7 +45,7 @@ void RotObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rota
 
 	model.SetLight(&light);
 	position = pos;
-	Rotation = rotation;
+	rotation = rot;
 
 	model.UpdateWorldMatrix({ 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0, 0.0f, 1.0 }, { 1.0f, 1.0f, 1.0f });
 	//ここから衝突判定絡みの初期化。
@@ -53,7 +58,7 @@ void RotObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rota
 	rbInfo.collider = &meshCollider;//剛体のコリジョンを設定する。
 	rbInfo.mass = 0.0f;				//質量を0にすると動かない剛体になる。
 	rbInfo.pos = position;
-	rbInfo.rot = Rotation;
+	rbInfo.rot = rotation;
 	//剛体を作成。
 	rigidBody.Create(rbInfo);
 	rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
@@ -69,7 +74,7 @@ void RotObject::Update()
 
 	float len = D3DXVec3Length(&toPos);
 
-	if (len <LightDownlength)
+	if (len <length)
 	{
 		Tflg = true;
 	}
@@ -77,28 +82,78 @@ void RotObject::Update()
 	{
 		Tflg = false;
 	}
-
-	if (Tflg)
+	switch (RotType)
 	{
-		D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
-		speed.x = RotSpeed.x/*-1.2f*/;
-		speed.z = RotSpeed.z;
-		game->GetPlayer()->AddSpeed(speed);
+		case ROT:
+		if (Tflg)
+		{
+			D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
+			speed.x = RotSpeed.x/*-1.2f*/;
+			speed.z = RotSpeed.z;
+			game->GetPlayer()->AddSpeed(speed);
+		}
+
+		angle += 0.01f;
+		break;
+		case CLOCK:
+			if (Tflg)
+			{
+				D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
+				speed.x = RotSpeed.x/*-1.2f*/;
+				speed.z = RotSpeed.z;
+				game->GetPlayer()->AddSpeed(speed);
+			}
+
+			if (ClockRotTime < 0)
+			{
+				angle += 0.2f;
+				ClockRotTime = 100;
+			}
+			else
+			{
+				ClockRotTime--;
+			}
+			break;
+		case STAND:
+			angle += 0.01f;
+			break;
+		default:
+			break;
+
 	}
+	//x += 0.01f;
+	//z += 0.01f;
+	//float s;
+	//float halfAngle = atan2f(x,z) * 0.5f;
+	//s = sin(halfAngle);
+	//rotation.w = cos(halfAngle);
+	//rotation.x = 0.0f * s;
+	//rotation.y = 1.0f * s;
+	//rotation.z = 0.0f * s;
+	D3DXQuaternionRotationAxis(&rotation, &RotDir, angle);
 
-	angle += 0.01f;
-	//D3DXQUATERNION addRot = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
-	D3DXQuaternionRotationAxis(&Rotation, &RotDir, angle);
-	//Rotation = addRot;
-	btTransform& Ttra = rigidBody.GetBody()->getWorldTransform();//剛体の移動処理
-	Ttra.setOrigin({ position.x,position.y,position.z });
-	Ttra.setRotation({ Rotation.x,Rotation.y,Rotation.z,Rotation.w });
+	rigidBody.GetBody()->setActivationState(DISABLE_DEACTIVATION);
+	btTransform& trans = rigidBody.GetBody()->getWorldTransform();
+	btVector3 btPos;
+	btPos.setX(position.x);
+	btPos.setY(position.y);
+	btPos.setZ(position.z);
+	trans.setOrigin(btPos);
+	btQuaternion btRot;
+	btRot.setX(rotation.x);
+	btRot.setY(rotation.y);
+	btRot.setZ(rotation.z);
+	btRot.setW(rotation.w);
+	trans.setRotation(btRot);
+	//btTransform& Ttra = rigidBody.GetBody()->getWorldTransform();//剛体の移動処理
+	//Ttra.setOrigin({ position.x,position.y,position.z });
+	//Ttra.setRotation({ rotation.x,rotation.y,rotation.z,rotation.w });
 
-	model.UpdateWorldMatrix(position, Rotation, { 1.0f,1.0f,1.0f});
+	model.UpdateWorldMatrix(position, rotation, { 1.0f,1.0f,1.0f});
 
 }
 
 void RotObject::Draw()
 {
-	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
+	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix(), false, false);
 }
