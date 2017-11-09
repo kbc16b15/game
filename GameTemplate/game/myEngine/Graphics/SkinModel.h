@@ -4,10 +4,12 @@
 #pragma once
 
 #include "myEngine/Graphics/Animation.h"
-#include "ShadowMap.h"
+
+
 class SkinModelData;
 class RenderContext;
 class Light;
+//class ShadowMap;
 /*!
 *@brief	スキンモデル
 */
@@ -22,7 +24,7 @@ public:
 	/*!
 	*@brief	描画。
 	*/
-	void Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix,bool Caster,bool Recive);
+	void Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix);
 	
 	/*!
 	*@brief	ワールド行列を更新。
@@ -40,11 +42,36 @@ public:
 	{
 		this->light = light;
 	}
+	//スペキュラマップの設定
 	void SetSpecularMap(LPDIRECT3DTEXTURE9 specMap)
 	{
 		specularMap = specMap;
 	}
+	//法線マップの設定
+	void SetnormalMap(LPDIRECT3DTEXTURE9 normMap)
+	{
+		normalMap = normMap;
+	}
+	//キューブマップの設定
+	void SetcubeMap(LPDIRECT3DCUBETEXTURE9 CubeMap)
+	{
+		cubeMap = CubeMap;
+	}
 
+	void SetCubeflg(bool cubeflg)
+	{
+		Cubeflg = true;
+	}
+
+	void SetCasterflg(bool Caster)
+	{
+		ShadowCaster = Caster;
+	}
+
+	void SetReciveflg(bool Recive)
+	{
+		ShadowRecive = Recive;
+	}
 	/*!
 	*@brief	オリジナルメッシュの先頭を取得する。
 	*/
@@ -56,8 +83,12 @@ private:
 	ID3DXEffect*		pEffect = nullptr;			//!<エフェクト。
 	Animation			animation;					//!<アニメーション。
 	Light*				light = nullptr;			//!<ライト。
-	LPDIRECT3DTEXTURE9	normalMap = NULL;			//!法線マップ
-	LPDIRECT3DTEXTURE9	specularMap = NULL;			//!スペキュラマップ
-	ShadowMap			shadowMap;
+	LPDIRECT3DTEXTURE9		normalMap = NULL;		//!法線マップ
+	LPDIRECT3DTEXTURE9		specularMap = NULL;		//!スペキュラマップ
+	LPDIRECT3DTEXTURE9		shadowMap = NULL;		//!シャドウマップ
+	LPDIRECT3DCUBETEXTURE9	cubeMap = NULL;			//!キューブマップ
+	bool				Cubeflg = false;
+	bool				ShadowCaster = false;
+	bool				ShadowRecive = false;
 
 };

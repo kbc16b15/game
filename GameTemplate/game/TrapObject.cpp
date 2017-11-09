@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "TrapObject.h"
-#include "myEngine/Physics/CollisionAttr.h"
+//#include "myEngine/Physics/CollisionAttr.h"
 
 TrapObject::TrapObject(int Damagetype,D3DXVECTOR3 RDir)
 {
@@ -57,7 +57,7 @@ void TrapObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rot
 	//剛体を作成。
 	rigidBody.Create(rbInfo);
 	rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
-	rigidBody.GetBody()->setUserIndex(enCollisionAttr_HitActive);
+	rigidBody.GetBody()->setUserIndex(enCollisionAttr_Damage);
 	//作成した剛体を物理ワールドに追加。
 	g_physicsWorld->AddRigidBody(&rigidBody);
 
@@ -78,12 +78,29 @@ void TrapObject::Update()
 		Rot();
 		break;
 	}
-	CharacterController chara;
-	//if (chara.GetHit())
+
+	std::list<Bullet*> bulletstl = game->GetBullet();
+	for (auto bullet : bulletstl)
+	{
+		D3DXVECTOR3 Bulletpos=bullet->Getpos();
+		D3DXVECTOR3 toPos = Bulletpos - game->GetPlayer()->Getpos();
+		float len = D3DXVec3Length(&toPos);
+		if (len < 0.8f)
+		{
+			rotflg = true;
+		}
+
+	}
+
+	//D3DXVECTOR3 toPos = position - game->GetPlayer()->Getpos();
+	//float len = D3DXVec3Length(&toPos);
+	//if (len < 0.8f)
 	//{
-	//	game->GetPlayer()->SetDamage();
+	//	rotflg = true;
 	//}
-	btTransform& Ttra = rigidBody.GetBody()->getWorldTransform();//剛体の移動処理
+
+	//剛体の移動処理	
+	btTransform& Ttra = rigidBody.GetBody()->getWorldTransform();
 	Ttra.setOrigin({ position.x,position.y,position.z });
 	Ttra.setRotation({ rotation.x,rotation.y,rotation.z,rotation.w });
 	
@@ -93,11 +110,14 @@ void TrapObject::Update()
 
 void TrapObject::Rot()
 {
-	angle += 0.01f;
-	D3DXQuaternionRotationAxis(&rotation, &RotDir, angle);
+	if (rotflg)
+	{
+		angle += 0.01f;
+		D3DXQuaternionRotationAxis(&rotation, &RotDir, angle);
+	}
 }
 
 void TrapObject::Draw()
 {
-	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix(), false,false);
+	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
 }

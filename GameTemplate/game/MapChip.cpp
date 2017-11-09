@@ -3,12 +3,13 @@
 
 
 
-MapChip::MapChip() :
-	position(0.0f, 0.0f, 0.0f),
-	rotation(0.0f, 0.0f, 0.0f, 1.0f)
+MapChip::MapChip()
 {
 
 }
+	//position(0.0f, 0.0f, 0.0f),
+	//rotation(0.0f, 0.0f, 0.0f, 1.0f)
+
 
 
 MapChip::~MapChip()
@@ -42,8 +43,8 @@ void MapChip::Init(/*SMapChipLocInfo& locInfo*/const char* modelName, D3DXVECTOR
 	light.SetAmbientLight(D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.0f));
 
 	model.SetLight(&light);
-	position =/* locInfo.*/pos;
-	rotation =/* locInfo.*/rot;
+	position =pos;
+	rotation =rot;
 
 	model.UpdateWorldMatrix(position, rotation, { 1.0f, 1.0f, 1.0f });
 	//ここから衝突判定絡みの初期化。
@@ -61,6 +62,8 @@ void MapChip::Init(/*SMapChipLocInfo& locInfo*/const char* modelName, D3DXVECTOR
 	rigidBody.Create(rbInfo);
 	//作成した剛体を物理ワールドに追加。
 	g_physicsWorld->AddRigidBody(&rigidBody);
+
+
 }
 
 void MapChip::Update()
@@ -70,7 +73,10 @@ void MapChip::Update()
 
 void MapChip::Draw()
 {
-	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix(),false,true);
+	model.SetReciveflg(true);
+	
+	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
+
 }
 
 //bool MapChip::Rend(bool Rendflg)

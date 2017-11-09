@@ -13,7 +13,7 @@ public:
 	//rotation	モデルの回転
 	void Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rotation);
 	//更新
-	void Update();
+	void Update() override;
 	//描画
 	void Draw();
 	//座標の取得

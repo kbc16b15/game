@@ -65,6 +65,8 @@ void RotObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rot)
 	//ì¬‚µ‚½„‘Ì‚ð•¨—ƒ[ƒ‹ƒh‚É’Ç‰ÁB
 	g_physicsWorld->AddRigidBody(&rigidBody);
 
+	rigidBody.GetBody()->setUserIndex(enCollisionAttr_ObjectHit);
+
 }
 
 void RotObject::Update()
@@ -74,9 +76,10 @@ void RotObject::Update()
 
 	float len = D3DXVec3Length(&toPos);
 
-	if (len <length)
+	if (len <length&&game->GetPlayer()->GetObjectHit())
 	{
 		Tflg = true;
+		game->GetPlayer()->SetObjectHit(false);
 	}
 	else
 	{
@@ -155,5 +158,5 @@ void RotObject::Update()
 
 void RotObject::Draw()
 {
-	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix(), false, false);
+	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
 }

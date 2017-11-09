@@ -39,6 +39,7 @@ private:
 	bool				IsDeath = false;									//死亡フラグ
 	int					DeadTime = 100;										//死亡タイム
 	int					BulletDir = 0;										//バレット打つ方向
-
+	CharacterController	characterController;				//キャラクターコントローラー
+	D3DXVECTOR3			moveSpeed = { 0.0f,0.0f,0.0f };		//移動速度
 };
 

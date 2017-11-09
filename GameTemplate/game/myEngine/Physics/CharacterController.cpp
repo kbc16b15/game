@@ -28,10 +28,14 @@ namespace {
 				//自分に衝突した。or キャラクタ属性のコリジョンと衝突した。
 				return 0.0f;
 			}
-			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_HitActive)//ユーザー定義のコリジョン属性
+			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Damage)//ユーザー定義のコリジョン属性
 			{
 				game->GetPlayer()->SetDamage();//プレイヤーにダメージ
 				//ObjectHit = true;
+			}
+			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_ObjectHit)//ユーザー定義のコリジョン属性
+			{
+				game->GetPlayer()->SetObjectHit(true);
 			}
 			//衝突点の法線を引っ張ってくる。
 			D3DXVECTOR3 hitNormalTmp = *(D3DXVECTOR3*)&convexResult.m_hitNormalLocal;
@@ -97,9 +101,9 @@ namespace {
 				) {
 				isHit = true;
 				D3DXVECTOR3 hitPosTmp;
-				hitPosTmp = { convexResult.m_hitPointLocal.x(),convexResult.m_hitPointLocal.y(), convexResult.m_hitPointLocal.z() };
+				hitPosTmp = { convexResult.m_hitPointLocal.x(),convexResult.m_hitPointLocal.y(), convexResult.m_hitPointLocal.z()/* * 1.4f*/ };
 				//交点との距離を調べる。
-				D3DXVECTOR3 vDist;
+				D3DXVECTOR3 vDist;;
 				vDist = hitPosTmp - startPos;
 				vDist.y = 0.0f;
 				float distTmp = D3DXVec3Length( &vDist );
@@ -212,7 +216,6 @@ void CharacterController::Execute()
 				currentDir = nextPosition - m_position;
 				currentDir.y = 0.0f;
 				D3DXVec3Normalize(&currentDir, &currentDir);
-				
 				if (D3DXVec3Dot( &currentDir, &originalXZDir ) < 0.0f) {
 					//角に入った時のキャラクタの振動を防止するために、
 					//移動先が逆向きになったら移動をキャンセルする。
@@ -221,12 +224,6 @@ void CharacterController::Execute()
 					break;
 				}
 			}
-			/*else if (!m_isOnGround)
-			{
-				m_position.x = 0.0f;
-				m_position.z = 0.0f;
-				break;
-			}*/
 			else {
 				//どことも当たらないので終わり。
 				break;
@@ -281,12 +278,14 @@ void CharacterController::Execute()
 		if (fabsf(addPos.y) > FLT_EPSILON) {
 			g_physicsWorld->ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
 		}
-		if (callback.isHit) {
+
+		if (callback.isHit){
 			//当たった。
 			m_moveSpeed.y = 0.0f;
 			m_isJump = false;
 			m_isOnGround = true;
 			nextPosition.y = callback.hitPos.y;//; + offset - m_radius;
+
 		}
 		else {
 			//地面上にいない。

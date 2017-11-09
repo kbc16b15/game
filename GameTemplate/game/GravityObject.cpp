@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "GravityObject.h"
-#include "myEngine/Physics/CollisionAttr.h"
+//#include "myEngine/Physics/CollisionAttr.h"
 
 GravityObject::GravityObject()
 {
@@ -56,19 +56,19 @@ void GravityObject::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	
 	//剛体を作成。
 	rigidBody.Create(rbInfo);
 	//作成した剛体を物理ワールドに追加。
-	//g_physicsWorld->AddRigidBody(&rigidBody);
-
-	rigidBody.GetBody()->setUserIndex(enCollisionAttr_HitActive);
+	g_physicsWorld->AddRigidBody(&rigidBody);
+	rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+	//rigidBody.GetBody()->setUserIndex(enCollisionAttr_HitActive);
 	//rigidBody.GetBody()->setUserIndex
 }
 
 void GravityObject::Update()
 {
-	GravityTime--;
+	/*GravityTime--;
 	if (GravityTime > 0) { return; }
 	D3DXVECTOR3 toPos;
 	D3DXVec3Subtract(&toPos, &position, &game->GetPlayer()->Getpos());
-	float len = D3DXVec3Length(&toPos);
+	float len = D3DXVec3Length(&toPos);*/
 
 	//if (len < length/*characterController.GetHit()*/)
 	//{
@@ -77,14 +77,17 @@ void GravityObject::Update()
 	//}
 
 	//0になったらフラグが入れかわるようにする？
-
 	//関数呼んだだけでフラグが入れかわるようにする?
+	position.z -= 0.02f;
 
+	//btTransform& Ttra = rigidBody.GetBody()->getWorldTransform();//剛体の移動処理
+	//Ttra.setOrigin({ position.x,position.y,position.z });
+	//Ttra.setRotation({ rotation.x,rotation.y,rotation.z,rotation.w });
 	model.UpdateWorldMatrix(position, rotation, { 1.0f,1.0f,1.0f });
 
 }
 
 void GravityObject::Draw()
 {
-	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix(), false,false);
+	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
 }

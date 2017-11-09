@@ -40,5 +40,5 @@ private:
 	D3DXVECTOR3		RotDir;					//‰ñ“]•ûŒü
 	D3DXVECTOR3		RotSpeed;				//‰ñ“]‘¬“x
 	float			angle = 0.0f;			//Šp“x
-	
+	bool			rotflg = false;
 };

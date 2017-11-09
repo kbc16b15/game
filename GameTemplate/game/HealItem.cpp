@@ -45,8 +45,14 @@ void HealItem::Update()
 {
 	D3DXVECTOR3 toPos = position - game->GetPlayer()->Getpos();
 	float len = D3DXVec3Length(&toPos);
-	if (len < 1.0f)
+	if (len < 0.8f)
 	{
+		m_HealSound = new Sound();
+		m_HealSound->Init("Assets/Sound/powerup03.wav");
+		m_HealSound->SetVolume(0.4f);
+		m_HealSound->Play(false);
+
+
 		game->Heal(1);
 		Healflg = true;
 	}
@@ -56,5 +62,5 @@ void HealItem::Update()
 
 void HealItem::Draw()
 {
-	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix(), false,false);
+	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
 }

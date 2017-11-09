@@ -5,7 +5,7 @@
 
 ResultScene::ResultScene()
 {
-	g_fade->StartFadeIn();
+
 }
 
 
@@ -16,6 +16,7 @@ ResultScene::~ResultScene()
 
 void ResultScene::Init()
 {
+	g_fade->StartFadeIn();
 	m_End.Initialize("Assets/Sprite/end.png", endpos);
 	CreateSprite();
 }
@@ -49,7 +50,7 @@ void ResultScene::Update()
 			if (!g_fade->isExecute())
 			{
 				//delete this;
-				scene->SceneChange();
+				scene->SceneChange(scene->CHANGETITLE);
 				return;
 
 			}
@@ -61,7 +62,9 @@ void ResultScene::Update()
 
 void ResultScene::Render()
 {
+	g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 	m_End.Draw(m_Sprite);
+	g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 }
 
 HRESULT ResultScene::CreateSprite()

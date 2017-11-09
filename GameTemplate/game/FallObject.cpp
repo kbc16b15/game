@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "FallObject.h"
-#include "myEngine/Physics/CollisionAttr.h"
+//#include "myEngine/Physics/CollisionAttr.h"
 
 
 FallObject::FallObject()
@@ -15,7 +15,7 @@ FallObject::~FallObject()
 	modelData.Release();
 }
 
-void FallObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rotation)
+void FallObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rot)
 {
 	firstpos = pos;
 	//読み込むモデルのファイルパスを作成。
@@ -40,7 +40,7 @@ void FallObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rot
 
 	model.SetLight(&light);
 	position = pos;
-	Rotation = rotation;
+	rotation = rot;
 	model.UpdateWorldMatrix({ 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0, 0.0f, 1.0 }, { 1.0f, 1.0f, 1.0f });
 	//ここから衝突判定絡みの初期化。
 	//スキンモデルからメッシュコライダーを作成する。
@@ -52,11 +52,11 @@ void FallObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rot
 	rbInfo.collider = &meshCollider;//剛体のコリジョンを設定する。
 	rbInfo.mass = 0.0f;				//質量を0にすると動かない剛体になる。
 	rbInfo.pos = position;
-	rbInfo.rot = Rotation;
+	rbInfo.rot = rotation;
 	//剛体を作成。
 	rigidBody.Create(rbInfo);
 	rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
-	rigidBody.GetBody()->setUserIndex(enCollisionAttr_HitActive);
+	rigidBody.GetBody()->setUserIndex(enCollisionAttr_Damage);
 	//作成した剛体を物理ワールドに追加。
 	g_physicsWorld->AddRigidBody(&rigidBody);
 	//angle = 85.0f;
@@ -71,18 +71,33 @@ void FallObject::Update()
 	angle += 0.05f;
 	D3DXQUATERNION addRot = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
 	D3DXQuaternionRotationAxis(&addRot, &RotDir, angle);
-	Rotation = addRot;
+	rotation = addRot;
 	position.x -=FallSpeedx;
 	position.y -=FallSpeedy;
 
-	btTransform& Ttra = rigidBody.GetBody()->getWorldTransform();//剛体の移動処理
-	Ttra.setOrigin({ position.x,position.y,position.z });
-	Ttra.setRotation({ Rotation.x,Rotation.y,Rotation.z,Rotation.w });
-	model.UpdateWorldMatrix(position, Rotation, { 1.0f,1.0f,1.0f, });
+
+	rigidBody.GetBody()->setActivationState(DISABLE_DEACTIVATION);
+	btTransform& trans = rigidBody.GetBody()->getWorldTransform();
+	btVector3 btPos;
+	btPos.setX(position.x);
+	btPos.setY(position.y);
+	btPos.setZ(position.z);
+	trans.setOrigin(btPos);
+	btQuaternion btRot;
+	btRot.setX(rotation.x);
+	btRot.setY(rotation.y);
+	btRot.setZ(rotation.z);
+	btRot.setW(rotation.w);
+	trans.setRotation(btRot);
+
+	//btTransform& Ttra = rigidBody.GetBody()->getWorldTransform();//剛体の移動処理
+	//Ttra.setOrigin({ position.x,position.y,position.z });
+	//Ttra.setRotation({ rotation.x,rotation.y,rotation.z,rotation.w });
+	model.UpdateWorldMatrix(position, rotation, { 1.0f,1.0f,1.0f, });
 
 }
 
 void FallObject::Draw()
 {
-	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix(), false, false);
+	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
 }

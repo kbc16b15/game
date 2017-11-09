@@ -22,11 +22,11 @@ public:
 	}
 
 private:
+	D3DXVECTOR3		firstpos;						//初期座標
 	SkinModel		model;							//スキンモデル
 	SkinModelData	modelData;						//スキンモデルデータ
 	D3DXVECTOR3		position;						//座標
-	D3DXVECTOR3		firstpos;						//初期座標
-	D3DXQUATERNION	Rotation;						//回転
+	D3DXQUATERNION	rotation;						//回転
 	Light			light;							//ライト
 	MeshCollider	meshCollider;					//メッシュコライダー
 	RigidBody		rigidBody;						//剛体。

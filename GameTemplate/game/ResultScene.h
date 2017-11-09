@@ -1,7 +1,8 @@
 #pragma once
 #include "HUD.h"
 #include "myEngine\HID\Pad.h"
-class ResultScene
+//#include "BaseScene.h"
+class ResultScene 
 {
 public:
 	//コンストラクタ

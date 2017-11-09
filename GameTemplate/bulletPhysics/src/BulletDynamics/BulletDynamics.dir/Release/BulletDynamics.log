@@ -5,7 +5,7 @@ ConstraintSolver\btConeTwistConstraint.cpp(913): warning C4244: '=': 'double' �
 ConstraintSolver\btConeTwistConstraint.cpp(973): warning C4244: '=': 'double' から 'btScalar' への変換です。データが失われる可能性があります。
 ConstraintSolver\btConeTwistConstraint.cpp(975): warning C4244: '=': 'double' から 'btScalar' への変換です。データが失われる可能性があります。
   btContactConstraint.cpp
-c:\users\kbc16b15\documents\github\game\gametemplate\bulletphysics\src\bulletdynamics\constraintsolver\btContactConstraint.h(25): warning C4359: 'btContactConstraint': アライメント指定子は実際のアラインメント (128) より小さいため、無視されます。
+c:\users\kbc16b15\desktop\github\game\gametemplate\bulletphysics\src\bulletdynamics\constraintsolver\btContactConstraint.h(25): warning C4359: 'btContactConstraint': アライメント指定子は実際のアラインメント (128) より小さいため、無視されます。
   btFixedConstraint.cpp
   btGearConstraint.cpp
   btGeneric6DofConstraint.cpp
@@ -22,7 +22,7 @@ ConstraintSolver\btGeneric6DofSpring2Constraint.cpp(786): warning C4244: '初期
   btTypedConstraint.cpp
   btUniversalConstraint.cpp
   btDiscreteDynamicsWorld.cpp
-C:\Users\kbc16b15\Documents\github\game\GameTemplate\\BulletPhysics\src\BulletDynamics/ConstraintSolver/btContactConstraint.h(25): warning C4359: 'btContactConstraint': アライメント指定子は実際のアラインメント (128) より小さいため、無視されます。
+C:\Users\kbc16b15\Desktop\github\game\GameTemplate\\BulletPhysics\src\BulletDynamics/ConstraintSolver/btContactConstraint.h(25): warning C4359: 'btContactConstraint': アライメント指定子は実際のアラインメント (128) より小さいため、無視されます。
   btRigidBody.cpp
   btSimpleDynamicsWorld.cpp
   コードを生成中...
@@ -39,7 +39,7 @@ Featherstone\btMultiBodyJointLimitConstraint.cpp(114): warning C4244: '初期化
   btLemkeAlgorithm.cpp
   btMLCPSolver.cpp
   btRaycastVehicle.cpp
-C:\Users\kbc16b15\Documents\github\game\GameTemplate\\BulletPhysics\src\BulletDynamics/ConstraintSolver/btContactConstraint.h(25): warning C4359: 'btContactConstraint': アライメント指定子は実際のアラインメント (128) より小さいため、無視されます。
+C:\Users\kbc16b15\Desktop\github\game\GameTemplate\\BulletPhysics\src\BulletDynamics/ConstraintSolver/btContactConstraint.h(25): warning C4359: 'btContactConstraint': アライメント指定子は実際のアラインメント (128) より小さいため、無視されます。
   btWheelInfo.cpp
   コードを生成中...
-  BulletDynamics.vcxproj -> C:\Users\kbc16b15\Documents\github\game\GameTemplate\\bulletPhysics\lib\Release\BulletDynamics.lib
+  BulletDynamics.vcxproj -> C:\Users\kbc16b15\Desktop\github\game\GameTemplate\\bulletPhysics\lib\Release\BulletDynamics.lib

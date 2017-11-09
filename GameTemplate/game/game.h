@@ -13,14 +13,16 @@
 #include "gameCamera.h"
 #include "ShadowMap.h"
 #include "Sound.h"
-
+#include "SoundEngine.h"
+//#include "BaseScene.h"
 //#include "IGameObject.h"
 //#include "GameObjectManager.h"
 
 /*!
  * @brief	ゲームクラス。
  */
-class Game{
+class Game 
+{
 public:
 	/*!
 	 * @brief	コンストラクタ。
@@ -33,7 +35,7 @@ public:
 	/*!
 	 * @brief	ゲームが起動してから一度だけ呼ばれる関数。
 	 */
-	void Start();
+	void Init();
 	/*!
 	 * @brief	更新。
 	 */
@@ -52,26 +54,33 @@ public:
 	//カメラの取得
 	Camera* GetCamera()
 	{
-		return &camera.Getcamera();
+		return &gameCamera.Getcamera();
+		//return camera;
 	}
 	//プレイヤーの取得
 	Player* GetPlayer()
 	{
 		return &player;
 	}
+	//マップの取得
 	Map* GetMap()
 	{
 		return &map;
 	}
+
+	/*ShadowMap* GetShadow()
+	{
+		return &shadowMap;
+	}*/
 	//弾の追加
 	void AddBullets(Bullet* bullet)
 	{
 		Bullets.push_back(bullet);
 	}
 	//弾の取得
-	std::list<Bullet*>* GetBullet()
+	std::list<Bullet*> GetBullet()
 	{
-		return &Bullets;
+		return Bullets;
 	}
 	//敵の追加
 	void AddEnemy(Enemy* enemy)
@@ -93,7 +102,6 @@ public:
 	//体力の回復
 	void Heal(int healval)
 	{
-		
 		Hpnum += healval;
 		if (Hpnum > 3) { Hpnum = 3; }
 	}
@@ -106,7 +114,7 @@ private:
 	enum EState {
 		WaitFadeIn,
 		Run,
-		WaitFadeOut
+		WaitFadeOut,
 	};
 
 	enum Select {
@@ -117,12 +125,13 @@ private:
 	Select GAME = START;
 	EState      m_state = Run;
 	//GameObjectManager GoMgr;
-	Sound			m_Sound;
+	Sound*			m_Sound=nullptr;
+	SoundEngine*	m_SoundEngine=nullptr;
 	std::list<Bullet*>	Bullets;				//バレットのリスト
 	std::vector<Enemy*>	enem;					//エネミーのvector
 	std::vector<trackingEnemy*> Tenem;			//追従エネミー
-	ShadowMap			shadowMap;				//シャドウマップ
-	gameCamera			camera;					//ゲームカメラ
+	gameCamera			gameCamera;				//ゲームカメラ
+	//Camera*				camera;					//ゲームカメラ
 	Player				player;					//プレイヤー
 	Map					map;					//マップ
 	int				Hpnum = 3;					//HP量

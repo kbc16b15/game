@@ -156,7 +156,7 @@ void MoveObject::Update()
 		game->GetPlayer()->AddSpeed(speed);
 	}
 
-	/*rigidBody.GetBody()->setActivationState(DISABLE_DEACTIVATION);
+	rigidBody.GetBody()->setActivationState(DISABLE_DEACTIVATION);
 	btTransform& trans = rigidBody.GetBody()->getWorldTransform();
 	btVector3 btPos;
 	btPos.setX(position.x);
@@ -164,15 +164,15 @@ void MoveObject::Update()
 	btPos.setZ(position.z);
 	trans.setOrigin(btPos);
 	btQuaternion btRot;
-	btRot.setX(Rotation.x);
-	btRot.setY(Rotation.y);
-	btRot.setZ(Rotation.z);
-	btRot.setW(Rotation.w);
-	trans.setRotation(btRot);*/
+	btRot.setX(rotation.x);
+	btRot.setY(rotation.y);
+	btRot.setZ(rotation.z);
+	btRot.setW(rotation.w);
+	trans.setRotation(btRot);
 
-	btTransform& Ttra = rigidBody.GetBody()->getWorldTransform();//„‘Ì‚ÌˆÚ“®ˆ—
-	Ttra.setOrigin({ position.x,position.y,position.z });
-	Ttra.setRotation({ rotation.x,rotation.y,rotation.z,rotation.w });
+	//btTransform& Ttra = rigidBody.GetBody()->getWorldTransform();//„‘Ì‚ÌˆÚ“®ˆ—
+	//Ttra.setOrigin({ position.x,position.y,position.z });
+	//Ttra.setRotation({ rotation.x,rotation.y,rotation.z,rotation.w });
 	
 	model.UpdateWorldMatrix(position, rotation, { 1.0f,1.0f,1.0f, });
 
@@ -180,5 +180,5 @@ void MoveObject::Update()
 
 void MoveObject::Draw()
 {
-	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix(), false,false);
+	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
 }

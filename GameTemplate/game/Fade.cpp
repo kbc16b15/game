@@ -84,6 +84,8 @@ void Fade::Draw()
 {
 	if (Active)
 	{
+		g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+	
 		g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 		g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 		g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
@@ -92,8 +94,9 @@ void Fade::Draw()
 		m_fadetex.Draw(m_Sprite);
 		//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 		g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-		//g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, FALSE);
-		//g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, FALSE);
+	/*	g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, FALSE);
+		g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, FALSE);*/
+		g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 	}
 
 		

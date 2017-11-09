@@ -18,6 +18,11 @@ public:
 	//•`‰æ
 	void Draw();
 
+	void SetDownflg(bool down)
+	{
+		Downflg = down;
+	}
+
 	//is•ûŒü
 	enum MOVEDIR
 	{

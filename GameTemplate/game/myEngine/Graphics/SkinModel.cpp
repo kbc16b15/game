@@ -3,10 +3,11 @@
 #include "myEngine/Graphics/SkinModelData.h"
 #include "myEngine/Graphics/Light.h"
 #include <d3d9types.h>
-
+#include "ShadowMap.h"
 
 extern UINT                 g_NumBoneMatricesMax;
 extern D3DXMATRIXA16*       g_pBoneMatrices ;
+extern ShadowMap*		g_shadowmap;
 namespace {
 	void DrawMeshContainer(
 		IDirect3DDevice9* pd3dDevice, 
@@ -20,9 +21,11 @@ namespace {
 		Light* light,
 		LPDIRECT3DTEXTURE9 normalMap,
 		LPDIRECT3DTEXTURE9 specularMap,
-		ShadowMap shadowMap,
-		bool Caster,
-		bool Recive
+		LPDIRECT3DTEXTURE9 shadowMap,
+		LPDIRECT3DCUBETEXTURE9 cubeMap,
+		bool ShadowCaster,
+		bool ShadowRecive,
+		bool Cubeflg
 	)
 	{
 		D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
@@ -37,18 +40,30 @@ namespace {
 		D3DXMatrixMultiply(&viewProj, viewMatrix, projMatrix);
 		//テクニックを設定。
 		{
-			if (Caster&&pMeshContainer->pSkinInfo != NULL) {
-				pEffect->SetTechnique("ShadowSkinModel");
-			}
-			else if (!Caster&&pMeshContainer->pSkinInfo != NULL)
+			if (Cubeflg)
 			{
-				pEffect->SetTechnique("SkinModel");
+				pEffect->SetTechnique("SkyModel");
 			}
-			else if (Caster&&pMeshContainer->pSkinInfo == NULL) {
-				pEffect->SetTechnique("ShadowNoSkinModel");
+			else if (pMeshContainer->pSkinInfo != NULL)
+			{
+
+				if (ShadowCaster)
+				{
+					pEffect->SetTechnique("ShadowSkinModel");
+				}
+				else
+				{
+					pEffect->SetTechnique("SkinModel");
+				}
 			}
-			else {
-				pEffect->SetTechnique("NoSkinModel");
+			else if(pMeshContainer->pSkinInfo == NULL)
+			{
+				if (ShadowCaster) {
+					pEffect->SetTechnique("ShadowNoSkinModel");
+				}
+				else {
+					pEffect->SetTechnique("NoSkinModel");
+				}
 			}
 			
 		}
@@ -56,16 +71,12 @@ namespace {
 		{
 			pEffect->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
 			pEffect->BeginPass(0);
-			pEffect->SetBool("g_Reciver", Recive);
+			pEffect->SetInt("g_Reciver",ShadowRecive);
 	
 			pEffect->SetMatrix("g_projectionMatrix", projMatrix);
 			pEffect->SetMatrix("g_viewMatrix", viewMatrix);
-			if (Recive){
-				
-				pEffect->SetMatrix("g_viewlightMatrix", &shadowMap.GetlightViewMatrix());
-				pEffect->SetMatrix("g_projlightMatrix", &shadowMap.GetlightProjectionMatrix());
-				pEffect->SetTexture("g_ShadowMapTexture", shadowMap.GetTexture());
-			}
+			
+			
 			//ビュープロジェクション
 			pEffect->SetMatrix("g_mViewProj", &viewProj);
 			//ライト
@@ -76,12 +87,38 @@ namespace {
 			);
 		}
 
-		if (specularMap != NULL)
+		if (cubeMap != NULL)
 		{
-			//スペキュラマップがあるから、シェーダーに転送
-			pEffect->SetTexture("g_specularTexture", specularMap);
-			//スペキュラマップのフラグをtrueにする。
-			pEffect->SetBool("g_isHasSpecularMap",true);
+			pEffect->SetTexture("g_cubeTex", cubeMap);
+		}
+
+		//if (specularMap != NULL)
+		//{
+		//	//スペキュラマップがあるから、シェーダーに転送
+		//	pEffect->SetTexture("g_specularTexture", specularMap);
+		//	//スペキュラマップのフラグをtrueにする。
+		//	pEffect->SetBool("g_isHasSpecularMap",true);
+		//}
+		//else {
+		//	pEffect->SetBool("g_isHasSpecularMap", false);
+		//}
+
+		//if (normalMap != NULL)
+		//{
+		//	//法線マップがあるから、シェーダーに転送
+		//	pEffect->SetTexture("g_normalTexture", normalMap);
+		//	//法線マップのフラグをtrueにする。
+		//	pEffect->SetBool("g_isHasNormalMap", true);
+		//}
+		/*else {
+			pEffect->SetBool("g_isHasNormalMap", false);
+		}*/
+
+		if (ShadowRecive){
+
+			pEffect->SetMatrix("g_viewlightMatrix", &g_shadowmap->GetlightViewMatrix()/*&g_shadowmap->lightViewMatrix*/);
+			pEffect->SetMatrix("g_projlightMatrix", &g_shadowmap->GetlightProjectionMatrix()/*&g_shadowmap->lightProjectionMatrix*/);
+			pEffect->SetTexture("g_shadowMapTexture", g_shadowmap->GetTexture());
 		}
 
 		if (pMeshContainer->pSkinInfo != NULL)
@@ -112,8 +149,7 @@ namespace {
 				pEffect->SetInt("g_numBone", pMeshContainer->NumInfl);
 				// ディフューズテクスチャ。
 				pEffect->SetTexture("g_diffuseTexture", pMeshContainer->ppTextures[pBoneComb[iAttrib].AttribId]);
-
-				// ボーン数。
+				//ボーン数。
 				pEffect->SetInt("CurNumBones", pMeshContainer->NumInfl - 1);
 				D3DXMATRIX viewRotInv;
 				D3DXMatrixInverse(&viewRotInv, NULL, viewMatrix);
@@ -130,7 +166,6 @@ namespace {
 				pMeshContainer->MeshData.pMesh->DrawSubset(iAttrib);
 				pEffect->EndPass();
 				pEffect->End();
-
 			}
 		}
 		else {
@@ -147,13 +182,13 @@ namespace {
 			pEffect->SetMatrix("g_rotationMatrix", rotationMatrix);
 			pEffect->Begin(0, D3DXFX_DONOTSAVESTATE);
 			pEffect->BeginPass(0);
-
+			
 			for (DWORD i = 0; i < pMeshContainer->NumMaterials; i++) {
 				pEffect->SetTexture("g_diffuseTexture", pMeshContainer->ppTextures[i]);
-				//pEffect->SetTexture("g_speTexture", pMeshContainer->ppTextures[i]);
 				pEffect->CommitChanges();
 				pMeshContainer->MeshData.pMesh->DrawSubset(i);
 			}
+			
 			pEffect->EndPass();
 			pEffect->End();
 		}
@@ -169,9 +204,11 @@ namespace {
 		Light* light,
 		LPDIRECT3DTEXTURE9 normalMap,
 		LPDIRECT3DTEXTURE9 specularMap,
-		ShadowMap shadowMap,
-		bool Caster,
-		bool Recive
+		LPDIRECT3DTEXTURE9 shadowMap,
+		LPDIRECT3DCUBETEXTURE9 cubeMap,
+		bool ShadowCaster,
+		bool ShadowRecive,
+		bool Cubeflg
 	)
 	{
 		LPD3DXMESHCONTAINER pMeshContainer;
@@ -192,8 +229,10 @@ namespace {
 				normalMap,
 				specularMap,
 				shadowMap,
-				Caster,
-				Recive
+				cubeMap,
+				ShadowCaster,
+				ShadowRecive,
+				Cubeflg
 				);
 
 			pMeshContainer = pMeshContainer->pNextMeshContainer;
@@ -213,15 +252,17 @@ namespace {
 				normalMap,
 				specularMap,
 				shadowMap,
-				Caster,
-				Recive
+				cubeMap,
+				ShadowCaster,
+				ShadowRecive,
+				Cubeflg
 				);
 		}
 
 		if (pFrame->pFrameFirstChild != NULL)
 		{
 			DrawFrame(
-				pd3dDevice, 
+				pd3dDevice,
 				pFrame->pFrameFirstChild, 
 				pEffect,
 				worldMatrix,
@@ -232,11 +273,15 @@ namespace {
 				normalMap,
 				specularMap,
 				shadowMap,
-				Caster,
-				Recive
+				cubeMap,
+				ShadowCaster,
+				ShadowRecive,
+				Cubeflg
 				);
 		}
 	}
+
+	
 }
 SkinModel::SkinModel() :
 	skinModelData(nullptr),
@@ -252,12 +297,12 @@ SkinModel::~SkinModel()
 void SkinModel::Init(SkinModelData* modelData)
 {
 
-
-	pEffect = g_effectManager->LoadEffect("Assets/Shader/Model.fx");
-
+	pEffect = g_effectManager->LoadEffect("Assets/Shader/model.fx");
 
 	skinModelData = modelData;
+
 }
+
 void SkinModel::UpdateWorldMatrix(const D3DXVECTOR3& trans, const D3DXQUATERNION& rot, const D3DXVECTOR3& scale)
 {
 	D3DXMATRIX mTrans, mScale;
@@ -272,11 +317,11 @@ void SkinModel::UpdateWorldMatrix(const D3DXVECTOR3& trans, const D3DXQUATERNION
 	}
 }
 
-void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix,bool Caster,bool Recive)
+void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)
 {
 	if (skinModelData) {
 		DrawFrame(
-			g_pd3dDevice, 
+			g_pd3dDevice,
 			skinModelData->GetFrameRoot(), 
 			pEffect,
 			&worldMatrix,
@@ -287,8 +332,10 @@ void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix,bool Caster,
 			normalMap,
 			specularMap,
 			shadowMap,
-			Caster,
-			Recive
+			cubeMap,
+			ShadowCaster,
+			ShadowRecive,
+			Cubeflg
 		);
 	}
 }

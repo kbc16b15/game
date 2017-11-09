@@ -188,10 +188,13 @@
     <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="RotObject.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Sea.cpp" />
     <ClCompile Include="ShadowMap.cpp" />
     <ClCompile Include="Sky.cpp" />
     <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="SoundEngine.cpp" />
     <ClCompile Include="Spring.cpp" />
+    <ClCompile Include="SpringCamera.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -243,10 +246,13 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="RotObject.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Sea.h" />
     <ClInclude Include="ShadowMap.h" />
     <ClInclude Include="Sky.h" />
     <ClInclude Include="Sound.h" />
+    <ClInclude Include="SoundEngine.h" />
     <ClInclude Include="Spring.h" />
+    <ClInclude Include="SpringCamera.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="trackingEnemy.h" />

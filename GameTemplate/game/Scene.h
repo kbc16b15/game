@@ -2,6 +2,7 @@
 #include "TitleScene.h"
 #include "ResultScene.h"
 #include "Fade.h"
+//#include "BaseScene.h"
 class Scene
 {
 public:
@@ -15,28 +16,27 @@ public:
 	void Update();
 	//描画
 	void Render();
-	//シーンチェンジ
-	void SceneChange();
 
-	void SetScene(int SceneNo)
-	{
-		m_Scene = SceneNo;
-	}
 	enum SCENE
 	{
 		TITLE,			//タイトルシーン
 		GAME,			//ゲームシーン
-		GAME2,
+		//GAME2,
 		END,
-		CHANGEGAME,		//ゲームシーンに遷移
-		CHANGEGAME2,
-		CHANGETITLE,	//タイトルシーンに遷移
-		CHANGEEND,
+		CHANGEGAME,
+		//CHANGEGAME2,
+		CHANGETITLE,
+		CHANGEEND
 	};
+
+	//シーンチェンジ
+	void SceneChange(SCENE SceneNo);
+
 private:
-	TitleScene* title=nullptr;	//タイトル
+	TitleScene* title=nullptr;
 	ResultScene* end = nullptr;
-	int m_Scene = TITLE;	//シーンの状態
+	//BaseScene* m_bScene=nullptr;
+	SCENE m_Scene;
 };
 
 extern Scene* scene;

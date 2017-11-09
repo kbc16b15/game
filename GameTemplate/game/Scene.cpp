@@ -3,10 +3,11 @@
 */
 #include "stdafx.h"
 #include "Scene.h"
-
+#include "TitleScene.h"
+#include "ResultScene.h"
+//BaseScene *Scene::m_bScene = NULL;
 Scene::Scene()
 {
-
 }
 Scene::~Scene()
 {
@@ -17,24 +18,26 @@ Scene::~Scene()
 //-----------------------------------------------------------------------------
 void Scene::Init()
 {
+	//m_bScene->Init();
 
 	switch (m_Scene)
 	{
 	case TITLE:
+		 //scene= new TitleScene;
 		title = new TitleScene;
 		title->Init();
 		break;
 	case GAME:
+		//scene = new Game;
 		game = new Game;
-		game->Start();
+		game->Init();
 		break;
-	case GAME2:
+	/*case GAME2:
 		game = new Game;
-		game->GetMap()->SetStage(1);
-		game->Start();
-		
-		break;
+		game->Init();
+		break;*/
 	case END:
+		//scene = new ResultScene;
 		end = new ResultScene;
 		end->Init();
 		break;
@@ -49,20 +52,30 @@ void Scene::Init()
 
 void Scene::Render()
 {
+	//m_bScene->Render();
 
 	switch (m_Scene)
 	{
 	case TITLE:
-		title->Render();
+		if (title != nullptr)
+		{
+			title->Render();
+		}
 		break;
 	case GAME:
-		game->Render();
+		if (game != nullptr)
+		{
+			game->Render();
+		}
 		break;
-	case GAME2:
-		game->Render();
-		break;
+	//case GAME2:
+	//	game->Render();
+	//	break;
 	case END:
-		end->Render();
+		if (end != nullptr)
+		{
+			end->Render();
+		}
 		break;
 	default:
 		break;
@@ -74,57 +87,130 @@ void Scene::Render()
 -----------------------------------------------------------------------------*/
 void Scene::Update()
 {
+	//m_bScene->Update();
+
 
 	switch (m_Scene)
 	{
 	case TITLE:
-		title->Update();
+		if (title != nullptr)
+		{
+			title->Update();
+		}
 		break;
 	case GAME:
-		game->Update();
+		if (game != nullptr)
+		{
+			game->Update();
+		}
 		break;
-	case GAME2:
-		game->Update();
-		break;
+	//case GAME2:
+	//	game->Update();
+	//	break;
 	case END:
-		end->Update();
+		if (end != nullptr)
+		{
+			end->Update();
+		}
 		break;
 	case CHANGEGAME:
-		delete title;
-		title = nullptr;
+		if (title != nullptr)
+		{
+			delete title;
+			title = nullptr;
+		}
 		m_Scene = GAME;
 		Init();
 		break;
-	case CHANGEGAME2:
+	/*case CHANGEGAME2:
 		delete game;
 		game = nullptr;
 		delete g_physicsWorld;
 		g_physicsWorld = nullptr;
 		m_Scene = GAME2;
 		Init();
-		break;
+		break;*/
 	case CHANGETITLE:
 		m_Scene = TITLE;
 		Init();
-		delete end;
-		end = nullptr;
+		if (end != nullptr)
+		{
+			delete end;
+			end = nullptr;
+		}
 		break;
 	case CHANGEEND:
 		m_Scene = END;
 		Init();
-		delete game;
-		game = nullptr;
-		delete g_physicsWorld;
-		g_physicsWorld = nullptr;
+		if (game != nullptr)
+		{
+			delete game;
+			game = nullptr;
+		}
+		if (g_physicsWorld != nullptr)
+		{
+			delete g_physicsWorld;
+			g_physicsWorld = nullptr;
+		}
 		break;
 	default:
 		break;
 	}
+
 }
 
-void Scene::SceneChange()
+void Scene::SceneChange(SCENE SceneNo)
 {
-	switch (m_Scene)
+	m_Scene = SceneNo;
+	//Init();
+	//if (m_bScene != nullptr) {
+	//	delete 	m_bScene;
+	//	m_bScene = nullptr;
+	//}
+
+	//if (g_physicsWorld != nullptr)
+	//{
+	//	delete g_physicsWorld;
+	//	g_physicsWorld = nullptr;
+	//}
+
+	//switch (SceneNo)
+	//{
+	//case TITLE:
+	//	m_bScene = new TitleScene;
+	//	//scene->Init();
+	//	break;
+	//case GAME:
+	//	m_bScene = new Game;
+	//	//m_bScene->Init();
+	//	break;
+	//case END:
+	//	m_bScene = new ResultScene;
+	//	//m_bScene->Init();
+	//	break;
+	//default:
+	//	break;
+	//}
+
+
+	//case TITLE:
+	//	m_Scene = CHANGEGAME;
+	//	break;
+	//case GAME:
+	//	m_Scene = CHANGEGAME2;
+	//	break;
+	//case GAME2:
+	//	m_Scene = CHANGETITLE;
+	//	break;
+	//case END:
+	//	m_Scene = CHANGETITLE;
+	//	break;
+	//default:
+	//	break;
+	//}
+
+
+	/*switch (SceneNo)
 	{
 	case TITLE:
 		m_Scene = CHANGEGAME;
@@ -132,13 +218,10 @@ void Scene::SceneChange()
 	case GAME:
 		m_Scene = CHANGEGAME2;
 		break;
-	case GAME2:
-		m_Scene = CHANGETITLE;
-		break;
 	case END:
 		m_Scene = CHANGETITLE;
 		break;
 	default:
 		break;
-	}
+	}*/
 }

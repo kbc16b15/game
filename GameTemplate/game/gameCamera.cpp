@@ -25,6 +25,13 @@ void gameCamera::Init()
 void gameCamera::Update()
 {
 	pad.Update();
+	RotCamera();
+	RockCamera();
+	m_camera.Update();
+}
+
+void gameCamera::RotCamera()
+{
 	D3DXMATRIX m_Rot;
 	D3DXMatrixIdentity(&m_Rot);
 
@@ -36,7 +43,7 @@ void gameCamera::Update()
 	}
 	else if (pad.GetRStickXF()>0.0)
 	{
-			
+
 		angle -= RotSpeedY;
 		D3DXMatrixRotationY(&m_Rot, D3DXToRadian(angle));
 	}
@@ -74,31 +81,30 @@ void gameCamera::Update()
 	}
 	angle = 0.0f;
 	D3DXVec3TransformCoord(&toCameraPos, &toCameraPos, &m_Rot);
-	if (!Rockonflg)
-	m_camera.SetEyePt(m_camera.GetLookatPt() + toCameraPos);
-	
+
 	//プレイヤー追従カメラ。
 	D3DXVECTOR3 targetPos = game->GetPlayer()->Getpos();
 	/*if (targetPos.y < 0.0f)
 	{
-		targetPos.y = 0.0f;
+	targetPos.y = 0.0f;
 	}*/
-	D3DXVECTOR3 eyePos = targetPos + toCameraPos;
-	if(!Rockonflg)
+	//if (!Rockonflg)
 	m_camera.SetLookatPt(targetPos);
-	m_camera.SetEyePt(eyePos);
+	m_camera.SetEyePt(m_camera.GetLookatPt() + toCameraPos);
+}
 
+void gameCamera::RockCamera()
+{
 	if (Rockonflg)
 	{
+		D3DXVECTOR3 ReyePos = game->GetPlayer()->Getpos();
+		D3DXVECTOR3 RtargetPos = game->GetPlayer()->Getpos();
+		ReyePos.x += 1.0f;
+		ReyePos.z += 0.8f;
+		ReyePos.y += 1.2f;
+		RtargetPos.x -= 10.0f;
 
-		eyePos = game->GetPlayer()->Getpos();
-		targetPos = game->GetPlayer()->Getpos();
-		eyePos.x += 1.0f;
-		eyePos.z += 0.8f;
-		eyePos.y += 1.2f;
-		targetPos.x -= 10.0f;
-		
-		if (GetAsyncKeyState('H') || pad.GetRStickXF() < 0.0f)
+		/*if (GetAsyncKeyState('H') || pad.GetRStickXF() < 0.0f)
 		{
 			vec.z += 0.5f;
 		}
@@ -113,11 +119,10 @@ void gameCamera::Update()
 		else if (GetAsyncKeyState('U') || pad.GetRStickYF() > 0.0f)
 		{
 			vec.y -= 0.5f;
-		}
-		targetPos += vec;
-		m_camera.SetLookatPt(targetPos);
-		m_camera.SetEyePt(eyePos);
+		}*/
+		RtargetPos += vec;
+		m_camera.SetLookatPt(RtargetPos);
+		m_camera.SetEyePt(ReyePos);
 	}
-	m_camera.Update();
 }
 

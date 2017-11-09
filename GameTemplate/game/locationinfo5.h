@@ -922,9 +922,9 @@
 	D3DXVECTOR3(-25.40f, 7.30f, 7.21f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
-//skyhalf
+//sky
 {
-	"skyhalf",
+	"sky",
 	D3DXVECTOR3(-85.00f, 10.10f, -19.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
@@ -932,5 +932,17 @@
 {
 	"Sea",
 	D3DXVECTOR3(-91.60f, -36.90f, -28.70f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//GCube
+{
+	"GCube",
+	D3DXVECTOR3(-12.85f, 0.00f, 0.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//GCube
+{
+	"GCube",
+	D3DXVECTOR3(-2.08f, 0.00f, 7.04f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },

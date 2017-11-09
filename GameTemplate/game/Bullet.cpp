@@ -46,7 +46,7 @@ void Bullet::Start(D3DXVECTOR3 pos, D3DXVECTOR3 targetPos,int cha)
 	skinModel.Init(skinModelData);
 	skinModel.SetLight(&light);
 	
-	D3DXQuaternionRotationAxis(&rotation, &D3DXVECTOR3(0.0f, 1.0f, 0.0f),-5.0f);
+	//D3DXQuaternionRotationAxis(&rotation, rotation,-5.0f);
 	direction = { 0.0f, 0.0f, 1.0f };
 
 	//state = eState_Search;
@@ -112,7 +112,20 @@ void Bullet::TargetBullet()
 		if (targetpos == position || len < 0.3f)
 		{
 			Btime = 0;
-		}*/
+
+		}
+		
+		D3DXVECTOR3 Def;
+		D3DXVec3Subtract(&Def, &position, &game->GetPlayer()->Getpos());
+
+		float s;
+		float halfAngle = atan2f(-Def.x, -Def.z) * 0.5f;
+		s = sin(halfAngle);
+		rotation.w = cos(halfAngle);
+		rotation.x = 0.0f * s;
+		rotation.y = 1.0f * s;
+		rotation.z = 0.0f * s;
+			*/
 
 	CubeCollision Cubemass;
 	D3DXVECTOR3 Ppos = game->GetPlayer()->Getpos();
@@ -127,8 +140,8 @@ void Bullet::TargetBullet()
 		switch (m_Chara)
 		{
 		case Player:
-			break;
 
+			break;
 
 		case Enemy:
 			game->GetPlayer()->SetDamage();
@@ -149,5 +162,5 @@ void Bullet::Draw()
 {
 	skinModel.UpdateWorldMatrix(position, rotation/*D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0)*/, scale);
 
-	skinModel.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix(), false, false);
+	skinModel.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
 }

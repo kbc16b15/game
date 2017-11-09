@@ -44,8 +44,8 @@ sampler_state
     MipFilter = LINEAR;
     MinFilter = LINEAR;
     MagFilter = LINEAR;
-    AddressU = CLAMP;
-	AddressV = CLAMP;
+    AddressU = Clamp;
+	AddressV = Clamp;
 };
 
 //法線マップ
@@ -73,6 +73,18 @@ sampler_state
 	AddressU=Wrap;
 	AddressV=Wrap;
 };
+
+//キューブマップ
+texture g_cubeTex;
+sampler g_cubeTexSampler=
+sampler_state{
+ 	Texture=<g_cubeTex>;
+ 	MipFilter=LINEAR;
+	MinFilter=LINEAR;
+ 	MagFilter=LINEAR;
+	AddressU=Wrap;
+	AddressV=Wrap;
+};
 /*!
  * @brief	入力頂点
  */
@@ -84,7 +96,7 @@ struct VS_INPUT
     float3  Normal          : NORMAL;
     float3	Tangent			: TANGENT;		//接ベクトル
     float3  Tex0            : TEXCOORD0;
-    float4  color		:COLOR0;
+    //float4  color		:COLOR0;
    //float2 uv			:TEXCOORD4;
 };
 
@@ -93,13 +105,15 @@ struct VS_INPUT
  */
 struct VS_OUTPUT
 {
+
 	float4  Pos     		: POSITION;
     float3  Normal			: NORMAL;
     float2  Tex0   			: TEXCOORD0;
     float3	Tangent			: TEXCOORD1;	//接ベクトル
     float3 world			: TEXCOORD2;	//ワールドの変換座標
     float4 lightViewPos 		: TEXCOORD3;
-    float4  color		:COLOR0;
+ 
+    //float4  color		:COLOR0;
     //float2 uv			:TEXCOORD4;
 
 };
@@ -167,23 +181,19 @@ VS_OUTPUT VSMain( VS_INPUT In, uniform bool hasSkin )
 		//スキンなし。
 		CalcWorldPosAndNormal( In, Pos, Normal, Tangent );
 	}
-
+		//float4 worldPos=mul( Pos, g_worldMatrix );
+		o.world=Pos;
         o.Pos = mul(float4(Pos.xyz, 1.0f), g_mViewProj);
+        
         o.Normal = normalize(Normal);
         o.Tangent = normalize(Tangent);
         o.Tex0 = In.Tex0;
 
-	float4 worldPos;
-	worldPos=mul(In.Pos,g_worldMatrix);
-	//o.Pos=mul(worldPos,g_viewMatrix);
-	//o.Pos=mul(o.Pos,g_projectionMatrix);
-	//o.color=In.color;
-	//o.uv=In.uv;
-	
-       if(g_Reciver)
+       if(g_Reciver==1)
        {
-	   o.lightViewPos=mul(worldPos,g_viewlightMatrix);
-	   o.lightViewPos=mul(o.lightViewPos,g_projlightMatrix);
+	  	o.lightViewPos=mul(float4(o.world, 1.0f),g_viewlightMatrix);
+	  	//o.lightViewPos=mul(worldPos,g_viewlightMatrix);
+	   	o.lightViewPos=mul(o.lightViewPos,g_projlightMatrix);
        }
 
     return o;
@@ -199,35 +209,51 @@ float4 PSMain( VS_OUTPUT In ) : COLOR
 	
 	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0);
 	float3 normal = In.Normal;
+	float4 lig = DiffuseLight(normal);
 	
-
+	
 	//float3 eye=normalize(Eye-In.world.xyz);//カメラからオブジェクトへの方向？
 	//float3 L = -g_light.diffuseLightDir[0];//ライト
 	//float3 N = normal.xyz;//法線
 	//float3 R = -L+2.0f*dot(L,N)*N;
-	//lig+=pow(max(0.0f,dot(R,eye)),2.0f);//累乗計算	
+	//lig+=pow(max(0.0f,dot(R,eye)),2.0f);//累乗計算
 	//color *= lig;
 
-	//if (g_isHasSpecularMap)
-	//{
-	//	float3 spe = CalcSpecular(In.worldPos, normal);
-	//	spe *= tex2D(g_specularMapSamoler, In.Tex0).a;
-	//	lig.xyz += spe;
-	//}
+	
+	
 
-	if(g_Reciver)
+	
+	if(g_Reciver==1)
 	{
-		float2 shadowMapUV=In.lightViewPos.xy/In.lightViewPos.w;
-		shadowMapUV*=float2(0.5f,-0.5f);
+		float2 shadowMapUV = In.lightViewPos.xy/In.lightViewPos.w;
+		shadowMapUV *= float2(0.5f,-0.5f);
 		
-		shadowMapUV+=float2(0.5f,0.5f);
+		shadowMapUV += float2(0.5f,0.5f);
 		
 		float4 shadowVal=tex2D(g_shadowMapTextureSampler,shadowMapUV);
-		//color*=shadowVal;
+		
+		color *= shadowVal;
+		
 	}
+	
+	//if (g_isHasSpecularMap)
+	//{
+	//	float3 spe = CalcSpecular(In.world, normal);
+	//	spe *= tex2D(g_specularMapSampler, In.Tex0).a;
+	//	lig.xyz += spe;
+	//}
+	color *= lig;
+	
+	return color;
+}
 
-	float4 lig = DiffuseLight(normal);
-	color*=lig;
+/*!
+* @brief	ピクセルシェーダー。
+*/
+float4 PSSkyMain(VS_OUTPUT In) : COLOR
+{
+	float3 normal = In.Normal;
+	float4 color=texCUBE(g_cubeTexSampler,normal);
 	return color;
 }
 
@@ -283,5 +309,15 @@ technique ShadowNoSkinModel
 	{
 		VertexShader = compile vs_3_0 VSMain(false);
 		PixelShader = compile ps_3_0 PSShadowMain();
+	}
+}
+
+
+technique SkyModel
+{
+	pass p0
+	{
+		VertexShader=compile vs_3_0 VSMain(false);
+		PixelShader=compile ps_3_0 PSSkyMain();
 	}
 }

@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "ShadowMap.h"
 
-
 ShadowMap::ShadowMap()
 {
 	D3DXMatrixIdentity(&lightViewMatrix);
@@ -12,6 +11,7 @@ ShadowMap::ShadowMap()
 	viewTarget.x = 0.0f;
 	viewTarget.y = 0.0f;
 	viewTarget.z = 0.0f;
+
 }
 
 ShadowMap::~ShadowMap()
@@ -29,11 +29,18 @@ void ShadowMap::Init()
 		D3DMULTISAMPLE_NONE,
 		0
 	);
+
 }
 
 
 void ShadowMap::Update()
 {
+
+	/*viewTarget = game->GetPlayer()->Getpos();
+	viewPosition = viewTarget;
+
+	viewPosition.y += 10;*/
+
 	D3DXVECTOR3 tmp = viewTarget - viewPosition;
 	D3DXVec3Normalize(&tmp, &tmp);
 	if (fabsf(tmp.y) > 0.9999f)
@@ -45,6 +52,7 @@ void ShadowMap::Update()
 		D3DXMatrixLookAtLH(&lightViewMatrix, &viewPosition, &viewTarget, &D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 	}
 	D3DXMatrixPerspectiveFovLH(&lightProjectionMatrix, D3DXToRadian(60.0f), 1.0f, 0.1f, 100.0f);
+
 }
 
 void ShadowMap::Draw()
@@ -57,8 +65,15 @@ void ShadowMap::Draw()
 
 	g_pd3dDevice->SetRenderTarget(0, renderTarget.GetRenderTarget());
 	g_pd3dDevice->SetDepthStencilSurface(renderTarget.GetDepthStencilBuffer());
+	//g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0xffffffff, 1.0f, 0);
 	g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
-	game->GetPlayer()->Draw(lightViewMatrix,lightProjectionMatrix,true,false);
+	if (game != NULL && game->GetPlayer() != NULL)
+	{
+		game->GetPlayer()->Draw(&lightViewMatrix,&lightProjectionMatrix,true,false);
+	}
+
 	g_pd3dDevice->SetRenderTarget(0, renderTargetBackup);
 	g_pd3dDevice->SetDepthStencilSurface(depthBufferBackup);
+
+
 }

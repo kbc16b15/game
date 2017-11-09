@@ -28,6 +28,8 @@ void Animation::PlayAnimation(int animationSetIndex)
 {
 	if (animationSetIndex < numAnimSet) {
 		if (pAnimController) {
+			isAnimEnd = false;
+			isInterpolate = false;
 			currentAnimationSetNo = animationSetIndex;
 			currentTrackNo = 0;
 			//0番目以外のトラックは無効にする。
@@ -50,6 +52,7 @@ void Animation::PlayAnimation(int animationSetIndex, float interpolateTime)
 {
 	if (animationSetIndex < numAnimSet) {
 		if (pAnimController) {
+			isAnimEnd = false;
 			//補間開始の印。
 			isInterpolate = true;
 			this->interpolateTime = 0.0f;

@@ -9,11 +9,16 @@ Player::Player()
 Player::~Player()
 {
 	//delete skinModelData;
-	characterController.RemoveRigidBoby();
-	skinModelData.Release();
+	//characterController.RemoveRigidBoby();
+	//skinModelData.Release();
+	//delete m_JumpSound;
+	//m_JumpSound = nullptr;
 }
 
 void Player::Start(){
+
+	scale *= 0.01f;
+	//ライトのセット
 	light.SetDiffuseLightDirection(0, D3DXVECTOR4(0.707f, 0.0f, -0.707f, 1.0f));
 	light.SetDiffuseLightDirection(1, D3DXVECTOR4(-0.707f, 0.0f, -0.707f, 1.0f));
 	light.SetDiffuseLightDirection(2, D3DXVECTOR4(0.0f, 0.707f, -0.707f, 1.0f));
@@ -27,60 +32,53 @@ void Player::Start(){
 	skinModelData.LoadModelData("Assets/modelData/Unity2.X", &animation);
 	skinModel.Init(&skinModelData);
 	skinModel.SetLight(&light);
-	animation.PlayAnimation(0);
-	//キャラクタコントローラを初期化。
 
-	characterController.Init(0.3f, 0.2f, position);
+	//animation.PlayAnimation(Stand);
+
+	//キャラクタコントローラを初期化。
+	characterController.Init(0.3f, 0.5f, position);
 	characterController.SetGravity(m_Gravity);
 
+	//アニメーションループフラグのセット
 	animation.SetAnimationLoopFlag(Jump, false);
 	animation.SetAnimationLoopFlag(Damage, false);
 	animation.SetAnimationLoopFlag(Dead, false);
 
+	//アニメーションエンドタイムのセット
 	animation.PlayAnimation(Stand, 0.3f);
 	animation.SetAnimationEndTime(Dash, 0.8f);
-	animation.SetAnimationEndTime(Jump, 2.2f);
-	animation.SetAnimationEndTime(Damage, 0.8f);
-	animation.SetAnimationEndTime(Dead, 0.8f);
+	animation.SetAnimationEndTime(Jump, 1.5f);
+	animation.SetAnimationEndTime(Damage, 0.2f);
+	animation.SetAnimationEndTime(Dead, 3.0f);
 
-
-	scale *= 0.01f;
 	
-	//HRESULT hr = D3DXCreateTextureFromFileA(g_pd3dDevice,
-	//	"Assets/model/utc_spec.tga",
+	//D3DXCreateTextureFromFileA(g_pd3dDevice,
+	//	"Assets/modelData/utc_spec.tga",
 	//	&specularMap);
 	//
 	//if (specularMap != NULL)
 	//{
 	//	skinModel.SetSpecularMap(specularMap);
 	//}
+
 }
 
 void Player::Update()
 {
-	switch (m_State)
-	{
-	case Dead:
-		pad.Update();
-		Setangle();
-		move();
-		AnimationSet();
-		break;
-	default:
-		pad.Update();
-		BulletHit();
-		Setangle();
-		move();
-		AnimationSet();
-		//Key();
+	if (Deathflg)return;//死んでいたらリターン
+	AnimationSet();
+	pad.Update();
+	BulletHit();
+	Setangle();
+	move();
 
-		skinModel.UpdateWorldMatrix(characterController.GetPosition(), rotation, scale);
-		break;
-	}
+	skinModel.UpdateWorldMatrix(characterController.GetPosition(), rotation, scale);
+
 }
 
 void Player::move()
 {
+	//移動しているがどうかのフラグのセット
 	if (MoveStop)
 	{
 		Ismove = false;
@@ -99,8 +97,6 @@ void Player::move()
 void Player::AnimationSet()
 {
 	//状態遷移？
-	//ループフラグを切れていないからまだ変
-	//if(!animation.IsPlay()){}これが使えない
 	switch (m_State)
 	{
 	case Stand://待機
@@ -111,8 +107,6 @@ void Player::AnimationSet()
 		else if (Isjump) { m_State = Jump; }
 		else if (Ismove) { m_State = Dash; }
 		else{ m_State = Stand;}
-		//アニメーションの更新
-		animation.Update(1.0f / 60.0f);
 		break;
 	case Dash://歩行
 		if (workState != Dash){animation.PlayAnimation(Dash, 0.5f);}
@@ -122,8 +116,6 @@ void Player::AnimationSet()
 		else if (Isjump) { m_State = Jump; }
 		else if (Ismove) { m_State = Dash; }
 		else { m_State = Stand; }
-		//アニメーションの更新
-		animation.Update(1.0f / 60.0f);
 		break;
 	case Jump://ジャンプ
 		if (workState != Jump){animation.PlayAnimation(Jump, 0.5f);}
@@ -133,9 +125,11 @@ void Player::AnimationSet()
 		else if (Isjump) { m_State = Jump; }
 		else if (Ismove) { m_State = Dash; }
 		else { m_State = Stand; }
-		Isjump = false;
-		//アニメーションの更新
-		animation.Update(1.0f / 60.0f);
+		if (!animation.IsPlay()|| characterController.IsOnGround())
+		{
+			Isjump = false;
+			//m_State = Stand;
+		}
 		break;
 	case Damage://ダメージ
 		if (workState != Damage){animation.PlayAnimation(Damage, 0.5f);}
@@ -145,37 +139,26 @@ void Player::AnimationSet()
 		else if (Isjump) { m_State = Jump; }
 		else if (Ismove) { m_State = Dash; }
 		else { m_State = Stand; }
-		//if (!animation.IsPlay())
-		//{
-			IsDamage = false;
-		//}
-		//アニメーションの更新
-		animation.Update(1.0f / 60.0f);
+
+		if (!animation.IsPlay()){IsDamage = false;}
 		break;
 	case Dead://死亡
 		if (workState != Dead){animation.PlayAnimation(Dead, 0.5f);}
 		workState = m_State;
-		if (IsDead&&game->GetHp() <= 0){ m_State = Dead; }
-		else if (IsDamage) { m_State = Damage; }
-		else if (Isjump) { m_State = Jump; }
-		else if (Ismove) { m_State = Dash; }
-		else { m_State = Stand; }
-		//if (!animation.IsPlay())
-		//{
-			IsDead = false;
-		//}
-		//アニメーションの更新
-		animation.Update(1.0f / 60.0f);
+
+		if (!animation.IsPlay()){Deathflg = true;}
 		break;
 	default:
 		break;
 	}
-	
+	//アニメーションの更新
+	animation.Update(1.0f / 60.0f);
 
 }
 
 void Player::Setangle()
 {
+	if (IsDead)return;
 	D3DXVECTOR3 Mpos = position;
 
 	moveSpeed = characterController.GetMoveSpeed();
@@ -201,11 +184,12 @@ void Player::Setangle()
 	D3DXVec3Normalize(&cameraX, &cameraX);
 
 	D3DXVECTOR3 moveDir;
-	
 	moveDir.x = cameraX.x * LocalDir.x + cameraZ.x * LocalDir.z;
 	moveDir.y = 0.0f;
 	moveDir.z = cameraX.z *LocalDir.x + cameraZ.z * LocalDir.z;
-	if (moveDir.x > 0.0f || moveDir.x<0.0f)
+
+
+	/*if (moveDir.x > 0.0f || moveDir.x<0.0f)
 	{
 		Addvector.x += 1.0f;
 	}
@@ -223,21 +207,20 @@ void Player::Setangle()
 	if (Addvector.z > 100.0f)
 	{
 		moveSpeed.z = 2.5f;
-	}
+	}*/
 	
-	moveSpeed.x = moveDir.x*(6.0f+moveSpeed.x);
-	moveSpeed.z = moveDir.z*(6.0f+moveSpeed.z);
+	//moveSpeed.x = moveDir.x*(4.0f/*+moveSpeed.x*/);
+	//moveSpeed.z = moveDir.z*(4.0f/*+moveSpeed.z*/);
 
-	if (moveSpeed == D3DXVECTOR3{ 0.0f,0.0f,0.0f })
+	/*if (moveSpeed == D3DXVECTOR3{ 0.0f,0.0f,0.0f })
 	{
 		Addvector = { 0.0f,0.0f,0.0f };
-	}
+	}*/
 	//if (m_isGravity)
 	//{
 	//	if (Grotflg)
 	//	{
 	//		gAngle += 3.0f;
-
 	//		D3DXQuaternionRotationAxis(&rotation, &D3DXVECTOR3(0.0f, 0.0f, 1.0f), D3DXToRadian(gAngle));
 	//	}
 	//	if (gAngle >= 180)
@@ -246,9 +229,6 @@ void Player::Setangle()
 	//		//D3DXQuaternionNormalize(&rotation, &rotation);
 	//		//Grotflg = false;
 	//	}
-
-
-
 	//}
 	if ((moveDir.x*moveDir.x + moveDir.y*moveDir.y + moveDir.z*moveDir.z) > 0.0001f&&!MoveStop)
 	{
@@ -262,8 +242,11 @@ void Player::Setangle()
 		rotation.z = 0.0f * s;
 	}
 
-	if (pad.IsTrigger(pad.enButtonA) && characterController.IsOnGround() /*&& animation.GetNumAnimationSet() != Jump*/) {
-
+	if (pad.IsTrigger(pad.enButtonA) && characterController.IsOnGround()) {
+		m_JumpSound = new Sound();
+		m_JumpSound->Init("Assets/Sound/jump06.wav");
+		m_JumpSound->SetVolume(0.4f);
+		m_JumpSound->Play(false);
 		//ジャンプ
 		moveSpeed.y = 8.0f;
 		//ジャンプしたことをキャラクタコントローラーに通知。
@@ -281,67 +264,112 @@ void Player::Setangle()
 		Isjump = true;
 	}
 
+	//慣性の設定テスト
+	//if (pad.GetLStickXF()<0.0) {//左方向
+	//	Dir.z = 0.0f;
+	//	Dir.x += 0.6f;
+	//	//moveDir.x += 0.8f;
+	//}
+	//else if (pad.GetLStickXF()>0.0) {//右方向
+	//	Dir.z = 0.0f;
+	//	Dir.x -= 0.6f;
+	//	//moveDir.x -= 0.8f;
+	//}
+	//if (pad.GetLStickYF()>0.0) {//上方向
+	//	Dir.x = 0.0f;
+	//	Dir.z -= 0.6f;
+	//	//moveDir.z += 0.8f;
+	//}
+	//else if (pad.GetLStickYF()<0.0) {//下方向
+	//	Dir.x = 0.0f;
+	//	Dir.z += 0.6f;
+	//	//moveDir.z -= 0.8f;
+	//}
+	Dir.x += moveDir.x;
+	Dir.z += moveDir.z;
+	if (pad.GetLStickXF() == 0.0f&&pad.GetLStickYF() == 0.0f)
+	{
+		/*if (Dir.x > 0.0f)
+		{
+		Dir.x += -0.1f;
+		}
+		if (Dir.x < 0.0f)
+		{
+		Dir.x += 0.1f;
+		}
+		if (Dir.z > 0.0f)
+		{
+		Dir.z += -0.1f;
+		}
+		if (Dir.z < 0.0f)
+		{
+		Dir.z += 0.1f;
+		}
 
+		if (Dir.x > -1.0f&&Dir.x < 1.0f&&Dir.z < 1.0f&&Dir.z > -1.0f)
+		{
+		Dir = { 0.0f,0.0f,0.0f };
+		}
+		*/
+
+		//移動していないときに減速させる処理
+		if (Dir.x > 0.0f)
+		{
+			Dir.x += -0.2f;
+		}
+		if (Dir.x < 0.0f)
+		{
+			Dir.x += 0.2f;
+		}
+		if (Dir.z > 0.0f)
+		{
+			Dir.z += -0.2f;
+		}
+		if (Dir.z < 0.0f)
+		{
+			Dir.z += 0.2f;
+		}
+
+		//移動していないときに止める処理
+		if (Dir.x > -1.0f&&Dir.x < 1.0f&&Dir.z < 1.0f&&Dir.z > -1.0f)
+		{
+			Dir = { 0.0f,0.0f,0.0f };
+		}
+	}
+	//最大移動速度の保存
+	if (Dir.x > 5.0f)
+	{
+		Dir.x = 5.0f;
+	}
+	else if (Dir.x < -5.0f)
+	{
+		Dir.x = -5.0f;
+	}
+	if (Dir.z > 5.0f)
+	{
+		Dir.z = 5.0f;
+	}
+	else if (Dir.z < -5.0f)
+	{
+		Dir.z = -5.0f;
+	}
+	//D3DXVec3Normalize(&Dir, &Dir);
+	Dir.y = 0.0f;
+	//moveSpeed.x = Dir.x*6.0f;
+	//moveSpeed.z = Dir.z*6.0f;
+	moveSpeed.x += Dir.x;
+	moveSpeed.z += Dir.z;
 	//キャラクタが動く速度を設定。
 	characterController.SetMoveSpeed(moveSpeed);
-
-	//if (MoveStop)
+	//if(MoveStop)
 	//{
 	//	characterController.SetPosition(Mpos);
 	//}
 	if (!MoveStop)
 	{
-		//キャラクタコントローラーを実行。
+		//キャラクタコントローラーを実行
 		characterController.Execute();
 	}
-}
-
-void Player::Key()
-{
-
-	//float fMoveSpeed = 8.0f;
-	//D3DXQUATERNION addRot = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
-
-	//if (pad.IsPress(pad.enButtonLeft)||pad.GetLStickXF()<0.0) {//左方向
-
-	//		moveSpeed.x = fMoveSpeed;
-	//	D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), -5.0f);
-	//	rotation = addRot;
-	//}
-	//else if (pad.IsPress(pad.enButtonRight)||pad.GetLStickXF()>0.0) {//右方向
-
-	//		moveSpeed.x = -fMoveSpeed;
-	//	//moveSpeed.x = fMoveSpeed;
-	//	D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 5.0f);
-	//	rotation = addRot;
-
-	//	
-	//}
-	//else if (pad.IsPress(pad.enButtonUp)||pad.GetLStickYF()>0.0) {//上方向
-	//		moveSpeed.x = -fMoveSpeed;
-
-	//	//moveSpeed.z = -fMoveSpeed;
-	//	D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 60.0f);
-	//	rotation = addRot;
-
-	//}
-	//else if (pad.IsPress(pad.enButtonDown)|| pad.GetLStickYF()<0.0) {//下方向
-
-	//	//if (AddCount > 5.0f)
-	//	//{
-	//	//	moveSpeed.x = fMoveSpeed ;
-	//	//}
-	//	//else
-	//	//{
-	//		moveSpeed.x = 20.0f;
-	//	//}
-	//	moveSpeed.z = fMoveSpeed;
-	//	D3DXQuaternionRotationAxis(&addRot, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 0.0f);
-	//	rotation = addRot;
-
-	//}
-
-	
 }
 
 void Player::BulletHit()
@@ -358,6 +386,8 @@ void Player::BulletHit()
 		}
 		else
 		{
+			//m_State = Damage;
+			Damageflg = false;
 			IsDamage = true;
 			game->Damage(1);
 			DamageTime = 200;
@@ -365,12 +395,16 @@ void Player::BulletHit()
 		Damageflg = false;
 	}
 	DamageTime--;
-	
 }
 
-void Player::Draw(D3DXMATRIX viewM, D3DXMATRIX projM,bool Caster,bool Recive)
+void Player::Draw(D3DXMATRIX* viewM, D3DXMATRIX* projM, bool shadowCaster,bool shadowRecive)
 {
-	if (DamageTime > 0 && (DamageTime % 2) == 0){return;}
-	skinModel.Draw(/*&game->GetCamera()->GetViewMatrix()*/&viewM, &projM,Caster,Recive);
+	skinModel.SetCasterflg(shadowCaster);
+	skinModel.SetReciveflg(shadowRecive);
+	if (!shadowCaster)
+	{
+		if (DamageTime > 0 && (DamageTime % 2) == 0) { return; }
+	}
+	skinModel.Draw(viewM, projM);
 
 }

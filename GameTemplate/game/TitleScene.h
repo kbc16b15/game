@@ -1,6 +1,7 @@
 #pragma once
 #include "HUD.h"
 #include "myEngine\HID\Pad.h"
+//#include "BaseScene.h"
 class TitleScene
 {
 public:

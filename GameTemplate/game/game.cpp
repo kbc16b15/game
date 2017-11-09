@@ -2,9 +2,9 @@
  * @brief	ゲーム
  */
 #include "stdafx.h"
-#include "Scene.h"
 #include <stdlib.h>
 #include <time.h>
+#include "Scene.h"
 
 //gameCamera* g_gameCamera = nullptr;
 
@@ -26,18 +26,20 @@ Game::~Game()
 /*!
  * @brief	ゲームが起動してから一度だけ呼ばれる関数。
  */
-void Game::Start()
+void Game::Init()
 {
 	g_fade->StartFadeIn();
 	//物理ワールドを初期化
 	g_physicsWorld = new PhysicsWorld;
 	g_physicsWorld->Init();
+	//camera = new Camera;
+	//camera->Init();
 	//カメラ初期化。
-	camera.Init();
-	//マップを初期化。
-	map.Init(/*mapChipInfo*/);
-	//プレイヤーを初期化。
+	gameCamera.Init();
 	player.Start();
+	//マップを初期化。
+	map.Init();
+
 	//画像表示
 	for (int i = 0;i < Hpnum;i++)
 	{
@@ -50,9 +52,14 @@ void Game::Start()
 
 	CreateSprite();
 
-	shadowMap.Init();
+	m_SoundEngine = new SoundEngine();
+	m_SoundEngine->Init();
+	m_Sound = new Sound();
+	m_Sound->Init("Assets/Sound/bgm.wav");
+	m_Sound->Play(true);
+	m_Sound->SetVolume(0.5f);
 
-	//m_Sound.Start("Assets/Sound/Machi.wav");
+
 	//Player* pl = new Player();
 	//GoMgr.AddGameObject(pl);
 	//Enemy* en = new Enemy();
@@ -66,8 +73,22 @@ void Game::Start()
 void Game::Update()
 {
 	D3DXVECTOR3 Ppos = player.Getpos();
+	m_SoundEngine->Update();
+	m_Sound->Update();
+	m_pad.Update();
 
-	//m_Sound.Update();
+	//if (player != nullptr)
+	//{
+		D3DXVECTOR3 toPos = player.Getpos();
+		toPos.y += 7.0f;
+		g_shadowmap->SetviewPosition(toPos);
+		g_shadowmap->SetviewTarget(player.Getpos());
+	//}
+	//else
+	//{
+	//	g_shadowmap->SetviewTarget({ 0.0f,0.0f,0.0f });
+	//	g_shadowmap->SetviewPosition({ 0.0f,10.0f,0.0f });
+	//}
 	switch (GAME) {
 	case START:
 		switch (m_state) {
@@ -78,8 +99,7 @@ void Game::Update()
 			}
 			break;
 		case Run:
-			if (Hpnum < 1 || Ppos.y < -2.0f || GetAsyncKeyState('S')) {
-
+			if (player.PlayerDeath()|| Ppos.y < -9.0f) {
 				g_fade->StartFadeOut();
 				m_state = WaitFadeOut;
 			}
@@ -88,39 +108,36 @@ void Game::Update()
 			if (!g_fade->isExecute())
 			{
 				GameEnd();
-				return;
-
 			}
 			break;
 		}
 		break;
 	}
 
-	m_pad.Update();
-	if (GetAsyncKeyState('L') || m_pad.IsTrigger(m_pad.enButtonLB1))
-	{
-		Gunflg = true;
-		camera.SetRockCamera(true);
-		player.PlayerMoveSet(true);
-	}
+	//if (GetAsyncKeyState('L') || m_pad.IsTrigger(m_pad.enButtonLB1))
+	//{
+	//	Gunflg = true;
+	//	camera.SetRockCamera(true);
+	//	player.PlayerMoveSet(true);
+	//}
 
-	if (GetAsyncKeyState('R') || m_pad.IsTrigger(m_pad.enButtonLB2))
-	{
-		camera.SetRockCamera(false);
-		Gunflg = false;
-		player.PlayerMoveSet(false);
-		rockpos = { 700.0f,250.0f };
-	}
-	rock.Initialize("Assets/Sprite/Rock.jpg", rockpos);
+	//if (GetAsyncKeyState('R') || m_pad.IsTrigger(m_pad.enButtonLB2))
+	//{
+	//	camera.SetRockCamera(false);
+	//	Gunflg = false;
+	//	player.PlayerMoveSet(false);
+	//	rockpos = { 700.0f,250.0f };
+	//}
+	//rock.Initialize("Assets/Sprite/Rock.jpg", rockpos);
 
-	if (GetAsyncKeyState('Z') || m_pad.IsTrigger(m_pad.enButtonRB1)&&Gunflg)
-	{
-		D3DXVECTOR3 Ppos = player.Getpos();
-		D3DXVECTOR3 Cpos = camera.Getcamera().GetLookatPt();
-		Bullet* bullet = new Bullet();
-		bullet->Start(Ppos, { Cpos.x ,Cpos.y ,Cpos.z },0);
-		game->AddBullets(bullet);
-	}
+	//if (GetAsyncKeyState('Z') || m_pad.IsTrigger(m_pad.enButtonRB1)&&Gunflg)
+	//{
+	//	D3DXVECTOR3 Ppos = player.Getpos();
+	//	D3DXVECTOR3 Cpos = camera.Getcamera().GetLookatPt();
+	//	Bullet* bullet = new Bullet();
+	//	bullet->Start(Ppos, { Cpos.x ,Cpos.y ,Cpos.z },0);
+	//	game->AddBullets(bullet);
+	//}
 
 	auto enemyIt = enem.begin();
 	while (enemyIt != enem.end()) {
@@ -172,14 +189,14 @@ void Game::Update()
 	Key.Update();
 	rock.Update();
 	//GoMgr.Update();
-	g_physicsWorld->Update();
+	gameCamera.Update();
 	player.Update();
-	camera.Update();
+	//camera->Update();
 	map.Update();
-	shadowMap.Update();
-
+	g_physicsWorld->Update();
 	if (GetAsyncKeyState('G'))
 	{
+		//次のステージへ
 		NextStage();
 	}
 
@@ -189,17 +206,9 @@ void Game::Update()
  */
 void Game::Render()
 {
-	D3DXVECTOR3 toPos = player.Getpos();
-	shadowMap.SetviewTarget(player.Getpos());
-	toPos.y = 7.0f;
-	//toPos.x += 5.0f;
-	shadowMap.SetviewPosition(toPos);
-	shadowMap.Update();
-
-	shadowMap.Draw();
 	//GoMgr.Draw();
 	map.Draw();
-	player.Draw(camera.Getcamera().GetViewMatrix(), camera.Getcamera().GetProjectionMatrix(), false, false);
+	player.Draw(&gameCamera.Getcamera().GetViewMatrix(), &gameCamera.Getcamera().GetProjectionMatrix(), false, false);
 
 	for (auto enemy : enem)
 	{
@@ -226,6 +235,11 @@ void Game::Render()
 	{
 		rock.Draw(m_Sprite);
 	}
+
+	//g_pd3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_GREATER);
+
+	//player.Draw(&camera.Getcamera().GetViewMatrix(), &camera.Getcamera().GetProjectionMatrix(), false, false);
+
 }
 
 void Game::GameEnd()
@@ -243,9 +257,13 @@ void Game::GameEnd()
 	{
 		delete TEnemynum;
 	}
-
-	scene->SetScene(scene->CHANGEEND);
-	scene->SceneChange();
+	delete m_Sound;
+	m_Sound = nullptr;
+	delete m_SoundEngine;
+	m_SoundEngine = nullptr;
+	//m_SoundEngine->Release();
+	scene->SceneChange(scene->CHANGEEND);
+	//scene->SceneChange(scene->END);
 
 }
 
@@ -264,7 +282,8 @@ void Game::NextStage()
 	{
 		delete TEnemynum;
 	}
-	scene->SceneChange();
+	scene->SceneChange(scene->GAME);
+
 }
 
 HRESULT Game::CreateSprite()

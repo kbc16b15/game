@@ -2,6 +2,7 @@
 
 #include "myEngine/Physics/CharacterController.h"
 #include "myEngine\HID\Pad.h"
+#include "Sound.h"
 //#include "IGameObject.h"
 
 class Player/*:public IGameObject*/
@@ -16,13 +17,14 @@ public:
 	//更新
 	void Update();
 	//描画
-	void Draw(D3DXMATRIX viewM, D3DXMATRIX projM,bool Caster,bool Recive);
+	void Draw(D3DXMATRIX* viewM, D3DXMATRIX* projM,bool shadowCaster,bool shadowRecive);
+
 	//アニメーション処理
 	void AnimationSet();
 	//移動処理
 	void move();
 	//移動キーの設定
-	void Key();
+	//void Key();
 	//バレットの当たり処理
 	void BulletHit();
 	//キャラの向きの設定
@@ -37,6 +39,7 @@ public:
 	void Setpos(D3DXVECTOR3 pos)
 	{
 		position = pos;
+
 	}
 	//プレイヤーのジャンプフラグ設定
 	void SetJumpflg(bool Jump)
@@ -66,6 +69,23 @@ public:
 	{
 		MoveStop = Move;
 	}
+	//プレイヤーの死亡アニメーションの終了
+	bool PlayerDeath()
+	{
+		return Deathflg;
+	}
+	//オブジェクトとの当たった判定
+	bool GetObjectHit()
+	{
+		return ObjectHit;
+	}
+
+	//オブジェクトとの当たった判定の設定
+	void SetObjectHit(bool hit)
+	{
+		ObjectHit = hit;
+	}
+
 	////重力の設定
 	//void SetGravity()
 	//{
@@ -84,8 +104,8 @@ public:
 private:
 	enum PlayerState						//プレイヤーアニメーションの状態
 	{Stand, Move, Dash, Jump,Damage,Dead};
-	PlayerState	m_State=Stand;
-	PlayerState workState = Stand;
+	PlayerState			m_State=Stand;
+	PlayerState			workState = Stand;
 	bool				IsDead = false;		//死亡アニメーションフラグ
 	bool				Isrun=false;		//走るアニメーションフラグ
 	bool				Ismove=false;		//歩行アニメーションフラグ
@@ -93,8 +113,8 @@ private:
 	bool				Jumpflg = false;	//ジャンプアニメーションフラグ
 	bool				IsDamage = false;	//ダメージアニメーションフラグ
 	bool				IsStand = false;	//待機アニメーションフラグ
-	//bool				IsAnimend = true;	//アニメーションエンドフラグ
 	bool				Damageflg = false;	//ダメージアニメーションフラグ
+	bool				Deathflg = false;	//死亡フラグ
 	int					DamageTime = 0;		//ダメージ間隔
 	SkinModel			skinModel;							//スキンモデル
 	SkinModelData		skinModelData;						//スキンモデルデータ
@@ -106,15 +126,18 @@ private:
 	CharacterController	characterController;				//キャラクターコントローラー
 	D3DXVECTOR3			moveSpeed = { 0.0f,0.0f,0.0f };		//移動速度
 	Pad					pad;								//パッド
-	LPDIRECT3DTEXTURE9	normalMap = NULL;					//法線マップ。
-	LPDIRECT3DTEXTURE9	specularMap = NULL;					//スペキュラマップ。
+	LPDIRECT3DTEXTURE9	normalMap = NULL;					//法線マップ
+	LPDIRECT3DTEXTURE9	specularMap = NULL;					//スペキュラマップ
 	D3DXVECTOR3			Addvector = { 0.0f,0.0f,0.0f };		//加算速度
 	float				m_Gravity = -10.0f;					//重力
-	bool				m_isGravity = false;				//反転フラグ
-	float				gAngle = 0.0f;
-	bool				Grotflg = true;
+	//bool				m_isGravity = false;				//反転フラグ
+	//float				gAngle = 0.0f;
+	//bool				Grotflg = true;
 	bool				MoveStop = false;
-
+	bool				ObjectHit = false;
+	D3DXVECTOR3 Dir = { 0.0f,0.0f,0.0f };//かんせー
+	Sound*				m_JumpSound = nullptr;
 
 };
 
+extern Player*		g_player;

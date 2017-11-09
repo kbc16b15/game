@@ -34,11 +34,11 @@ MapObject::~MapObject()
 //	light.SetDiffuseLightColor(1, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
 //	light.SetDiffuseLightColor(2, D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
 //	light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-//	light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
+//	light.SetAmbientLight(D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.0f));
 //
 //	model.SetLight(&light);
-//	position =/* locInfo.*/pos;
-//	rotation =/* locInfo.*/rot;
+//	position = pos;
+//	rotation = rot;
 //
 //	model.UpdateWorldMatrix(position, rotation, { 1.0f, 1.0f, 1.0f });
 //	//ここから衝突判定絡みの初期化。
@@ -56,8 +56,9 @@ MapObject::~MapObject()
 //	rigidBody.Create(rbInfo);
 //	//作成した剛体を物理ワールドに追加。
 //	g_physicsWorld->AddRigidBody(&rigidBody);
+//
 //}
-
+//
 //void MapObject::Update()
 //{
 //	model.UpdateWorldMatrix(position, rotation, { 1.0f,1.0f,1.0f, });
@@ -65,5 +66,8 @@ MapObject::~MapObject()
 //
 //void MapObject::Draw()
 //{
-//	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix(),false,true);
+//	model.SetReciveflg(true);
+//
+//	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
+//
 //}

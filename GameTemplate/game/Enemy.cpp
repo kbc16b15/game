@@ -84,7 +84,7 @@ void Enemy::EnemyBullet()
 
 void Enemy::Draw()
 {
-	skinModel.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix(), false, true);
+	skinModel.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
 }
 
 void Enemy::Dead()

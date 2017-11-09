@@ -16,7 +16,7 @@ Sprite::~Sprite()
 void Sprite::Initialize(LPCTSTR modelName,D3DXVECTOR2 position)
 {
 	D3DXIMAGE_INFO imgInfo;
-	D3DXCreateTextureFromFileEx(g_pd3dDevice, modelName/*m_texFileName*/, 0, 0, 0, 0, D3DFMT_UNKNOWN,
+	D3DXCreateTextureFromFileEx(g_pd3dDevice, modelName, 0, 0, 0, 0, D3DFMT_UNKNOWN,
 		D3DPOOL_DEFAULT, D3DX_FILTER_NONE, D3DX_DEFAULT, 0xff000000, &imgInfo, NULL, &m_pTexture);
 	this->m_texCenter = D3DXVECTOR2((float)imgInfo.Width / 2, (float)imgInfo.Height / 2);
 	RECT rec = { 0,0,imgInfo.Width,imgInfo.Height };

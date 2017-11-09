@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "MoveCube.h"
-
+//#include "myEngine/Physics/CollisionAttr.h"
 
 MoveCube::MoveCube(int Dir, D3DXVECTOR3 limitpos)
 {
@@ -52,6 +52,7 @@ void MoveCube::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 
 	rigidBody.Create(rbInfo);
 	rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+	rigidBody.GetBody()->setUserIndex(enCollisionAttr_ObjectHit);
 	rigidBody.GetBody()->setGravity({ 0.0f,0.0f,0.0f });
 
 	g_physicsWorld->AddRigidBody(&rigidBody);
@@ -69,7 +70,7 @@ void MoveCube::Update()
 	case FORWARD:
 		D3DXVec3Subtract(&toPos, &position, &game->GetPlayer()->Getpos());
 		len = D3DXVec3Length(&toPos);
-		if (len < 3.0f&&position.x>Limitpos.x)
+		if (len < 3.0f&&position.x>Limitpos.x&&game->GetPlayer()->GetObjectHit())
 		{
 
 			position.x -= 0.04f;
@@ -85,7 +86,7 @@ void MoveCube::Update()
 	case LEFT:
 		D3DXVec3Subtract(&toPos, &position, &game->GetPlayer()->Getpos());
 		len = D3DXVec3Length(&toPos);
-		if (len < 3.0f&&position.z>Limitpos.z)
+		if (len < 3.0f&&position.z>Limitpos.z&&game->GetPlayer()->GetObjectHit())
 		{
 			position.z -= 0.04f;
 			D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
@@ -100,7 +101,7 @@ void MoveCube::Update()
 	case RIGHT:
 		D3DXVec3Subtract(&toPos, &position, &game->GetPlayer()->Getpos());
 		len = D3DXVec3Length(&toPos);
-		if (len < 3.0f&&position.z<Limitpos.z)
+		if (len < 3.0f&&position.z<Limitpos.z&&game->GetPlayer()->GetObjectHit())
 		{
 			position.z += 0.04f;
 			D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
@@ -115,7 +116,7 @@ void MoveCube::Update()
 	case BACK:
 		D3DXVec3Subtract(&toPos, &position, &game->GetPlayer()->Getpos());
 		len = D3DXVec3Length(&toPos);
-		if (len < 3.0f&&position.x<Limitpos.x)
+		if (len < 3.0f&&position.x<Limitpos.x&&game->GetPlayer()->GetObjectHit())
 		{
 			position.x += 0.04f;
 			D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
@@ -130,7 +131,7 @@ void MoveCube::Update()
 	case UP:
 		D3DXVec3Subtract(&toPos, &position, &game->GetPlayer()->Getpos());
 		len = D3DXVec3Length(&toPos);
-		if (len < 2.5f&&position.y<Limitpos.y)
+		if (len < 2.5f&&position.y<Limitpos.y&&game->GetPlayer()->GetObjectHit())
 		{
 			position.y += 0.04f;
 			D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
@@ -146,14 +147,14 @@ void MoveCube::Update()
 		D3DXVec3Subtract(&toPos, &position, &game->GetPlayer()->Getpos());
 		len = D3DXVec3Length(&toPos);
 		
-		if (len < 2.5f&&position.y>Limitpos.y)
+		if (len < 2.7f&&position.y>Limitpos.y&&game->GetPlayer()->GetObjectHit())
 		{
 			Downflg = true;
-			
+			game->GetPlayer()->SetObjectHit(false);
 		}
 		if (Downflg)
 		{
-			position.y -= 0.06f;
+			position.y -= 0.04f;
 
 		}
 		break;
@@ -169,5 +170,5 @@ void MoveCube::Update()
 
 void MoveCube::Draw()
 {
-	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix(), false,false);
+	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
 }

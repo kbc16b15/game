@@ -58,6 +58,9 @@
     <Filter Include="ソース ファイル\myEngine\HID">
       <UniqueIdentifier>{eb51f13c-4c51-4798-b6cc-97f71ded64a4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Map\Sea">
+      <UniqueIdentifier>{5b92a977-feca-4cf2-a7a6-f788b7c0fc01}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -191,6 +194,15 @@
     </ClCompile>
     <ClCompile Include="trackingEnemy.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEngine.cpp">
+      <Filter>ソース ファイル\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SpringCamera.cpp">
+      <Filter>ソース ファイル\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Sea.cpp">
+      <Filter>ソース ファイル\Map\Sea</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -337,6 +349,15 @@
     </ClInclude>
     <ClInclude Include="trackingEnemy.h">
       <Filter>ソース ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEngine.h">
+      <Filter>ソース ファイル\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SpringCamera.h">
+      <Filter>ソース ファイル\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Sea.h">
+      <Filter>ソース ファイル\Map\Sea</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
