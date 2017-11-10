@@ -71,11 +71,11 @@ void Fade::Update()
 
 			}
 
-			if (!m_fadetex.Getalfa() == 1.0f || !m_fadetex.Getalfa() == 0.0f)
-			{
-				m_fadetex.Initialize("Assets/Sprite/LL.png", fadepos);
-				//CreateSprite();
-			}
+			//if (!m_fadetex.Getalfa() == 1.0f || !m_fadetex.Getalfa() == 0.0f)
+			//{
+			//	m_fadetex.Initialize("Assets/Sprite/LL.png", fadepos);
+			//	//CreateSprite();
+			//}
 		}
 	}
 }
@@ -84,7 +84,7 @@ void Fade::Draw()
 {
 	if (Active)
 	{
-		g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+		//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 	
 		g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 		g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
@@ -96,7 +96,7 @@ void Fade::Draw()
 		g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	/*	g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, FALSE);
 		g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, FALSE);*/
-		g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+		//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 	}
 
 		

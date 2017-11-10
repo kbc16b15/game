@@ -262,7 +262,7 @@ float4 PSSkyMain(VS_OUTPUT In) : COLOR
  */
 float4 PSShadowMain( VS_OUTPUT In ) : COLOR
 {
-	return float4(0.5f,0.5f,0.5f,1.0f);
+	return float4(0.7f,0.7f,0.7f,1.0f);
 }
 
 /*!

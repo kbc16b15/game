@@ -208,6 +208,12 @@ void Game::Render()
 {
 	//GoMgr.Draw();
 	map.Draw();
+	g_pd3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_GREATER);
+	g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE,FALSE);
+	player.Draw(&gameCamera.Getcamera().GetViewMatrix(), &gameCamera.Getcamera().GetProjectionMatrix(),true, false);
+	g_pd3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESS);
+	g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+
 	player.Draw(&gameCamera.Getcamera().GetViewMatrix(), &gameCamera.Getcamera().GetProjectionMatrix(), false, false);
 
 	for (auto enemy : enem)

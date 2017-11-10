@@ -183,10 +183,63 @@ void Player::Setangle()
 	cameraX.y = 0.0f;
 	D3DXVec3Normalize(&cameraX, &cameraX);
 
+
+	Dir.x += LocalDir.x;
+	Dir.z += LocalDir.z;
+	if (pad.GetLStickXF() == 0.0f&&pad.GetLStickYF() == 0.0f)
+	{
+
+		//移動していないときに減速させる処理
+		if (Dir.x > 0.0f)
+		{
+			Dir.x += -0.2f;
+		}
+		if (Dir.x < 0.0f)
+		{
+			Dir.x += 0.2f;
+		}
+		if (Dir.z > 0.0f)
+		{
+			Dir.z += -0.2f;
+		}
+		if (Dir.z < 0.0f)
+		{
+			Dir.z += 0.2f;
+		}
+
+		//移動していないときに止める処理
+		if (Dir.x > -1.0f&&Dir.x < 1.0f&&Dir.z < 1.0f&&Dir.z > -1.0f)
+		{
+			Dir = { 0.0f,0.0f,0.0f };
+		}
+	}
+	////最大移動速度の保存
+	//if (Dir.x > 5.0f)
+	//{
+	//	Dir.x = 5.0f;
+	//}
+	//else if (Dir.x < -5.0f)
+	//{
+	//	Dir.x = -5.0f;
+	//}
+	//if (Dir.z > 5.0f)
+	//{
+	//	Dir.z = 5.0f;
+	//}
+	//else if (Dir.z < -5.0f)
+	//{
+	//	Dir.z = -5.0f;
+	//}
+
+	//moveSpeed.x += Dir.x;
+	//moveSpeed.z += Dir.z;
+
 	D3DXVECTOR3 moveDir;
 	moveDir.x = cameraX.x * LocalDir.x + cameraZ.x * LocalDir.z;
 	moveDir.y = 0.0f;
 	moveDir.z = cameraX.z *LocalDir.x + cameraZ.z * LocalDir.z;
+	//moveSpeed.x = Dir.x*6.0f;
+	//moveSpeed.z = Dir.z*6.0f;
 
 
 	/*if (moveDir.x > 0.0f || moveDir.x<0.0f)
@@ -209,8 +262,8 @@ void Player::Setangle()
 		moveSpeed.z = 2.5f;
 	}*/
 	
-	//moveSpeed.x = moveDir.x*(4.0f/*+moveSpeed.x*/);
-	//moveSpeed.z = moveDir.z*(4.0f/*+moveSpeed.z*/);
+	moveSpeed.x = moveDir.x*(4.0f/*+moveSpeed.x*/);
+	moveSpeed.z = moveDir.z*(4.0f/*+moveSpeed.z*/);
 
 	/*if (moveSpeed == D3DXVECTOR3{ 0.0f,0.0f,0.0f })
 	{
@@ -264,101 +317,7 @@ void Player::Setangle()
 		Isjump = true;
 	}
 
-	//慣性の設定テスト
-	//if (pad.GetLStickXF()<0.0) {//左方向
-	//	Dir.z = 0.0f;
-	//	Dir.x += 0.6f;
-	//	//moveDir.x += 0.8f;
-	//}
-	//else if (pad.GetLStickXF()>0.0) {//右方向
-	//	Dir.z = 0.0f;
-	//	Dir.x -= 0.6f;
-	//	//moveDir.x -= 0.8f;
-	//}
-	//if (pad.GetLStickYF()>0.0) {//上方向
-	//	Dir.x = 0.0f;
-	//	Dir.z -= 0.6f;
-	//	//moveDir.z += 0.8f;
-	//}
-	//else if (pad.GetLStickYF()<0.0) {//下方向
-	//	Dir.x = 0.0f;
-	//	Dir.z += 0.6f;
-	//	//moveDir.z -= 0.8f;
-	//}
-	Dir.x += moveDir.x;
-	Dir.z += moveDir.z;
-	if (pad.GetLStickXF() == 0.0f&&pad.GetLStickYF() == 0.0f)
-	{
-		/*if (Dir.x > 0.0f)
-		{
-		Dir.x += -0.1f;
-		}
-		if (Dir.x < 0.0f)
-		{
-		Dir.x += 0.1f;
-		}
-		if (Dir.z > 0.0f)
-		{
-		Dir.z += -0.1f;
-		}
-		if (Dir.z < 0.0f)
-		{
-		Dir.z += 0.1f;
-		}
 
-		if (Dir.x > -1.0f&&Dir.x < 1.0f&&Dir.z < 1.0f&&Dir.z > -1.0f)
-		{
-		Dir = { 0.0f,0.0f,0.0f };
-		}
-		*/
-
-		//移動していないときに減速させる処理
-		if (Dir.x > 0.0f)
-		{
-			Dir.x += -0.2f;
-		}
-		if (Dir.x < 0.0f)
-		{
-			Dir.x += 0.2f;
-		}
-		if (Dir.z > 0.0f)
-		{
-			Dir.z += -0.2f;
-		}
-		if (Dir.z < 0.0f)
-		{
-			Dir.z += 0.2f;
-		}
-
-		//移動していないときに止める処理
-		if (Dir.x > -1.0f&&Dir.x < 1.0f&&Dir.z < 1.0f&&Dir.z > -1.0f)
-		{
-			Dir = { 0.0f,0.0f,0.0f };
-		}
-	}
-	//最大移動速度の保存
-	if (Dir.x > 5.0f)
-	{
-		Dir.x = 5.0f;
-	}
-	else if (Dir.x < -5.0f)
-	{
-		Dir.x = -5.0f;
-	}
-	if (Dir.z > 5.0f)
-	{
-		Dir.z = 5.0f;
-	}
-	else if (Dir.z < -5.0f)
-	{
-		Dir.z = -5.0f;
-	}
-	//D3DXVec3Normalize(&Dir, &Dir);
-	Dir.y = 0.0f;
-	//moveSpeed.x = Dir.x*6.0f;
-	//moveSpeed.z = Dir.z*6.0f;
-	moveSpeed.x += Dir.x;
-	moveSpeed.z += Dir.z;
 	//キャラクタが動く速度を設定。
 	characterController.SetMoveSpeed(moveSpeed);
 	//if(MoveStop)
@@ -406,5 +365,6 @@ void Player::Draw(D3DXMATRIX* viewM, D3DXMATRIX* projM, bool shadowCaster,bool s
 		if (DamageTime > 0 && (DamageTime % 2) == 0) { return; }
 	}
 	skinModel.Draw(viewM, projM);
-
+	skinModel.SetCasterflg(false);
+	skinModel.SetReciveflg(false);
 }
