@@ -9,9 +9,9 @@ GravityObject::GravityObject()
 
 GravityObject::~GravityObject()
 {
-	g_physicsWorld->RemoveRigidBody(&rigidBody);
+	/*g_physicsWorld->RemoveRigidBody(&rigidBody);
 	rigidBody.Release();
-	modelData.Release();
+	modelData.Release();*/
 }
 
 void GravityObject::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
@@ -49,15 +49,15 @@ void GravityObject::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	
 	//続いて剛体を作成する。
 	//まずは剛体を作成するための情報を設定。
 
-	rbInfo.collider = &meshCollider;//剛体のコリジョンを設定する。
-	rbInfo.mass = 0.0f;				//質量を0にすると動かない剛体になる。
-	rbInfo.pos = { 0.0f, 0.0f, 0.0f };
-	rbInfo.rot = { 0.0f, 0.0f, 0.0f, 1.0f };
-	//剛体を作成。
-	rigidBody.Create(rbInfo);
-	//作成した剛体を物理ワールドに追加。
-	g_physicsWorld->AddRigidBody(&rigidBody);
-	rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+	//rbInfo.collider = &meshCollider;//剛体のコリジョンを設定する。
+	//rbInfo.mass = 0.0f;				//質量を0にすると動かない剛体になる。
+	//rbInfo.pos = { 0.0f, 0.0f, 0.0f };
+	//rbInfo.rot = { 0.0f, 0.0f, 0.0f, 1.0f };
+	////剛体を作成。
+	//rigidBody.Create(rbInfo);
+	////作成した剛体を物理ワールドに追加。
+	//g_physicsWorld->AddRigidBody(&rigidBody);
+	//rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 	//rigidBody.GetBody()->setUserIndex(enCollisionAttr_HitActive);
 	//rigidBody.GetBody()->setUserIndex
 }
@@ -83,7 +83,7 @@ void GravityObject::Update()
 	//btTransform& Ttra = rigidBody.GetBody()->getWorldTransform();//剛体の移動処理
 	//Ttra.setOrigin({ position.x,position.y,position.z });
 	//Ttra.setRotation({ rotation.x,rotation.y,rotation.z,rotation.w });
-	model.UpdateWorldMatrix(position, rotation, { 1.0f,1.0f,1.0f });
+	//model.UpdateWorldMatrix(position, rotation, { 1.0f,1.0f,1.0f });
 
 }
 

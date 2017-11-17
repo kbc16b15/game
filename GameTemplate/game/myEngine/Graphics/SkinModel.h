@@ -57,7 +57,7 @@ public:
 	{
 		cubeMap = CubeMap;
 	}
-
+	//
 	void SetCubeflg(bool cubeflg)
 	{
 		Cubeflg = true;

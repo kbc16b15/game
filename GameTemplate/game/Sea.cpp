@@ -10,6 +10,8 @@ Sea::Sea()
 Sea::~Sea()
 {
 	modelData.Release();
+
+
 }
 
 void Sea::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
@@ -41,14 +43,14 @@ void Sea::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 	}
 	*/
 
-	//D3DXCreateTextureFromFileA(g_pd3dDevice,
-	//"Assets/modelData/NormalMap.png",
-	//&normalMap);
+	/*D3DXCreateTextureFromFileA(g_pd3dDevice,
+	"Assets/modelData/NormalMap.png",
+	&normalMap);
 
-	//if (normalMap != NULL)
-	//{
-	//	model.SetnormalMap(normalMap);
-	//}
+	if (normalMap != NULL)
+	{
+		model.SetnormalMap(normalMap);
+	}*/
 }
 
 void Sea::Update()

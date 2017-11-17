@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Player.h"
-#include "CubeCollision.h"
 
 Player::Player()
 {
@@ -8,11 +7,10 @@ Player::Player()
 
 Player::~Player()
 {
-	//delete skinModelData;
-	//characterController.RemoveRigidBoby();
-	//skinModelData.Release();
-	//delete m_JumpSound;
-	//m_JumpSound = nullptr;
+	characterController.RemoveRigidBoby();
+	skinModelData.Release();
+	delete m_JumpSound;
+	m_JumpSound = nullptr;
 }
 
 void Player::Start(){
@@ -51,7 +49,6 @@ void Player::Start(){
 	animation.SetAnimationEndTime(Damage, 0.2f);
 	animation.SetAnimationEndTime(Dead, 3.0f);
 
-	
 	//D3DXCreateTextureFromFileA(g_pd3dDevice,
 	//	"Assets/modelData/utc_spec.tga",
 	//	&specularMap);
@@ -183,13 +180,30 @@ void Player::Setangle()
 	cameraX.y = 0.0f;
 	D3DXVec3Normalize(&cameraX, &cameraX);
 
+	D3DXVECTOR3 moveDir;
+	moveDir.x = cameraX.x * LocalDir.x + cameraZ.x * LocalDir.z;
+	moveDir.y = 0.0f;
+	moveDir.z = cameraX.z *LocalDir.x + cameraZ.z * LocalDir.z;
 
-	Dir.x += LocalDir.x;
-	Dir.z += LocalDir.z;
+	/*if (fabs(Dir.x) > 8.0f || fabsf(Dir.x) < -8.0f || fabsf(Dir.z) > 8.0f || fabsf(Dir.z) < -8.0f)
+	{
+	}
+	else
+	{*/
+	//}
+	if (!maxSflg)
+	{
+		Dir.x += moveDir.x;
+		Dir.z += moveDir.z;
+	}
 	if (pad.GetLStickXF() == 0.0f&&pad.GetLStickYF() == 0.0f)
 	{
-
-		//ˆÚ“®‚µ‚Ä‚¢‚È‚¢‚Æ‚«‚ÉŒ¸‘¬‚³‚¹‚éˆ—
+		//ˆÚ“®‚µ‚Ä‚¢‚È‚¢‚Æ‚«‚ÉŒ¸‘¬‚³‚¹‚éˆ—(–€ŽCH)
+		/*D3DXVECTOR3 toPos = characterController.GetPosition() - Dir;
+		D3DXVec3Normalize(&toPos, &toPos);
+		Dir += toPos*0.04f;
+		D3DXVECTOR3 Pos = characterController.GetPosition() - Dir;
+		float len = D3DXVec3Length(&Pos);*/
 		if (Dir.x > 0.0f)
 		{
 			Dir.x += -0.2f;
@@ -208,36 +222,77 @@ void Player::Setangle()
 		}
 
 		//ˆÚ“®‚µ‚Ä‚¢‚È‚¢‚Æ‚«‚ÉŽ~‚ß‚éˆ—
-		if (Dir.x > -1.0f&&Dir.x < 1.0f&&Dir.z < 1.0f&&Dir.z > -1.0f)
+		if (Dir.x > -1.0f&&Dir.x < 1.0f&&Dir.z < 1.0f&&Dir.z > -1.0f/*len<1.0f*/)
 		{
 			Dir = { 0.0f,0.0f,0.0f };
 		}
 	}
-	////Å‘åˆÚ“®‘¬“x‚Ì•Û‘¶
-	//if (Dir.x > 5.0f)
-	//{
-	//	Dir.x = 5.0f;
-	//}
-	//else if (Dir.x < -5.0f)
-	//{
-	//	Dir.x = -5.0f;
-	//}
-	//if (Dir.z > 5.0f)
-	//{
-	//	Dir.z = 5.0f;
-	//}
-	//else if (Dir.z < -5.0f)
-	//{
-	//	Dir.z = -5.0f;
-	//}
+	//Å‘åˆÚ“®‘¬“x‚Ì•Û‘¶
+	maxSflg = false;
+	/*if (Dir.x > 5.0f)
+	{
+		Dir.x = 5.0f;
+		maxSflg = true;
+	}
+	else if (Dir.x < -5.0f)
+	{
+		Dir.x = -5.0f;
+		maxSflg = true;
+	}
+	if (Dir.z > 5.0f)
+	{
+		Dir.z = 5.0f;
+		maxSflg = true;
+	}
+	else if (Dir.z < -5.0f)
+	{
+		Dir.z = -5.0f;
+		maxSflg = true;
+	}*/
+	if (Dir.x > 8.0f)
+	{
+		Dir.x = 8.0f;
+		maxSflg = true;
+	}
+	else if (Dir.x < -8.0f)
+	{
+		Dir.x = -8.0f;
+		maxSflg = true;
+	}
+	if (Dir.z > 8.0f)
+	{
+		Dir.z = 8.0f;
+		maxSflg = true;
+	}
+	else if (Dir.z < -8.0f)
+	{
+		Dir.z = -8.0f;
+		maxSflg = true;
+	}
 
-	//moveSpeed.x += Dir.x;
-	//moveSpeed.z += Dir.z;
+	moveSpeed.x = Dir.x;
+	moveSpeed.z = Dir.z;
 
-	D3DXVECTOR3 moveDir;
-	moveDir.x = cameraX.x * LocalDir.x + cameraZ.x * LocalDir.z;
-	moveDir.y = 0.0f;
-	moveDir.z = cameraX.z *LocalDir.x + cameraZ.z * LocalDir.z;
+	//if (moveSpeed.x > 5.0f)
+	//{
+	//	moveSpeed.x = 5.0f;
+	//	//maxSflg = true;
+	//}
+	//else if (moveSpeed.x < -5.0f)
+	//{
+	//	moveSpeed.x = -5.0f;
+	//	//maxSflg = true;
+	//}
+	//if (moveSpeed.z > 5.0f)
+	//{
+	//	moveSpeed.z = 5.0f;
+	//	//maxSflg = true;
+	//}
+	//else if (moveSpeed.z < -5.0f)
+	//{
+	//	moveSpeed.z = -5.0f;
+	//	maxSflg = true;
+	//}
 	//moveSpeed.x = Dir.x*6.0f;
 	//moveSpeed.z = Dir.z*6.0f;
 
@@ -262,8 +317,8 @@ void Player::Setangle()
 		moveSpeed.z = 2.5f;
 	}*/
 	
-	moveSpeed.x = moveDir.x*(4.0f/*+moveSpeed.x*/);
-	moveSpeed.z = moveDir.z*(4.0f/*+moveSpeed.z*/);
+	//moveSpeed.x = moveDir.x*(4.0f/*+moveSpeed.x*/);
+	//moveSpeed.z = moveDir.z*(4.0f/*+moveSpeed.z*/);
 
 	/*if (moveSpeed == D3DXVECTOR3{ 0.0f,0.0f,0.0f })
 	{

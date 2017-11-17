@@ -24,14 +24,14 @@ public:
 	{
 		return IsDeath;
 	}
+	
+private:
 	enum TEnemyState
 	{
 		SEACH,
 		FOUND,
 		DEAD
-
 	};
-private:
 	int TState = SEACH;
 	SkinModel			skinModel;											//スキンモデル
 	SkinModelData		skinModelData;										//スキンモデルデータ

@@ -2,7 +2,7 @@
 #include "trackingEnemy.h"
 #include "Enemy.h"
 #include "Bullet.h"
-#include "CubeCollision.h"
+
 
 trackingEnemy::trackingEnemy()
 {
@@ -10,13 +10,14 @@ trackingEnemy::trackingEnemy()
 
 trackingEnemy::~trackingEnemy()
 {
-	skinModelData.Release();
 	characterController.RemoveRigidBoby();
+	skinModelData.Release();
+
 }
 
 void trackingEnemy::Start(D3DXVECTOR3 pos)
 {
-	//Spos = pos;
+	Spos = pos;
 	position = pos;
 	skinModelData.LoadModelData("Assets/modelData/ghost.X", NULL);
 	skinModel.Init(&skinModelData);
@@ -37,7 +38,7 @@ void trackingEnemy::Start(D3DXVECTOR3 pos)
 
 	//キャラクタコントローラを初期化。
 	characterController.Init(0.8f, 1.0f, position);
-	characterController.SetGravity(-10.0f);
+	characterController.SetGravity(-15.0f);
 
 }
 
@@ -59,34 +60,25 @@ void trackingEnemy::Move()
 
 	D3DXVECTOR3 pos = game->GetPlayer()->Getpos();
 	D3DXVECTOR3 toPos = pos - characterController.GetPosition();
-	float len = D3DXVec3Length(&toPos);
 	D3DXVec3Normalize(&toPos, &toPos);
+	float len = D3DXVec3Length(&toPos);
+
 	switch (TState)
 	{
 	case SEACH:
 
-		if (len < 5.0f)
+		if (len < 4.0f)
 		{
 			TState = FOUND;
 		}
-		/*
-		if (moveX)
-		{
-			moveSpeed.x = 3.0f;
-		}
-		else
-		{
-			moveSpeed.x = -3.0f;
-		}
-		*/
-		if (Tpos.x<-18.0f)
+		/*if (Tpos.x<-18.0f)
 		{
 			moveX = true;
 		}
 		else if(Tpos.x>3.0f)
 		{
 			moveX = false;
-		}
+		}*/
 		break;
 	case FOUND:
 		if (len > 10.0f)
@@ -125,10 +117,20 @@ void trackingEnemy::Draw()
 
 void trackingEnemy::Dead()
 {
+	if (game->GetPlayer()->PlayerDeath())
+	{
+		IsDeath = true;
+	}
+	D3DXVECTOR3 Ppos = characterController.GetPosition();
+	if ((Spos.y-5.0f) >Ppos.y)
+	{
+		IsDeath = true;
+	}
 	CubeCollision Cmass;
 	if (Cmass.Cubemass(characterController.GetPosition(), game->GetPlayer()->Getpos(), 0.5f, 0.5f))
 	{
 		game->GetPlayer()->SetDamage();
-		//IsDeath = true;
+		IsDeath = true;
 	}
+
 }

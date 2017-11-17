@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Bullet.h"
-#include "CubeCollision.h"
 
 SkinModelData* Bullet::skinModelData = NULL;
 
@@ -108,11 +107,10 @@ void Bullet::TargetBullet()
 		D3DXVec3Normalize(&toPos, &toPos);
 		position += toPos*0.05f;
 		D3DXVECTOR3 Pos = targetpos - position;
-		float len = D3DXVec3Length(&Pos);
+		float len = D3DXVec3Length(&toPos);
 		if (targetpos == position || len < 0.3f)
 		{
 			Btime = 0;
-
 		}
 		
 		D3DXVECTOR3 Def;

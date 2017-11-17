@@ -9,8 +9,8 @@ HealItem::HealItem()
 
 HealItem::~HealItem()
 {
-	//g_physicsWorld->RemoveRigidBody(&rigidBody);
-	//rigidBody.Release();
+	g_physicsWorld->RemoveRigidBody(&rigidBody);
+	rigidBody.Release();
 	modelData.Release();
 }
 
@@ -51,7 +51,6 @@ void HealItem::Update()
 		m_HealSound->Init("Assets/Sound/powerup03.wav");
 		m_HealSound->SetVolume(0.4f);
 		m_HealSound->Play(false);
-
 
 		game->Heal(1);
 		Healflg = true;

@@ -189,9 +189,6 @@
     <ClCompile Include="GravityObject.cpp">
       <Filter>ソース ファイル\Map\MapChip</Filter>
     </ClCompile>
-    <ClCompile Include="ShadowMap.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="trackingEnemy.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
@@ -203,6 +200,9 @@
     </ClCompile>
     <ClCompile Include="Sea.cpp">
       <Filter>ソース ファイル\Map\Sea</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMap.cpp">
+      <Filter>ソース ファイル\myEngine\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -344,9 +344,6 @@
     <ClInclude Include="GravityObject.h">
       <Filter>ソース ファイル\Map\MapChip</Filter>
     </ClInclude>
-    <ClInclude Include="ShadowMap.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="trackingEnemy.h">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClInclude>
@@ -358,6 +355,9 @@
     </ClInclude>
     <ClInclude Include="Sea.h">
       <Filter>ソース ファイル\Map\Sea</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMap.h">
+      <Filter>ソース ファイル\myEngine\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

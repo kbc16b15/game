@@ -170,5 +170,6 @@ void MoveCube::Update()
 
 void MoveCube::Draw()
 {
+	model.SetReciveflg(true);
 	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
 }

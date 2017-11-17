@@ -9,6 +9,7 @@ Sky::Sky()
 Sky::~Sky()
 {
 	modelData.Release();
+	m_cubeTex->Release();
 }
 
 void Sky::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
@@ -21,7 +22,6 @@ void Sky::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 	modelData.LoadModelData(modelPath, NULL);
 	//ロードしたモデルデータを使ってSkinModelを初期化。
 	model.Init(&modelData);
-
 
 	//ライトを初期化。
 	light.SetAmbientLight(D3DXVECTOR4(0.8f, 0.8f, 0.8f, 1.0f));
@@ -36,10 +36,11 @@ void Sky::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 	//キューブマップの作成
 	D3DXCreateCubeTextureFromFile(g_pd3dDevice, "Assets/modelData/skyCubeMap.dds", &m_cubeTex);
 
-	if (m_cubeTex != NULL)
+	if (m_cubeTex != nullptr)
 	{
 		model.SetcubeMap(m_cubeTex);
 	}
+
 }
 
 void Sky::Update()

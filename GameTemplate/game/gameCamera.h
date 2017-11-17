@@ -21,7 +21,6 @@ public:
 	{
 		return m_camera;
 	}
-
 	//Æ€ƒtƒ‰ƒO
 	void SetRockCamera(bool Rcamera)
 	{

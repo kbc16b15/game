@@ -5,7 +5,7 @@
 #include "Scene.h"
 #include "TitleScene.h"
 #include "ResultScene.h"
-//BaseScene *Scene::m_bScene = NULL;
+
 Scene::Scene()
 {
 }
@@ -23,21 +23,14 @@ void Scene::Init()
 	switch (m_Scene)
 	{
 	case TITLE:
-		 //scene= new TitleScene;
 		title = new TitleScene;
 		title->Init();
 		break;
 	case GAME:
-		//scene = new Game;
 		game = new Game;
 		game->Init();
 		break;
-	/*case GAME2:
-		game = new Game;
-		game->Init();
-		break;*/
 	case END:
-		//scene = new ResultScene;
 		end = new ResultScene;
 		end->Init();
 		break;
@@ -68,9 +61,6 @@ void Scene::Render()
 			game->Render();
 		}
 		break;
-	//case GAME2:
-	//	game->Render();
-	//	break;
 	case END:
 		if (end != nullptr)
 		{
@@ -89,7 +79,6 @@ void Scene::Update()
 {
 	//m_bScene->Update();
 
-
 	switch (m_Scene)
 	{
 	case TITLE:
@@ -104,9 +93,6 @@ void Scene::Update()
 			game->Update();
 		}
 		break;
-	//case GAME2:
-	//	game->Update();
-	//	break;
 	case END:
 		if (end != nullptr)
 		{
@@ -122,14 +108,6 @@ void Scene::Update()
 		m_Scene = GAME;
 		Init();
 		break;
-	/*case CHANGEGAME2:
-		delete game;
-		game = nullptr;
-		delete g_physicsWorld;
-		g_physicsWorld = nullptr;
-		m_Scene = GAME2;
-		Init();
-		break;*/
 	case CHANGETITLE:
 		m_Scene = TITLE;
 		Init();
@@ -138,6 +116,7 @@ void Scene::Update()
 			delete end;
 			end = nullptr;
 		}
+		
 		break;
 	case CHANGEEND:
 		m_Scene = END;
@@ -147,11 +126,11 @@ void Scene::Update()
 			delete game;
 			game = nullptr;
 		}
-		if (g_physicsWorld != nullptr)
+		/*if (g_physicsWorld != nullptr)
 		{
 			delete g_physicsWorld;
 			g_physicsWorld = nullptr;
-		}
+		}*/
 		break;
 	default:
 		break;

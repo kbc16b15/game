@@ -210,7 +210,7 @@ float4 PSMain( VS_OUTPUT In ) : COLOR
 	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0);
 	float3 normal = In.Normal;
 	float4 lig = DiffuseLight(normal);
-	
+	color *= lig;
 	
 	//float3 eye=normalize(Eye-In.world.xyz);//カメラからオブジェクトへの方向？
 	//float3 L = -g_light.diffuseLightDir[0];//ライト
@@ -222,6 +222,7 @@ float4 PSMain( VS_OUTPUT In ) : COLOR
 	
 	
 
+	float Zwrite = In.lightViewPos.z/In.lightViewPos.w;
 	
 	if(g_Reciver==1)
 	{
@@ -231,9 +232,8 @@ float4 PSMain( VS_OUTPUT In ) : COLOR
 		shadowMapUV += float2(0.5f,0.5f);
 		
 		float4 shadowVal=tex2D(g_shadowMapTextureSampler,shadowMapUV);
-		
+
 		color *= shadowVal;
-		
 	}
 	
 	//if (g_isHasSpecularMap)
@@ -242,7 +242,7 @@ float4 PSMain( VS_OUTPUT In ) : COLOR
 	//	spe *= tex2D(g_specularMapSampler, In.Tex0).a;
 	//	lig.xyz += spe;
 	//}
-	color *= lig;
+	
 	
 	return color;
 }
@@ -262,7 +262,7 @@ float4 PSSkyMain(VS_OUTPUT In) : COLOR
  */
 float4 PSShadowMain( VS_OUTPUT In ) : COLOR
 {
-	return float4(0.7f,0.7f,0.7f,1.0f);
+	return float4(0.0f,0.0f,0.0f,1.0f);
 }
 
 /*!

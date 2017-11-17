@@ -60,18 +60,14 @@ public:
 	//プレイヤーの取得
 	Player* GetPlayer()
 	{
-		return &player;
+		return player;
 	}
 	//マップの取得
-	Map* GetMap()
-	{
-		return &map;
-	}
+	//Map* GetMap()
+	//{
+	//	return &map;
+	//}
 
-	/*ShadowMap* GetShadow()
-	{
-		return &shadowMap;
-	}*/
 	//弾の追加
 	void AddBullets(Bullet* bullet)
 	{
@@ -103,7 +99,7 @@ public:
 	void Heal(int healval)
 	{
 		Hpnum += healval;
-		if (Hpnum > 3) { Hpnum = 3; }
+		if (Hpnum >= HpMaxnum) { Hpnum = HpMaxnum; }
 	}
 	//HPの取得
 	int GetHp()
@@ -131,9 +127,10 @@ private:
 	std::vector<Enemy*>	enem;					//エネミーのvector
 	std::vector<trackingEnemy*> Tenem;			//追従エネミー
 	gameCamera			gameCamera;				//ゲームカメラ
-	//Camera*				camera;					//ゲームカメラ
-	Player				player;					//プレイヤー
-	Map					map;					//マップ
+	//Camera*			camera;					//カメラ
+	Player*				player;					//プレイヤー
+	Map*				map;					//マップ
+	int				HpMaxnum = 3;					//最大HP量
 	int				Hpnum = 3;					//HP量
 	HUD				m_Hud[3];					//画像表示の変数
 	HUD				Key;						//鍵

@@ -62,9 +62,9 @@ void ResultScene::Update()
 
 void ResultScene::Render()
 {
-	g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 	m_End.Draw(m_Sprite);
-	g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 }
 
 HRESULT ResultScene::CreateSprite()

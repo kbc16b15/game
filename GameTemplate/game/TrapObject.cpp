@@ -79,7 +79,7 @@ void TrapObject::Update()
 		break;
 	}
 
-	std::list<Bullet*> bulletstl = game->GetBullet();
+	/*std::list<Bullet*> bulletstl = game->GetBullet();
 	for (auto bullet : bulletstl)
 	{
 		D3DXVECTOR3 Bulletpos=bullet->Getpos();
@@ -90,7 +90,7 @@ void TrapObject::Update()
 			rotflg = true;
 		}
 
-	}
+	}*/
 
 	//D3DXVECTOR3 toPos = position - game->GetPlayer()->Getpos();
 	//float len = D3DXVec3Length(&toPos);
@@ -110,14 +110,13 @@ void TrapObject::Update()
 
 void TrapObject::Rot()
 {
-	if (rotflg)
-	{
 		angle += 0.01f;
 		D3DXQuaternionRotationAxis(&rotation, &RotDir, angle);
-	}
+	
 }
 
 void TrapObject::Draw()
 {
+	model.SetReciveflg(true);
 	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
 }

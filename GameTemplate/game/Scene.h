@@ -21,10 +21,8 @@ public:
 	{
 		TITLE,			//タイトルシーン
 		GAME,			//ゲームシーン
-		//GAME2,
 		END,
 		CHANGEGAME,
-		//CHANGEGAME2,
 		CHANGETITLE,
 		CHANGEEND
 	};

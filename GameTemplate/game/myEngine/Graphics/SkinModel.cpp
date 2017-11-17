@@ -40,7 +40,7 @@ namespace {
 		D3DXMatrixMultiply(&viewProj, viewMatrix, projMatrix);
 		//テクニックを設定。
 		{
-			if (Cubeflg)
+			if (Cubeflg/*cubeMap!=NULL*/)
 			{
 				pEffect->SetTechnique("SkyModel");
 			}
@@ -114,8 +114,9 @@ namespace {
 			pEffect->SetBool("g_isHasNormalMap", false);
 		}*/
 
-		if (ShadowRecive){
 
+		if (ShadowRecive)
+		{
 			pEffect->SetMatrix("g_viewlightMatrix", &g_shadowmap->GetlightViewMatrix()/*&g_shadowmap->lightViewMatrix*/);
 			pEffect->SetMatrix("g_projlightMatrix", &g_shadowmap->GetlightProjectionMatrix()/*&g_shadowmap->lightProjectionMatrix*/);
 			pEffect->SetTexture("g_shadowMapTexture", g_shadowmap->GetTexture());
@@ -141,9 +142,9 @@ namespace {
 						//D3DXMatrixMultiply(&g_pBoneMatrices[iPaletteEntry], &matTemp, &g_matView);
 					}
 				}
-				D3DXVECTOR4 CameraEye = game->GetCamera()->GetEyePt();//カメラの視点の座標
-				CameraEye.w = 1.0f;
-				pEffect->SetVector("Eye", &CameraEye);
+				//D3DXVECTOR4 CameraEye = game->GetCamera()->GetEyePt();//カメラの視点の座標
+				//CameraEye.w = 1.0f;
+				pEffect->SetVector("Eye", (D3DXVECTOR4*)&game->GetCamera()->GetEyePt()/*&CameraEye*/);
 				
 				pEffect->SetMatrixArray("g_mWorldMatrixArray", g_pBoneMatrices, pMeshContainer->NumPaletteEntries);
 				pEffect->SetInt("g_numBone", pMeshContainer->NumInfl);
@@ -169,7 +170,6 @@ namespace {
 			}
 		}
 		else {
-						
 			D3DXMATRIX mWorld;
 			if (pFrame != NULL) {
 				mWorld = pFrame->CombinedTransformationMatrix;

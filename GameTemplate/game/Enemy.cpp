@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Enemy.h"
 #include "Bullet.h"
-#include "CubeCollision.h"
 
 Enemy::Enemy()
 {

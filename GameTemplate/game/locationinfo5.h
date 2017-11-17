@@ -808,10 +808,16 @@
 	D3DXVECTOR3(-61.00f, 10.00f, 9.20f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-1.70f, 3.81f, -1.19f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
 //unity
 {
 	"unity",
-	D3DXVECTOR3(-2.15f, 2.32f, -0.80f),             //平行移動
+	D3DXVECTOR3(0.00f, 2.00f, 0.00f),             //平行移動
 	D3DXQUATERNION(0.50f, -0.50f, 0.50f, 0.50f ),  //回転
 },
 //DOWNCube
@@ -874,23 +880,17 @@
 	D3DXVECTOR3(-86.00f, 2.00f, -9.00f),             //平行移動
 	D3DXQUATERNION(0.00f, -0.17f, 0.00f, 0.98f ),  //回転
 },
+//GoalCube
+{
+	"GoalCube",
+	D3DXVECTOR3(-25.40f, 7.30f, 7.21f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
 //Bridge
 {
 	"Bridge",
 	D3DXVECTOR3(-56.70f, 3.65f, 17.84f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
-},
-//TEnemy
-{
-	"TEnemy",
-	D3DXVECTOR3(-15.72f, 1.39f, 0.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//block
-{
-	"block",
-	D3DXVECTOR3(-50.29f, 12.00f, 0.46f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //block
 {
@@ -898,10 +898,10 @@
 	D3DXVECTOR3(-50.27f, 12.00f, 10.94f),             //平行移動
 	D3DXQUATERNION(0.00f, 1.00f, 0.00f, 0.07f ),  //回転
 },
-//block2
+//block
 {
-	"block2",
-	D3DXVECTOR3(-41.00f, 10.00f, 0.00f),             //平行移動
+	"block",
+	D3DXVECTOR3(-50.29f, 12.00f, 0.46f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //block2
@@ -910,28 +910,22 @@
 	D3DXVECTOR3(-41.00f, 10.00f, 12.61f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
+//block2
+{
+	"block2",
+	D3DXVECTOR3(-41.00f, 10.00f, 0.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
 //block3
 {
 	"block3",
 	D3DXVECTOR3(-34.00f, 8.00f, 6.90f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
-//GoalCube
+//GCube
 {
-	"GoalCube",
-	D3DXVECTOR3(-25.40f, 7.30f, 7.21f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//sky
-{
-	"sky",
-	D3DXVECTOR3(-85.00f, 10.10f, -19.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//Sea
-{
-	"Sea",
-	D3DXVECTOR3(-91.60f, -36.90f, -28.70f),             //平行移動
+	"GCube",
+	D3DXVECTOR3(-2.08f, 0.00f, 7.04f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //GCube
@@ -940,9 +934,69 @@
 	D3DXVECTOR3(-12.85f, 0.00f, 0.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
-//GCube
+//Sea
 {
-	"GCube",
-	D3DXVECTOR3(-2.08f, 0.00f, 7.04f),             //平行移動
+	"Sea",
+	D3DXVECTOR3(-91.60f, -36.90f, -28.70f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//sky
+{
+	"sky",
+	D3DXVECTOR3(-85.00f, 10.10f, -19.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//banana
+{
+	"banana",
+	D3DXVECTOR3(-36.06f, 3.85f, -0.28f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
+},
+//apple
+{
+	"apple",
+	D3DXVECTOR3(-63.57f, 12.40f, 3.44f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
+},
+//cake
+{
+	"cake",
+	D3DXVECTOR3(-63.57f, 12.40f, 6.65f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
+},
+//grape
+{
+	"grape",
+	D3DXVECTOR3(-40.36f, 12.70f, -0.38f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
+},
+//cherry
+{
+	"cherry",
+	D3DXVECTOR3(-107.20f, 8.06f, 3.13f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
+},
+//TEnemy
+{
+	"TEnemy",
+	D3DXVECTOR3(-21.78f, 1.43f, 0.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
+},
+//TEnemy
+{
+	"TEnemy",
+	D3DXVECTOR3(-45.70f, 4.29f, 0.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//TEnemy
+{
+	"TEnemy",
+	D3DXVECTOR3(-94.06f, 5.53f, -13.66f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//TEnemy
+{
+	"TEnemy",
+	D3DXVECTOR3(-76.09f, 11.48f, 4.94f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },

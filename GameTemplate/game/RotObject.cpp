@@ -158,5 +158,6 @@ void RotObject::Update()
 
 void RotObject::Draw()
 {
+	model.SetReciveflg(true);
 	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
 }

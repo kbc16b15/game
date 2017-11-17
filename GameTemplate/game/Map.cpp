@@ -1,18 +1,18 @@
 #include "stdafx.h"
 #include "Map.h"
 #include "MapChip.h"
+#include "MapObject.h"
 #include "MoveObject.h"
 #include "TrapObject.h"
 #include "RotObject.h"
 #include "FallObject.h"
 #include "GoalObject.h"
 #include "HealItem.h"
-#include "Sky.h"
 #include "MoveCube.h"
-#include "MapObject.h"
 #include "Spring.h"
 #include "GravityObject.h"
 #include "Sea.h"
+#include "Sky.h"
 
 struct SMapChipLocInfo {
 	const char* modelName;		//モデル。
@@ -34,6 +34,10 @@ Map::Map()
 
 Map::~Map()
 {
+	for (auto mapnum : mapList)
+	{
+		delete mapnum;
+	}
 	auto mapIt = mapList.begin();
 	while (mapIt != mapList.end())
 	{
@@ -44,7 +48,7 @@ Map::~Map()
 void Map::Init(/*struct SMapChipLocInfo Info[]*/)
 {
 	int numObject=0;
-	SMapChipLocInfo work[1000];
+	SMapChipLocInfo work[2000];
 
 	switch (m_StageNum)
 	{
@@ -244,7 +248,8 @@ void Map::Init(/*struct SMapChipLocInfo Info[]*/)
 			//fallList.push_back(fallChip);
 			mapList.push_back(fallChip);
 		}
-		else if (strcmp(work[i].modelName, "HealItem") == 0)//回復アイテム
+		else if (strcmp(work[i].modelName, "HealItem") == 0|| strcmp(work[i].modelName, "apple") == 0 
+			|| strcmp(work[i].modelName, "banana") == 0 || strcmp(work[i].modelName, "cake") == 0 || strcmp(work[i].modelName, "grape") == 0 || strcmp(work[i].modelName, "cherry") == 0)//回復アイテム
 		{
 			HealItem* healChip = new HealItem;
 			healChip->Init(work[i].modelName, work[i].pos, work[i].rotation);
@@ -274,7 +279,6 @@ void Map::Init(/*struct SMapChipLocInfo Info[]*/)
 		{
 			Sky* skyChip = new Sky;
 			skyChip->Init(work[i].modelName, work[i].pos, work[i].rotation);
-			//skyList.push_back(skyChip);
 			mapList.push_back(skyChip);
 		}
 		else if (strcmp(work[i].modelName, "Sea") == 0)//海
@@ -298,9 +302,6 @@ void Map::Init(/*struct SMapChipLocInfo Info[]*/)
 		}
 		else if (strcmp(work[i].modelName, "unity") == 0)//プレイヤーの初期位置
 		{
-			//Player* player = new Player;
-			//player->Setpos(work[i].pos);
-			//game->GetPlayer()->
 			game->GetPlayer()->Setpos(work[i].pos);
 		}
 		else {

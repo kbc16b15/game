@@ -135,10 +135,11 @@ private:
 	//bool				Grotflg = true;
 	bool				MoveStop = false;
 	bool				ObjectHit = false;
+	bool				maxSflg = false;
 	D3DXVECTOR3 Dir = { 0.0f,0.0f,0.0f };//Ç©ÇÒÇπÅ[
 	
 	Sound*				m_JumpSound = nullptr;
 
 };
 
-extern Player*		g_player;
+//extern Player*		g_player;
