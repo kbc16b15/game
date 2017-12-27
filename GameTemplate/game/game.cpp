@@ -40,7 +40,14 @@ void Game::Init()
 	m_player->Start();
 	//マップを初期化。
 	m_map->Init();
-
+	//パーティクルの初期化
+	SParticleEmitParameter param;
+	param.texturePath = "star.png";
+	param.w = 0.5f;
+	param.h = 0.5f;
+	param.intervalTime = 0.2f;
+	param.initSpeed = D3DXVECTOR3(0.0f, 3.0f, 0.0f);
+	m_particleEmitter.Init(param);
 	//画像表示
 	for (int i = 0;i <= m_hpMaxNum;i++)
 	{
@@ -216,6 +223,7 @@ void Game::Update()
 	m_gameCamera.Update();
 	m_player->Update();
 	m_map->Update();
+	m_particleEmitter.Update();
 	
 	if (GetAsyncKeyState('G'))
 	{
@@ -240,6 +248,11 @@ void Game::Render()
 	g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 
 	m_player->Draw(&m_gameCamera.Getcamera().GetViewMatrix(), &m_gameCamera.Getcamera().GetProjectionMatrix(), false, false);
+
+	//パーティクルの描画
+	g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+	m_particleEmitter.Render(m_gameCamera.Getcamera().GetViewMatrix(), m_gameCamera.Getcamera().GetProjectionMatrix());
+	g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 
 	for (auto enemy : m_enem)
 	{

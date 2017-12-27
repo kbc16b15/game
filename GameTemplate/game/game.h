@@ -16,6 +16,7 @@
 #include "SoundEngine.h"
 #include "RenderTarget.h"
 #include "bloom.h"
+#include "ParticleEmitter.h"
 //#include "BaseScene.h"
 //#include "IGameObject.h"
 //#include "GameObjectManager.h"
@@ -141,6 +142,7 @@ private:
 	Player*				m_player;					//プレイヤー
 	Map*				m_map;						//マップ
 	Bloom				m_bloom;					//ブルーム
+	ParticleEmitter		m_particleEmitter;			//パーティクル
 	int					m_hpMaxNum = 3;				//最大HP量
 	int					m_hpNum = 3;				//HP量
 	HUD					m_hud[3];					//画像表示の変数

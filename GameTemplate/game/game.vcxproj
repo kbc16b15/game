@@ -159,6 +159,8 @@
     <ClCompile Include="GravityObject.cpp" />
     <ClCompile Include="Indexbuffer.cpp" />
     <ClCompile Include="MapObject.cpp" />
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleEmitter.cpp" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -217,6 +219,8 @@
     <ClInclude Include="GravityObject.h" />
     <ClInclude Include="Indexbuffer.h" />
     <ClInclude Include="MapObject.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleEmitter.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="Enemy.h" />
