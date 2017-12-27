@@ -10,6 +10,7 @@ WaveFile::WaveFile()
 
 WaveFile::~WaveFile()
 {
+	Release();
 }
 
 void WaveFile::Open(const char* fileName)

@@ -18,23 +18,24 @@ public:
 	//スプライト生成関数
 	HRESULT CreateSprite();
 private:
+	//ステート
 	enum EState {
 		WaitFadeIn,
 		Run,
 		WaitFadeOut
 	};
-
-	enum Select {
+	//選択
+	enum Select{
 		NO,
 		START,
 		BREAK,
 	};
-	Select GAME = START;
-	EState      m_state = Run;
-	LPD3DXSPRITE		m_Sprite;						//スプライト
-	HUD					m_Title;						//タイトル画像
-	const D3DXVECTOR2	titlepos = { 700.0f,300.0f };	//タイトル画像の座標
-	Pad					pad;								//パッド
+	Select				GAME = START;					//状態
+	EState				m_state = Run;					//フェード
+	LPD3DXSPRITE		m_sprite;						//スプライト
+	HUD					m_title;						//タイトル画像
+	const D3DXVECTOR2	m_titlePos = { 700.0f,300.0f };	//タイトル画像の座標
+	Pad					m_pad;							//パッド
 	
 };
 

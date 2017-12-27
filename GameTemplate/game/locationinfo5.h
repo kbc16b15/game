@@ -808,12 +808,6 @@
 	D3DXVECTOR3(-61.00f, 10.00f, 9.20f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-1.70f, 3.81f, -1.19f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
 //unity
 {
 	"unity",
@@ -880,12 +874,6 @@
 	D3DXVECTOR3(-86.00f, 2.00f, -9.00f),             //平行移動
 	D3DXQUATERNION(0.00f, -0.17f, 0.00f, 0.98f ),  //回転
 },
-//GoalCube
-{
-	"GoalCube",
-	D3DXVECTOR3(-25.40f, 7.30f, 7.21f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
 //Bridge
 {
 	"Bridge",
@@ -920,18 +908,6 @@
 {
 	"block3",
 	D3DXVECTOR3(-34.00f, 8.00f, 6.90f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//GCube
-{
-	"GCube",
-	D3DXVECTOR3(-2.08f, 0.00f, 7.04f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//GCube
-{
-	"GCube",
-	D3DXVECTOR3(-12.85f, 0.00f, 0.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //Sea
@@ -986,7 +962,7 @@
 {
 	"TEnemy",
 	D3DXVECTOR3(-45.70f, 4.29f, 0.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
 },
 //TEnemy
 {
@@ -998,5 +974,11 @@
 {
 	"TEnemy",
 	D3DXVECTOR3(-76.09f, 11.48f, 4.94f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//GoalCube
+{
+	"GoalCube",
+	D3DXVECTOR3(-26.21f, 7.79f, 7.30f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },

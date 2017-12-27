@@ -29,3 +29,9 @@
 #include "myEngine/Graphics/Light.h"
 #include "game.h"
 #include "CubeCollision.h"
+
+
+extern LPD3DXEFFECT copyEffect;
+extern LPD3DXEFFECT monochromeEffect;		//!<18-4 モノクロフィルターをかけるシェーダー。
+extern void DrawQuadPrimitive();
+extern CRenderTarget* g_renderTarget;

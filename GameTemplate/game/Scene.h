@@ -16,13 +16,15 @@ public:
 	void Update();
 	//描画
 	void Render();
-
+	//シーン
 	enum SCENE
 	{
 		TITLE,			//タイトルシーン
 		GAME,			//ゲームシーン
+		GAME2,
 		END,
 		CHANGEGAME,
+		CHANGEGAME2,
 		CHANGETITLE,
 		CHANGEEND
 	};
@@ -31,11 +33,11 @@ public:
 	void SceneChange(SCENE SceneNo);
 
 private:
-	TitleScene* title=nullptr;
-	ResultScene* end = nullptr;
-	//BaseScene* m_bScene=nullptr;
-	SCENE m_Scene;
+	TitleScene*		m_title=nullptr;	//タイトル
+	ResultScene*	m_end = nullptr;	//リザルト
+	SCENE			m_scene;			//シーンの状態
+	//BaseScene*	m_bScene=nullptr;
 };
 
-extern Scene* scene;
+extern Scene* g_scene;
 

@@ -68,15 +68,15 @@ void MoveCube::Update()
 	switch (MoveDir)
 	{
 	case FORWARD:
-		D3DXVec3Subtract(&toPos, &position, &game->GetPlayer()->Getpos());
+		D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
 		len = D3DXVec3Length(&toPos);
-		if (len < 3.0f&&position.x>Limitpos.x&&game->GetPlayer()->GetObjectHit())
+		if (len < 3.0f&&position.x>Limitpos.x&&g_game->GetPlayer()->GetObjectHit())
 		{
 
 			position.x -= 0.04f;
-			D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
+			D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
 			speed.x -=2.4f;
-			game->GetPlayer()->AddSpeed(speed);
+			g_game->GetPlayer()->AddSpeed(speed);
 		}
 		else if (len > 3.0f&&position.x<Spos.x)
 		{
@@ -84,14 +84,14 @@ void MoveCube::Update()
 		}
 		break;
 	case LEFT:
-		D3DXVec3Subtract(&toPos, &position, &game->GetPlayer()->Getpos());
+		D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
 		len = D3DXVec3Length(&toPos);
-		if (len < 3.0f&&position.z>Limitpos.z&&game->GetPlayer()->GetObjectHit())
+		if (len < 3.0f&&position.z>Limitpos.z&&g_game->GetPlayer()->GetObjectHit())
 		{
 			position.z -= 0.04f;
-			D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
+			D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
 			speed.z -= 2.4f;
-			game->GetPlayer()->AddSpeed(speed);
+			g_game->GetPlayer()->AddSpeed(speed);
 		}
 		else if (len > 3.0f&&position.z<Spos.z)
 		{
@@ -99,14 +99,14 @@ void MoveCube::Update()
 		}
 		break;
 	case RIGHT:
-		D3DXVec3Subtract(&toPos, &position, &game->GetPlayer()->Getpos());
+		D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
 		len = D3DXVec3Length(&toPos);
-		if (len < 3.0f&&position.z<Limitpos.z&&game->GetPlayer()->GetObjectHit())
+		if (len < 3.0f&&position.z<Limitpos.z&&g_game->GetPlayer()->GetObjectHit())
 		{
 			position.z += 0.04f;
-			D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
+			D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
 			speed.z += 2.4f;
-			game->GetPlayer()->AddSpeed(speed);
+			g_game->GetPlayer()->AddSpeed(speed);
 		}
 		else if (len > 3.0f&&position.z>Spos.z)
 		{
@@ -114,14 +114,14 @@ void MoveCube::Update()
 		}
 		break;
 	case BACK:
-		D3DXVec3Subtract(&toPos, &position, &game->GetPlayer()->Getpos());
+		D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
 		len = D3DXVec3Length(&toPos);
-		if (len < 3.0f&&position.x<Limitpos.x&&game->GetPlayer()->GetObjectHit())
+		if (len < 3.0f&&position.x<Limitpos.x&&g_game->GetPlayer()->GetObjectHit())
 		{
 			position.x += 0.04f;
-			D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
+			D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
 			speed.x += 1.f;
-			game->GetPlayer()->AddSpeed(speed);
+			g_game->GetPlayer()->AddSpeed(speed);
 		}
 		else if (len > 3.0f&&position.x>Spos.x)
 		{
@@ -129,14 +129,14 @@ void MoveCube::Update()
 		}
 		break;
 	case UP:
-		D3DXVec3Subtract(&toPos, &position, &game->GetPlayer()->Getpos());
+		D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
 		len = D3DXVec3Length(&toPos);
-		if (len < 2.5f&&position.y<Limitpos.y&&game->GetPlayer()->GetObjectHit())
+		if (len < 2.5f&&position.y<Limitpos.y&&g_game->GetPlayer()->GetObjectHit())
 		{
 			position.y += 0.04f;
-			D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
+			D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
 			speed.y += 2.4f;
-			game->GetPlayer()->AddSpeed(speed);
+			g_game->GetPlayer()->AddSpeed(speed);
 		}
 		else if (len > 2.5f&&position.y>Spos.y)
 		{
@@ -144,13 +144,13 @@ void MoveCube::Update()
 		}
 		break;
 	case DOWN:
-		D3DXVec3Subtract(&toPos, &position, &game->GetPlayer()->Getpos());
+		D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
 		len = D3DXVec3Length(&toPos);
 		
-		if (len < 2.7f&&position.y>Limitpos.y&&game->GetPlayer()->GetObjectHit())
+		if (len < 3.0f&&position.y>Limitpos.y&&g_game->GetPlayer()->GetObjectHit())
 		{
 			Downflg = true;
-			game->GetPlayer()->SetObjectHit(false);
+			g_game->GetPlayer()->SetObjectHit(false);
 		}
 		if (Downflg)
 		{
@@ -171,5 +171,5 @@ void MoveCube::Update()
 void MoveCube::Draw()
 {
 	model.SetReciveflg(true);
-	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
+	model.Draw(&g_game->GetCamera()->GetViewMatrix(), &g_game->GetCamera()->GetProjectionMatrix());
 }

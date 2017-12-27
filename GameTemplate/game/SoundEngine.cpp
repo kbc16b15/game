@@ -12,7 +12,7 @@ SoundEngine::SoundEngine()
 
 SoundEngine::~SoundEngine()
 {
-	//Release();
+	Release();
 }
 
 

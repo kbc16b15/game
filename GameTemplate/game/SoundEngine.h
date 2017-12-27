@@ -42,6 +42,8 @@ public:
 	{
 		return m_nChannels;
 	}
+
+
 private:
 	IXAudio2* m_xAudio2 = nullptr;
 	IXAudio2MasteringVoice* m_masteringVoice = nullptr;

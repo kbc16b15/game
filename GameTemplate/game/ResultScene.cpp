@@ -17,14 +17,14 @@ ResultScene::~ResultScene()
 void ResultScene::Init()
 {
 	g_fade->StartFadeIn();
-	m_End.Initialize("Assets/Sprite/end.png", endpos);
+	m_end.Initialize("Assets/Sprite/end.png", m_endPos);
 	CreateSprite();
 }
 
 void ResultScene::Update()
 {
-	pad.Update();
-	m_End.Update();
+	m_pad.Update();
+	m_end.Update();
 	//if (GetAsyncKeyState('S') || pad.IsTrigger(pad.enButtonStart))
 	//{
 	//	//delete this;
@@ -41,7 +41,7 @@ void ResultScene::Update()
 			}
 			break;
 		case Run:
-			if (pad.IsTrigger(pad.enButtonStart) || GetAsyncKeyState('S')) {
+			if (m_pad.IsTrigger(m_pad.enButtonStart) || GetAsyncKeyState('S')) {
 				g_fade->StartFadeOut();
 				m_state = WaitFadeOut;
 			}
@@ -50,7 +50,7 @@ void ResultScene::Update()
 			if (!g_fade->isExecute())
 			{
 				//delete this;
-				scene->SceneChange(scene->CHANGETITLE);
+				g_scene->SceneChange(g_scene->CHANGETITLE);
 				return;
 
 			}
@@ -63,13 +63,13 @@ void ResultScene::Update()
 void ResultScene::Render()
 {
 	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
-	m_End.Draw(m_Sprite);
+	m_end.Draw(m_sprite);
 	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 }
 
 HRESULT ResultScene::CreateSprite()
 {
-	if (FAILED(D3DXCreateSprite(g_pd3dDevice, &m_Sprite)))
+	if (FAILED(D3DXCreateSprite(g_pd3dDevice, &m_sprite)))
 	{
 		MessageBox(0, TEXT("ÉXÉvÉâÉCÉgçÏê¨é∏îs"), NULL, MB_OK);
 		return E_FAIL;//é∏îsï‘ãp

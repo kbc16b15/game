@@ -18,13 +18,13 @@ public:
 	void Draw();
 
 private:
-	SkinModel			model;							//スキンモデル
-	SkinModelData		modelData;						//スキンモデルデータ
-	D3DXVECTOR3			position;						//座標
-	D3DXQUATERNION		rotation;						//回転
-	Light				light;							//ライト
-	MeshCollider		meshCollider;					//メッシュコライダー
-	RigidBody			rigidBody;						//剛体。
-	RigidBodyInfo		rbInfo;							//剛体情報
+	SkinModel			m_model;			//スキンモデル
+	SkinModelData		m_modelData;		//スキンモデルデータ
+	D3DXVECTOR3			m_position;			//座標
+	D3DXQUATERNION		m_rotation;			//回転
+	Light				m_light;			//ライト
+	MeshCollider		m_meshCollider;		//メッシュコライダー
+	RigidBody			m_rigidBody;		//剛体。
+	RigidBodyInfo		m_rbInfo;			//剛体情報
 };
 

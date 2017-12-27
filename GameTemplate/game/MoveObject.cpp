@@ -79,13 +79,13 @@ void MoveObject::Update()
 	UPos.x -= 2.4f;
 	DPos.x += 2.4f;
 
-	D3DXVec3Subtract(&toPos, &LPos, &game->GetPlayer()->Getpos());
+	D3DXVec3Subtract(&toPos, &LPos, &g_game->GetPlayer()->Getpos());
 	float Llen = D3DXVec3Length(&toPos);
-	D3DXVec3Subtract(&toPos, &RPos, &game->GetPlayer()->Getpos());
+	D3DXVec3Subtract(&toPos, &RPos, &g_game->GetPlayer()->Getpos());
 	float Rlen = D3DXVec3Length(&toPos);
-	D3DXVec3Subtract(&toPos, &DPos, &game->GetPlayer()->Getpos());
+	D3DXVec3Subtract(&toPos, &DPos, &g_game->GetPlayer()->Getpos());
 	float Dlen = D3DXVec3Length(&toPos);
-	D3DXVec3Subtract(&toPos, &game->GetPlayer()->Getpos(), &UPos);
+	D3DXVec3Subtract(&toPos, &g_game->GetPlayer()->Getpos(), &UPos);
 	float Ulen = D3DXVec3Length(&toPos);
 	if (Llen < 1.5f&&position.z>LMovelenge.x)
 	{
@@ -99,9 +99,9 @@ void MoveObject::Update()
 	if (Lflg)
 	{
 		position.z -= MoveSpeed;
-		D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
+		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
 		speed.z -= PAddSpeed;
-		game->GetPlayer()->AddSpeed(speed);
+		g_game->GetPlayer()->AddSpeed(speed);
 	}
 
 	if (Rlen < 1.5f&&position.z<RMovelenge.x)
@@ -117,9 +117,9 @@ void MoveObject::Update()
 	if (Rflg)
 	{
 		position.z += MoveSpeed;
-		D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
+		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
 		speed.z += PAddSpeed;
-		game->GetPlayer()->AddSpeed(speed);
+		g_game->GetPlayer()->AddSpeed(speed);
 	}
 
 	if (Dlen < 1.0f&&position.x<DMovelenge.x)
@@ -134,9 +134,9 @@ void MoveObject::Update()
 	if (Dflg)
 	{
 		position.x += MoveSpeed;
-		D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
+		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
 		speed.x += PAddSpeed;
-		game->GetPlayer()->AddSpeed(speed);
+		g_game->GetPlayer()->AddSpeed(speed);
 	}
 
 	if (Ulen < 1.0f&&position.x > UMovelenge.x)
@@ -151,9 +151,9 @@ void MoveObject::Update()
 	{
 		//moveSpeed.x = 4.0f;
 		position.x -= MoveSpeed;
-		D3DXVECTOR3 speed = game->GetPlayer()->GetSpeed();
+		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
 		speed.x -=PAddSpeed;
-		game->GetPlayer()->AddSpeed(speed);
+		g_game->GetPlayer()->AddSpeed(speed);
 	}
 
 	rigidBody.GetBody()->setActivationState(DISABLE_DEACTIVATION);
@@ -180,5 +180,5 @@ void MoveObject::Update()
 
 void MoveObject::Draw()
 {
-	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
+	model.Draw(&g_game->GetCamera()->GetViewMatrix(), &g_game->GetCamera()->GetProjectionMatrix());
 }

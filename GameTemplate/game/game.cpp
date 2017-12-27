@@ -15,17 +15,18 @@
 Game::Game()
 {
 	srand((unsigned int)time(NULL));
-	player = new Player;
-	map = new Map;
+	m_player = new Player;
+	m_map = new Map;
+	m_renderTarget = new CRenderTarget;
 }
 /*!
  * @brief	デストラクタ。
  */
 Game::~Game()
 {
-	delete player;
-	delete map;
-	delete g_physicsWorld;
+	delete m_player;
+	delete m_map;
+	//delete g_physicsWorld;
 }
 /*!
  * @brief	ゲームが起動してから一度だけ呼ばれる関数。
@@ -33,35 +34,41 @@ Game::~Game()
 void Game::Init()
 {
 	g_fade->StartFadeIn();
-	//物理ワールドを初期化
-	g_physicsWorld = new PhysicsWorld;
-	g_physicsWorld->Init();
 	//カメラ初期化。
-	gameCamera.Init();
-	player->Start();
+	m_gameCamera.Init();
+	//プレイヤー初期化
+	m_player->Start();
 	//マップを初期化。
-	map->Init();
+	m_map->Init();
 
 	//画像表示
-	for (int i = 0;i <= HpMaxnum;i++)
+	for (int i = 0;i <= m_hpMaxNum;i++)
 	{
-		m_Hud[i].Initialize("Assets/Sprite/HP.png", Hppos);
-		Hppos.x += 100.0f;
+		m_hud[i].Initialize("Assets/Sprite/HP.png", m_hppos);
+		m_hppos.x += 100.0f;
 	}
-	Key.Initialize("Assets/Sprite/key.png", Keypos);
-	rock.Setalfa(0.5f);
-	rock.Initialize("Assets/Sprite/Rock.jpg", rockpos);
-
+	m_key.Initialize("Assets/Sprite/key.png", m_keypos);
+	m_rock.Setalfa(0.5f);
+	m_rock.Initialize("Assets/Sprite/Rock.jpg", m_rockpos);
+	//スプライトの生成
 	CreateSprite();
 
-	/*m_SoundEngine = new SoundEngine();
-	m_SoundEngine->Init();
-	m_Sound = new Sound();
-	m_Sound->Init("Assets/Sound/bgm.wav");
-	m_Sound->Play(true);
-	m_Sound->SetVolume(0.5f);*/
+	m_soundEngine = new SoundEngine();
+	m_soundEngine->Init();
+	m_sound = new Sound();
+	m_sound->Init("Assets/Sound/bgm.wav");
+	m_sound->Play(true);
+	m_sound->SetVolume(0.5f);
 
-
+	m_renderTarget->Create(
+		FRAME_BUFFER_WIDTH,
+		FRAME_BUFFER_HEIGHT,
+		1,
+		D3DFMT_A8R8G8B8,
+		D3DFMT_D24S8,
+		D3DMULTISAMPLE_NONE,
+		0
+	);
 	//Player* pl = new Player();
 	//GoMgr.AddGameObject(pl);
 	//Enemy* en = new Enemy();
@@ -75,19 +82,20 @@ void Game::Init()
 void Game::Update()
 {
 
-	//m_SoundEngine->Update();
-	//m_Sound->Update();
+	m_soundEngine->Update();
+	m_sound->Update();
 	m_pad.Update();
-
-	D3DXVECTOR3 toPos = player->Getpos();
+	//かげ用のライトの位置の設定
+	D3DXVECTOR3 toPos = m_player->Getpos();
 	toPos.y += 7.0f;
 	g_shadowmap->SetviewPosition(toPos);
-	g_shadowmap->SetviewTarget(player->Getpos());
+	g_shadowmap->SetviewTarget(m_player->Getpos());
 
-	D3DXVECTOR3 Ppos = player->Getpos();
-	switch (GAME) {
+	D3DXVECTOR3 Ppos = m_player->Getpos();
+
+	switch (GAME){
 	case START:
-		switch (m_state) {
+		switch(m_state){
 		case WaitFadeIn:
 			if (!g_fade->isExecute())
 			{
@@ -95,13 +103,25 @@ void Game::Update()
 			}
 			break;
 		case Run:
-			if (player->PlayerDeath()|| Ppos.y < -9.0f) {
+			if (m_player->PlayerDeath()|| Ppos.y < -9.0f|| m_nextflg) {
 				g_fade->StartFadeOut();
 				m_state = WaitFadeOut;
 			}
 			break;
 		case WaitFadeOut:
-			if (!g_fade->isExecute())
+			if (m_nextflg&& !g_fade->isExecute())
+			{
+				if (m_map->GetStage() == m_map->STAGE1)
+				{
+					g_scene->SceneChange(g_scene->CHANGEGAME2);
+
+				}
+				else if (m_map->GetStage() == m_map->STAGE2)
+				{
+					g_scene->SceneChange(g_scene->CHANGETITLE);
+				}
+			}
+			else if (!g_fade->isExecute())
 			{
 				GameEnd();
 			}
@@ -109,6 +129,7 @@ void Game::Update()
 		}
 		break;
 	}
+	
 
 	//if (GetAsyncKeyState('L') || m_pad.IsTrigger(m_pad.enButtonLB1))
 	//{
@@ -135,68 +156,67 @@ void Game::Update()
 	//	game->AddBullets(bullet);
 	//}
 
-	for (auto enemy : enem)
+	for (auto enemy : m_enem)
 	{
 		enemy->Update();
 	}
-	for (auto Tenemy : Tenem)
+	for (auto Tenemy : m_tenem)
 	{
 		Tenemy->Update();
 	}
-	for (auto bullet : Bullets)
+	for (auto bullet : m_bullets)
 	{
 		bullet->Update();
 	}
 	//画像のアップデート
-	for (int i = 0;i < Hpnum;i++)
+	for (int i = 0;i < m_hpNum;i++)
 	{
-		m_Hud[i].Update();
+		m_hud[i].Update();
 	}
 
-	auto enemyIt = enem.begin();
-	while (enemyIt != enem.end()) {
+	auto enemyIt = m_enem.begin();
+	while (enemyIt != m_enem.end()) {
 		if ((*enemyIt)->GetDeathflg()){
-			enemyIt = enem.erase(enemyIt);
+			enemyIt = m_enem.erase(enemyIt);
 		}
 		else {
 			enemyIt++;
 		}
 	}
 
-	auto TenemyIt = Tenem.begin();
-	while (TenemyIt != Tenem.end()) {
+	auto TenemyIt = m_tenem.begin();
+	while (TenemyIt != m_tenem.end()) {
 		if ((*TenemyIt)->GetDeathflg()) {
 			
-			for (auto TEnemynum : Tenem)
+			for (auto TEnemynum : m_tenem)
 			{
 				if(TEnemynum->GetDeathflg())
 				delete TEnemynum;
 			}
-			TenemyIt = Tenem.erase(TenemyIt);
+			TenemyIt = m_tenem.erase(TenemyIt);
 		}
 		else {
 			TenemyIt++;
 		}
 	}
 
-	auto bulletIt = Bullets.begin();
-	while (bulletIt != Bullets.end()) {
+	auto bulletIt = m_bullets.begin();
+	while (bulletIt != m_bullets.end()) {
 		if (!(*bulletIt)->GetBulletflg()) {
-			bulletIt = Bullets.erase(bulletIt);
+			bulletIt = m_bullets.erase(bulletIt);
 		}
 		else {
 			bulletIt++;
 		}
 	}
 
-
-	Key.Update();
-	rock.Update();
+	m_key.Update();
+	m_rock.Update();
 	//GoMgr.Update();
-	gameCamera.Update();
-	player->Update();
-	map->Update();
-	g_physicsWorld->Update();
+	m_gameCamera.Update();
+	m_player->Update();
+	m_map->Update();
+	
 	if (GetAsyncKeyState('G'))
 	{
 		//次のステージへ
@@ -209,94 +229,129 @@ void Game::Update()
  */
 void Game::Render()
 {
+
 	//GoMgr.Draw();
-	map->Draw();
+	m_map->Draw();
 	//物体に遮蔽されているときにだけ描画する
 	g_pd3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_GREATER);
 	g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE,FALSE);//Z値を書き込まないようにする
-	player->Draw(&gameCamera.Getcamera().GetViewMatrix(), &gameCamera.Getcamera().GetProjectionMatrix(),true, false);
+	m_player->Draw(&m_gameCamera.Getcamera().GetViewMatrix(), &m_gameCamera.Getcamera().GetProjectionMatrix(),true, false);
 	g_pd3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESS);
 	g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 
-	player->Draw(&gameCamera.Getcamera().GetViewMatrix(), &gameCamera.Getcamera().GetProjectionMatrix(), false, false);
+	m_player->Draw(&m_gameCamera.Getcamera().GetViewMatrix(), &m_gameCamera.Getcamera().GetProjectionMatrix(), false, false);
 
-	for (auto enemy : enem)
+	for (auto enemy : m_enem)
 	{
 		enemy->Draw();
 	}
 
-	for (auto Tenemy : Tenem)
+	for (auto Tenemy : m_tenem)
 	{
 		Tenemy->Draw();
 	}
 	
-	for (auto bullet : Bullets)
+	for (auto bullet : m_bullets)
 	{
 		bullet->Draw();
 	}
 	
-	for (int i = 0;i < Hpnum;i++)
+	for (int i = 0;i < m_hpNum;i++)
 	{
-		m_Hud[i].Draw(m_Sprite);
+		m_hud[i].Draw(m_sprite);
 	}
 	
-	Key.Draw(m_Sprite);
-	if (Gunflg)
+	m_key.Draw(m_sprite);
+	if (m_gunflg)
 	{
-		rock.Draw(m_Sprite);
+		m_rock.Draw(m_sprite);
 	}
+	m_bloom.Draw();
 
 }
 
 void Game::GameEnd()
 {
-
-	for (auto bullet : Bullets) {
+	//bulletの消去
+	for (auto bullet : m_bullets) {
 		delete bullet;
 	}
-
-	for (auto Enemynum : enem)
+	auto bulletIt = m_bullets.begin();
+	while (bulletIt != m_bullets.end()) 
 	{
+		bulletIt = m_bullets.erase(bulletIt);
+	}
+	//enemの消去
+	for (auto Enemynum : m_enem){
 		delete Enemynum;
 	}
-	/*for (auto TEnemynum : Tenem)
+	auto enemyIt = m_enem.begin();
+	while (enemyIt != m_enem.end()) 
+	{
+		enemyIt = m_enem.erase(enemyIt);
+	}
+	//Tenemの消去
+	for (auto TEnemynum : m_tenem)
 	{
 		delete TEnemynum;
 	}
-*/
+	auto TenemyIt = m_tenem.begin();
+	while (TenemyIt != m_tenem.end()) {
+
+		TenemyIt = m_tenem.erase(TenemyIt);
+
+	}
 	/*delete m_Sound;
 	m_Sound = nullptr;
 	delete m_SoundEngine;
-	m_SoundEngine = nullptr;
-	m_SoundEngine->Release();*/
+	m_SoundEngine = nullptr;*/
 
-	scene->SceneChange(scene->CHANGEEND);
-	//scene->SceneChange(scene->END);
+	g_scene->SceneChange(g_scene->CHANGEEND);
 
 }
 
 void Game::NextStage()
 {
-	for (auto bullet : Bullets)
+	//bulletの消去
+	for (auto bullet : m_bullets)
 	{
 		delete bullet;
 	}
 
-	for (auto Enemynum : enem)
+	auto bulletIt = m_bullets.begin();
+	while (bulletIt != m_bullets.end()) 
+	{
+		bulletIt = m_bullets.erase(bulletIt);
+	}
+	//enemの消去
+	for (auto Enemynum : m_enem)
 	{
 		delete Enemynum;
 	}
-	/*for (auto TEnemynum : Tenem)
+	auto enemyIt = m_enem.begin();
+	while (enemyIt != m_enem.end()) 
+	{
+		enemyIt = m_enem.erase(enemyIt);
+	}
+	//Tenemの消去
+	for (auto TEnemynum : m_tenem)
 	{
 		delete TEnemynum;
-	}*/
-	scene->SceneChange(scene->GAME);
+	}
+	auto TenemyIt = m_tenem.begin();
+	while (TenemyIt != m_tenem.end()){
+
+		TenemyIt = m_tenem.erase(TenemyIt);
+
+	}
+
+	m_nextflg = true;
 
 }
 
 HRESULT Game::CreateSprite()
 {
-	if (FAILED(D3DXCreateSprite(g_pd3dDevice, &m_Sprite)))
+	if (FAILED(D3DXCreateSprite(g_pd3dDevice, &m_sprite)))
 	{
 		MessageBox(0, TEXT("スプライト作成失敗"), NULL, MB_OK);
 		return E_FAIL;//失敗返却

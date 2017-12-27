@@ -19,7 +19,7 @@ public:
 	//座標の取得
 	D3DXVECTOR3 Getpos()
 	{
-		return position;
+		return m_position;
 	}
 
 	enum DamageObjectType {
@@ -28,17 +28,17 @@ public:
 		MOVE,
 	};
 private:
-	int DamageType = STAND;
-	SkinModel		model;					//スキンモデル
-	SkinModelData	modelData;				//スキンモデルデータ
-	D3DXVECTOR3		position;				//座標
-	D3DXQUATERNION	rotation;				//回転
-	Light			light;					//ライト
-	MeshCollider	meshCollider;			//メッシュコライダー
-	RigidBody		rigidBody;				//剛体。
-	RigidBodyInfo	rbInfo;					//剛体情報
-	D3DXVECTOR3		RotDir;					//回転方向
-	D3DXVECTOR3		RotSpeed;				//回転速度
-	float			angle = 0.0f;			//角度
-	bool			rotflg = false;
+	int				m_damageType = STAND;
+	SkinModel		m_model;					//スキンモデル
+	SkinModelData	m_modelData;				//スキンモデルデータ
+	D3DXVECTOR3		m_position;				//座標
+	D3DXQUATERNION	m_rotation;				//回転
+	Light			m_light;					//ライト
+	MeshCollider	m_meshCollider;			//メッシュコライダー
+	RigidBody		m_rigidBody;				//剛体。
+	RigidBodyInfo	m_rbInfo;					//剛体情報
+	D3DXVECTOR3		m_rotDir;					//回転方向
+	D3DXVECTOR3		m_totSpeed;				//回転速度
+	float			m_angle = 0.0f;			//角度
+	bool			m_rotflg = false;
 };

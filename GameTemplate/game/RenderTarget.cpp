@@ -7,7 +7,6 @@ CRenderTarget::CRenderTarget()
 	m_surface = NULL;
 	m_texture = NULL;
 	m_depthSurface = NULL;
-	m_texture = NULL;
 }
 
 
@@ -36,7 +35,7 @@ void CRenderTarget::Create(
 		&m_depthSurface,
 		NULL
 	);
-		//カラーバッファの作成
+	//カラーバッファの作成
 	hr = g_pd3dDevice->CreateTexture(
 		w,
 		h,
@@ -48,6 +47,9 @@ void CRenderTarget::Create(
 		NULL
 	);
 	m_texture->GetSurfaceLevel(0, &m_surface);
+
+	m_width = w;
+	m_height = h;
 }
 
 void CRenderTarget::Release()
@@ -65,3 +67,4 @@ void CRenderTarget::Release()
 		m_surface = NULL;
 	}
 }
+

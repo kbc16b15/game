@@ -10,7 +10,7 @@ public:
 	//デストラクタ
 	~trackingEnemy();
 	//初期化　座標の設定
-	void Start(D3DXVECTOR3 pos);
+	void Start(D3DXVECTOR3 pos, D3DXQUATERNION rotation);
 	//更新
 	void Update();
 	//描画
@@ -22,7 +22,7 @@ public:
 	//Enemyの死亡フラグの取得
 	bool GetDeathflg()
 	{
-		return IsDeath;
+		return m_isDeath;
 	}
 	
 private:
@@ -33,23 +33,22 @@ private:
 		DEAD
 	};
 	int TState = SEACH;
-	SkinModel			skinModel;											//スキンモデル
-	SkinModelData		skinModelData;										//スキンモデルデータ
-	D3DXVECTOR3			position;											//座標
-	D3DXVECTOR3			Spos;												//初期座標
-	D3DXVECTOR3			scale = { 1.0f,1.0f,1.0f };							//拡大
-	D3DXQUATERNION		rotation = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);	//回転
-	Light				light;												//ライト
-	int					BulletTime = 150;									//バレットの発射間隔
-	bool				IsDead = false;										//死亡処理フラグ
-	bool				IsDeath = false;									//死亡フラグ
-	int					DeadTime = 100;										//死亡タイム
-	int					BulletDir = 0;										//バレット打つ方向
-	CharacterController	characterController;				//キャラクターコントローラー
-	D3DXVECTOR3			moveSpeed = { 0.0f,0.0f,0.0f };		//移動速度
-
-	D3DXVECTOR3 direction = { 0.0f,0.0f,1.0f };
-	bool				moveX = false;
+	SkinModel			m_skinModel;										//スキンモデル
+	SkinModelData		m_skinModelData;									//スキンモデルデータ
+	D3DXVECTOR3			m_position;											//座標
+	D3DXVECTOR3			m_sPos;												//初期座標
+	D3DXVECTOR3			m_scale = { 0.7f,0.7f,0.7f };						//拡大
+	D3DXQUATERNION		m_rotation = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);//回転
+	Light				m_light;											//ライト
+	int					m_bulletTime = 150;									//バレットの発射間隔
+	bool				m_isDead = false;									//死亡処理フラグ
+	bool				m_isDeath = false;									//死亡フラグ
+	int					m_deadTime = 100;									//死亡タイム
+	int					m_bulletDir = 0;									//バレット打つ方向
+	CharacterController	m_characterController;								//キャラクターコントローラー
+	D3DXVECTOR3			m_moveSpeed = { 0.0f,0.0f,0.0f };					//移動速度
+	D3DXVECTOR3			m_direction = { 0.0f,0.0f,1.0f };
+	//bool				moveX = false;
 
 };
 

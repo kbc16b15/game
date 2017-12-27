@@ -20,19 +20,24 @@ void Scene::Init()
 {
 	//m_bScene->Init();
 
-	switch (m_Scene)
+	switch (m_scene)
 	{
 	case TITLE:
-		title = new TitleScene;
-		title->Init();
+		m_title = new TitleScene;
+		m_title->Init();
 		break;
 	case GAME:
-		game = new Game;
-		game->Init();
+		g_game = new Game;
+		g_game->Init();
+		break;
+	case GAME2:
+		g_game = new Game;
+		g_game->GetMap()->SetStage(g_game->GetMap()->STAGE2);
+		g_game->Init();
 		break;
 	case END:
-		end = new ResultScene;
-		end->Init();
+		m_end = new ResultScene;
+		m_end->Init();
 		break;
 	default:
 		break;
@@ -47,24 +52,30 @@ void Scene::Render()
 {
 	//m_bScene->Render();
 
-	switch (m_Scene)
+	switch (m_scene)
 	{
 	case TITLE:
-		if (title != nullptr)
+		if (m_title != nullptr)
 		{
-			title->Render();
+			m_title->Render();
 		}
 		break;
 	case GAME:
-		if (game != nullptr)
+		if (g_game != nullptr)
 		{
-			game->Render();
+			g_game->Render();
+		}
+		break;
+	case GAME2:
+		if (g_game != nullptr)
+		{
+			g_game->Render();
 		}
 		break;
 	case END:
-		if (end != nullptr)
+		if (m_end != nullptr)
 		{
-			end->Render();
+			m_end->Render();
 		}
 		break;
 	default:
@@ -79,52 +90,73 @@ void Scene::Update()
 {
 	//m_bScene->Update();
 
-	switch (m_Scene)
+	switch (m_scene)
 	{
 	case TITLE:
-		if (title != nullptr)
+		if (m_title != nullptr)
 		{
-			title->Update();
+			m_title->Update();
 		}
 		break;
 	case GAME:
-		if (game != nullptr)
+		if (g_game != nullptr)
 		{
-			game->Update();
+			g_game->Update();
+		}
+		break;
+	case GAME2:
+		if (g_game != nullptr)
+		{
+			g_game->Update();
 		}
 		break;
 	case END:
-		if (end != nullptr)
+		if (m_end != nullptr)
 		{
-			end->Update();
+			m_end->Update();
 		}
 		break;
 	case CHANGEGAME:
-		if (title != nullptr)
+		if (m_title != nullptr)
 		{
-			delete title;
-			title = nullptr;
+			delete m_title;
+			m_title = nullptr;
 		}
-		m_Scene = GAME;
+		m_scene = GAME;
+		Init();
+		break;
+	case CHANGEGAME2:
+		if (m_title != nullptr)
+		{
+			delete m_title;
+			m_title = nullptr;
+		}
+		if (g_game != nullptr)
+		{
+			delete g_game;
+			g_game = nullptr;
+		}
+		m_scene = GAME2;
+		
 		Init();
 		break;
 	case CHANGETITLE:
-		m_Scene = TITLE;
+		m_scene = TITLE;
 		Init();
-		if (end != nullptr)
+		if (m_end != nullptr)
 		{
-			delete end;
-			end = nullptr;
+			delete m_end;
+			m_end = nullptr;
 		}
 		
 		break;
 	case CHANGEEND:
-		m_Scene = END;
+		m_scene = END;
 		Init();
-		if (game != nullptr)
+		if (g_game != nullptr)
 		{
-			delete game;
-			game = nullptr;
+			delete g_game;
+			g_game = nullptr;
 		}
 		/*if (g_physicsWorld != nullptr)
 		{
@@ -140,7 +172,7 @@ void Scene::Update()
 
 void Scene::SceneChange(SCENE SceneNo)
 {
-	m_Scene = SceneNo;
+	m_scene = SceneNo;
 	//Init();
 	//if (m_bScene != nullptr) {
 	//	delete 	m_bScene;

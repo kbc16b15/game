@@ -62,7 +62,7 @@ void Spring::Init(/*SMapChipLocInfo& locInfo*/const char* modelName, D3DXVECTOR3
 void Spring::Update()
 {
 	D3DXVECTOR3 toPos;
-	D3DXVec3Subtract(&toPos, &position, &game->GetPlayer()->Getpos());
+	D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
 
 	float len = D3DXVec3Length(&toPos);
 
@@ -80,10 +80,10 @@ void Spring::Update()
 
 	if (Sflg)
 	{
-		D3DXVECTOR3 Ppos=game->GetPlayer()->Getpos();
+		D3DXVECTOR3 Ppos=g_game->GetPlayer()->Getpos();
 		Ppos.y = position.y + 2.0f;
-		game->GetPlayer()->Setpos({ position.x,position.y,position.z});
-		game->GetPlayer()->SetJumpflg(true);
+		g_game->GetPlayer()->Setpos({ position.x,position.y,position.z});
+		g_game->GetPlayer()->SetJumpflg(true);
 		if (scale.y < 0.5f) 
 		{
 			return; 
@@ -97,5 +97,5 @@ void Spring::Update()
 
 void Spring::Draw()
 {
-	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
+	model.Draw(&g_game->GetCamera()->GetViewMatrix(), &g_game->GetCamera()->GetProjectionMatrix());
 }

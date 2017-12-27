@@ -16,9 +16,6 @@
     <Filter Include="ソース ファイル\Map">
       <UniqueIdentifier>{9f303c51-fcc3-4864-99e8-e84adfe0c377}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\scene">
-      <UniqueIdentifier>{be987a8b-c367-4b8e-8aa3-16a84005c3d4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Player">
       <UniqueIdentifier>{de0b1208-8401-4c18-a875-c92dd5c61047}</UniqueIdentifier>
     </Filter>
@@ -36,9 +33,6 @@
     </Filter>
     <Filter Include="ソース ファイル\Fade">
       <UniqueIdentifier>{be730973-e379-4e61-af11-736069a8c124}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\mass">
-      <UniqueIdentifier>{744be983-6b64-4397-b0f5-b808879651e5}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\Map\Sky">
       <UniqueIdentifier>{da42494e-e18c-4379-beb1-3cb45871610b}</UniqueIdentifier>
@@ -60,6 +54,12 @@
     </Filter>
     <Filter Include="ソース ファイル\Map\Sea">
       <UniqueIdentifier>{5b92a977-feca-4cf2-a7a6-f788b7c0fc01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene">
+      <UniqueIdentifier>{be987a8b-c367-4b8e-8aa3-16a84005c3d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\math">
+      <UniqueIdentifier>{744be983-6b64-4397-b0f5-b808879651e5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -117,9 +117,6 @@
     <ClCompile Include="TitleScene.cpp">
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル\Player</Filter>
-    </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
@@ -151,7 +148,7 @@
       <Filter>ソース ファイル\Fade</Filter>
     </ClCompile>
     <ClCompile Include="CubeCollision.cpp">
-      <Filter>ソース ファイル\mass</Filter>
+      <Filter>ソース ファイル\math</Filter>
     </ClCompile>
     <ClCompile Include="Sky.cpp">
       <Filter>ソース ファイル\Map\Sky</Filter>
@@ -203,6 +200,21 @@
     </ClCompile>
     <ClCompile Include="ShadowMap.cpp">
       <Filter>ソース ファイル\myEngine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="bloom.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Indexbuffer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Primitive.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertexbuffer.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -306,7 +318,7 @@
       <Filter>ソース ファイル\Fade</Filter>
     </ClInclude>
     <ClInclude Include="CubeCollision.h">
-      <Filter>ソース ファイル\mass</Filter>
+      <Filter>ソース ファイル\math</Filter>
     </ClInclude>
     <ClInclude Include="Sky.h">
       <Filter>ソース ファイル\Map\Sky</Filter>
@@ -350,14 +362,26 @@
     <ClInclude Include="SoundEngine.h">
       <Filter>ソース ファイル\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="SpringCamera.h">
-      <Filter>ソース ファイル\Camera</Filter>
-    </ClInclude>
     <ClInclude Include="Sea.h">
       <Filter>ソース ファイル\Map\Sea</Filter>
     </ClInclude>
     <ClInclude Include="ShadowMap.h">
       <Filter>ソース ファイル\myEngine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="SpringCamera.h">
+      <Filter>ソース ファイル\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="bloom.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Indexbuffer.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitive.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertexbuffer.h">
+      <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -57,17 +57,13 @@ public:
 	{
 		cubeMap = CubeMap;
 	}
-	//
-	void SetCubeflg(bool cubeflg)
-	{
-		Cubeflg = true;
-	}
 
+	//影を落とすモデルの設定
 	void SetCasterflg(bool Caster)
 	{
 		ShadowCaster = Caster;
 	}
-
+	//影を落とされるモデルの設定
 	void SetReciveflg(bool Recive)
 	{
 		ShadowRecive = Recive;
@@ -87,7 +83,7 @@ private:
 	LPDIRECT3DTEXTURE9		specularMap = NULL;		//!スペキュラマップ
 	LPDIRECT3DTEXTURE9		shadowMap = NULL;		//!シャドウマップ
 	LPDIRECT3DCUBETEXTURE9	cubeMap = NULL;			//!キューブマップ
-	bool				Cubeflg = false;
+	//bool				Cubeflg = false;
 	bool				ShadowCaster = false;
 	bool				ShadowRecive = false;
 

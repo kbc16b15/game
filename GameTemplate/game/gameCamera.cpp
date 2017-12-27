@@ -37,14 +37,14 @@ void gameCamera::RotCamera()
 
 	if (pad.GetRStickXF()<0.0)
 	{
-		angle += RotSpeedY;
+		angle -= RotSpeedY;
 		D3DXMatrixRotationY(&m_Rot, D3DXToRadian(angle));
 
 	}
 	else if (pad.GetRStickXF()>0.0)
 	{
 
-		angle -= RotSpeedY;
+		angle += RotSpeedY;
 		D3DXMatrixRotationY(&m_Rot, D3DXToRadian(angle));
 	}
 	else if (pad.GetRStickYF()<0.0)
@@ -53,14 +53,15 @@ void gameCamera::RotCamera()
 		D3DXVECTOR3 Axis;
 		D3DXVECTOR3 vUP(0.0f, 1.0f, 0.0f);
 		D3DXVec3Cross(&Axis, &toCameraPos, &vUP);
-		if (angleX > CameraUpLimit)
+		/*if (angleX > CameraUpLimit)
 		{
 			angle = 0.0f;
 		}
 		else
 		{
 			angleX += RotSpeedX;
-		}
+		}*/
+		angleX += RotSpeedX;
 		D3DXMatrixRotationAxis(&m_Rot, &Axis, D3DXToRadian(angle));
 	}
 	else if (pad.GetRStickYF()>0.0)
@@ -69,21 +70,22 @@ void gameCamera::RotCamera()
 		D3DXVECTOR3 Axis;
 		D3DXVECTOR3 vUP(0.0f, 1.0f, 0.0f);
 		D3DXVec3Cross(&Axis, &toCameraPos, &vUP);
-		if (angleX <-CameraUpLimit)
+		/*if (angleX <-CameraUpLimit)
 		{
 			angle = 0.0f;
 		}
 		else
 		{
 			angleX -= RotSpeedX;
-		}
+		}*/
+		angleX -= RotSpeedX;
 		D3DXMatrixRotationAxis(&m_Rot, &Axis, D3DXToRadian(angle));
 	}
 	angle = 0.0f;
 	D3DXVec3TransformCoord(&toCameraPos, &toCameraPos, &m_Rot);
 
 	//プレイヤー追従カメラ。
-	D3DXVECTOR3 targetPos = game->GetPlayer()->Getpos();
+	D3DXVECTOR3 targetPos = g_game->GetPlayer()->Getpos();
 	/*if (targetPos.y < 0.0f)
 	{
 	targetPos.y = 0.0f;
@@ -97,8 +99,8 @@ void gameCamera::RockCamera()
 {
 	if (Rockonflg)
 	{
-		D3DXVECTOR3 ReyePos = game->GetPlayer()->Getpos();
-		D3DXVECTOR3 RtargetPos = game->GetPlayer()->Getpos();
+		D3DXVECTOR3 ReyePos = g_game->GetPlayer()->Getpos();
+		D3DXVECTOR3 RtargetPos = g_game->GetPlayer()->Getpos();
 		ReyePos.x += 1.0f;
 		ReyePos.z += 0.8f;
 		ReyePos.y += 1.2f;

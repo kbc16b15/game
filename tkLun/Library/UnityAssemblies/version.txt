@@ -1,5 +1,5 @@
 2017.2.0f3:2.2.0.0
-StandaloneWindows
+Android
 C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll
 C:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.dll
 C:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.CoreModule.dll
@@ -67,6 +67,7 @@ C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityHoloLens/Editor/Un
 C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/Editor/UnityEditor.SpatialTracking.dll
 C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll
 C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll
+C:/Program Files/Unity/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
 C:/Program Files/Unity/Editor/Data/PlaybackEngines/windowsstandalonesupport/UnityEditor.WindowsStandalone.Extensions.dll
 C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/2015/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll
 C:/Users/kbc16b15/AppData/LocalLow/Unity/cache/packages/packages.unity.com/com.unity.ads@1.0.7/Editor/UnityEditor.Advertisements.dll

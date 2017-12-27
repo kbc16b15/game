@@ -18,11 +18,11 @@ public:
 	void Draw();
 
 private:
-	SkinModel			model;							//スキンモデル
-	SkinModelData		modelData;						//スキンモデルデータ
-	D3DXVECTOR3			position;						//座標
-	D3DXQUATERNION		rotation;						//回転
-	Light				light;							//ライト
-	LPDIRECT3DCUBETEXTURE9 m_cubeTex = nullptr;	//!<キューブテクスチャ。
+	SkinModel				m_model;								//スキンモデル
+	SkinModelData			m_modelData;							//スキンモデルデータ
+	D3DXVECTOR3				m_position;								//座標
+	D3DXQUATERNION			m_rotation = {0.0f,0.0f,0.0f,1.0f};		//回転
+	Light					m_light;								//ライト
+	LPDIRECT3DCUBETEXTURE9	m_cubeTex = nullptr;				//!<キューブテクスチャ。
 };
 

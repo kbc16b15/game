@@ -99,5 +99,5 @@ void FallObject::Update()
 
 void FallObject::Draw()
 {
-	model.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
+	model.Draw(&g_game->GetCamera()->GetViewMatrix(), &g_game->GetCamera()->GetProjectionMatrix());
 }

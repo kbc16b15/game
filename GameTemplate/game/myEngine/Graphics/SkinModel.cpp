@@ -24,8 +24,7 @@ namespace {
 		LPDIRECT3DTEXTURE9 shadowMap,
 		LPDIRECT3DCUBETEXTURE9 cubeMap,
 		bool ShadowCaster,
-		bool ShadowRecive,
-		bool Cubeflg
+		bool ShadowRecive
 	)
 	{
 		D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
@@ -40,11 +39,11 @@ namespace {
 		D3DXMatrixMultiply(&viewProj, viewMatrix, projMatrix);
 		//テクニックを設定。
 		{
-			if (Cubeflg/*cubeMap!=NULL*/)
+			if (cubeMap!=NULL)//キューブテクスチャが有り
 			{
 				pEffect->SetTechnique("SkyModel");
 			}
-			else if (pMeshContainer->pSkinInfo != NULL)
+			else if (pMeshContainer->pSkinInfo != NULL)//スキン有り
 			{
 
 				if (ShadowCaster)
@@ -56,7 +55,7 @@ namespace {
 					pEffect->SetTechnique("SkinModel");
 				}
 			}
-			else if(pMeshContainer->pSkinInfo == NULL)
+			else if(pMeshContainer->pSkinInfo == NULL)//スキン無し
 			{
 				if (ShadowCaster) {
 					pEffect->SetTechnique("ShadowNoSkinModel");
@@ -86,7 +85,7 @@ namespace {
 				sizeof(Light)
 			);
 		}
-
+		//キューブマップをシェーダーに転送
 		if (cubeMap != NULL)
 		{
 			pEffect->SetTexture("g_cubeTex", cubeMap);
@@ -103,16 +102,16 @@ namespace {
 		//	pEffect->SetBool("g_isHasSpecularMap", false);
 		//}
 
-		//if (normalMap != NULL)
-		//{
-		//	//法線マップがあるから、シェーダーに転送
-		//	pEffect->SetTexture("g_normalTexture", normalMap);
-		//	//法線マップのフラグをtrueにする。
-		//	pEffect->SetBool("g_isHasNormalMap", true);
-		//}
-		/*else {
+		if (normalMap != NULL)
+		{
+			//法線マップがあるから、シェーダーに転送
+			pEffect->SetTexture("g_normalTexture", normalMap);
+			//法線マップのフラグをtrueにする。
+			pEffect->SetBool("g_isHasNormalMap", true);
+		}
+		else {
 			pEffect->SetBool("g_isHasNormalMap", false);
-		}*/
+		}
 
 
 		if (ShadowRecive)
@@ -144,7 +143,7 @@ namespace {
 				}
 				//D3DXVECTOR4 CameraEye = game->GetCamera()->GetEyePt();//カメラの視点の座標
 				//CameraEye.w = 1.0f;
-				pEffect->SetVector("Eye", (D3DXVECTOR4*)&game->GetCamera()->GetEyePt()/*&CameraEye*/);
+				pEffect->SetVector("Eye", (D3DXVECTOR4*)&g_game->GetCamera()->GetEyePt()/*&CameraEye*/);
 				
 				pEffect->SetMatrixArray("g_mWorldMatrixArray", g_pBoneMatrices, pMeshContainer->NumPaletteEntries);
 				pEffect->SetInt("g_numBone", pMeshContainer->NumInfl);
@@ -207,8 +206,7 @@ namespace {
 		LPDIRECT3DTEXTURE9 shadowMap,
 		LPDIRECT3DCUBETEXTURE9 cubeMap,
 		bool ShadowCaster,
-		bool ShadowRecive,
-		bool Cubeflg
+		bool ShadowRecive
 	)
 	{
 		LPD3DXMESHCONTAINER pMeshContainer;
@@ -231,8 +229,7 @@ namespace {
 				shadowMap,
 				cubeMap,
 				ShadowCaster,
-				ShadowRecive,
-				Cubeflg
+				ShadowRecive
 				);
 
 			pMeshContainer = pMeshContainer->pNextMeshContainer;
@@ -254,8 +251,7 @@ namespace {
 				shadowMap,
 				cubeMap,
 				ShadowCaster,
-				ShadowRecive,
-				Cubeflg
+				ShadowRecive
 				);
 		}
 
@@ -275,8 +271,7 @@ namespace {
 				shadowMap,
 				cubeMap,
 				ShadowCaster,
-				ShadowRecive,
-				Cubeflg
+				ShadowRecive
 				);
 		}
 	}
@@ -334,8 +329,7 @@ void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)
 			shadowMap,
 			cubeMap,
 			ShadowCaster,
-			ShadowRecive,
-			Cubeflg
+			ShadowRecive
 		);
 	}
 }

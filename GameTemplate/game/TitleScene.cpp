@@ -15,7 +15,7 @@ TitleScene::~TitleScene()
 void TitleScene::Init()
 {
 	g_fade->StartFadeIn();
-	m_Title.Initialize("Assets/Sprite/ÇΩÇ¢Ç∆ÇÈ.jpg",titlepos);
+	m_title.Initialize("Assets/Sprite/ÇΩÇ¢Ç∆ÇÈ.jpg",m_titlePos);
 	//m_Title.Setalfa(10);
 	//m_Title.SetRGB(0, 0, 0);
 	CreateSprite();
@@ -26,8 +26,8 @@ void TitleScene::Init()
 void TitleScene::Update()
 {
 	//if (m_Title == NULL)return;
-	m_Title.Update();
-	pad.Update();
+	m_title.Update();
+	m_pad.Update();
 	/*
 	if (pad.IsTrigger(pad.enButtonStart)) {
 
@@ -45,7 +45,7 @@ void TitleScene::Update()
 			}
 			break;
 		case Run:
-			if (pad.IsTrigger(pad.enButtonStart)||GetAsyncKeyState('S')){
+			if (m_pad.IsTrigger(m_pad.enButtonStart)||GetAsyncKeyState('S')){
 				g_fade->StartFadeOut();
 				m_state = WaitFadeOut;
 			}
@@ -54,7 +54,7 @@ void TitleScene::Update()
 			if (!g_fade->isExecute())
 			{
 				//delete this;
-				scene->SceneChange(scene->CHANGEGAME);
+				g_scene->SceneChange(g_scene->CHANGEGAME);
 				return;
 				
 			}
@@ -70,14 +70,14 @@ void TitleScene::Update()
 void TitleScene::Render()
 {
 	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
-	m_Title.Draw(m_Sprite);
+	m_title.Draw(m_sprite);
 	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 	
 }
 
 HRESULT TitleScene::CreateSprite()
 {
-	if (FAILED(D3DXCreateSprite(g_pd3dDevice, &m_Sprite)))
+	if (FAILED(D3DXCreateSprite(g_pd3dDevice, &m_sprite)))
 	{
 		MessageBox(0, TEXT("ÉXÉvÉâÉCÉgçÏê¨é∏îs"), NULL, MB_OK);
 		return E_FAIL;//é∏îsï‘ãp

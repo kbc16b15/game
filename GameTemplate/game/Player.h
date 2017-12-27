@@ -33,57 +33,57 @@ public:
 	//プレイヤー座標の取得
 	D3DXVECTOR3 Getpos()
 	{
-		return characterController.GetPosition();
+		return m_characterController.GetPosition();
 	}
 	//座標セット
 	void Setpos(D3DXVECTOR3 pos)
 	{
-		position = pos;
+		m_position = pos;
 
 	}
 	//プレイヤーのジャンプフラグ設定
 	void SetJumpflg(bool Jump)
 	{
-		Jumpflg = Jump;
+		m_jumpflg = Jump;
 	}
 	//プレイヤーの移動速度を設定
 	void AddSpeed(D3DXVECTOR3 addpos)
 	{
-		characterController.SetMoveSpeed(addpos);
-		characterController.Execute();
+		m_characterController.SetMoveSpeed(addpos);
+		m_characterController.Execute();
 	}
 	//プレイヤーの移動速度の取得
 	D3DXVECTOR3 GetSpeed()
 	{
-		return characterController.GetMoveSpeed();
+		return m_characterController.GetMoveSpeed();
 	}
 	//ダメージ通知
 	void SetDamage()
 	{
-		if (DamageTime > 0) { return; }
-		Damageflg = true;
+		if (m_damageTime > 0) { return; }
+		m_damageflg = true;
 	}
 
 	//移動の停止
 	void PlayerMoveSet(bool Move)
 	{
-		MoveStop = Move;
+		m_moveStop = Move;
 	}
 	//プレイヤーの死亡アニメーションの終了
 	bool PlayerDeath()
 	{
-		return Deathflg;
+		return m_deathflg;
 	}
 	//オブジェクトとの当たった判定
 	bool GetObjectHit()
 	{
-		return ObjectHit;
+		return m_objectHit;
 	}
 
 	//オブジェクトとの当たった判定の設定
 	void SetObjectHit(bool hit)
 	{
-		ObjectHit = hit;
+		m_objectHit = hit;
 	}
 
 	////重力の設定
@@ -104,42 +104,39 @@ public:
 private:
 	enum PlayerState						//プレイヤーアニメーションの状態
 	{Stand, Move, Dash, Jump,Damage,Dead};
-	PlayerState			m_State=Stand;
-	PlayerState			workState = Stand;
-	bool				IsDead = false;		//死亡アニメーションフラグ
-	bool				Isrun=false;		//走るアニメーションフラグ
-	bool				Ismove=false;		//歩行アニメーションフラグ
-	bool				Isjump=false;		//ジャンプアニメーションフラグ
-	bool				Jumpflg = false;	//ジャンプアニメーションフラグ
-	bool				IsDamage = false;	//ダメージアニメーションフラグ
-	bool				IsStand = false;	//待機アニメーションフラグ
-	bool				Damageflg = false;	//ダメージアニメーションフラグ
-	bool				Deathflg = false;	//死亡フラグ
-	int					DamageTime = 0;		//ダメージ間隔
-	SkinModel			skinModel;							//スキンモデル
-	SkinModelData		skinModelData;						//スキンモデルデータ
-	Light				light;								//ライト
-	Animation			animation;							//アニメーション
-	D3DXVECTOR3			position = { 0.0f,0.0f,0.0f };		//座標
-	D3DXVECTOR3			scale = { 1.0f,1.0f,1.0f };			//拡大
-	D3DXQUATERNION		rotation = { 0.0f,0.0f,0.0f,1.0f };	//回転
-	CharacterController	characterController;				//キャラクターコントローラー
-	D3DXVECTOR3			moveSpeed = { 0.0f,0.0f,0.0f };		//移動速度
-	Pad					pad;								//パッド
-	LPDIRECT3DTEXTURE9	normalMap = NULL;					//法線マップ
-	LPDIRECT3DTEXTURE9	specularMap = NULL;					//スペキュラマップ
-	D3DXVECTOR3			Addvector = { 0.0f,0.0f,0.0f };		//加算速度
-	float				m_Gravity = -10.0f;					//重力
-	//bool				m_isGravity = false;				//反転フラグ
+	PlayerState			m_state=Stand;
+	PlayerState			m_workState = Stand;
+	bool				m_isDead = false;		//死亡アニメーションフラグ
+	bool				m_isrun=false;			//走るアニメーションフラグ
+	bool				m_ismove=false;			//歩行アニメーションフラグ
+	bool				m_isjump=false;			//ジャンプアニメーションフラグ
+	bool				m_jumpflg = false;		//ジャンプアニメーションフラグ
+	bool				m_isDamage = false;		//ダメージアニメーションフラグ
+	bool				m_isStand = false;		//待機アニメーションフラグ
+	bool				m_damageflg = false;	//ダメージアニメーションフラグ
+	bool				m_deathflg = false;		//死亡フラグ
+	int					m_damageTime = 0;		//ダメージ間隔
+	SkinModel			m_skinModel;							//スキンモデル
+	SkinModelData		m_skinModelData;						//スキンモデルデータ
+	Light				m_light;								//ライト
+	Animation			m_animation;							//アニメーション
+	D3DXVECTOR3			m_position = { 0.0f,0.0f,0.0f };		//座標
+	D3DXVECTOR3			m_scale = { 1.0f,1.0f,1.0f };			//拡大
+	D3DXQUATERNION		m_rotation = { 0.0f,0.0f,0.0f,1.0f };	//回転
+	CharacterController	m_characterController;					//キャラクターコントローラー
+	D3DXVECTOR3			m_moveSpeed = { 0.0f,0.0f,0.0f };		//移動速度
+	Pad					m_pad;									//パッド
+	LPDIRECT3DTEXTURE9	m_normalMap = NULL;						//法線マップ
+	LPDIRECT3DTEXTURE9	m_specularMap = NULL;					//スペキュラマップ
+	D3DXVECTOR3			m_Addvector = { 0.0f,0.0f,0.0f };		//加算速度
+	float				m_Gravity = -10.0f;						//重力
+	//bool				m_isGravity = false;					//反転フラグ
 	//float				gAngle = 0.0f;
 	//bool				Grotflg = true;
-	bool				MoveStop = false;
-	bool				ObjectHit = false;
-	bool				maxSflg = false;
-	D3DXVECTOR3 Dir = { 0.0f,0.0f,0.0f };//かんせー
-	
+	bool				m_moveStop = false;
+	bool				m_objectHit = false;
+	bool				m_maxSflg = false;
+	D3DXVECTOR3			m_dir = { 0.0f,0.0f,0.0f };				//かんせー
 	Sound*				m_JumpSound = nullptr;
 
 };
-
-//extern Player*		g_player;

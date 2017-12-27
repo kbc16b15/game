@@ -209,8 +209,7 @@ float4 PSMain( VS_OUTPUT In ) : COLOR
 	
 	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0);
 	float3 normal = In.Normal;
-	float4 lig = DiffuseLight(normal);
-	color *= lig;
+
 	
 	//float3 eye=normalize(Eye-In.world.xyz);//カメラからオブジェクトへの方向？
 	//float3 L = -g_light.diffuseLightDir[0];//ライト
@@ -219,8 +218,27 @@ float4 PSMain( VS_OUTPUT In ) : COLOR
 	//lig+=pow(max(0.0f,dot(R,eye)),2.0f);//累乗計算
 	//color *= lig;
 
-	
-	
+	if(g_isHasNormalMap){
+		//法線マップがある。
+		float3 tangent = normalize(In.Tangent);
+		float3 binSpaceNormal = tex2D( g_normalMapSampler, In.Tex0);
+		float4x4 tangentSpaceMatrix;
+		//法線とタンジェントから従法線を求める
+		float3 biNormal = normalize( cross( tangent, normal) );
+		//タンジェントスペースからワールドスペースに変換する行列を求める。
+		tangentSpaceMatrix[0] = float4( tangent, 0.0f);
+		tangentSpaceMatrix[1] = float4( biNormal, 0.0f);
+		tangentSpaceMatrix[2] = float4( normal, 0.0f);
+		tangentSpaceMatrix[3] = float4( 0.0f, 0.0f, 0.0f, 1.0f );
+		//-1.0～1.0の範囲にマッピングする。
+		binSpaceNormal = (binSpaceNormal * 2.0f)- 1.0f;
+		//タンジェントスペースからワールドスペースの法線に変換する。
+		normal = tangentSpaceMatrix[0] * binSpaceNormal.x + tangentSpaceMatrix[1] * binSpaceNormal.y + tangentSpaceMatrix[2] * binSpaceNormal.z; 
+		
+
+	}
+		float4 lig = DiffuseLight(normal);
+	color *= lig;
 
 	float Zwrite = In.lightViewPos.z/In.lightViewPos.w;
 	

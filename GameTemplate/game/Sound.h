@@ -1,5 +1,6 @@
 #pragma once
 #include "WaveFile.h"
+#include "SoundEngine.h"
 #define INPUTCHANNELS 2  // number of source channels
 #define OUTPUTCHANNELS 8	//最大出力チャンネル数。
 class Sound
@@ -92,7 +93,7 @@ public:
 private:
 	void Play(char* buff, unsigned int bufferSize);
 private:
-
+	SoundEngine* SE;
 	//IXAudio2*				m_xAudio2 = nullptr;
 	//IXAudio2MasteringVoice* m_masteringVoice = nullptr;
 	//XAUDIO2_VOICE_STATE		xa2state;

@@ -13,14 +13,14 @@ Fade::~Fade()
 
 void Fade::Start()
 {
-	m_fadetex.Initialize("Assets/Sprite/LL.png",fadepos);
+	m_fadetex.Initialize("Assets/Sprite/LL.png",m_fadepos);
 	CreateSprite();
-	Active = false;
+	m_active = false;
 }
 
 void Fade::Update()
 {
-	if (Active)
+	if (m_active)
 	{
 		m_fadetex.Update();
 		if (m_isExecute)
@@ -34,24 +34,24 @@ void Fade::Update()
 				{
 					float t = m_timer / FADE_TIME;
 					m_fadetex.Setalfa(min(t, 1.0f));
-					Outtimer += m_frameDeltaTime;
+					m_outtimer += m_frameDeltaTime;
 			
 				}
-				else if (Outtimer < 0.8)
+				else if (m_outtimer < 0.8)
 				{
 					m_fadetex.Setalfa(1.0f);
-					Outtimer += m_frameDeltaTime;
+					m_outtimer += m_frameDeltaTime;
 				}
 				else
 				{
 					m_fadetex.Setalfa(1.0f);
 					m_isExecute = false;
-					Outtimer = 0;
+					m_outtimer = 0;
 				}
 				break;
 			case eFadeIn:
-				Outtimer += m_frameDeltaTime;
-				if (Outtimer < 1.5) { return; }
+				m_outtimer += m_frameDeltaTime;
+				if (m_outtimer < 1.5) { return; }
 
 				m_timer += m_frameDeltaTime;
 				if (m_timer < FADE_TIME)
@@ -62,10 +62,10 @@ void Fade::Update()
 				else
 				{
 					m_fadetex.Setalfa(0.0f);
-					Active = false;
+					m_active = false;
 					m_timer = FADE_TIME;
 					m_isExecute = false;
-					Outtimer = 0;
+					m_outtimer = 0;
 				}
 				break;
 
@@ -73,7 +73,7 @@ void Fade::Update()
 
 			if (!m_fadetex.Getalfa() == 1.0f || !m_fadetex.Getalfa() == 0.0f)
 			{
-				m_fadetex.Initialize("Assets/Sprite/LL.png", fadepos);
+				m_fadetex.Initialize("Assets/Sprite/LL.png", m_fadepos);
 				//CreateSprite();
 			}
 		}
@@ -82,7 +82,7 @@ void Fade::Update()
 
 void Fade::Draw()
 {
-	if (Active)
+	if (m_active)
 	{
 		//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 	
@@ -91,7 +91,7 @@ void Fade::Draw()
 		g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
 		//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
-		m_fadetex.Draw(m_Sprite);
+		m_fadetex.Draw(m_sprite);
 		//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 		g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	/*	g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, FALSE);
@@ -104,7 +104,7 @@ void Fade::Draw()
 
 HRESULT Fade::CreateSprite()
 {
-	if (FAILED(D3DXCreateSprite(g_pd3dDevice, &m_Sprite)))
+	if (FAILED(D3DXCreateSprite(g_pd3dDevice, &m_sprite)))
 	{
 		MessageBox(0, TEXT("ÉXÉvÉâÉCÉgçÏê¨é∏îs"), NULL, MB_OK);
 		return E_FAIL;//é∏îsï‘ãp

@@ -16,36 +16,36 @@ public:
 	//テクスチャの取得
 	LPDIRECT3DTEXTURE9 GetTexture()
 	{
-		return renderTarget.GetTexture();
+		return m_renderTarget.GetTexture();
 	}
 	//ライトビューの視点の設定
 	void SetviewPosition(D3DXVECTOR3 viewPos)
 	{
-		viewPosition = viewPos;
+		m_viewPosition = viewPos;
 	}
 	//ライトビューの注視点の設定
 	void SetviewTarget(D3DXVECTOR3 vTarget)
 	{
-		viewTarget = vTarget;
+		m_viewTarget = vTarget;
 	}
 	//ライトプロジェクション行列の取得
 	D3DXMATRIX GetlightProjectionMatrix()
 	{
-		return lightProjectionMatrix;
+		return m_lightProjectionMatrix;
 	}
 	//ライトビュー行列の取得
 	D3DXMATRIX GetlightViewMatrix()
 	{
-		return lightViewMatrix;
+		return m_lightViewMatrix;
 	}
 
 
 private:
-	CRenderTarget	renderTarget;//シャドウマップを書きこむレンダリングターゲット
-	D3DXMATRIX	lightViewMatrix;//ライトビューマトリクス。カメラ空間に変換
-	D3DXMATRIX	lightProjectionMatrix;//ライトプロジェクションマトリクス。スクリーン空間に変換
-	D3DXVECTOR3	viewPosition;//ライトビューの視点。
-	D3DXVECTOR3 viewTarget;//ライトビューの注視点。
+	CRenderTarget	m_renderTarget;//シャドウマップを書きこむレンダリングターゲット
+	D3DXMATRIX	m_lightViewMatrix;//ライトビューマトリクス。カメラ空間に変換
+	D3DXMATRIX	m_lightProjectionMatrix;//ライトプロジェクションマトリクス。スクリーン空間に変換
+	D3DXVECTOR3	m_viewPosition;//ライトビューの視点。
+	D3DXVECTOR3 m_viewTarget;//ライトビューの注視点。
 	//SkinModel	skinModel;
 };
 

@@ -14,6 +14,8 @@
 #include "ShadowMap.h"
 #include "Sound.h"
 #include "SoundEngine.h"
+#include "RenderTarget.h"
+#include "bloom.h"
 //#include "BaseScene.h"
 //#include "IGameObject.h"
 //#include "GameObjectManager.h"
@@ -54,94 +56,104 @@ public:
 	//カメラの取得
 	Camera* GetCamera()
 	{
-		return &gameCamera.Getcamera();
+		return &m_gameCamera.Getcamera();
 		//return camera;
 	}
 	//プレイヤーの取得
 	Player* GetPlayer()
 	{
-		return player;
+		return m_player;
 	}
 	//マップの取得
-	//Map* GetMap()
-	//{
-	//	return &map;
-	//}
+	Map* GetMap()
+	{
+		return m_map;
+	}
 
 	//弾の追加
 	void AddBullets(Bullet* bullet)
 	{
-		Bullets.push_back(bullet);
+		m_bullets.push_back(bullet);
 	}
 	//弾の取得
 	std::list<Bullet*> GetBullet()
 	{
-		return Bullets;
+		return m_bullets;
 	}
 	//敵の追加
 	void AddEnemy(Enemy* enemy)
 	{
-		enem.push_back(enemy);
+		m_enem.push_back(enemy);
 	}
 	//追従敵の追加
 	void AddTEnemy(trackingEnemy* enemy)
 	{
-		Tenem.push_back(enemy);
+		m_tenem.push_back(enemy);
+	}
+
+	//追従敵の取得
+	std::vector<trackingEnemy*> GetTEnemy()
+	{
+		return m_tenem;
 	}
 	//スプライト生成関数
 	HRESULT CreateSprite();
 	//ダメージ処理
 	void Damage(int dame)
 	{
-		Hpnum -= dame;
+		m_hpNum -= dame;
 	}
 	//体力の回復
 	void Heal(int healval)
 	{
-		Hpnum += healval;
-		if (Hpnum >= HpMaxnum) { Hpnum = HpMaxnum; }
+		m_hpNum += healval;
+		if (m_hpNum >= m_hpMaxNum) { m_hpNum = m_hpMaxNum; }
 	}
 	//HPの取得
 	int GetHp()
 	{
-		return Hpnum;
+		return m_hpNum;
 	}
 private:
+	//フェード
 	enum EState {
 		WaitFadeIn,
 		Run,
-		WaitFadeOut,
+		WaitFadeOut
 	};
-
+	//選択
 	enum Select {
 		NO,
 		START,
 		BREAK,
 	};
-	Select GAME = START;
-	EState      m_state = Run;
-	//GameObjectManager GoMgr;
-	Sound*			m_Sound=nullptr;
-	SoundEngine*	m_SoundEngine=nullptr;
-	std::list<Bullet*>	Bullets;				//バレットのリスト
-	std::vector<Enemy*>	enem;					//エネミーのvector
-	std::vector<trackingEnemy*> Tenem;			//追従エネミー
-	gameCamera			gameCamera;				//ゲームカメラ
-	//Camera*			camera;					//カメラ
-	Player*				player;					//プレイヤー
-	Map*				map;					//マップ
-	int				HpMaxnum = 3;					//最大HP量
-	int				Hpnum = 3;					//HP量
-	HUD				m_Hud[3];					//画像表示の変数
-	HUD				Key;						//鍵
-	HUD				rock;
-	LPD3DXSPRITE	m_Sprite;					//スプライト
-	D3DXVECTOR2 Hppos = { 120.0f,80.0f };		//HP座標
-	D3DXVECTOR2 Keypos = { 120.0f, 200.0f };	//鍵座標
-	D3DXVECTOR2 rockpos = { 700.0f,250.0f };	//照準座標
-	bool Gunflg = false;
-	Pad				m_pad;
-	D3DXVECTOR3 rockCamera;
+	//GameObjectManager GoMgr;						//
+	CRenderTarget*		m_renderTarget;				//ポストエフェクト用のレンダリングターゲット？
+	Select				GAME = START;				//選択
+	EState				m_state = Run;				//フェードの状態
+	Sound*				m_sound=nullptr;			//サウンド
+	SoundEngine*		m_soundEngine=nullptr;		//サウンドエンジン
+	std::list<Bullet*>	m_bullets;					//バレットのリスト
+	std::vector<Enemy*>	m_enem;						//エネミーのvector
+	std::vector<trackingEnemy*> m_tenem;			//追従エネミー
+	gameCamera			m_gameCamera;				//ゲームカメラ
+	//Camera*			camera;						//カメラ
+	Player*				m_player;					//プレイヤー
+	Map*				m_map;						//マップ
+	Bloom				m_bloom;					//ブルーム
+	int					m_hpMaxNum = 3;				//最大HP量
+	int					m_hpNum = 3;				//HP量
+	HUD					m_hud[3];					//画像表示の変数
+	HUD					m_key;						//鍵
+	HUD					m_rock;						//
+	LPD3DXSPRITE		m_sprite;					//スプライト
+	D3DXVECTOR2			m_hppos = { 120.0f,80.0f };		//HP座標
+	D3DXVECTOR2			m_keypos = { 120.0f, 200.0f };	//鍵座標
+	D3DXVECTOR2			m_rockpos = { 700.0f,250.0f };	//照準座標
+	bool				m_gunflg = false;
+	bool				m_nextflg = false;
+	Pad					m_pad;
+	D3DXVECTOR3			m_rockCamera;
 };
 
-extern Game* game;
+extern Game* g_game;

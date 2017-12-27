@@ -30,12 +30,12 @@ namespace {
 			}
 			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Damage)//ユーザー定義のコリジョン属性
 			{
-				game->GetPlayer()->SetDamage();//プレイヤーにダメージ
+				g_game->GetPlayer()->SetDamage();//プレイヤーにダメージ
 				//ObjectHit = true;
 			}
 			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_ObjectHit)//ユーザー定義のコリジョン属性
 			{
-				game->GetPlayer()->SetObjectHit(true);
+				g_game->GetPlayer()->SetObjectHit(true);
 			}
 			//衝突点の法線を引っ張ってくる。
 			D3DXVECTOR3 hitNormalTmp = *(D3DXVECTOR3*)&convexResult.m_hitNormalLocal;

@@ -8,28 +8,28 @@ Enemy::Enemy()
 
 Enemy::~Enemy()
 {
-	skinModelData.Release();
+	m_skinModelData.Release();
 }
 
 void Enemy::Start(D3DXVECTOR3 pos)
 {
-	position = pos;
-	skinModelData.LoadModelData("Assets/modelData/Enemy.X", NULL);
-	skinModel.Init(&skinModelData);
+	m_position = pos;
+	m_skinModelData.LoadModelData("Assets/modelData/Enemy.X", NULL);
+	m_skinModel.Init(&m_skinModelData);
 
 	//ライトを初期化。
-	light.SetDiffuseLightDirection(0, D3DXVECTOR4(0.707f, 0.0f, -0.707f, 1.0f));
-	light.SetDiffuseLightDirection(1, D3DXVECTOR4(-0.707f, 0.0f, -0.707f, 1.0f));
-	light.SetDiffuseLightDirection(2, D3DXVECTOR4(0.0f, 0.707f, -0.707f, 1.0f));
-	light.SetDiffuseLightDirection(3, D3DXVECTOR4(0.0f, -0.707f, -0.707f, 1.0f));
+	m_light.SetDiffuseLightDirection(0, D3DXVECTOR4(0.707f, 0.0f, -0.707f, 1.0f));
+	m_light.SetDiffuseLightDirection(1, D3DXVECTOR4(-0.707f, 0.0f, -0.707f, 1.0f));
+	m_light.SetDiffuseLightDirection(2, D3DXVECTOR4(0.0f, 0.707f, -0.707f, 1.0f));
+	m_light.SetDiffuseLightDirection(3, D3DXVECTOR4(0.0f, -0.707f, -0.707f, 1.0f));
 
-	light.SetDiffuseLightColor(0, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	light.SetDiffuseLightColor(1, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	light.SetDiffuseLightColor(2, D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
-	light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
+	m_light.SetDiffuseLightColor(0, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
+	m_light.SetDiffuseLightColor(1, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
+	m_light.SetDiffuseLightColor(2, D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
+	m_light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
+	m_light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
 
-	skinModel.SetLight(&light);
+	m_skinModel.SetLight(&m_light);
 
 }
 
@@ -40,13 +40,13 @@ void Enemy::Update()
 	//scale.y -= 0.02f;
 	CubeCollision Cmass;
 	//position.y += 0.1f;
-	if (Cmass.Cubemass(position, game->GetPlayer()->Getpos(),0.3f,0.3f))
+	if (Cmass.Cubemass(m_position, g_game->GetPlayer()->Getpos(),0.3f,0.3f))
 	{
-		game->GetPlayer()->SetJumpflg(true);
-		IsDead = true;
+		g_game->GetPlayer()->SetJumpflg(true);
+		m_isDead = true;
 	}
 	//position.y -= 0.1f;
-	skinModel.UpdateWorldMatrix(position,D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0), scale);
+	m_skinModel.UpdateWorldMatrix(m_position,D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0), m_scale);
 	Dead();
 }
 
@@ -67,34 +67,34 @@ void Enemy::Move()
 
 void Enemy::EnemyBullet()
 {
-	D3DXVECTOR3 pos=game->GetPlayer()->Getpos();
-	if (pos.x<position.x){ return; }//プレイヤーが左側にいる時だけ？
-	if (IsDead) { return; }
+	D3DXVECTOR3 pos=g_game->GetPlayer()->Getpos();
+	if (pos.x<m_position.x){ return; }//プレイヤーが左側にいる時だけ？
+	if (m_isDead) { return; }
 	
-	BulletTime--;
-	if (BulletTime < 0)
+	m_bulletTime--;
+	if (m_bulletTime < 0)
 	{
 		Bullet* bullet = new Bullet();
-		bullet->Start(position, {10.0f,0.0f,0.0f},1);
-		game->AddBullets(bullet);
-		BulletTime = 150;
+		bullet->Start(m_position, {10.0f,0.0f,0.0f},1);
+		g_game->AddBullets(bullet);
+		m_bulletTime = 150;
 	}
 }
 
 void Enemy::Draw()
 {
-	skinModel.Draw(&game->GetCamera()->GetViewMatrix(), &game->GetCamera()->GetProjectionMatrix());
+	m_skinModel.Draw(&g_game->GetCamera()->GetViewMatrix(), &g_game->GetCamera()->GetProjectionMatrix());
 }
 
 void Enemy::Dead()
 {
-	if (!IsDead) { return; }
-	scale.y -= 0.01f;
-	DeadTime--;
-	if (scale.y < 0.0f)
+	if (!m_isDead) { return; }
+	m_scale.y -= 0.01f;
+	m_deadTime--;
+	if (m_scale.y < 0.0f)
 	{
 		//characterController.RemoveRigidBoby();
-		IsDeath = true;
+		m_isDeath = true;
 	}
 	//IsDeath = true;
 }

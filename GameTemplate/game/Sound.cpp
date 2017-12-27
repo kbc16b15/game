@@ -13,7 +13,7 @@ Sound::Sound()
 Sound::~Sound()
 {
 	Release();
-
+	delete SE;
 }
 
 void Sound::Release()
@@ -51,12 +51,12 @@ void Sound::Release()
 
 void Sound::Init(char* filePath, bool is3DSound)
 {
-	SoundEngine SE;
+	SE = new SoundEngine;
 	//m_waveFile = SoundEngine().GetWaveFileBank().FindWaveFile(0, filePath);
 	if (!m_waveFile) {
 		m_waveFile.reset(new WaveFile);
 		m_waveFile->Open(filePath);
-		m_waveFile->AllocReadBuffer(m_waveFile->GetSize());	//waveファイルのサイズ分の読み込みバッファを確保する。
+		m_waveFile->AllocReadBuffer(m_waveFile->GetSize());//waveファイルのサイズ分の読み込みバッファを確保する。
 		unsigned int dummy;
 		m_waveFile->Read(m_waveFile->GetReadBuffer(), m_waveFile->GetSize(), &dummy);
 		m_waveFile->ResetFile();
@@ -65,7 +65,7 @@ void Sound::Init(char* filePath, bool is3DSound)
 
 	//サウンドボイスソースを作成。
 	
-	SourceVoice = SE.CreateXAudio2SourceVoice(m_waveFile.get(), is3DSound);
+	SourceVoice = SE->CreateXAudio2SourceVoice(m_waveFile.get(), is3DSound);
 }
 
 void Sound::Play(char* buff, unsigned int bufferSize)
@@ -108,7 +108,8 @@ void Sound::UpdateOnMemory()
 	SourceVoice->GetState(&state);
 	if (state.BuffersQueued <= 0) {
 		m_isPlaying = false;
-		if (m_isLoop) {
+		if (m_isLoop)
+		{
 			//ループ。
 			Play(m_isLoop);
 		}
