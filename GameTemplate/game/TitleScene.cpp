@@ -14,8 +14,8 @@ TitleScene::~TitleScene()
 
 void TitleScene::Init()
 {
-	g_fade->StartFadeIn();
-	m_title.Initialize("Assets/Sprite/‚½‚¢‚Æ‚é.jpg",m_titlePos);
+//	g_fade->StartFadeIn();
+	m_title.Initialize("Assets/Sprite/T2.tga",m_titlePos);
 	//m_Title.Setalfa(10);
 	//m_Title.SetRGB(0, 0, 0);
 	CreateSprite();
@@ -28,12 +28,13 @@ void TitleScene::Update()
 	//if (m_Title == NULL)return;
 	m_title.Update();
 	m_pad.Update();
+	
 	/*
 	if (pad.IsTrigger(pad.enButtonStart)) {
 
 		scene->SceneChange();
-	}
-	*/
+	}*/
+	
 
 	switch (GAME){
 	case START:

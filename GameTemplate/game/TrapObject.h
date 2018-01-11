@@ -31,8 +31,9 @@ private:
 	int				m_damageType = STAND;
 	SkinModel		m_model;					//スキンモデル
 	SkinModelData	m_modelData;				//スキンモデルデータ
-	D3DXVECTOR3		m_position;				//座標
-	D3DXQUATERNION	m_rotation;				//回転
+	D3DXVECTOR3		m_position;					//座標
+	D3DXQUATERNION	m_rotation;					//回転
+	D3DXVECTOR3		m_scale;					//拡大
 	Light			m_light;					//ライト
 	MeshCollider	m_meshCollider;			//メッシュコライダー
 	RigidBody		m_rigidBody;				//剛体。

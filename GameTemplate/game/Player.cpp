@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
+#include "MoveCube.h"
+#include "Sound.h"
 
 Player::Player()
 {
@@ -14,6 +16,10 @@ Player::~Player()
 		delete m_JumpSound;
 		m_JumpSound = nullptr;
 	}*/
+	if (m_normalMap != NULL)
+	{
+		m_normalMap->Release();
+	}
 }
 
 void Player::Start(){
@@ -25,7 +31,7 @@ void Player::Start(){
 	m_light.SetDiffuseLightDirection(2, D3DXVECTOR4(0.0f, 0.707f, -0.707f, 1.0f));
 	m_light.SetDiffuseLightDirection(3, D3DXVECTOR4(0.0f, -0.707f, -0.707f, 1.0f));
 
-	m_light.SetDiffuseLightColor(0, D3DXVECTOR4(30.2f, 0.2f, 0.2f, 1.0f));
+	m_light.SetDiffuseLightColor(0, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
 	m_light.SetDiffuseLightColor(1, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
 	m_light.SetDiffuseLightColor(2, D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
 	m_light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
@@ -33,8 +39,6 @@ void Player::Start(){
 	m_skinModelData.LoadModelData("Assets/modelData/Unity2.X", &m_animation);
 	m_skinModel.Init(&m_skinModelData);
 	m_skinModel.SetLight(&m_light);
-
-	//animation.PlayAnimation(Stand);
 
 	//キャラクタコントローラを初期化。
 	m_characterController.Init(0.3f, 0.5f, m_position);
@@ -61,11 +65,31 @@ void Player::Start(){
 		skinModel.SetSpecularMap(specularMap);
 	}*/
 
+	//m_skinModel.SetSpecularlight(true);
+
+	D3DXCreateTextureFromFileA(g_pd3dDevice,
+		"Assets/modelData/utc_nomal.tga",
+		&m_normalMap);
+
+	if (m_normalMap != NULL)
+	{
+		m_skinModel.SetnormalMap(m_normalMap);
+	}
 }
 
 void Player::Update()
 {
 	if (m_deathflg)return;//死んでいたらリターン
+
+	//if (GetAsyncKeyState('Q')) {
+	//	//法線マップのオフ
+	//	m_skinModel.SetnormalMap(NULL);
+	//}
+	//if (GetAsyncKeyState('E')) {
+	//	m_skinModel.SetnormalMap(m_normalMap);
+	//}
+
+	
 	AnimationSet();
 	m_pad.Update();
 	BulletHit();
@@ -244,28 +268,6 @@ void Player::Setangle()
 		m_maxSflg = true;
 	}
 
-	/*m_maxSflg = false;
-	if (Dir.x > 8.0f)
-	{
-		Dir.x = 8.0f;
-		m_maxSflg = true;
-	}
-	else if (Dir.x < -8.0f)
-	{
-		Dir.x = -8.0f;
-		m_maxSflg = true;
-	}
-	if (Dir.z > 8.0f)
-	{
-		Dir.z = 8.0f;
-		m_maxSflg = true;
-	}
-	else if (Dir.z < -8.0f)
-	{
-		Dir.z = -8.0f;
-		m_maxSflg = true;
-	}*/
-
 	m_moveSpeed.x = m_dir.x;
 	m_moveSpeed.z = m_dir.z;
 
@@ -301,7 +303,7 @@ void Player::Setangle()
 
 	if (m_pad.IsTrigger(m_pad.enButtonA) && m_characterController.IsOnGround()) {
 
-			m_JumpSound = new Sound();
+			Sound*	m_JumpSound = new Sound();
 			m_JumpSound->Init("Assets/Sound/jump06.wav");
 			m_JumpSound->SetVolume(0.4f);
 			m_JumpSound->Play(false);
@@ -311,7 +313,7 @@ void Player::Setangle()
 		m_characterController.Jump();
 		m_isjump = true;
 	}
-	/*if (!m_JumpSound->IsPlaying())
+	/*if (!m_JumpSound->IsPlaying()&&m_JumpSound!=nullptr)
 	{
 		delete m_JumpSound;
 		m_JumpSound = nullptr;
@@ -325,19 +327,13 @@ void Player::Setangle()
 		m_jumpflg = false;
 		m_isjump = true;
 	}
-
+	
 
 	//キャラクタが動く速度を設定。
 	m_characterController.SetMoveSpeed(m_moveSpeed);
-	//if(MoveStop)
-	//{
-	//	characterController.SetPosition(Mpos);
-	//}
-	if (!m_moveStop)
-	{
+
 		//キャラクタコントローラーを実行
 		m_characterController.Execute();
-	}
 }
 
 void Player::BulletHit()
@@ -360,7 +356,7 @@ void Player::BulletHit()
 	//プレイヤーとバレット前方の当たり判定
 	if (m_damageflg&&m_damageTime<0)
 	{
-		if (g_game->GetHp() <= 0)
+		if (g_game->GetHp() <= 0 && m_characterController.IsOnGround())
 		{
 			m_isDead = true;
 		}

@@ -41,7 +41,7 @@ void Particle::Init(const SParticleEmitParameter& param)
 	moveSpeed = param.initSpeed;
 
 	//position = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	position = g_game->GetPlayer()->Getpos();
+	position = g_game->GetPlayer()->Getpos();//パーティクルの発生座標
 	float add = ((rand() % 255) - 128) / 128.0f;
 	moveSpeed.x += add*0.3f;
 	moveSpeed.y += add*0.3f;
@@ -103,6 +103,7 @@ void Particle::Init(const SParticleEmitParameter& param)
 
 void Particle::Update() 
 {
+	time--;
 	float deltaTime = 1.0f / 60.0f;
 	moveSpeed.y -= 0.1f;
 	D3DXVECTOR3 add = moveSpeed*deltaTime;
@@ -170,8 +171,8 @@ void Particle::Render(const D3DXMATRIX& viewMatrix, const D3DXMATRIX& projMatrix
 	rot.m[3][3] = 1.0f;
 	mTrans = rot*mTrans;
 	m = mTrans*viewMatrix*projMatrix;
-/*
-	g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+
+	/*g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND,D3DBLEND_SRCALPHA);
 	g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND,D3DBLEND_INVSRCALPHA);*/
 	//αブレンディングを有効にする

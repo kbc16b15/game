@@ -24,6 +24,20 @@ public:
 	{
 		return m_isDeath;
 	}
+
+	/*D3DXMATRIX get()
+	{
+		return Transmat;
+	}
+	D3DXMATRIX rotget()
+	{
+		return rotmat;
+	}
+
+	bool Getparent()
+	{
+		return parent;
+	}*/
 	
 private:
 	enum TEnemyState
@@ -32,6 +46,9 @@ private:
 		FOUND,
 		DEAD
 	};
+	/*D3DXMATRIX Transmat;
+	D3DXMATRIX rotmat;*/
+	//bool				parent = false;
 	int TState = SEACH;
 	SkinModel			m_skinModel;										//スキンモデル
 	SkinModelData		m_skinModelData;									//スキンモデルデータ
@@ -47,8 +64,9 @@ private:
 	int					m_bulletDir = 0;									//バレット打つ方向
 	CharacterController	m_characterController;								//キャラクターコントローラー
 	D3DXVECTOR3			m_moveSpeed = { 0.0f,0.0f,0.0f };					//移動速度
+	LPDIRECT3DTEXTURE9	m_normalMap = NULL;									//法線マップ
 	D3DXVECTOR3			m_direction = { 0.0f,0.0f,1.0f };
-	//bool				moveX = false;
-
+	bool				moveX = false;
+	
 };
 

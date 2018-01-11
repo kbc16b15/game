@@ -54,7 +54,9 @@ void SoundEngine::Init()
 
 	//リバーブエフェクトを作成。
 	flags = 0;
-
+#ifdef _DEBUG
+	flags |= XAUDIO2FX_DEBUG;
+#endif
 	if (FAILED(hr = XAudio2CreateReverb(&m_reverbEffect, flags))) {
 		Release();
 		return;
@@ -82,23 +84,29 @@ void SoundEngine::Init()
 */
 void SoundEngine::Release()
 {
-	if (m_xAudio2 != nullptr) {
-		m_xAudio2->Release();
-		m_xAudio2 = nullptr;
-	}
-	if (m_masteringVoice != nullptr){
-		m_masteringVoice->DestroyVoice();
-		m_masteringVoice = nullptr;
-	}
-	if (m_reverbEffect != nullptr) {
-		m_reverbEffect->Release();
-		m_reverbEffect = nullptr;
-	}
 	if (m_submixVoice != nullptr) {
 		m_submixVoice->DestroyVoice();
 		m_submixVoice = nullptr;
 	}
+
+	
+	if (m_reverbEffect != nullptr) {
+		m_reverbEffect->Release();
+		m_reverbEffect = nullptr;
+	}
+	
+	if (m_masteringVoice != nullptr) {
+		m_masteringVoice->DestroyVoice();
+		m_masteringVoice = nullptr;
+	}
+
+	if (m_xAudio2 != nullptr) {
+		m_xAudio2->Release();
+		m_xAudio2 = nullptr;
+	}
 	CoUninitialize();
+
+
 }
 /*!
 * @brief	XAudio2のソースボイスを作成。

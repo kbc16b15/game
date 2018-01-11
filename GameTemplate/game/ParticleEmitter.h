@@ -13,6 +13,7 @@ struct SParticleEmitParameter
 	float h;
 	float intervalTime;
 	D3DXVECTOR3 initSpeed;
+	//D3DXVECTOR3 position;
 };
 
 //パーティクルの発生器
@@ -31,5 +32,6 @@ private:
 	SParticleEmitParameter	param;
 	std::list<Particle*>	particleList;
 	float					timer;
+	float					deleteTimer;
 };
 

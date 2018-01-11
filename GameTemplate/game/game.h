@@ -54,6 +54,8 @@ public:
 	//次のステージに行く
 	void NextStage();
 
+	//スプライト生成関数
+	HRESULT CreateSprite();
 	//カメラの取得
 	Camera* GetCamera()
 	{
@@ -93,12 +95,11 @@ public:
 	}
 
 	//追従敵の取得
-	std::vector<trackingEnemy*> GetTEnemy()
+	/*std::vector<trackingEnemy*> GetTEnemy()
 	{
 		return m_tenem;
-	}
-	//スプライト生成関数
-	HRESULT CreateSprite();
+	}*/
+
 	//ダメージ処理
 	void Damage(int dame)
 	{
@@ -156,6 +157,8 @@ private:
 	bool				m_nextflg = false;
 	Pad					m_pad;
 	D3DXVECTOR3			m_rockCamera;
+
+
 };
 
 extern Game* g_game;

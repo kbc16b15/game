@@ -3620,7 +3620,7 @@ Frame Hose001 {
     0.000000;0.000000;0.000000;;
 
     TextureFilename Diffuse {
-     "tree1.texture.png";
+     "crate6 normal.tga";
     }
    }
   }

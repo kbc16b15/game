@@ -61,6 +61,12 @@
     <Filter Include="ソース ファイル\math">
       <UniqueIdentifier>{744be983-6b64-4397-b0f5-b808879651e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Primitive">
+      <UniqueIdentifier>{f35ffc1b-5a1e-47c3-ab1a-6fa10088b7c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Particle">
+      <UniqueIdentifier>{92c26a46-feb6-4340-9faf-f4101578892b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -207,20 +213,20 @@
     <ClCompile Include="bloom.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Indexbuffer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Primitive.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Vertexbuffer.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Particle.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Particle</Filter>
     </ClCompile>
     <ClCompile Include="ParticleEmitter.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Indexbuffer.cpp">
+      <Filter>ソース ファイル\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Primitive.cpp">
+      <Filter>ソース ファイル\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertexbuffer.cpp">
+      <Filter>ソース ファイル\Primitive</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -380,20 +386,20 @@
     <ClInclude Include="bloom.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Indexbuffer.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Primitive.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Vertexbuffer.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Particle.h">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Particle</Filter>
     </ClInclude>
     <ClInclude Include="ParticleEmitter.h">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Indexbuffer.h">
+      <Filter>ソース ファイル\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitive.h">
+      <Filter>ソース ファイル\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertexbuffer.h">
+      <Filter>ソース ファイル\Primitive</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

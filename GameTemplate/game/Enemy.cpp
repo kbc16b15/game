@@ -46,7 +46,9 @@ void Enemy::Update()
 		m_isDead = true;
 	}
 	//position.y -= 0.1f;
-	m_skinModel.UpdateWorldMatrix(m_position,D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0), m_scale);
+	D3DXMATRIX Transmat;
+	D3DXMatrixTranslation(&Transmat, m_position.x,m_position.y,m_position.z);
+	//m_skinModel.UpdateWorldMatrix(m_position,D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0), m_scale,g_game->GetPlayer()->get(),g_game->GetPlayer()->rotget());
 	Dead();
 }
 
@@ -67,8 +69,8 @@ void Enemy::Move()
 
 void Enemy::EnemyBullet()
 {
-	D3DXVECTOR3 pos=g_game->GetPlayer()->Getpos();
-	if (pos.x<m_position.x){ return; }//プレイヤーが左側にいる時だけ？
+	//D3DXVECTOR3 pos=g_game->GetPlayer()->Getpos();
+	//if (pos.x<m_position.x){ return; }//プレイヤーが左側にいる時だけ？
 	if (m_isDead) { return; }
 	
 	m_bulletTime--;

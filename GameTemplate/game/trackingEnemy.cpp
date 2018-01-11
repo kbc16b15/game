@@ -10,8 +10,12 @@ trackingEnemy::trackingEnemy()
 
 trackingEnemy::~trackingEnemy()
 {
-	m_characterController.RemoveRigidBoby();
 	m_skinModelData.Release();
+	m_characterController.RemoveRigidBoby();
+	if (m_normalMap != NULL)
+	{
+		m_normalMap->Release();
+	}
 
 }
 
@@ -20,7 +24,7 @@ void trackingEnemy::Start(D3DXVECTOR3 pos, D3DXQUATERNION rot)
 	m_sPos = pos;
 	m_position = pos;
 	m_rotation = rot;
-	m_skinModelData.LoadModelData("Assets/modelData/ghost.X", NULL);
+	m_skinModelData.LoadModelData("Assets/modelData/Drone.X", NULL);
 	m_skinModel.Init(&m_skinModelData);
 
 	//ライトを初期化。
@@ -39,12 +43,25 @@ void trackingEnemy::Start(D3DXVECTOR3 pos, D3DXQUATERNION rot)
 
 	//キャラクタコントローラを初期化。
 	m_characterController.Init(0.8f, 0.5f, m_position);
-	m_characterController.SetGravity(-15.0f);
+	m_characterController.SetGravity(0.0f);
+	
+	m_skinModel.SetSpecularlight(true);
+
+	D3DXCreateTextureFromFileA(g_pd3dDevice,
+		"Assets/modelData/PA_DroneNorm.png",
+		&m_normalMap);
+
+	if (m_normalMap != NULL)
+	{
+		m_skinModel.SetnormalMap(m_normalMap);
+	}
 
 }
 
 void trackingEnemy::Update()
 {
+	if (m_isDead) { return; }
+
 	Move();
 	Dead();
 
@@ -57,7 +74,7 @@ void trackingEnemy::Update()
 
 	//キャラクタコントローラーを実行。
 	m_characterController.Execute();
-
+	
 	m_skinModel.UpdateWorldMatrix(m_characterController.GetPosition(), m_rotation, m_scale);
 
 }
@@ -74,7 +91,6 @@ void trackingEnemy::Move()
 	D3DXVECTOR3 toPos = pos - m_characterController.GetPosition();
 	float len = D3DXVec3Length(&toPos);
 
-
 	float angle = atan2f(m_direction.x, m_direction.z);
 	D3DXVECTOR3 Def;
 	D3DXVec3Subtract(&Def, &m_characterController.GetPosition(), &pos);
@@ -89,23 +105,33 @@ void trackingEnemy::Move()
 		{
 			TState = FOUND;
 		}
-		/*if (Tpos.x<-18.0f)
+
+		if (m_position.x>0.0f)
 		{
 			moveX = true;
 		}
-		else if(Tpos.x>3.0f)
+		else if(m_position.x<-40.0f)
 		{
 			moveX = false;
-		}*/
+		}
+
+		if (moveX)
+		{
+			//m_moveSpeed.x -= 5.5f;
+		}
+		else
+		{
+			//m_moveSpeed.x += 5.5f;
+		}
+
 		break;
 	case FOUND:
-		if (len > 10.0f)
+		if (len > 7.0f)
 		{
 			TState = SEACH;
 		}
-		//position += toPos*0.05f;
-
-		m_moveSpeed += toPos*1.5f;
+		toPos.y = 0.0f;
+		m_moveSpeed += toPos*1.2f;
 
 		s = sin(halfAngle);
 		m_rotation.w = cos(halfAngle);
@@ -113,7 +139,19 @@ void trackingEnemy::Move()
 		m_rotation.y = 1.0f * s;
 		m_rotation.z = 0.0f * s;
 
+		m_bulletTime--;
+		if (m_bulletTime < 0)
+		{
+			Bullet* bullet = new Bullet();
+			bullet->Start(m_characterController.GetPosition(), g_game->GetPlayer()->Getpos(), 1);
+			g_game->AddBullets(bullet);
+			m_bulletTime = 80;
 
+			Sound*	m_beamSound = new Sound();
+			m_beamSound->Init("Assets/Sound/beamgun.wav");
+			m_beamSound->SetVolume(0.4f);
+			m_beamSound->Play(false);
+		}
 		break;
 	default:
 		break;
@@ -131,16 +169,11 @@ void trackingEnemy::Dead()
 	{
 		m_isDeath = true;
 	}
-	/*D3DXVECTOR3 Ppos = characterController.GetPosition();
-	if ((Spos.y-5.0f) >Ppos.y)
-	{
-		IsDeath = true;
-	}*/
-	CubeCollision Cmass;
+	/*CubeCollision Cmass;
 	if (Cmass.Cubemass(m_characterController.GetPosition(), g_game->GetPlayer()->Getpos(), 0.5f, 0.5f))
 	{
 		g_game->GetPlayer()->SetDamage();
 		m_isDeath = true;
-	}
+	}*/
 
 }

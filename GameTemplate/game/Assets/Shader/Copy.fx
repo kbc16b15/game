@@ -20,6 +20,7 @@ sampler_state
     MipFilter = NONE;
     MinFilter = LINEAR;
     MagFilter = LINEAR;
+
 };
 
 

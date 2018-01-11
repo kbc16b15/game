@@ -41,7 +41,7 @@ float4 PSSamplingLuminance( VS_OUTPUT In ) : COLOR
 	//輝度を計算する。tに輝度が入っている。
 	float t = dot( color.xyz, float3(0.2125f, 0.7154f, 0.0721f) );
 	//輝度が1.0以下ならピクセルキル
-	clip(t - 2.00f);
+	clip(t - 1.001f);
 	color.xyz *= (t - 1.0f);
 	return color;
 }
@@ -71,16 +71,21 @@ sampler_state
 float2 g_luminanceTexSize;		//輝度テクスチャのサイズ。
 float2 g_offset;				//オフセット
 float  g_weight[8];				//ガウスフィルタの重み。
+float2 g_renderTargetSize;		//レンダリングターゲットのサイズ。
+float  g_mulYBlurOutputColor;	//Yブラーから出力されるピクセルカラーに乗算されるシェーダー定数。
+
+
 /*!
  * @brief	Xブラー頂点シェーダー。
  */
 VS_BlurOutput VSXBlur(VS_INPUT In)
 {
-	VS_BlurOutput Out;
+	VS_BlurOutput Out = (VS_BlurOutput)0;
 	Out.pos = In.pos;
 	float2 tex = (In.pos * 0.5f) + 0.5f;;
 	tex.y = 1.0f - tex.y;
-	tex += float2( 0.5/g_luminanceTexSize.x, 0.5/g_luminanceTexSize.y);
+	tex += float2(0.5f/g_renderTargetSize.x, 0.5f/g_renderTargetSize.y);
+
 	Out.tex0 = tex + float2( - 1.0f/g_luminanceTexSize.x, 0.0f );
     Out.tex1 = tex + float2( - 3.0f/g_luminanceTexSize.x, 0.0f );
     Out.tex2 = tex + float2( - 5.0f/g_luminanceTexSize.x, 0.0f );
@@ -120,11 +125,12 @@ float4 PSXBlur( VS_BlurOutput In ) : COLOR
  */
 VS_BlurOutput VSYBlur(VS_INPUT In)
 {
-	VS_BlurOutput Out;
+	VS_BlurOutput Out = (VS_BlurOutput)0;
 	Out.pos = In.pos;
 	float2 tex = (In.pos * 0.5f) + 0.5f;
 	tex.y = 1.0f - tex.y;
-	tex += float2( 0.5/g_luminanceTexSize.x, 0.5/g_luminanceTexSize.y);
+	
+	tex += float2(0.5f/g_renderTargetSize.x, 0.5f/g_renderTargetSize.y);
 	Out.tex0 = tex + float2( 0.0f,- 1.0f/g_luminanceTexSize.y  );
     Out.tex1 = tex + float2( 0.0f,- 3.0f/g_luminanceTexSize.y  );
     Out.tex2 = tex + float2( 0.0f,- 5.0f/g_luminanceTexSize.y  );
@@ -157,7 +163,7 @@ float4 PSYBlur( VS_BlurOutput In ) : COLOR
 	                 + tex2D( g_blurSampler, In.tex1 + g_offset ));
 	Color += g_weight[7] * (tex2D( g_blurSampler, In.tex7 )
 	                 + tex2D( g_blurSampler, In.tex0 + g_offset ));
-	return Color;
+	return Color * g_mulYBlurOutputColor;
 }
 /*!
  * @brief	ファイナル。
@@ -168,7 +174,7 @@ VS_OUTPUT VSFinal( VS_INPUT In )
 	Out.pos = In.pos;		//トランスフォーム済み頂点なのでそのまま
 	Out.tex = (In.pos.xy * 0.5f) + 0.5f;
 	Out.tex.y = 1.0f - Out.tex.y;
-	Out.tex += g_offset;
+//	Out.tex += g_offset;
 	return Out;
 }
 float4 PSFinal( VS_OUTPUT In ) : COLOR

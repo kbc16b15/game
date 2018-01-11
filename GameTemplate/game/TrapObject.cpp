@@ -6,6 +6,7 @@ TrapObject::TrapObject(int Damagetype,D3DXVECTOR3 RDir)
 {
 	m_rotDir = RDir;
 	m_damageType = Damagetype;
+	m_scale = { 1.0f,1.0f,1.0f };
 }
 
 
@@ -60,6 +61,8 @@ void TrapObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rot
 	m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Damage);
 	//ì¬‚µ‚½„‘Ì‚ð•¨—ƒ[ƒ‹ƒh‚É’Ç‰ÁB
 	g_physicsWorld->AddRigidBody(&m_rigidBody);
+
+	m_model.SetSpecularlight(true);
 }
 
 
@@ -77,32 +80,12 @@ void TrapObject::Update()
 		break;
 	}
 
-	/*std::list<Bullet*> bulletstl = g_game->GetBullet();
-	for (auto bullet : bulletstl)
-	{
-		D3DXVECTOR3 Bulletpos=bullet->Getpos();
-		D3DXVECTOR3 toPos = Bulletpos - g_game->GetPlayer()->Getpos();
-		float len = D3DXVec3Length(&toPos);
-		if (len < 0.8f)
-		{
-			rotflg = true;
-		}
-
-	}*/
-
-	//D3DXVECTOR3 toPos = position - g_game->GetPlayer()->Getpos();
-	//float len = D3DXVec3Length(&toPos);
-	//if (len < 0.8f)
-	//{
-	//	rotflg = true;
-	//}
-
 	//„‘Ì‚ÌˆÚ“®ˆ—	
 	btTransform& Ttra = m_rigidBody.GetBody()->getWorldTransform();
 	Ttra.setOrigin({ m_position.x,m_position.y,m_position.z });
 	Ttra.setRotation({ m_rotation.x,m_rotation.y,m_rotation.z,m_rotation.w });
 	
-	m_model.UpdateWorldMatrix(m_position, m_rotation, { 1.0f,1.0f,1.0f, });
+	m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 
 }
 

@@ -10,9 +10,10 @@ public:
 
 	void UpdateWeight(float dispersion);
 private:
+	static const int MGF_DOWN_SAMPLE_COUNT = 5;
 	LPD3DXEFFECT effect;
 	CRenderTarget luminanceRenderTarget;
-	CRenderTarget downSamplingRenderTarget[2];
+	CRenderTarget downSamplingRenderTarget[MGF_DOWN_SAMPLE_COUNT][2];
 	static const int NUM_WEIGHT = 8;
 	float weights[NUM_WEIGHT];
 };

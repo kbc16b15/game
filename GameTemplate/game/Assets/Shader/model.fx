@@ -20,6 +20,8 @@ float4x4 g_viewlightMatrix;
 float4x4 g_projlightMatrix;
 
 bool g_Reciver;
+bool g_isSpecularlight;
+float g_Scroll;
 
 float3 Eye;				//カメラ座標
 bool g_isHasNormalMap;			//法線マップ保持している？
@@ -195,7 +197,6 @@ VS_OUTPUT VSMain( VS_INPUT In, uniform bool hasSkin )
 	  	//o.lightViewPos=mul(worldPos,g_viewlightMatrix);
 	   	o.lightViewPos=mul(o.lightViewPos,g_projlightMatrix);
        }
-
     return o;
 }
 
@@ -205,23 +206,20 @@ VS_OUTPUT VSMain( VS_INPUT In, uniform bool hasSkin )
  */
 float4 PSMain( VS_OUTPUT In ) : COLOR
 {
-
-	
-	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0);
+	float4 color;
+	if(g_isHasNormalMap){
+		color = tex2D(g_diffuseTextureSampler, In.Tex0+ float2( g_Scroll, 0.0f ) );
+	}else
+	{
+		color = tex2D(g_diffuseTextureSampler, In.Tex0);
+	}
 	float3 normal = In.Normal;
-
 	
-	//float3 eye=normalize(Eye-In.world.xyz);//カメラからオブジェクトへの方向？
-	//float3 L = -g_light.diffuseLightDir[0];//ライト
-	//float3 N = normal.xyz;//法線
-	//float3 R = -L+2.0f*dot(L,N)*N;
-	//lig+=pow(max(0.0f,dot(R,eye)),2.0f);//累乗計算
-	//color *= lig;
 
 	if(g_isHasNormalMap){
 		//法線マップがある。
 		float3 tangent = normalize(In.Tangent);
-		float3 binSpaceNormal = tex2D( g_normalMapSampler, In.Tex0);
+		float3 binSpaceNormal = tex2D( g_normalMapSampler, In.Tex0+ float2( g_Scroll, 0.0f ) );
 		float4x4 tangentSpaceMatrix;
 		//法線とタンジェントから従法線を求める
 		float3 biNormal = normalize( cross( tangent, normal) );
@@ -235,11 +233,22 @@ float4 PSMain( VS_OUTPUT In ) : COLOR
 		//タンジェントスペースからワールドスペースの法線に変換する。
 		normal = tangentSpaceMatrix[0] * binSpaceNormal.x + tangentSpaceMatrix[1] * binSpaceNormal.y + tangentSpaceMatrix[2] * binSpaceNormal.z; 
 		
-
 	}
-		float4 lig = DiffuseLight(normal);
+	
+	
+	float4 lig = DiffuseLight(normal);	
+	
+	if(g_isSpecularlight)
+	{
+		float3 eye=normalize(Eye-In.world.xyz);//カメラからオブジェクトへの方向？
+		float3 L = -g_light.diffuseLightDir[0];//ライト
+		float3 N = normal.xyz;//法線
+		float3 R = -L+2.0f*dot(L,N)*N;
+		lig+=pow(max(0.0f,dot(R,eye)),2.0f);//累乗計算
+		
+	}
 	color *= lig;
-
+	
 	float Zwrite = In.lightViewPos.z/In.lightViewPos.w;
 	
 	if(g_Reciver==1)
@@ -262,7 +271,9 @@ float4 PSMain( VS_OUTPUT In ) : COLOR
 	//	lig.xyz += spe;
 	//}
 	
-	
+	if(g_isHasNormalMap){
+	return float4(color.rgb,0.2f);
+	}
 	return color;
 }
 

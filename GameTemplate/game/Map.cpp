@@ -21,7 +21,7 @@ struct SMapChipLocInfo {
 };
 
 SMapChipLocInfo mapChipInfo[] = {
-#include "locationinfo5.h"
+#include "locationinfo7.h"
 };
 
 SMapChipLocInfo mapChipInfo2[] = {
@@ -299,7 +299,6 @@ void Map::Init(/*struct SMapChipLocInfo Info[]*/)
 		{
 			trackingEnemy* Tenemy = new trackingEnemy;
 			g_game->AddTEnemy(Tenemy);
-			//work[i].modelName = "ghost.X";
 			Tenemy->Start(work[i].pos, work[i].rotation);
 		}
 		else if (strcmp(work[i].modelName, "unity") == 0)//プレイヤーの初期位置

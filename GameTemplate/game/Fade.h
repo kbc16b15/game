@@ -51,7 +51,7 @@ private:
 	bool				m_isExecute = false;			//フェードを実行中
 	bool				m_active = false;					//アクティブフラグ
 	LPD3DXSPRITE		m_sprite;						//スプライト
-	const D3DXVECTOR2	m_fadepos = { 700.0f,300.0f };	//座標
+	const D3DXVECTOR2	m_fadepos = { 680.0f,300.0f };	//座標
 	const float			FADE_TIME = 0.1f;				//フェード時間
 	float				m_frameDeltaTime = 1.0f / 60.0f;//1フレームの時間
 };

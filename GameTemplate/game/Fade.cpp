@@ -13,7 +13,7 @@ Fade::~Fade()
 
 void Fade::Start()
 {
-	m_fadetex.Initialize("Assets/Sprite/LL.png",m_fadepos);
+	m_fadetex.Initialize("Assets/Sprite/TL.tga",m_fadepos);
 	CreateSprite();
 	m_active = false;
 }
@@ -73,7 +73,7 @@ void Fade::Update()
 
 			if (!m_fadetex.Getalfa() == 1.0f || !m_fadetex.Getalfa() == 0.0f)
 			{
-				m_fadetex.Initialize("Assets/Sprite/LL.png", m_fadepos);
+				m_fadetex.Initialize("Assets/Sprite/TL.tga", m_fadepos);
 				//CreateSprite();
 			}
 		}

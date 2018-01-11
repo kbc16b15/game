@@ -4,6 +4,7 @@
 
 Spring::Spring()
 {
+	scale = { 1.0f,1.0f,1.0f, };
 }
 
 
@@ -14,7 +15,7 @@ Spring::~Spring()
 	modelData.Release();
 }
 
-void Spring::Init(/*SMapChipLocInfo& locInfo*/const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
+void Spring::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 {
 	//mapObject->Init(modelName, pos, rot);
 	//読み込むモデルのファイルパスを作成。
@@ -51,8 +52,8 @@ void Spring::Init(/*SMapChipLocInfo& locInfo*/const char* modelName, D3DXVECTOR3
 
 	rbInfo.collider = &meshCollider;//剛体のコリジョンを設定する。
 	rbInfo.mass = 0.0f;				//質量を0にすると動かない剛体になる。
-	rbInfo.pos = { 0.0f, 0.0f, 0.0f };
-	rbInfo.rot = { 0.0f, 0.0f, 0.0f, 1.0f };
+	rbInfo.pos = position;
+	rbInfo.rot = rotation;
 	//剛体を作成。
 	rigidBody.Create(rbInfo);
 	//作成した剛体を物理ワールドに追加。
@@ -75,7 +76,7 @@ void Spring::Update()
 	{
 		Sflg = false;
 		if (scale.y > 1.0f) { return; }
-		scale.y += 0.1f;
+		scale.y += 0.03f;
 	}
 
 	if (Sflg)
@@ -84,11 +85,11 @@ void Spring::Update()
 		Ppos.y = position.y + 2.0f;
 		g_game->GetPlayer()->Setpos({ position.x,position.y,position.z});
 		g_game->GetPlayer()->SetJumpflg(true);
-		if (scale.y < 0.5f) 
+		if (scale.y < 0.2f) 
 		{
 			return; 
 		}
-		scale.y -= 0.05f;
+		scale.y -= 0.03f;
 	}
 
 	model.UpdateWorldMatrix(position, rotation, scale);

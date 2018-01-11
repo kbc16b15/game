@@ -8,6 +8,7 @@
 extern UINT                 g_NumBoneMatricesMax;
 extern D3DXMATRIXA16*       g_pBoneMatrices ;
 extern ShadowMap*		g_shadowmap;
+float				g_Scroll = 0.0f;
 namespace {
 	void DrawMeshContainer(
 		IDirect3DDevice9* pd3dDevice, 
@@ -24,7 +25,8 @@ namespace {
 		LPDIRECT3DTEXTURE9 shadowMap,
 		LPDIRECT3DCUBETEXTURE9 cubeMap,
 		bool ShadowCaster,
-		bool ShadowRecive
+		bool ShadowRecive,
+		bool Specularlight
 	)
 	{
 		D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
@@ -75,7 +77,8 @@ namespace {
 			pEffect->SetMatrix("g_projectionMatrix", projMatrix);
 			pEffect->SetMatrix("g_viewMatrix", viewMatrix);
 			
-			
+			//スペキュラライト
+			pEffect->SetBool("g_isSpecularlight",Specularlight);
 			//ビュープロジェクション
 			pEffect->SetMatrix("g_mViewProj", &viewProj);
 			//ライト
@@ -112,7 +115,8 @@ namespace {
 		else {
 			pEffect->SetBool("g_isHasNormalMap", false);
 		}
-
+		pEffect->SetFloat("g_Scroll",g_Scroll);
+		//g_Scroll += 0.000002f;
 
 		if (ShadowRecive)
 		{
@@ -206,7 +210,8 @@ namespace {
 		LPDIRECT3DTEXTURE9 shadowMap,
 		LPDIRECT3DCUBETEXTURE9 cubeMap,
 		bool ShadowCaster,
-		bool ShadowRecive
+		bool ShadowRecive,
+		bool Specularlight
 	)
 	{
 		LPD3DXMESHCONTAINER pMeshContainer;
@@ -229,7 +234,8 @@ namespace {
 				shadowMap,
 				cubeMap,
 				ShadowCaster,
-				ShadowRecive
+				ShadowRecive,
+				Specularlight
 				);
 
 			pMeshContainer = pMeshContainer->pNextMeshContainer;
@@ -251,7 +257,8 @@ namespace {
 				shadowMap,
 				cubeMap,
 				ShadowCaster,
-				ShadowRecive
+				ShadowRecive,
+				Specularlight
 				);
 		}
 
@@ -271,7 +278,8 @@ namespace {
 				shadowMap,
 				cubeMap,
 				ShadowCaster,
-				ShadowRecive
+				ShadowRecive,
+				Specularlight
 				);
 		}
 	}
@@ -303,9 +311,27 @@ void SkinModel::UpdateWorldMatrix(const D3DXVECTOR3& trans, const D3DXQUATERNION
 	D3DXMATRIX mTrans, mScale;
 	D3DXMatrixScaling(&mScale, scale.x, scale.y, scale.z);
 	D3DXMatrixTranslation(&mTrans, trans.x, trans.y, trans.z);
+
+
 	D3DXMatrixRotationQuaternion(&rotationMatrix, &rot);
 
 	worldMatrix = mScale * rotationMatrix * mTrans;
+
+	if (skinModelData) {
+		skinModelData->UpdateBoneMatrix(worldMatrix);	//ボーン行列を更新。
+	}
+}
+
+void SkinModel::UpdateWorldMatrix(const D3DXVECTOR3& trans, const D3DXQUATERNION& rot, const D3DXVECTOR3& scale,D3DXMATRIX mat, D3DXMATRIX rotmat)
+{
+	D3DXMATRIX mTrans, mScale;
+	D3DXMatrixScaling(&mScale, scale.x, scale.y, scale.z);
+	D3DXMatrixTranslation(&mTrans, trans.x, trans.y, trans.z);
+
+	//mTrans= mat*mTrans;
+	D3DXMatrixRotationQuaternion(&rotationMatrix, &rot);
+
+	worldMatrix = mScale * rotationMatrix * mTrans*mat;
 
 	if (skinModelData) {
 		skinModelData->UpdateBoneMatrix(worldMatrix);	//ボーン行列を更新。
@@ -329,7 +355,8 @@ void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)
 			shadowMap,
 			cubeMap,
 			ShadowCaster,
-			ShadowRecive
+			ShadowRecive,
+			Specularlight
 		);
 	}
 }

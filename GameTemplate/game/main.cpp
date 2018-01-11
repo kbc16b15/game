@@ -13,7 +13,6 @@
 
 LPD3DXEFFECT copyEffect;
 LPD3DXEFFECT monochromeEffect;		//!<18-4 モノクロフィルターをかけるシェーダー。
-
 Primitive*			m_primitive;				//プリミティブ
 
 Game* g_game=nullptr;
@@ -32,7 +31,7 @@ void InitMainRenderTarget()
 		FRAME_BUFFER_HEIGHT,
 		1,
 		D3DFMT_A16B16G16R16F,
-		D3DFMT_D24S8,				//デプスステンシルバッファのフォーマット。一般的に16bitと24bitフォーマットが使われることが多い。今回は24bitフォーマットを使う。
+		D3DFMT_D16,				//デプスステンシルバッファのフォーマット。一般的に16bitと24bitフォーマットが使われることが多い。今回は24bitフォーマットを使う。
 
 		D3DMULTISAMPLE_NONE,
 		0
@@ -138,26 +137,26 @@ void LoadShaders()
 		std::abort();
 	}
 
-	hr = D3DXCreateEffectFromFile(
-		g_pd3dDevice,
-		"Assets/Shader/MonochromeFilter.fx",
-		NULL,
-		NULL,
-#ifdef _DEBUG
-		D3DXSHADER_DEBUG,
-#else
-		D3DXSHADER_SKIPVALIDATION,
-#endif // _DEBUG
-		NULL,
-		&monochromeEffect,
-		&compileErrorBuffer
-	);
-
-	if (FAILED(hr))
-	{
-		MessageBox(NULL, (char*)(compileErrorBuffer->GetBufferPointer()), "error", MB_OK);
-		std::abort();
-	}
+//	hr = D3DXCreateEffectFromFile(
+//		g_pd3dDevice,
+//		"Assets/Shader/MonochromeFilter.fx",
+//		NULL,
+//		NULL,
+//#ifdef _DEBUG
+//		D3DXSHADER_DEBUG,
+//#else
+//		D3DXSHADER_SKIPVALIDATION,
+//#endif // _DEBUG
+//		NULL,
+//		&monochromeEffect,
+//		&compileErrorBuffer
+//	);
+//
+//	if (FAILED(hr))
+//	{
+//		MessageBox(NULL, (char*)(compileErrorBuffer->GetBufferPointer()), "error", MB_OK);
+//		std::abort();
+//	}
 }
 
 void CopyMainRTToCurrentRT()
@@ -215,15 +214,12 @@ void Init()
 VOID Render()
 {
 	g_shadowmap->Update();
-	//画面をクリア。
-	g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
-
-	//シーンの描画開始。
-	g_shadowmap->Draw();
-
+	
 	if (SUCCEEDED(g_pd3dDevice->BeginScene()))
 	{
-		g_pd3dDevice->BeginScene();
+		//シーンの描画開始。
+		g_shadowmap->Draw();
+
 		//あとで戻すためにフレームバッファのレンダリングターゲットとデプスステンシルバッファのバックアップを取る。
 		LPDIRECT3DSURFACE9 frameBufferRT;
 		LPDIRECT3DSURFACE9 frameBufferDS;
@@ -290,3 +286,4 @@ void Terminate()
 //ステージ１完成
 //バネカメラ、コースカメラ
 //クローン？
+

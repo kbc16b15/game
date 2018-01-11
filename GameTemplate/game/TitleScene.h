@@ -34,7 +34,7 @@ private:
 	EState				m_state = Run;					//フェード
 	LPD3DXSPRITE		m_sprite;						//スプライト
 	HUD					m_title;						//タイトル画像
-	const D3DXVECTOR2	m_titlePos = { 700.0f,300.0f };	//タイトル画像の座標
+	const D3DXVECTOR2	m_titlePos = { 595.0f,400.0f };	//タイトル画像の座標
 	Pad					m_pad;							//パッド
 	
 };

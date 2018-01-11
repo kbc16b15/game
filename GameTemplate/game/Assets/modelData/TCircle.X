@@ -2018,7 +2018,7 @@ Frame Box002 {
     0.000000;0.000000;0.000000;;
 
     TextureFilename Diffuse {
-     "tree1.texture.png";
+     "diffuse.tga";
     }
    }
   }

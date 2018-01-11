@@ -6,9 +6,6 @@
 #include <time.h>
 #include "Scene.h"
 
-//gameCamera* g_gameCamera = nullptr;
-
-
 /*!
  * @brief	コンストラクタ。
  */
@@ -24,9 +21,59 @@ Game::Game()
  */
 Game::~Game()
 {
+
 	delete m_player;
 	delete m_map;
 	//delete g_physicsWorld;
+	delete m_renderTarget;
+
+	if (m_sound != nullptr)
+	{
+		m_sound->Release();
+		m_sound = nullptr;
+	}
+
+	if (m_soundEngine != nullptr)
+	{
+		m_soundEngine->Release();
+		m_soundEngine = nullptr;
+	}
+
+	//bulletの消去
+	for (auto bullet : m_bullets) {
+		delete bullet;
+	}
+	auto bulletIt = m_bullets.begin();
+	while (bulletIt != m_bullets.end())
+	{
+		bulletIt = m_bullets.erase(bulletIt);
+	}
+	//enemの消去
+	/*for (auto Enemynum : m_enem) {
+		delete Enemynum;
+	}
+	auto enemyIt = m_enem.begin();
+	while (enemyIt != m_enem.end())
+	{
+		enemyIt = m_enem.erase(enemyIt);
+	}*/
+	//Tenemの消去
+	
+	auto TenemyIt = m_tenem.begin();
+	while (TenemyIt != m_tenem.end()) {
+
+		TenemyIt = m_tenem.erase(TenemyIt);
+
+	}
+	for (auto TEnemynum : m_tenem)
+	{
+		if(TEnemynum!=nullptr)
+		{
+			delete TEnemynum;
+			TEnemynum = nullptr;
+		}
+		
+	}
 }
 /*!
  * @brief	ゲームが起動してから一度だけ呼ばれる関数。
@@ -41,31 +88,32 @@ void Game::Init()
 	//マップを初期化。
 	m_map->Init();
 	//パーティクルの初期化
-	SParticleEmitParameter param;
+	/*SParticleEmitParameter param;
 	param.texturePath = "star.png";
 	param.w = 0.5f;
 	param.h = 0.5f;
 	param.intervalTime = 0.2f;
-	param.initSpeed = D3DXVECTOR3(0.0f, 3.0f, 0.0f);
-	m_particleEmitter.Init(param);
+	param.initSpeed = D3DXVECTOR3(0.0f, 3.0f, 0.0f);*/
+	//param.position = m_player->Getpos();
+	//m_particleEmitter.Init(param);
 	//画像表示
 	for (int i = 0;i <= m_hpMaxNum;i++)
 	{
 		m_hud[i].Initialize("Assets/Sprite/HP.png", m_hppos);
 		m_hppos.x += 100.0f;
 	}
-	m_key.Initialize("Assets/Sprite/key.png", m_keypos);
-	m_rock.Setalfa(0.5f);
-	m_rock.Initialize("Assets/Sprite/Rock.jpg", m_rockpos);
+	//m_key.Initialize("Assets/Sprite/key.png", m_keypos);
+	//m_rock.Setalfa(0.5f);
+	//m_rock.Initialize("Assets/Sprite/Rock.jpg", m_rockpos);
 	//スプライトの生成
 	CreateSprite();
 
-	m_soundEngine = new SoundEngine();
+	/*m_soundEngine = new SoundEngine();
 	m_soundEngine->Init();
 	m_sound = new Sound();
-	m_sound->Init("Assets/Sound/bgm.wav");
+	m_sound->Init("Assets/Sound/bgm.wav",false);
 	m_sound->Play(true);
-	m_sound->SetVolume(0.5f);
+	m_sound->SetVolume(0.5f);*/
 
 	m_renderTarget->Create(
 		FRAME_BUFFER_WIDTH,
@@ -88,9 +136,9 @@ void Game::Init()
  */
 void Game::Update()
 {
-
-	m_soundEngine->Update();
-	m_sound->Update();
+	//param.position = m_player->Getpos();
+	/*m_soundEngine->Update();
+	m_sound->Update();*/
 	m_pad.Update();
 	//かげ用のライトの位置の設定
 	D3DXVECTOR3 toPos = m_player->Getpos();
@@ -163,10 +211,10 @@ void Game::Update()
 	//	game->AddBullets(bullet);
 	//}
 
-	for (auto enemy : m_enem)
+	/*for (auto enemy : m_enem)
 	{
 		enemy->Update();
-	}
+	}*/
 	for (auto Tenemy : m_tenem)
 	{
 		Tenemy->Update();
@@ -181,7 +229,7 @@ void Game::Update()
 		m_hud[i].Update();
 	}
 
-	auto enemyIt = m_enem.begin();
+	/*auto enemyIt = m_enem.begin();
 	while (enemyIt != m_enem.end()) {
 		if ((*enemyIt)->GetDeathflg()){
 			enemyIt = m_enem.erase(enemyIt);
@@ -189,7 +237,7 @@ void Game::Update()
 		else {
 			enemyIt++;
 		}
-	}
+	}*/
 
 	auto TenemyIt = m_tenem.begin();
 	while (TenemyIt != m_tenem.end()) {
@@ -197,8 +245,11 @@ void Game::Update()
 			
 			for (auto TEnemynum : m_tenem)
 			{
-				if(TEnemynum->GetDeathflg())
-				delete TEnemynum;
+				if (TEnemynum->GetDeathflg())
+				{
+					delete TEnemynum;
+					TEnemynum = nullptr;
+				}
 			}
 			TenemyIt = m_tenem.erase(TenemyIt);
 		}
@@ -217,19 +268,19 @@ void Game::Update()
 		}
 	}
 
-	m_key.Update();
-	m_rock.Update();
+	//m_key.Update();
+	//m_rock.Update();
 	//GoMgr.Update();
 	m_gameCamera.Update();
 	m_player->Update();
 	m_map->Update();
-	m_particleEmitter.Update();
+	//m_particleEmitter.Update();
 	
-	if (GetAsyncKeyState('G'))
-	{
-		//次のステージへ
-		NextStage();
-	}
+	//if (GetAsyncKeyState('G'))
+	//{
+	//	//次のステージへ
+	//	NextStage();
+	//}
 
 }
 /*!
@@ -250,14 +301,15 @@ void Game::Render()
 	m_player->Draw(&m_gameCamera.Getcamera().GetViewMatrix(), &m_gameCamera.Getcamera().GetProjectionMatrix(), false, false);
 
 	//パーティクルの描画
-	g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+	/*g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 	m_particleEmitter.Render(m_gameCamera.Getcamera().GetViewMatrix(), m_gameCamera.Getcamera().GetProjectionMatrix());
-	g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+	g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);*/
 
-	for (auto enemy : m_enem)
-	{
-		enemy->Draw();
-	}
+
+	//for (auto enemy : m_enem)
+	//{
+	//	enemy->Draw();
+	//}
 
 	for (auto Tenemy : m_tenem)
 	{
@@ -274,90 +326,23 @@ void Game::Render()
 		m_hud[i].Draw(m_sprite);
 	}
 	
-	m_key.Draw(m_sprite);
-	if (m_gunflg)
+	//m_key.Draw(m_sprite);
+	/*if (m_gunflg)
 	{
 		m_rock.Draw(m_sprite);
-	}
+	}*/
 	m_bloom.Draw();
 
 }
 
 void Game::GameEnd()
 {
-	//bulletの消去
-	for (auto bullet : m_bullets) {
-		delete bullet;
-	}
-	auto bulletIt = m_bullets.begin();
-	while (bulletIt != m_bullets.end()) 
-	{
-		bulletIt = m_bullets.erase(bulletIt);
-	}
-	//enemの消去
-	for (auto Enemynum : m_enem){
-		delete Enemynum;
-	}
-	auto enemyIt = m_enem.begin();
-	while (enemyIt != m_enem.end()) 
-	{
-		enemyIt = m_enem.erase(enemyIt);
-	}
-	//Tenemの消去
-	for (auto TEnemynum : m_tenem)
-	{
-		delete TEnemynum;
-	}
-	auto TenemyIt = m_tenem.begin();
-	while (TenemyIt != m_tenem.end()) {
-
-		TenemyIt = m_tenem.erase(TenemyIt);
-
-	}
-	/*delete m_Sound;
-	m_Sound = nullptr;
-	delete m_SoundEngine;
-	m_SoundEngine = nullptr;*/
-
 	g_scene->SceneChange(g_scene->CHANGEEND);
 
 }
 
 void Game::NextStage()
 {
-	//bulletの消去
-	for (auto bullet : m_bullets)
-	{
-		delete bullet;
-	}
-
-	auto bulletIt = m_bullets.begin();
-	while (bulletIt != m_bullets.end()) 
-	{
-		bulletIt = m_bullets.erase(bulletIt);
-	}
-	//enemの消去
-	for (auto Enemynum : m_enem)
-	{
-		delete Enemynum;
-	}
-	auto enemyIt = m_enem.begin();
-	while (enemyIt != m_enem.end()) 
-	{
-		enemyIt = m_enem.erase(enemyIt);
-	}
-	//Tenemの消去
-	for (auto TEnemynum : m_tenem)
-	{
-		delete TEnemynum;
-	}
-	auto TenemyIt = m_tenem.begin();
-	while (TenemyIt != m_tenem.end()){
-
-		TenemyIt = m_tenem.erase(TenemyIt);
-
-	}
-
 	m_nextflg = true;
 
 }

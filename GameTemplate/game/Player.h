@@ -2,7 +2,7 @@
 
 #include "myEngine/Physics/CharacterController.h"
 #include "myEngine\HID\Pad.h"
-#include "Sound.h"
+
 //#include "IGameObject.h"
 
 class Player/*:public IGameObject*/
@@ -86,21 +86,7 @@ public:
 		m_objectHit = hit;
 	}
 
-	////重力の設定
-	//void SetGravity()
-	//{
-	//	if (m_isGravity)
-	//	{
-	//		characterController.SetGravity(-10.0f);
-	//		m_isGravity = false;
-	//	}
-	//	else
-	//	{
-	//		characterController.SetGravity(10.0f);
-	//		m_isGravity = true;
-	//	}
-	//	
-	//}
+	
 private:
 	enum PlayerState						//プレイヤーアニメーションの状態
 	{Stand, Move, Dash, Jump,Damage,Dead};
@@ -130,13 +116,10 @@ private:
 	LPDIRECT3DTEXTURE9	m_specularMap = NULL;					//スペキュラマップ
 	D3DXVECTOR3			m_Addvector = { 0.0f,0.0f,0.0f };		//加算速度
 	float				m_Gravity = -10.0f;						//重力
-	//bool				m_isGravity = false;					//反転フラグ
-	//float				gAngle = 0.0f;
-	//bool				Grotflg = true;
 	bool				m_moveStop = false;
 	bool				m_objectHit = false;
 	bool				m_maxSflg = false;
 	D3DXVECTOR3			m_dir = { 0.0f,0.0f,0.0f };				//かんせー
-	Sound*				m_JumpSound = nullptr;
+	//Sound*				m_JumpSound = nullptr;
 
 };

@@ -17,10 +17,7 @@ Bullet::~Bullet()
 
 void Bullet::Start(D3DXVECTOR3 pos, D3DXVECTOR3 targetPos,int cha)
 {
-	m_Chara = cha;
-	m_targetPos = targetPos;
 	//Number = No;
-	m_position = pos;
 	//skinModelData.LoadModelData("Assets/modelData/Bullet.X", NULL);
 	//ライトを初期化。
 	m_light.SetDiffuseLightDirection(0, D3DXVECTOR4(0.707f, 0.0f, -0.707f, 1.0f));
@@ -32,7 +29,7 @@ void Bullet::Start(D3DXVECTOR3 pos, D3DXVECTOR3 targetPos,int cha)
 	m_light.SetDiffuseLightColor(1, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
 	m_light.SetDiffuseLightColor(2, D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
 	m_light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	m_light.SetAmbientLight(D3DXVECTOR4(0.8f, 0.8f, 0.8f, 1.0f));
+	m_light.SetAmbientLight(D3DXVECTOR4(7.8f, 0.8f, 0.8f, 1.0f));
 
 	m_playerpos = g_game->GetPlayer()->Getpos();
 
@@ -49,6 +46,9 @@ void Bullet::Start(D3DXVECTOR3 pos, D3DXVECTOR3 targetPos,int cha)
 	m_direction = { 0.0f, 0.0f, 1.0f };
 
 	//state = eState_Search;
+	m_Chara = cha;
+	m_targetPos = targetPos;
+	m_position = pos;
 }
 
 
@@ -127,9 +127,12 @@ void Bullet::TargetBullet()
 
 	CubeCollision Cubemass;
 	D3DXVECTOR3 Ppos = g_game->GetPlayer()->Getpos();
+	D3DXVECTOR3 toPos =m_targetPos- m_position;
+	float len = D3DXVec3Length(&toPos);
+	D3DXVec3Normalize(&toPos, &toPos);
+	
 	//直進バレット
-	m_position += m_targetPos*0.04f;
-	//position.z += Ppos.z*0.04f;
+	m_position += toPos*0.2f;
 	m_btime--;
 
 	//バレットの当たり判定
@@ -149,9 +152,9 @@ void Bullet::TargetBullet()
 	}
 
 	//バレットの寿命
-	if (m_btime <= 0 /*|| len<0.5f*/)
+	if (m_btime <= 0 || len<0.4f)
 	{
-		//Bulletflg = false;
+		m_bulletflg = false;
 		m_btime = 300;
 	}
 }

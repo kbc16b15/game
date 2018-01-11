@@ -13,46 +13,22 @@ Sound::Sound()
 Sound::~Sound()
 {
 	Release();
-	delete SE;
 }
 
 void Sound::Release()
 {
-
 	if (SourceVoice != nullptr) {
 		SourceVoice->DestroyVoice();
 		SourceVoice = nullptr;
 	}
+
 }
-//void Sound::Start(char* name)
-//{
-//
-//	CoInitializeEx(NULL, COINIT_MULTITHREADED);
-//XAudio2Create(&m_xAudio2, 0);
-//
-//
-//m_xAudio2->CreateSourceVoice(&SourceVoice, m_pwfx);
-//
-//	////buffer.AudioBytes = dwChunkSize;
-//	////buffer.pAudioData = pDataBuffer;
-//	//buffer.Flags = XAUDIO2_END_OF_STREAM;
-//	//buffer.LoopCount = XAUDIO2_LOOP_INFINITE;
-//
-//	//SourceVoice->SubmitSourceBuffer(&buffer);
-//
-//
-//}
-//
-//void Sound::Update()
-//{
-//	//IXAudio2SourceVoice* voice;
-//	//m_xAudio2->StartEngine();
-//}
 
 void Sound::Init(char* filePath, bool is3DSound)
 {
-	SE = new SoundEngine;
+	SoundEngine* SE = new SoundEngine;
 	//m_waveFile = SoundEngine().GetWaveFileBank().FindWaveFile(0, filePath);
+	//m_waveFile=SE->
 	if (!m_waveFile) {
 		m_waveFile.reset(new WaveFile);
 		m_waveFile->Open(filePath);

@@ -39,11 +39,11 @@ private:
 	RigidBodyInfo	rbInfo;					//剛体情報
 	D3DXVECTOR3		RotDir;					//回転方向
 	D3DXVECTOR3		RotSpeed;				//回転速度
+	float			rotSpeed=0.01f;			//回転速度
 	float angle = 0.0f;						//角度
 	bool Tflg = false;						//プレイヤーとのフラグ
 	const float length = 8.0f;				//ひきつける範囲
-
-	int ClockRotTime = 200;
+	//int ClockRotTime = 200;
 
 	float x = 0.0f;
 	float z = 0.0f;

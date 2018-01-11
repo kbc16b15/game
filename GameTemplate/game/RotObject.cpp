@@ -98,27 +98,27 @@ void RotObject::Update()
 
 		angle += 0.01f;
 		break;
-		case CLOCK:
-			if (Tflg)
-			{
-				D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
-				speed.x = RotSpeed.x/*-1.2f*/;
-				speed.z = RotSpeed.z;
-				g_game->GetPlayer()->AddSpeed(speed);
-			}
+		//case CLOCK:
+		//	if (Tflg)
+		//	{
+		//		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
+		//		speed.x = RotSpeed.x/*-1.2f*/;
+		//		speed.z = RotSpeed.z;
+		//		g_game->GetPlayer()->AddSpeed(speed);
+		//	}
 
-			if (ClockRotTime < 0)
-			{
-				angle += 0.2f;
-				ClockRotTime = 100;
-			}
-			else
-			{
-				ClockRotTime--;
-			}
-			break;
+		//	if (ClockRotTime < 0)
+		//	{
+		//		angle += 0.2f;
+		//		ClockRotTime = 100;
+		//	}
+		//	else
+		//	{
+		//		ClockRotTime--;
+		//	}
+		//	break;
 		case STAND:
-			angle += 0.01f;
+			angle += rotSpeed;
 			break;
 		default:
 			break;

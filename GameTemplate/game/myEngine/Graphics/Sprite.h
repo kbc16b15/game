@@ -14,6 +14,7 @@ protected:
 	D3DXVECTOR2 m_scale;
 	LPDIRECT3DTEXTURE9 m_pTexture;
 	D3DCOLOR m_backColor;
+	LPD3DXSPRITE m_Sprite;
 	LPCTSTR m_texFileName;
 	D3DXVECTOR2 m_texCenter;
 	RECT m_rect;

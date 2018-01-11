@@ -122,6 +122,11 @@ void Scene::Update()
 			delete m_title;
 			m_title = nullptr;
 		}
+		if (g_game != nullptr)
+		{
+			delete g_game;
+			g_game = nullptr;
+		}
 		m_scene = GAME;
 		Init();
 		break;

@@ -93,7 +93,6 @@ public:
 private:
 	void Play(char* buff, unsigned int bufferSize);
 private:
-	SoundEngine* SE;
 	//IXAudio2*				m_xAudio2 = nullptr;
 	//IXAudio2MasteringVoice* m_masteringVoice = nullptr;
 	//XAUDIO2_VOICE_STATE		xa2state;

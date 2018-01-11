@@ -12,6 +12,7 @@ class Particle{
 	ID3DXEffect* shaderEffect;
 	D3DXVECTOR3 moveSpeed;
 	D3DXVECTOR3 position;
+	int time=80;
 public:
 	//コンストラクタ
 	Particle();
@@ -21,6 +22,10 @@ public:
 	void Update();
 	void Render(const D3DXMATRIX& viewMatrix,const D3DXMATRIX& projMatrix);
 
+	int gettime()
+	{
+		return time;
+	}
 };
 
 

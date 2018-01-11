@@ -35,6 +35,8 @@ public:
 	*@param[in]		scale	拡大。
 	*/
 	void UpdateWorldMatrix( const D3DXVECTOR3& trans, const D3DXQUATERNION& rot, const D3DXVECTOR3& scale );
+
+	void UpdateWorldMatrix(const D3DXVECTOR3& trans, const D3DXQUATERNION& rot, const D3DXVECTOR3& scale,D3DXMATRIX mat, D3DXMATRIX rotmat);
 	/*!
 	*@brief	ライトを設定。
 	*/
@@ -46,6 +48,11 @@ public:
 	void SetSpecularMap(LPDIRECT3DTEXTURE9 specMap)
 	{
 		specularMap = specMap;
+	}
+	//スペキュラライトの設定
+	void SetSpecularlight(bool speclight)
+	{
+		Specularlight = speclight;
 	}
 	//法線マップの設定
 	void SetnormalMap(LPDIRECT3DTEXTURE9 normMap)
@@ -84,7 +91,8 @@ private:
 	LPDIRECT3DTEXTURE9		shadowMap = NULL;		//!シャドウマップ
 	LPDIRECT3DCUBETEXTURE9	cubeMap = NULL;			//!キューブマップ
 	//bool				Cubeflg = false;
+	bool				Specularlight = false;
 	bool				ShadowCaster = false;
 	bool				ShadowRecive = false;
-
+	
 };

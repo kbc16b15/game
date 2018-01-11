@@ -17,7 +17,7 @@ ResultScene::~ResultScene()
 void ResultScene::Init()
 {
 	g_fade->StartFadeIn();
-	m_end.Initialize("Assets/Sprite/end.png", m_endPos);
+	m_end.Initialize("Assets/Sprite/TE.tga", m_endPos);
 	CreateSprite();
 }
 
