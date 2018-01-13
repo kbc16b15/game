@@ -55,10 +55,23 @@ void GoalObject::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot
 	m_rigidBody.GetBody()->setGravity({ 0.0f,0.0f,0.0f });
 
 	g_physicsWorld->AddRigidBody(&m_rigidBody);
+
+	//パーティクルの初期化
+	SParticleEmitParameter param;
+	param.texturePath = "ray.png";
+	param.w = 0.5f;
+	param.h = 0.5f;
+	param.intervalTime = 0.1f;
+	param.initSpeed = D3DXVECTOR3(0.0f, 3.5f, 0.0f);
+	D3DVECTOR pPos = m_position;
+	pPos.y += 2.0f;
+	param.position = pPos;
+	m_particleEmitter.Init(param);
 }
 
 void GoalObject::Update()
 {
+	m_particleEmitter.Update();
 	D3DXVECTOR3 toPos = m_position - g_game->GetPlayer()->Getpos();
 	float len = D3DXVec3Length(&toPos);
 	if (len < 2.5f)
@@ -71,5 +84,17 @@ void GoalObject::Update()
 
 void GoalObject::Draw()
 {
+
 	m_model.Draw(&g_game->GetCamera()->GetViewMatrix(), &g_game->GetCamera()->GetProjectionMatrix());
+
+	D3DXVECTOR3 toPos = m_position - g_game->GetPlayer()->Getpos();
+	float plen = D3DXVec3Length(&toPos);
+	if (plen < 50.0f)
+	{
+		//パーティクルの描画
+		g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+		m_particleEmitter.Render(g_game->GetCamera()->GetViewMatrix(), g_game->GetCamera()->GetProjectionMatrix());
+		g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+	}
+	
 }

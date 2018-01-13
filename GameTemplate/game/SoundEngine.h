@@ -1,5 +1,5 @@
 #pragma once
-
+#include "WaveFileBank.h"
 #define INPUTCHANNELS 2  // number of source channels
 #define OUTPUTCHANNELS 8	//最大出力チャンネル数。
 class SoundEngine
@@ -43,6 +43,13 @@ public:
 		return m_nChannels;
 	}
 
+	/*!
+	* @brief	波形データバンクを取得。
+	*/
+	WaveFileBank& GetWaveFileBank()
+	{
+		return m_waveFileBank;
+	}
 
 private:
 	IXAudio2* m_xAudio2 = nullptr;
@@ -57,5 +64,6 @@ private:
 	bool m_fUseInnerRadius = false;
 	bool m_useRedirectToLFE = false;
 	bool m_isInited = false;
+	WaveFileBank m_waveFileBank;					//!<波形データのバンク。
 };
 

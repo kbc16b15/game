@@ -2,7 +2,6 @@
 #include "WaveFile.h"
 
 
-
 WaveFile::WaveFile()
 {
 }

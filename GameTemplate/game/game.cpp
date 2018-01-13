@@ -27,16 +27,10 @@ Game::~Game()
 	//delete g_physicsWorld;
 	delete m_renderTarget;
 
-	if (m_sound != nullptr)
+	if (m_bgmSound != nullptr)
 	{
-		m_sound->Release();
-		m_sound = nullptr;
-	}
-
-	if (m_soundEngine != nullptr)
-	{
-		m_soundEngine->Release();
-		m_soundEngine = nullptr;
+		m_bgmSound->Release();
+		m_bgmSound = nullptr;
 	}
 
 	//bulletの消去
@@ -93,9 +87,8 @@ void Game::Init()
 	param.w = 0.5f;
 	param.h = 0.5f;
 	param.intervalTime = 0.2f;
-	param.initSpeed = D3DXVECTOR3(0.0f, 3.0f, 0.0f);*/
-	//param.position = m_player->Getpos();
-	//m_particleEmitter.Init(param);
+	param.initSpeed = D3DXVECTOR3(0.0f, 3.0f, 0.0f);
+	m_particleEmitter.Init(param);*/
 	//画像表示
 	for (int i = 0;i <= m_hpMaxNum;i++)
 	{
@@ -108,12 +101,12 @@ void Game::Init()
 	//スプライトの生成
 	CreateSprite();
 
-	/*m_soundEngine = new SoundEngine();
-	m_soundEngine->Init();
-	m_sound = new Sound();
-	m_sound->Init("Assets/Sound/bgm.wav",false);
-	m_sound->Play(true);
-	m_sound->SetVolume(0.5f);*/
+	
+	/*Sound*	*/m_bgmSound = new Sound();
+	m_bgmSound->Init("Assets/Sound/bgm.wav",false);
+	m_bgmSound->SetVolume(0.5f);
+	m_bgmSound->Play(true);
+
 
 	m_renderTarget->Create(
 		FRAME_BUFFER_WIDTH,
@@ -136,9 +129,7 @@ void Game::Init()
  */
 void Game::Update()
 {
-	//param.position = m_player->Getpos();
-	/*m_soundEngine->Update();
-	m_sound->Update();*/
+	m_bgmSound->Update();
 	m_pad.Update();
 	//かげ用のライトの位置の設定
 	D3DXVECTOR3 toPos = m_player->Getpos();
@@ -239,18 +230,18 @@ void Game::Update()
 		}
 	}*/
 
+	for (auto TEnemynum : m_tenem)
+	{
+		if (TEnemynum->GetDeathflg())
+		{
+			delete TEnemynum;
+			TEnemynum = nullptr;
+		}
+	}
 	auto TenemyIt = m_tenem.begin();
 	while (TenemyIt != m_tenem.end()) {
 		if ((*TenemyIt)->GetDeathflg()) {
 			
-			for (auto TEnemynum : m_tenem)
-			{
-				if (TEnemynum->GetDeathflg())
-				{
-					delete TEnemynum;
-					TEnemynum = nullptr;
-				}
-			}
 			TenemyIt = m_tenem.erase(TenemyIt);
 		}
 		else {
@@ -301,9 +292,9 @@ void Game::Render()
 	m_player->Draw(&m_gameCamera.Getcamera().GetViewMatrix(), &m_gameCamera.Getcamera().GetProjectionMatrix(), false, false);
 
 	//パーティクルの描画
-	/*g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
-	m_particleEmitter.Render(m_gameCamera.Getcamera().GetViewMatrix(), m_gameCamera.Getcamera().GetProjectionMatrix());
-	g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);*/
+	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+	//m_particleEmitter.Render(m_gameCamera.Getcamera().GetViewMatrix(), m_gameCamera.Getcamera().GetProjectionMatrix());
+	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 
 
 	//for (auto enemy : m_enem)
@@ -331,19 +322,13 @@ void Game::Render()
 	{
 		m_rock.Draw(m_sprite);
 	}*/
-	m_bloom.Draw();
+	//m_bloom.Draw();
 
 }
 
 void Game::GameEnd()
 {
 	g_scene->SceneChange(g_scene->CHANGEEND);
-
-}
-
-void Game::NextStage()
-{
-	m_nextflg = true;
 
 }
 

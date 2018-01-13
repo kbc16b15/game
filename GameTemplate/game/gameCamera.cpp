@@ -14,7 +14,7 @@ gameCamera::~gameCamera()
 void gameCamera::Init()
 {
 	m_camera.Init();
-	m_camera.SetEyePt(D3DXVECTOR3(5.0f, 7.0f, 8.0f));
+	m_camera.SetEyePt(D3DXVECTOR3(5.0f, 7.0f, 2.0f));
 	m_camera.SetLookatPt(D3DXVECTOR3(0.0f, 2.5f, 0.0f));
 	m_camera.SetFar(1000.0f);
 	m_camera.Update();

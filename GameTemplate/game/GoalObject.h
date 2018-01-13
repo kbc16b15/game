@@ -26,5 +26,6 @@ private:
 	MeshCollider		m_meshCollider;		//メッシュコライダー
 	RigidBody			m_rigidBody;		//剛体。
 	RigidBodyInfo		m_rbInfo;			//剛体情報
+	ParticleEmitter		m_particleEmitter;	//パーティクル
 };
 

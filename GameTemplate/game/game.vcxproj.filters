@@ -228,6 +228,9 @@
     <ClCompile Include="Vertexbuffer.cpp">
       <Filter>ソース ファイル\Primitive</Filter>
     </ClCompile>
+    <ClCompile Include="WaveFileBank.cpp">
+      <Filter>ソース ファイル\Sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -304,9 +307,6 @@
     </ClInclude>
     <ClInclude Include="HUD.h">
       <Filter>ソース ファイル\HUD</Filter>
-    </ClInclude>
-    <ClInclude Include="locationinfo.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="gameCamera.h">
       <Filter>ソース ファイル\Camera</Filter>
@@ -400,6 +400,12 @@
     </ClInclude>
     <ClInclude Include="Vertexbuffer.h">
       <Filter>ソース ファイル\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveFileBank.h">
+      <Filter>ソース ファイル\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

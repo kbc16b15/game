@@ -25,7 +25,7 @@ float g_Scroll;
 
 float3 Eye;				//カメラ座標
 bool g_isHasNormalMap;			//法線マップ保持している？
-bool g_isHasSpecularMap;		//スペキュラマップ保持？
+int g_isHasSpecularMap;		//スペキュラマップ保持？
 texture g_diffuseTexture;		//ディフューズテクスチャ。
 sampler g_diffuseTextureSampler = 
 sampler_state
@@ -116,7 +116,7 @@ struct VS_OUTPUT
     float4 lightViewPos 		: TEXCOORD3;
  
     //float4  color		:COLOR0;
-    //float2 uv			:TEXCOORD4;
+    float3 worldPos			:TEXCOORD4;
 
 };
 /*!
@@ -183,6 +183,7 @@ VS_OUTPUT VSMain( VS_INPUT In, uniform bool hasSkin )
 		//スキンなし。
 		CalcWorldPosAndNormal( In, Pos, Normal, Tangent );
 	}
+		o.worldPos=Pos.xyz;
 		//float4 worldPos=mul( Pos, g_worldMatrix );
 		o.world=mul(Pos,g_worldMatrix);
         o.Pos = mul(float4(Pos.xyz, 1.0f), g_mViewProj);
@@ -206,13 +207,8 @@ VS_OUTPUT VSMain( VS_INPUT In, uniform bool hasSkin )
  */
 float4 PSMain( VS_OUTPUT In ) : COLOR
 {
-	float4 color;
-	if(g_isHasNormalMap){
-		color = tex2D(g_diffuseTextureSampler, In.Tex0+ float2( g_Scroll, 0.0f ) );
-	}else
-	{
-		color = tex2D(g_diffuseTextureSampler, In.Tex0);
-	}
+	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0);
+	
 	float3 normal = In.Normal;
 	
 
@@ -247,7 +243,17 @@ float4 PSMain( VS_OUTPUT In ) : COLOR
 		lig+=pow(max(0.0f,dot(R,eye)),2.0f);//累乗計算
 		
 	}
+	
+	if (g_isHasSpecularMap)
+	{
+		float3 spec=CalcSpecular(In.worldPos,normal);
+		spec *= tex2D(g_specularMapSampler, In.Tex0).r;
+		lig.xyz += spec;
+	}
+	
 	color *= lig;
+	
+	
 	
 	float Zwrite = In.lightViewPos.z/In.lightViewPos.w;
 	
@@ -264,16 +270,10 @@ float4 PSMain( VS_OUTPUT In ) : COLOR
 		}
 	}
 	
-	//if (g_isHasSpecularMap)
-	//{
-	//	float3 spe = CalcSpecular(In.world, normal);
-	//	spe *= tex2D(g_specularMapSampler, In.Tex0).a;
-	//	lig.xyz += spe;
-	//}
 	
-	if(g_isHasNormalMap){
-	return float4(color.rgb,0.2f);
-	}
+	//if(g_isHasNormalMap){
+	//return float4(color.rgb,0.2f);
+	//}
 	return color;
 }
 

@@ -1,10 +1,11 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "MoveCube.h"
-#include "Sound.h"
 
 Player::Player()
 {
+	//m_JumpSound = new Sound();
+	
 }
 
 Player::~Player()
@@ -56,14 +57,14 @@ void Player::Start(){
 	m_animation.SetAnimationEndTime(Damage, 0.2f);
 	m_animation.SetAnimationEndTime(Dead, 3.0f);
 
-	/*D3DXCreateTextureFromFileA(g_pd3dDevice,
+	D3DXCreateTextureFromFileA(g_pd3dDevice,
 		"Assets/modelData/utc_spec.tga",
-		&specularMap);
+		&m_specularMap);
 	
-	if (specularMap != NULL)
+	if (m_specularMap != NULL)
 	{
-		skinModel.SetSpecularMap(specularMap);
-	}*/
+		m_skinModel.SetSpecularMap(m_specularMap);
+	}
 
 	//m_skinModel.SetSpecularlight(true);
 
@@ -75,19 +76,22 @@ void Player::Start(){
 	{
 		m_skinModel.SetnormalMap(m_normalMap);
 	}
+
+	
 }
 
 void Player::Update()
 {
 	if (m_deathflg)return;//死んでいたらリターン
-
-	//if (GetAsyncKeyState('Q')) {
-	//	//法線マップのオフ
-	//	m_skinModel.SetnormalMap(NULL);
-	//}
-	//if (GetAsyncKeyState('E')) {
-	//	m_skinModel.SetnormalMap(m_normalMap);
-	//}
+	//m_JumpSound->Update();
+	if (GetAsyncKeyState('Q')) {
+		//m_skinModel.SetnormalMap(NULL);
+		m_skinModel.SetSpecularMap(NULL);
+	}
+	if (GetAsyncKeyState('E')) {
+		//m_skinModel.SetnormalMap(m_normalMap);
+		m_skinModel.SetSpecularMap(m_specularMap);
+	}
 
 	
 	AnimationSet();
@@ -182,7 +186,7 @@ void Player::AnimationSet()
 
 void Player::Setangle()
 {
-	if (m_isDead)return;
+	if (m_deathflg)return;
 	//D3DXVECTOR3 Mpos = position;
 
 	m_moveSpeed = m_characterController.GetMoveSpeed();
@@ -224,19 +228,19 @@ void Player::Setangle()
 		
 		if (m_dir.x > 0.0f)
 		{
-			m_dir.x += -0.2f;
+			m_dir.x += -m_downSpeed;
 		}
 		if (m_dir.x < 0.0f)
 		{
-			m_dir.x += 0.2f;
+			m_dir.x += m_downSpeed;
 		}
 		if (m_dir.z > 0.0f)
 		{
-			m_dir.z += -0.2f;
+			m_dir.z += -m_downSpeed;
 		}
 		if (m_dir.z < 0.0f)
 		{
-			m_dir.z += 0.2f;
+			m_dir.z += m_downSpeed;
 		}
 
 		//移動していないときに止める処理
@@ -247,24 +251,24 @@ void Player::Setangle()
 	}
 	//最大移動速度の保存
 	m_maxSflg = false;
-	if (m_dir.x > 5.0f)
+	if (m_dir.x >m_maxSpeed)
 	{
-		m_dir.x = 5.0f;
+		m_dir.x = m_maxSpeed;
 		m_maxSflg = true;
 	}
-	else if (m_dir.x < -5.0f)
+	else if (m_dir.x < -m_maxSpeed)
 	{
-		m_dir.x = -5.0f;
+		m_dir.x = -m_maxSpeed;
 		m_maxSflg = true;
 	}
-	if (m_dir.z > 5.0f)
+	if (m_dir.z >m_maxSpeed)
 	{
-		m_dir.z = 5.0f;
+		m_dir.z = m_maxSpeed;
 		m_maxSflg = true;
 	}
-	else if (m_dir.z < -5.0f)
+	else if (m_dir.z < -m_maxSpeed)
 	{
-		m_dir.z = -5.0f;
+		m_dir.z = -m_maxSpeed;
 		m_maxSflg = true;
 	}
 
@@ -302,26 +306,21 @@ void Player::Setangle()
 	}
 
 	if (m_pad.IsTrigger(m_pad.enButtonA) && m_characterController.IsOnGround()) {
-
 			Sound*	m_JumpSound = new Sound();
 			m_JumpSound->Init("Assets/Sound/jump06.wav");
 			m_JumpSound->SetVolume(0.4f);
 			m_JumpSound->Play(false);
 		//ジャンプ
-		m_moveSpeed.y = 8.0f;
+			m_moveSpeed.y = m_jumpHeight;
 		//ジャンプしたことをキャラクタコントローラーに通知。
 		m_characterController.Jump();
 		m_isjump = true;
 	}
-	/*if (!m_JumpSound->IsPlaying()&&m_JumpSound!=nullptr)
-	{
-		delete m_JumpSound;
-		m_JumpSound = nullptr;
-	}*/
+
 	if (m_jumpflg)
 	{
 		//ジャンプ
-		m_moveSpeed.y = 11.0f;
+		m_moveSpeed.y = m_jumpHeight;
 		//ジャンプしたことをキャラクタコントローラーに通知
 		m_characterController.Jump();
 		m_jumpflg = false;
@@ -356,7 +355,7 @@ void Player::BulletHit()
 	//プレイヤーとバレット前方の当たり判定
 	if (m_damageflg&&m_damageTime<0)
 	{
-		if (g_game->GetHp() <= 0 && m_characterController.IsOnGround())
+		if (g_game->GetHp() <= 0 /*&& m_characterController.IsOnGround()*/)
 		{
 			m_isDead = true;
 		}

@@ -92,7 +92,7 @@ void TrapObject::Update()
 void TrapObject::Rot()
 {
 		m_angle += 0.01f;
-		D3DXQuaternionRotationAxis(&m_rotation, &m_rotDir, m_angle);
+		D3DXQuaternionRotationAxis(&m_rotation, &m_rotDir, m_angle);//オブジェクトが同じまわり方になる？
 	
 }
 

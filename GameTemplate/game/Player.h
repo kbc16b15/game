@@ -2,7 +2,7 @@
 
 #include "myEngine/Physics/CharacterController.h"
 #include "myEngine\HID\Pad.h"
-
+#include "Sound.h"
 //#include "IGameObject.h"
 
 class Player/*:public IGameObject*/
@@ -106,20 +106,24 @@ private:
 	SkinModelData		m_skinModelData;						//スキンモデルデータ
 	Light				m_light;								//ライト
 	Animation			m_animation;							//アニメーション
+	Pad					m_pad;									//パッド
+	CharacterController	m_characterController;					//キャラクターコントローラー
 	D3DXVECTOR3			m_position = { 0.0f,0.0f,0.0f };		//座標
 	D3DXVECTOR3			m_scale = { 1.0f,1.0f,1.0f };			//拡大
 	D3DXQUATERNION		m_rotation = { 0.0f,0.0f,0.0f,1.0f };	//回転
-	CharacterController	m_characterController;					//キャラクターコントローラー
 	D3DXVECTOR3			m_moveSpeed = { 0.0f,0.0f,0.0f };		//移動速度
-	Pad					m_pad;									//パッド
 	LPDIRECT3DTEXTURE9	m_normalMap = NULL;						//法線マップ
 	LPDIRECT3DTEXTURE9	m_specularMap = NULL;					//スペキュラマップ
+	D3DXVECTOR3			m_dir = { 0.0f,0.0f,0.0f };				//かんせー
 	D3DXVECTOR3			m_Addvector = { 0.0f,0.0f,0.0f };		//加算速度
+	//Sound*				m_JumpSound = nullptr;					//ジャンプ音
 	float				m_Gravity = -10.0f;						//重力
+	const float			m_maxSpeed=5.0f;						//最大移動速度の保存
+	const float			m_jumpHeight = 8.0f;					//ジャンプの高さ
+	const float			m_downSpeed = 0.3f;						//移動していないときに減速させる処理(摩擦？)
 	bool				m_moveStop = false;
 	bool				m_objectHit = false;
 	bool				m_maxSflg = false;
-	D3DXVECTOR3			m_dir = { 0.0f,0.0f,0.0f };				//かんせー
-	//Sound*				m_JumpSound = nullptr;
+
 
 };

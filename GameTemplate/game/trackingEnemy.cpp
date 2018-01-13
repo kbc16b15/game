@@ -6,6 +6,12 @@
 
 trackingEnemy::trackingEnemy()
 {
+	m_rotation = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
+	m_scale = { 0.7f,0.7f,0.7f };
+	m_direction = { 0.0f,0.0f,1.0f };
+	m_moveSpeed = { 0.0f,0.0f,0.0f };
+	//m_beamSound = new Sound();
+	
 }
 
 trackingEnemy::~trackingEnemy()
@@ -17,13 +23,21 @@ trackingEnemy::~trackingEnemy()
 		m_normalMap->Release();
 	}
 
+	/*if (m_beamSound != nullptr)
+	{
+		delete m_beamSound;
+		m_beamSound = nullptr;
+	}*/
 }
 
-void trackingEnemy::Start(D3DXVECTOR3 pos, D3DXQUATERNION rot)
+void trackingEnemy::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 {
 	m_sPos = pos;
 	m_position = pos;
 	m_rotation = rot;
+	char modelPath[256];
+	//sprintf(modelPath, "Assets/modelData/%s.x", /*locInfo.*/modelName);
+
 	m_skinModelData.LoadModelData("Assets/modelData/Drone.X", NULL);
 	m_skinModel.Init(&m_skinModelData);
 
@@ -56,12 +70,13 @@ void trackingEnemy::Start(D3DXVECTOR3 pos, D3DXQUATERNION rot)
 		m_skinModel.SetnormalMap(m_normalMap);
 	}
 
+
 }
 
 void trackingEnemy::Update()
 {
 	if (m_isDead) { return; }
-
+	//m_beamSound->Update();
 	Move();
 	Dead();
 
@@ -73,7 +88,7 @@ void trackingEnemy::Update()
 	m_characterController.SetMoveSpeed(m_moveSpeed);
 
 	//キャラクタコントローラーを実行。
-	m_characterController.Execute();
+	//m_characterController.Execute();
 	
 	m_skinModel.UpdateWorldMatrix(m_characterController.GetPosition(), m_rotation, m_scale);
 
@@ -101,7 +116,7 @@ void trackingEnemy::Move()
 	{
 	case SEACH:
 
-		if (len < 6.0f)
+		if (len < 12.0f)
 		{
 			TState = FOUND;
 		}
@@ -126,7 +141,7 @@ void trackingEnemy::Move()
 
 		break;
 	case FOUND:
-		if (len > 7.0f)
+		if (len > 12.5f)
 		{
 			TState = SEACH;
 		}
@@ -145,9 +160,9 @@ void trackingEnemy::Move()
 			Bullet* bullet = new Bullet();
 			bullet->Start(m_characterController.GetPosition(), g_game->GetPlayer()->Getpos(), 1);
 			g_game->AddBullets(bullet);
-			m_bulletTime = 80;
+			m_bulletTime = 60;
 
-			Sound*	m_beamSound = new Sound();
+			Sound* m_beamSound = new Sound();
 			m_beamSound->Init("Assets/Sound/beamgun.wav");
 			m_beamSound->SetVolume(0.4f);
 			m_beamSound->Play(false);

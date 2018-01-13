@@ -84,6 +84,9 @@ void SoundEngine::Init()
 */
 void SoundEngine::Release()
 {
+
+	//波形データバンクを解放。
+	m_waveFileBank.ReleaseAll();
 	if (m_submixVoice != nullptr) {
 		m_submixVoice->DestroyVoice();
 		m_submixVoice = nullptr;

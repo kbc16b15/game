@@ -13,7 +13,7 @@ struct SParticleEmitParameter
 	float h;
 	float intervalTime;
 	D3DXVECTOR3 initSpeed;
-	//D3DXVECTOR3 position;
+	D3DXVECTOR3 position;
 };
 
 //パーティクルの発生器

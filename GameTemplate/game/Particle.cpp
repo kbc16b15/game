@@ -36,16 +36,20 @@ void Particle::Init(const SParticleEmitParameter& param)
 {
 	float halfW = param.w*0.5f;
 	float halfH = param.h*0.5f;
-
+	float add = ((rand() % 255) - 128) / 128.0f;
 	D3DXVECTOR4 uv(0.0f, 0.0f, 1.0f, 1.0f);
 	moveSpeed = param.initSpeed;
 
 	//position = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	position = g_game->GetPlayer()->Getpos();//パーティクルの発生座標
-	float add = ((rand() % 255) - 128) / 128.0f;
-	moveSpeed.x += add*0.3f;
-	moveSpeed.y += add*0.3f;
-	moveSpeed.z += add*0.3f;
+	
+	position = param.position;/*g_game->GetPlayer()->Getpos();*///パーティクルの発生座標
+	
+	position.x += add*2.0f;//パーティクルの発生座標に乱数を加えたい
+	position.z += add*2.0f;
+	position.y += add*0.2f;
+	moveSpeed.x += add*0.0f;//初速度に乱数を加える
+	moveSpeed.y += add*0.0f;
+	moveSpeed.z += add*0.0f;
 
 	SShapeVertex_PT vb[] = {
 		{
@@ -105,7 +109,7 @@ void Particle::Update()
 {
 	time--;
 	float deltaTime = 1.0f / 60.0f;
-	moveSpeed.y -= 0.1f;
+	//moveSpeed.y -= 0.1f;
 	D3DXVECTOR3 add = moveSpeed*deltaTime;
 	position += add;
 #if 0

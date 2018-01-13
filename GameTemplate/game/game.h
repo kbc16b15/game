@@ -52,7 +52,7 @@ public:
 	void GameEnd();
 
 	//次のステージに行く
-	void NextStage();
+	//void NextStage();
 
 	//スプライト生成関数
 	HRESULT CreateSprite();
@@ -116,6 +116,12 @@ public:
 	{
 		return m_hpNum;
 	}
+	//次のステージへ
+	void NextStage()
+	{
+		m_nextflg = true;
+
+	}
 private:
 	//フェード
 	enum EState {
@@ -133,8 +139,8 @@ private:
 	CRenderTarget*		m_renderTarget;				//ポストエフェクト用のレンダリングターゲット？
 	Select				GAME = START;				//選択
 	EState				m_state = Run;				//フェードの状態
-	Sound*				m_sound=nullptr;			//サウンド
-	SoundEngine*		m_soundEngine=nullptr;		//サウンドエンジン
+	Sound*				m_bgmSound=nullptr;			//サウンド
+	//SoundEngine*		m_soundEngine=nullptr;		//サウンドエンジン
 	std::list<Bullet*>	m_bullets;					//バレットのリスト
 	std::vector<Enemy*>	m_enem;						//エネミーのvector
 	std::vector<trackingEnemy*> m_tenem;			//追従エネミー
@@ -144,7 +150,7 @@ private:
 	Map*				m_map;						//マップ
 	Bloom				m_bloom;					//ブルーム
 	ParticleEmitter		m_particleEmitter;			//パーティクル
-	int					m_hpMaxNum = 3;				//最大HP量
+	int					m_hpMaxNum = 2;				//最大HP量
 	int					m_hpNum = 3;				//HP量
 	HUD					m_hud[3];					//画像表示の変数
 	HUD					m_key;						//鍵

@@ -20,7 +20,7 @@ Scene* g_scene=nullptr;
 Fade* g_fade = nullptr;
 ShadowMap* g_shadowmap= nullptr;
 CRenderTarget*		g_renderTarget;				//ポストエフェクト用のレンダリングターゲット？2
-
+SoundEngine* m_soundEngine = nullptr;
 
 void InitMainRenderTarget()
 {
@@ -207,6 +207,8 @@ void Init()
 	g_shadowmap = new ShadowMap;
 	g_shadowmap->Init();
 
+	SoundEngine* m_soundEngine = new SoundEngine();
+	m_soundEngine->Init();
 }
 //-----------------------------------------------------------------------------
 // Name: 描画処理。
@@ -238,6 +240,7 @@ VOID Render()
 		g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 		g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 
+		
 		//シーンの描画
 		g_scene->Render();
 		//フェードの描画
@@ -263,6 +266,7 @@ VOID Render()
 void Update()
 {
 	g_physicsWorld->Update();
+	m_soundEngine->Update();//mainで呼ぶ？
 	g_scene->Update();
 	g_fade->Update();
 }
@@ -277,8 +281,9 @@ void Terminate()
 	delete g_effectManager;
 	delete g_shadowmap;
 	delete g_physicsWorld;
-	delete g_renderTarget;	
-	delete m_primitive;		
+	delete g_renderTarget;
+	delete m_primitive;
+	m_soundEngine->Release();
 	copyEffect->Release();
 	g_pd3dDevice->Release();
 	g_pD3D->Release();

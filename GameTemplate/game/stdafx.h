@@ -15,6 +15,7 @@
 #include <list>
 #include <algorithm>
 #include <map>
+#include <string>
 #pragma comment(lib, "winmm.lib")
 #pragma comment(lib, "X3DAudio.lib")
 #include "btBulletDynamicsCommon.h"
@@ -29,6 +30,7 @@
 #include "myEngine/Graphics/Light.h"
 #include "game.h"
 #include "CubeCollision.h"
+
 
 
 extern LPD3DXEFFECT copyEffect;

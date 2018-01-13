@@ -211,6 +211,7 @@
     <ClCompile Include="TrapObject.cpp" />
     <ClCompile Include="Vertexbuffer.cpp" />
     <ClCompile Include="WaveFile.cpp" />
+    <ClCompile Include="WaveFileBank.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bloom.h" />
@@ -231,7 +232,6 @@
     <ClInclude Include="GoalObject.h" />
     <ClInclude Include="HealItem.h" />
     <ClInclude Include="HUD.h" />
-    <ClInclude Include="locationinfo.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapChip.h" />
     <ClInclude Include="MoveCube.h" />
@@ -268,8 +268,10 @@
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="trackingEnemy.h" />
     <ClInclude Include="TrapObject.h" />
+    <ClInclude Include="Util.h" />
     <ClInclude Include="Vertexbuffer.h" />
     <ClInclude Include="WaveFile.h" />
+    <ClInclude Include="WaveFileBank.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />

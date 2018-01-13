@@ -10,7 +10,7 @@ struct SLight{
 	float4  ambient;								//アンビエントライト。
 };
 SLight	g_light;		//ライト
-
+float3	 g_eyePos;				//視点。
 /*!
  *@brief	ディフューズライトを計算。
  */	
@@ -38,4 +38,20 @@ float CalcLuminance( float3 color )
 		luminance = 0.0f;
 	}
 	return luminance;
+}
+
+float3 CalcSpecular(float3 worldPos, float3 normal)
+{
+	float3 spec = 0.0f;
+
+	float3 toEyeDir = normalize(g_eyePos - worldPos);
+	float3 R = -toEyeDir + 2.0f * dot(normal, toEyeDir) * normal;
+
+	for (int i = 0; i < NUM_DIFFUSE_LIGHT; i++) {
+		//スペキュラ成分を計算する。
+		//反射ベクトルを計算。
+		float3 L = -g_light.diffuseLightDir[i].xyz;
+		spec += g_light.diffuseLightColor[i] * pow(max(0.0f, dot(L, R)), 5) * g_light.diffuseLightColor[i].w;	//スペキュラ強度。
+	}
+	return spec;
 }

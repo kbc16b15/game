@@ -36,7 +36,7 @@ private:
 	float		angle = 0.0f;			//角度
 	const float RotSpeedY = 2.0f;		//Y軸回転速度
 	const float RotSpeedX = 1.0f;		//X軸回転速度
-	const float CameraUpLimit = 20.0f;	//カメラ上下限度
+	const float CameraUpLimit = 30.0f;	//カメラ上下限度
 	bool		Rockonflg = false;
 	//bool	CameraTypeflg = false;
 

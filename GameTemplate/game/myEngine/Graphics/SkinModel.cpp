@@ -94,16 +94,16 @@ namespace {
 			pEffect->SetTexture("g_cubeTex", cubeMap);
 		}
 
-		//if (specularMap != NULL)
-		//{
-		//	//スペキュラマップがあるから、シェーダーに転送
-		//	pEffect->SetTexture("g_specularTexture", specularMap);
-		//	//スペキュラマップのフラグをtrueにする。
-		//	pEffect->SetBool("g_isHasSpecularMap",true);
-		//}
-		//else {
-		//	pEffect->SetBool("g_isHasSpecularMap", false);
-		//}
+		if (specularMap != NULL)
+		{
+			//スペキュラマップがあるから、シェーダーに転送
+			pEffect->SetTexture("g_specularTexture", specularMap);
+			//スペキュラマップのフラグをtrueにする。
+			pEffect->SetBool("g_isHasSpecularMap",true);
+		}
+		else {
+			pEffect->SetBool("g_isHasSpecularMap", false);
+		}
 
 		if (normalMap != NULL)
 		{
