@@ -67,3 +67,4 @@ private:
 	WaveFileBank m_waveFileBank;					//!<波形データのバンク。
 };
 
+extern SoundEngine* g_soundEngine;

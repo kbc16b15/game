@@ -36,6 +36,7 @@ void ParticleEmitter::Update()
 	//	p = nullptr;
 	//	deleteTime = 100.0f;
 	//}	
+
 	auto pIt = particleList.begin();
 	for (auto pt : particleList) {
 		if (pt->gettime() <= 0.0f)

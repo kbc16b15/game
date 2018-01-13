@@ -20,7 +20,7 @@ Scene* g_scene=nullptr;
 Fade* g_fade = nullptr;
 ShadowMap* g_shadowmap= nullptr;
 CRenderTarget*		g_renderTarget;				//ポストエフェクト用のレンダリングターゲット？2
-SoundEngine* m_soundEngine = nullptr;
+SoundEngine* g_soundEngine = nullptr;
 
 void InitMainRenderTarget()
 {
@@ -207,8 +207,8 @@ void Init()
 	g_shadowmap = new ShadowMap;
 	g_shadowmap->Init();
 
-	SoundEngine* m_soundEngine = new SoundEngine();
-	m_soundEngine->Init();
+	g_soundEngine = new SoundEngine();
+	g_soundEngine->Init();
 }
 //-----------------------------------------------------------------------------
 // Name: 描画処理。
@@ -266,7 +266,7 @@ VOID Render()
 void Update()
 {
 	g_physicsWorld->Update();
-	m_soundEngine->Update();//mainで呼ぶ？
+	g_soundEngine->Update();//mainで呼ぶ？
 	g_scene->Update();
 	g_fade->Update();
 }
@@ -283,7 +283,7 @@ void Terminate()
 	delete g_physicsWorld;
 	delete g_renderTarget;
 	delete m_primitive;
-	m_soundEngine->Release();
+	g_soundEngine->Release();
 	copyEffect->Release();
 	g_pd3dDevice->Release();
 	g_pD3D->Release();

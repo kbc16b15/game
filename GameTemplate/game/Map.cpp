@@ -21,11 +21,11 @@ struct SMapChipLocInfo {
 };
 
 SMapChipLocInfo mapChipInfo[] = {
-#include "locationinfo8.h"
+#include "locationinfo7.h"
 };
 
 SMapChipLocInfo mapChipInfo2[] = {
-#include "locationinfo7.h"
+#include "locationinfo8.h"
 };
 
 Map::Map()
@@ -48,7 +48,7 @@ Map::~Map()
 void Map::Init(/*struct SMapChipLocInfo Info[]*/)
 {
 	int numObject=0;
-	SMapChipLocInfo work[2000];
+	SMapChipLocInfo work[255];
 
 	switch (m_stageNum)
 	{

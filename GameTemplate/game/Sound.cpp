@@ -2,6 +2,7 @@
 #include "SoundEngine.h"
 #include "Sound.h"
 
+extern SoundEngine* g_soundEngine;
 
 Sound::Sound()
 {
@@ -26,16 +27,16 @@ void Sound::Release()
 
 void Sound::Init(char* filePath, bool is3DSound)
 {
-	SoundEngine* SE = new SoundEngine;
+	//SoundEngine* SE = new SoundEngine;
 	//m_waveFile = SoundEngine().GetWaveFileBank().FindWaveFile(0, filePath);
-	m_waveFile = SE->GetWaveFileBank().FindWaveFile(0, filePath);
+	m_waveFile = g_soundEngine->GetWaveFileBank().FindWaveFile(0, filePath);
 	
 	if (!m_waveFile) {
 		m_waveFile.reset(new WaveFile);
 		m_waveFile->Open(filePath);
-		SE->GetWaveFileBank().RegistWaveFile(0, m_waveFile);
+		g_soundEngine->GetWaveFileBank().RegistWaveFile(0, m_waveFile);
 		m_waveFile->AllocReadBuffer(m_waveFile->GetSize());//waveファイルのサイズ分の読み込みバッファを確保する。
-		SE->GetWaveFileBank().RegistWaveFile(0,m_waveFile);
+		g_soundEngine->GetWaveFileBank().RegistWaveFile(0,m_waveFile);
 		unsigned int dummy;
 		m_waveFile->Read(m_waveFile->GetReadBuffer(), m_waveFile->GetSize(), &dummy);
 		m_waveFile->ResetFile();
@@ -44,7 +45,30 @@ void Sound::Init(char* filePath, bool is3DSound)
 
 	//サウンドボイスソースを作成。
 	
-	SourceVoice = SE->CreateXAudio2SourceVoice(m_waveFile.get(),is3DSound);
+	SourceVoice = g_soundEngine->CreateXAudio2SourceVoice(m_waveFile.get(),is3DSound);
+}
+
+void Sound::Init(const NameKey& nameKey,bool is3DSound)
+{
+	//SoundEngine* SE = new SoundEngine;
+	//m_waveFile = SoundEngine().GetWaveFileBank().FindWaveFile(0, filePath);
+	m_waveFile = g_soundEngine->GetWaveFileBank().FindWaveFile(0, nameKey);
+
+	if (!m_waveFile) {
+		m_waveFile.reset(new WaveFile);
+		m_waveFile->Open(nameKey.GetName());
+		g_soundEngine->GetWaveFileBank().RegistWaveFile(0, m_waveFile);
+		m_waveFile->AllocReadBuffer(m_waveFile->GetSize());//waveファイルのサイズ分の読み込みバッファを確保する。
+		g_soundEngine->GetWaveFileBank().RegistWaveFile(0, m_waveFile);
+		unsigned int dummy;
+		m_waveFile->Read(m_waveFile->GetReadBuffer(), m_waveFile->GetSize(), &dummy);
+		m_waveFile->ResetFile();
+
+	}
+
+	//サウンドボイスソースを作成。
+
+	SourceVoice = g_soundEngine->CreateXAudio2SourceVoice(m_waveFile.get(), is3DSound);
 }
 
 void Sound::Play(char* buff, unsigned int bufferSize)

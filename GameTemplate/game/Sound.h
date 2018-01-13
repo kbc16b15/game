@@ -13,6 +13,7 @@ public:
 
 	void Init(char* filePath, bool is3DSound = false);
 
+	void Init(const NameKey& nameKey, bool is3DSound = false);
 	void Play(bool isLoop);
 	/*!
 	* @brief	í‚é~ÅB

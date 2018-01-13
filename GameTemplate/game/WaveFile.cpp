@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "WaveFile.h"
-
+#include "Util.h"
 
 WaveFile::WaveFile()
 {
@@ -15,6 +15,7 @@ WaveFile::~WaveFile()
 void WaveFile::Open(const char* fileName)
 {
 	m_filePath = fileName;
+	m_filePathHash = CUtil::MakeHash(fileName);
 	m_hmmio = mmioOpen(const_cast<char*>(fileName), NULL, MMIO_ALLOCBUF | MMIO_READ);
 	if (m_hmmio == NULL) {
 		//TK_LOG("Failed mmioOpen");

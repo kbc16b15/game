@@ -34,12 +34,12 @@ CWaveFilePtr WaveFileBank::FindWaveFile(int groupID, const char* filePath)
 	}
 	return CWaveFilePtr();
 }
-//CWaveFilePtr WaveFileBank::FindWaveFile(int groupID, const NameKey& nameKey)
-//{
-//	TK_ASSERT(groupID < MAX_GROUP, "groupID is invalid");
-//	auto value = m_waveFileMap[groupID].find(nameKey.GetHashCode());
-//	if (value != m_waveFileMap[groupID].end()) {
-//		return value->second;
-//	}
-//	return CWaveFilePtr();
-//}
+CWaveFilePtr WaveFileBank::FindWaveFile(int groupID, const NameKey& nameKey)
+{
+	//TK_ASSERT(groupID < MAX_GROUP, "groupID is invalid");
+	auto value = m_waveFileMap[groupID].find(nameKey.GetHashCode());
+	if (value != m_waveFileMap[groupID].end()) {
+		return value->second;
+	}
+	return CWaveFilePtr();
+}

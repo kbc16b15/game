@@ -149,20 +149,20 @@ private:
 	Player*				m_player;					//プレイヤー
 	Map*				m_map;						//マップ
 	Bloom				m_bloom;					//ブルーム
-	ParticleEmitter		m_particleEmitter;			//パーティクル
+	//ParticleEmitter		m_particleEmitter;			//パーティクル
 	int					m_hpMaxNum = 2;				//最大HP量
 	int					m_hpNum = 3;				//HP量
 	HUD					m_hud[3];					//画像表示の変数
-	HUD					m_key;						//鍵
-	HUD					m_rock;						//
+	//HUD					m_key;						//鍵
+	//HUD					m_rock;						//
 	LPD3DXSPRITE		m_sprite;					//スプライト
 	D3DXVECTOR2			m_hppos = { 120.0f,80.0f };		//HP座標
-	D3DXVECTOR2			m_keypos = { 120.0f, 200.0f };	//鍵座標
-	D3DXVECTOR2			m_rockpos = { 700.0f,250.0f };	//照準座標
+	//D3DXVECTOR2			m_keypos = { 120.0f, 200.0f };	//鍵座標
+	//D3DXVECTOR2			m_rockpos = { 700.0f,250.0f };	//照準座標
 	bool				m_gunflg = false;
 	bool				m_nextflg = false;
 	Pad					m_pad;
-	D3DXVECTOR3			m_rockCamera;
+	//D3DXVECTOR3			m_rockCamera;
 
 
 };

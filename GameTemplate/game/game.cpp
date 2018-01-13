@@ -329,7 +329,6 @@ void Game::Render()
 void Game::GameEnd()
 {
 	g_scene->SceneChange(g_scene->CHANGEEND);
-
 }
 
 HRESULT Game::CreateSprite()
