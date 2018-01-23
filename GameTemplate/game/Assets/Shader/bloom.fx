@@ -52,10 +52,6 @@ struct VS_BlurOutput{
 	float2 tex1 : TEXCOORD1;
 	float2 tex2 : TEXCOORD2;
 	float2 tex3 : TEXCOORD3;
-	float2 tex4 : TEXCOORD4;
-	float2 tex5 : TEXCOORD5;
-	float2 tex6 : TEXCOORD6;
-	float2 tex7 : TEXCOORD7;
 };
 texture g_blur;	//ブラーテクスチャ
 
@@ -70,7 +66,7 @@ sampler_state
 
 float2 g_luminanceTexSize;		//輝度テクスチャのサイズ。
 float2 g_offset;				//オフセット
-float  g_weight[8];				//ガウスフィルタの重み。
+float  g_weight[4];				//ガウスフィルタの重み。
 float2 g_renderTargetSize;		//レンダリングターゲットのサイズ。
 float  g_mulYBlurOutputColor;	//Yブラーから出力されるピクセルカラーに乗算されるシェーダー定数。
 
@@ -90,10 +86,10 @@ VS_BlurOutput VSXBlur(VS_INPUT In)
     Out.tex1 = tex + float2( - 3.0f/g_luminanceTexSize.x, 0.0f );
     Out.tex2 = tex + float2( - 5.0f/g_luminanceTexSize.x, 0.0f );
     Out.tex3 = tex + float2( - 7.0f/g_luminanceTexSize.x, 0.0f );
-    Out.tex4 = tex + float2( - 9.0f/g_luminanceTexSize.x, 0.0f );
+  /*  Out.tex4 = tex + float2( - 9.0f/g_luminanceTexSize.x, 0.0f );
     Out.tex5 = tex + float2( -11.0f/g_luminanceTexSize.x, 0.0f );
     Out.tex6 = tex + float2( -13.0f/g_luminanceTexSize.x, 0.0f );
-    Out.tex7 = tex + float2( -15.0f/g_luminanceTexSize.x, 0.0f );
+    Out.tex7 = tex + float2( -15.0f/g_luminanceTexSize.x, 0.0f );*/
     return Out;
 }
 /*!
@@ -103,20 +99,12 @@ float4 PSXBlur( VS_BlurOutput In ) : COLOR
 {
 	float4 Color;
 	Color  = g_weight[0] * (tex2D( g_blurSampler, In.tex0 )
-	                 + tex2D( g_blurSampler, In.tex7 + g_offset ));
-	Color += g_weight[1] * (tex2D( g_blurSampler, In.tex1 )
-	                 + tex2D( g_blurSampler, In.tex6 + g_offset ));
-	Color += g_weight[2] * (tex2D( g_blurSampler, In.tex2 )
-	            + tex2D( g_blurSampler, In.tex5 + g_offset ));
-	Color += g_weight[3] * (tex2D( g_blurSampler, In.tex3 )
-	                 + tex2D( g_blurSampler, In.tex4 + g_offset ));
-	Color += g_weight[4] * (tex2D( g_blurSampler, In.tex4 )
 	                 + tex2D( g_blurSampler, In.tex3 + g_offset ));
-	Color += g_weight[5] * (tex2D( g_blurSampler, In.tex5 )
+	Color += g_weight[1] * (tex2D( g_blurSampler, In.tex1 )
 	                 + tex2D( g_blurSampler, In.tex2 + g_offset ));
-	Color += g_weight[6] * (tex2D( g_blurSampler, In.tex6 )
-	                 + tex2D( g_blurSampler, In.tex1 + g_offset ));
-	Color += g_weight[7] * (tex2D( g_blurSampler, In.tex7 )
+	Color += g_weight[2] * (tex2D( g_blurSampler, In.tex2 )
+	            + tex2D( g_blurSampler, In.tex1 + g_offset ));
+	Color += g_weight[3] * (tex2D( g_blurSampler, In.tex3 )
 	                 + tex2D( g_blurSampler, In.tex0 + g_offset ));
 	return Color;
 }
@@ -135,10 +123,10 @@ VS_BlurOutput VSYBlur(VS_INPUT In)
     Out.tex1 = tex + float2( 0.0f,- 3.0f/g_luminanceTexSize.y  );
     Out.tex2 = tex + float2( 0.0f,- 5.0f/g_luminanceTexSize.y  );
     Out.tex3 = tex + float2( 0.0f,- 7.0f/g_luminanceTexSize.y  );
-    Out.tex4 = tex + float2( 0.0f,- 9.0f/g_luminanceTexSize.y  );
+  /*  Out.tex4 = tex + float2( 0.0f,- 9.0f/g_luminanceTexSize.y  );
     Out.tex5 = tex + float2( 0.0f,-11.0f/g_luminanceTexSize.y  );
     Out.tex6 = tex + float2( 0.0f,-13.0f/g_luminanceTexSize.y  );
-    Out.tex7 = tex + float2( 0.0f,-15.0f/g_luminanceTexSize.y  );
+    Out.tex7 = tex + float2( 0.0f,-15.0f/g_luminanceTexSize.y  );*/
     return Out;
 }
 /*!
@@ -148,21 +136,14 @@ float4 PSYBlur( VS_BlurOutput In ) : COLOR
 {
 	float4 Color;
 	Color  = g_weight[0] * (tex2D( g_blurSampler, In.tex0 )
-	                 + tex2D( g_blurSampler, In.tex7 + g_offset ));
-	Color += g_weight[1] * (tex2D( g_blurSampler, In.tex1 )
-	                 + tex2D( g_blurSampler, In.tex6 + g_offset ));
-	Color += g_weight[2] * (tex2D( g_blurSampler, In.tex2 )
-	            + tex2D( g_blurSampler, In.tex5 + g_offset ));
-	Color += g_weight[3] * (tex2D( g_blurSampler, In.tex3 )
-	                 + tex2D( g_blurSampler, In.tex4 + g_offset ));
-	Color += g_weight[4] * (tex2D( g_blurSampler, In.tex4 )
 	                 + tex2D( g_blurSampler, In.tex3 + g_offset ));
-	Color += g_weight[5] * (tex2D( g_blurSampler, In.tex5 )
+	Color += g_weight[1] * (tex2D( g_blurSampler, In.tex1 )
 	                 + tex2D( g_blurSampler, In.tex2 + g_offset ));
-	Color += g_weight[6] * (tex2D( g_blurSampler, In.tex6 )
-	                 + tex2D( g_blurSampler, In.tex1 + g_offset ));
-	Color += g_weight[7] * (tex2D( g_blurSampler, In.tex7 )
+	Color += g_weight[2] * (tex2D( g_blurSampler, In.tex2 )
+	            + tex2D( g_blurSampler, In.tex1 + g_offset ));
+	Color += g_weight[3] * (tex2D( g_blurSampler, In.tex3 )
 	                 + tex2D( g_blurSampler, In.tex0 + g_offset ));
+	
 	return Color * g_mulYBlurOutputColor;
 }
 /*!
@@ -177,10 +158,76 @@ VS_OUTPUT VSFinal( VS_INPUT In )
 //	Out.tex += g_offset;
 	return Out;
 }
+
+//合成テクスチャ。
+texture g_combineTex00;
+sampler g_combineSampler00 = 
+sampler_state
+{
+    Texture = <g_combineTex00>;
+    MipFilter = LINEAR;
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
+    AddressU = CLAMP;
+    AddressV = CLAMP;
+};
+texture g_combineTex01;
+sampler g_combineSampler01 = 
+sampler_state
+{
+    Texture = <g_combineTex01>;
+    MipFilter = LINEAR;
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
+    AddressU = CLAMP;
+    AddressV = CLAMP;
+};
+texture g_combineTex02;
+sampler g_combineSampler02 = 
+sampler_state
+{
+    Texture = <g_combineTex02>;
+    MipFilter = LINEAR;
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
+    AddressU = CLAMP;
+    AddressV = CLAMP;
+};
+texture g_combineTex03;
+sampler g_combineSampler03 = 
+sampler_state
+{
+    Texture = <g_combineTex03>;
+    MipFilter = LINEAR;
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
+    AddressU = CLAMP;
+    AddressV = CLAMP;
+};
+
+texture g_combineTex04;
+sampler g_combineSampler04 = 
+sampler_state
+{
+    Texture = <g_combineTex04>;
+    MipFilter = LINEAR;
+    MinFilter = LINEAR;
+    MagFilter = LINEAR;
+    AddressU = CLAMP;
+    AddressV = CLAMP;
+};
+
+
 float4 PSFinal( VS_OUTPUT In ) : COLOR
 {
 	float2 uv = In.tex;
-	return clamp(tex2D(g_blurSampler, uv ), 0.0f, 1.0f);
+	float4 combineColor = tex2D(g_combineSampler00, uv);
+	combineColor += tex2D(g_combineSampler01, uv);
+	combineColor += tex2D(g_combineSampler02, uv);
+	combineColor += tex2D(g_combineSampler03, uv);
+	combineColor += tex2D(g_combineSampler04, uv);
+//	combineColor /= 5.0f;
+	return combineColor;
 }
 /*!
  * @brief	輝度抽出テクニック。

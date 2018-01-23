@@ -511,7 +511,7 @@
 //TCircle
 {
 	"TCircle",
-	D3DXVECTOR3(-56.22f, 0.00f, -5.98f),             //平行移動
+	D3DXVECTOR3(-55.49f, 0.00f, -6.14f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //TCircle
@@ -523,7 +523,7 @@
 //TCircle
 {
 	"TCircle",
-	D3DXVECTOR3(-67.09f, 0.00f, 3.43f),             //平行移動
+	D3DXVECTOR3(-67.09f, 0.00f, 3.74f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //TCircle
@@ -548,5 +548,35 @@
 {
 	"GoalCube",
 	D3DXVECTOR3(-158.08f, -0.87f, -0.02f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//Drone
+{
+	"Drone",
+	D3DXVECTOR3(-141.76f, -0.19f, 5.93f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//Drone
+{
+	"Drone",
+	D3DXVECTOR3(-120.01f, 0.18f, 2.92f),             //平行移動
+	D3DXQUATERNION(0.00f, 1.00f, 0.00f, 0.00f ),  //回転
+},
+//Drone
+{
+	"Drone",
+	D3DXVECTOR3(-133.97f, -0.19f, -9.70f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//Drone
+{
+	"Drone",
+	D3DXVECTOR3(-128.38f, -0.19f, 16.81f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//Drone
+{
+	"Drone",
+	D3DXVECTOR3(-118.65f, -0.19f, -13.81f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },

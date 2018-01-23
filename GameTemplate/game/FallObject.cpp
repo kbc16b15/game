@@ -3,10 +3,11 @@
 //#include "myEngine/Physics/CollisionAttr.h"
 
 
-FallObject::FallObject()
+FallObject::FallObject(int sType)
 {
+	RotDir = { 0.0f, 0.0f, 1.0f };
+	m_speed = sType;
 }
-
 
 FallObject::~FallObject()
 {
@@ -55,44 +56,90 @@ void FallObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rot
 	rbInfo.rot = rotation;
 	//剛体を作成。
 	rigidBody.Create(rbInfo);
-	rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
-	rigidBody.GetBody()->setUserIndex(enCollisionAttr_Damage);
+	//rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+	switch (m_speed)
+	{
+	case F:
+		rigidBody.GetBody()->setUserIndex(enCollisionAttr_AddSpeedF);
+		break;
+	case B:
+		rigidBody.GetBody()->setUserIndex(enCollisionAttr_AddSpeedB);
+		break;
+	case R:
+		rigidBody.GetBody()->setUserIndex(enCollisionAttr_AddSpeedR);
+		break;
+	case L:
+		rigidBody.GetBody()->setUserIndex(enCollisionAttr_AddSpeedL);
+		break;
+	default:
+		break;
+	}
 	//作成した剛体を物理ワールドに追加。
 	g_physicsWorld->AddRigidBody(&rigidBody);
-	//angle = 85.0f;
 }
 
 void FallObject::Update()
 {
-	if (position.y < -1.0f)
+	D3DXVECTOR3 Pspeed = g_game->GetPlayer()->GetSpeed();
+	D3DXVECTOR3 Ppos = g_game->GetPlayer()->Getpos();
+	D3DXVECTOR3 speed = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_speed = NONE;
+	m_speed = g_game->GetPlayer()->GetDir();
+	if (!g_game->GetPlayer()->GetGround())
 	{
-		position = firstpos;
+		m_speed = NONE;
 	}
-	angle += 0.05f;
-	D3DXQUATERNION addRot = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
-	D3DXQuaternionRotationAxis(&addRot, &RotDir, angle);
-	rotation = addRot;
-	position.x -=FallSpeedx;
-	position.y -=FallSpeedy;
 
 
-	rigidBody.GetBody()->setActivationState(DISABLE_DEACTIVATION);
-	btTransform& trans = rigidBody.GetBody()->getWorldTransform();
-	btVector3 btPos;
-	btPos.setX(position.x);
-	btPos.setY(position.y);
-	btPos.setZ(position.z);
-	trans.setOrigin(btPos);
-	btQuaternion btRot;
-	btRot.setX(rotation.x);
-	btRot.setY(rotation.y);
-	btRot.setZ(rotation.z);
-	btRot.setW(rotation.w);
-	trans.setRotation(btRot);
+	switch (m_speed)
+	{
+	case F:
+		//if (Ppos.x<position.x + 1.8f&&Ppos.x>position.x - 1.8f){
+			speed.y = Pspeed.y;
+			speed.z = m_addSpeed;
+			g_game->GetPlayer()->AddSpeed(speed);
+		//}
+		break;
+	case B:
+		//if (Ppos.x<position.x + 1.8f&&Ppos.x>position.x - 1.8f){
+			speed.y = Pspeed.y;
+			speed.z = -m_addSpeed;
+			g_game->GetPlayer()->AddSpeed(speed);
+		//}
+		break;
+	case R:
+		//if (Ppos.z<position.z + 1.8f&&Ppos.z>position.z - 1.8f){
+			speed.y = Pspeed.y;
+			speed.x = m_addSpeed;
+			g_game->GetPlayer()->AddSpeed(speed);
+		//}
+		break;
+	case L:
+		//if (Ppos.z<position.z + 1.8f&&Ppos.z>position.z - 2.0f){
+			speed.y = Pspeed.y;
+			speed.x = -m_addSpeed;
+			g_game->GetPlayer()->AddSpeed(speed);
+		//}
+		//else if(Ppos.z>position.z+5.0f)
+		//{
+		//	speed.y = Pspeed.y;
+		//	speed.z = -0.3f/*m_addSpeed*/;
+		//	g_game->GetPlayer()->AddSpeed(speed);
+		//}
+		//else if (Ppos.z<position.z-5.0f)
+		//{
+		//	speed.y = Pspeed.y;
+		//	speed.z = -0.3f/*m_addSpeed*/;
+		//	g_game->GetPlayer()->AddSpeed(speed);
+		//}
+		break;
+	
+	default:
 
-	//btTransform& Ttra = rigidBody.GetBody()->getWorldTransform();//剛体の移動処理
-	//Ttra.setOrigin({ position.x,position.y,position.z });
-	//Ttra.setRotation({ rotation.x,rotation.y,rotation.z,rotation.w });
+
+		break;
+	} 
+
 	model.UpdateWorldMatrix(position, rotation, { 1.0f,1.0f,1.0f, });
 
 }

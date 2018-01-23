@@ -12,7 +12,7 @@ static const D3DVERTEXELEMENT9 scShapeVertex_PT_Element[] = {
 	D3DDECL_END()
 };
 Particle::Particle():
-texture(nullptr),
+//texture(nullptr),
 shaderEffect(nullptr)
 {
 
@@ -82,6 +82,7 @@ void Particle::Init(const SParticleEmitParameter& param)
 		D3DFMT_INDEX16,
 		index
 	);
+
 	HRESULT hr = D3DXCreateTextureFromFileA(g_pd3dDevice,param.texturePath,&texture);
 
 	LPD3DXBUFFER compileErrorBuffer = NULL;

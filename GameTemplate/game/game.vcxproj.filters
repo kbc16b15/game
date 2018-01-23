@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="ソース ファイル\Map">
-      <UniqueIdentifier>{9f303c51-fcc3-4864-99e8-e84adfe0c377}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Player">
       <UniqueIdentifier>{de0b1208-8401-4c18-a875-c92dd5c61047}</UniqueIdentifier>
     </Filter>
@@ -34,12 +31,6 @@
     <Filter Include="ソース ファイル\Fade">
       <UniqueIdentifier>{be730973-e379-4e61-af11-736069a8c124}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Map\Sky">
-      <UniqueIdentifier>{da42494e-e18c-4379-beb1-3cb45871610b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Map\MapChip">
-      <UniqueIdentifier>{4d9b8975-6672-4312-a545-f9f97ad09b3f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\myEngine">
       <UniqueIdentifier>{cf71c2d7-86a3-4324-b23c-562f3630fba6}</UniqueIdentifier>
     </Filter>
@@ -52,9 +43,6 @@
     <Filter Include="ソース ファイル\myEngine\HID">
       <UniqueIdentifier>{eb51f13c-4c51-4798-b6cc-97f71ded64a4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Map\Sea">
-      <UniqueIdentifier>{5b92a977-feca-4cf2-a7a6-f788b7c0fc01}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\scene">
       <UniqueIdentifier>{be987a8b-c367-4b8e-8aa3-16a84005c3d4}</UniqueIdentifier>
     </Filter>
@@ -66,6 +54,18 @@
     </Filter>
     <Filter Include="ソース ファイル\Particle">
       <UniqueIdentifier>{92c26a46-feb6-4340-9faf-f4101578892b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Map">
+      <UniqueIdentifier>{9f303c51-fcc3-4864-99e8-e84adfe0c377}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Map\Sky">
+      <UniqueIdentifier>{da42494e-e18c-4379-beb1-3cb45871610b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Map\MapChip">
+      <UniqueIdentifier>{4d9b8975-6672-4312-a545-f9f97ad09b3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Map\Sea">
+      <UniqueIdentifier>{5b92a977-feca-4cf2-a7a6-f788b7c0fc01}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -230,6 +230,9 @@
     </ClCompile>
     <ClCompile Include="WaveFileBank.cpp">
       <Filter>ソース ファイル\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="BossEnemy.cpp">
+      <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -406,6 +409,12 @@
     </ClInclude>
     <ClInclude Include="Util.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="NameKey.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="BossEnemy.h">
+      <Filter>ソース ファイル\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

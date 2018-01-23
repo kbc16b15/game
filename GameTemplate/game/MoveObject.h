@@ -28,10 +28,10 @@ public:
 
 	}
 	//オブジェクトに乗っているフラグ
-	bool GetRide()
+	/*bool GetRide()
 	{
 		return Rideflg;
-	}
+	}*/
 
 
 private:
@@ -43,20 +43,21 @@ private:
 	MeshCollider	meshCollider;				//メッシュコライダー
 	RigidBody		rigidBody;					//剛体。
 	RigidBodyInfo	rbInfo;						//剛体情報
-	CharacterController	characterController;	//キャラクターコントローラー
-	D3DXVECTOR3		UMovelenge = position;
-	D3DXVECTOR3		LMovelenge = position;
-	D3DXVECTOR3		RMovelenge = position;
-	D3DXVECTOR3		DMovelenge = position;
-	bool			Render = false;				//描画フラグ
-	bool			Rideflg = false;			//乗った時のフラグ
+	bool			m_open1 = false;			//ひらくか否か
+	//CharacterController	characterController;	//キャラクターコントローラー
+	//D3DXVECTOR3		UMovelenge = position;
+	//D3DXVECTOR3		LMovelenge = position;
+	//D3DXVECTOR3		RMovelenge = position;
+	//D3DXVECTOR3		DMovelenge = position;
+	//bool			Render = false;				//描画フラグ
+	//bool			Rideflg = false;			//乗った時のフラグ
 
-	bool Rflg = false;
-	bool Lflg = false;
-	bool Uflg = false;
-	bool Dflg = false;
-
-	const float PAddSpeed = 1.2f;
-	const float MoveSpeed = 0.02f;
+	//bool Rflg = false;
+	//bool Lflg = false;
+	//bool Uflg = false;
+	//bool Dflg = false;
+	const float	length = 5.0f;//開く範囲
+	const float m_maxUp = 30.0f;
+	const float m_upSpeed = 0.02f;
 };
 

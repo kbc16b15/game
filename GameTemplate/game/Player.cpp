@@ -5,7 +5,12 @@
 Player::Player()
 {
 	//m_JumpSound = new Sound();
-	
+	m_position = { 0.0f,0.0f,0.0f };		//座標
+	m_scale = { 1.0f,1.0f,1.0f };			//拡大
+	m_rotation = { 0.0f,0.0f,0.0f,1.0f };	//回転
+	m_moveSpeed = { 0.0f,0.0f,0.0f };		//移動速度
+	m_dir = { 0.0f,0.0f,0.0f };				//かんせー
+	//m_Addvector = { 0.0f,0.0f,0.0f };		//加算速度
 }
 
 Player::~Player()
@@ -17,6 +22,7 @@ Player::~Player()
 		delete m_JumpSound;
 		m_JumpSound = nullptr;
 	}*/
+	//法線マップ開放
 	if (m_normalMap != NULL)
 	{
 		m_normalMap->Release();
@@ -31,18 +37,20 @@ void Player::Start(){
 	m_light.SetDiffuseLightDirection(1, D3DXVECTOR4(-0.707f, 0.0f, -0.707f, 1.0f));
 	m_light.SetDiffuseLightDirection(2, D3DXVECTOR4(0.0f, 0.707f, -0.707f, 1.0f));
 	m_light.SetDiffuseLightDirection(3, D3DXVECTOR4(0.0f, -0.707f, -0.707f, 1.0f));
-
+	//ライトカラーのセット
 	m_light.SetDiffuseLightColor(0, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
 	m_light.SetDiffuseLightColor(1, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
 	m_light.SetDiffuseLightColor(2, D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
 	m_light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
 	m_light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
+
+	//スキンモデルのロード
 	m_skinModelData.LoadModelData("Assets/modelData/Unity2.X", &m_animation);
 	m_skinModel.Init(&m_skinModelData);
 	m_skinModel.SetLight(&m_light);
 
 	//キャラクタコントローラを初期化。
-	m_characterController.Init(0.3f, 0.5f, m_position);
+	m_characterController.Init(m_charaRadius,m_charaHeight, m_position);
 	m_characterController.SetGravity(m_Gravity);
 
 	//アニメーションループフラグのセット
@@ -57,6 +65,9 @@ void Player::Start(){
 	m_animation.SetAnimationEndTime(Damage, 0.2f);
 	m_animation.SetAnimationEndTime(Dead, 3.0f);
 
+	//m_skinModel.SetSpecularlight(true);
+
+	//スペキュラマップ
 	D3DXCreateTextureFromFileA(g_pd3dDevice,
 		"Assets/modelData/utc_spec.tga",
 		&m_specularMap);
@@ -66,8 +77,7 @@ void Player::Start(){
 		m_skinModel.SetSpecularMap(m_specularMap);
 	}
 
-	//m_skinModel.SetSpecularlight(true);
-
+	//法線マップ
 	D3DXCreateTextureFromFileA(g_pd3dDevice,
 		"Assets/modelData/utc_nomal.tga",
 		&m_normalMap);
@@ -77,7 +87,6 @@ void Player::Start(){
 		m_skinModel.SetnormalMap(m_normalMap);
 	}
 
-	
 }
 
 void Player::Update()
@@ -93,12 +102,15 @@ void Player::Update()
 		m_skinModel.SetSpecularMap(m_specularMap);
 	}
 
-	
+	//アニメーション
 	AnimationSet();
 	m_pad.Update();
-	BulletHit();
+	//ダメージ関係
+	Hit();
+	//移動
+	this->move();
 	Setangle();
-	move();
+	
 
 	m_skinModel.UpdateWorldMatrix(m_characterController.GetPosition(), m_rotation, m_scale);
 
@@ -107,11 +119,11 @@ void Player::Update()
 void Player::move()
 {
 	//移動しているがどうかのフラグのセット
-	if (m_moveStop)
+	/*if (m_moveStop)
 	{
 		m_ismove = false;
 	}
-	else if (m_moveSpeed.x != 0.0f || m_moveSpeed.z != 0.0f)
+	else */if (m_moveSpeed.x != 0.0f || m_moveSpeed.z != 0.0f)
 	{
 		m_ismove = true;
 	}
@@ -222,10 +234,85 @@ void Player::Setangle()
 		m_dir.x += moveDir.x;
 		m_dir.z += moveDir.z;
 	}
+
+	SetSubmove();//慣性
+	
+	/*if (moveSpeed == D3DXVECTOR3{ 0.0f,0.0f,0.0f })
+	{
+		Addvector = { 0.0f,0.0f,0.0f };
+	}*/
+	//if (m_isGravity)
+	//{
+	//	if (Grotflg)
+	//	{
+	//		gAngle += 3.0f;
+	//		D3DXQuaternionRotationAxis(&rotation, &D3DXVECTOR3(0.0f, 0.0f, 1.0f), D3DXToRadian(gAngle));
+	//	}
+	//	if (gAngle >= 180)
+	//	{
+	//		gAngle = 180.0f;
+	//		//D3DXQuaternionNormalize(&rotation, &rotation);
+	//		//Grotflg = false;
+	//	}
+	//}
+	if ((moveDir.x*moveDir.x + moveDir.y*moveDir.y + moveDir.z*moveDir.z) > 0.0001f&&!m_moveStop&&!m_isDead)
+	{
+		//回転させる　※
+		float s;
+		float halfAngle = atan2f(moveDir.x, moveDir.z) * 0.5f;
+		s = sin(halfAngle);
+		m_rotation.w = cos(halfAngle);
+		m_rotation.x = 0.0f * s;
+		m_rotation.y = 1.0f * s;
+		m_rotation.z = 0.0f * s;
+	}
+	
+	Setjump();//ジャンプ
+	//キャラクタが動く速度を設定。
+	m_characterController.SetMoveSpeed(m_moveSpeed);
+	
+	if (!m_isDead)//死んだときに移動を停止させる
+	{
+		//キャラクタコントローラーを実行
+		m_characterController.Execute();
+	}
+}
+
+void Player::Setjump()
+{
+	const float			jumpHeight = 8.0f;	//ジャンプの高さ
+	if (m_pad.IsTrigger(m_pad.enButtonA) && m_characterController.IsOnGround()) {
+		//ジャンプ
+		m_moveSpeed.y = jumpHeight;
+		//ジャンプしたことをキャラクタコントローラーに通知。
+		m_characterController.Jump();
+		m_isjump = true;
+
+		Sound*	m_JumpSound = new Sound();//ジャンプ音の読み込みの時に遅くなる？
+		m_JumpSound->Init("Assets/Sound/jump06.wav");
+		m_JumpSound->SetVolume(0.4f);
+		m_JumpSound->Play(false);
+	}
+
+	//if (m_jumpflg)
+	//{
+	//	//ジャンプ
+	//	m_moveSpeed.y = m_jumpHeight;
+	//	//ジャンプしたことをキャラクタコントローラーに通知
+	//	m_characterController.Jump();
+	//	m_jumpflg = false;
+	//	m_isjump = true;
+	//}
+}
+
+void Player::SetSubmove()
+{
+	const float			m_maxSpeed = 5.0f;		//最大移動速度の保存
+	const float			m_downSpeed = 0.3f;		//移動していないときに減速させる処理(摩擦？)
 	if (m_pad.GetLStickXF() == 0.0f&&m_pad.GetLStickYF() == 0.0f)
 	{
 		//移動していないときに減速させる処理(摩擦？)
-		
+
 		if (m_dir.x > 0.0f)
 		{
 			m_dir.x += -m_downSpeed;
@@ -275,67 +362,9 @@ void Player::Setangle()
 	m_moveSpeed.x = m_dir.x;
 	m_moveSpeed.z = m_dir.z;
 
-	/*if (moveSpeed == D3DXVECTOR3{ 0.0f,0.0f,0.0f })
-	{
-		Addvector = { 0.0f,0.0f,0.0f };
-	}*/
-	//if (m_isGravity)
-	//{
-	//	if (Grotflg)
-	//	{
-	//		gAngle += 3.0f;
-	//		D3DXQuaternionRotationAxis(&rotation, &D3DXVECTOR3(0.0f, 0.0f, 1.0f), D3DXToRadian(gAngle));
-	//	}
-	//	if (gAngle >= 180)
-	//	{
-	//		gAngle = 180.0f;
-	//		//D3DXQuaternionNormalize(&rotation, &rotation);
-	//		//Grotflg = false;
-	//	}
-	//}
-	if ((moveDir.x*moveDir.x + moveDir.y*moveDir.y + moveDir.z*moveDir.z) > 0.0001f&&!m_moveStop)
-	{
-		//回転させる　※
-		float s;
-		float halfAngle = atan2f(moveDir.x, moveDir.z) * 0.5f;
-		s = sin(halfAngle);
-		m_rotation.w = cos(halfAngle);
-		m_rotation.x = 0.0f * s;
-		m_rotation.y = 1.0f * s;
-		m_rotation.z = 0.0f * s;
-	}
-
-	if (m_pad.IsTrigger(m_pad.enButtonA) && m_characterController.IsOnGround()) {
-			Sound*	m_JumpSound = new Sound();
-			m_JumpSound->Init("Assets/Sound/jump06.wav");
-			m_JumpSound->SetVolume(0.4f);
-			m_JumpSound->Play(false);
-		//ジャンプ
-			m_moveSpeed.y = m_jumpHeight;
-		//ジャンプしたことをキャラクタコントローラーに通知。
-		m_characterController.Jump();
-		m_isjump = true;
-	}
-
-	if (m_jumpflg)
-	{
-		//ジャンプ
-		m_moveSpeed.y = m_jumpHeight;
-		//ジャンプしたことをキャラクタコントローラーに通知
-		m_characterController.Jump();
-		m_jumpflg = false;
-		m_isjump = true;
-	}
-	
-
-	//キャラクタが動く速度を設定。
-	m_characterController.SetMoveSpeed(m_moveSpeed);
-
-		//キャラクタコントローラーを実行
-		m_characterController.Execute();
 }
 
-void Player::BulletHit()
+void Player::Hit()
 {
 	//std::list<Bullet*> bulletstl = game->GetBullets();
 	//for (auto bullet : bulletstl)
@@ -352,16 +381,19 @@ void Player::BulletHit()
 			Tene->Settraking();
 		}
 	}*/
-	//プレイヤーとバレット前方の当たり判定
+
+	//HPがなくなったら死亡
+	if (g_game->GetHp() <= 0 /*&& m_characterController.IsOnGround()*/)
+	{
+		m_isDead = true;
+	}
+
+	//ダメージ判定
 	if (m_damageflg&&m_damageTime<0)
 	{
-		if (g_game->GetHp() <= 0 /*&& m_characterController.IsOnGround()*/)
+		if(m_isDead == false)
 		{
-			m_isDead = true;
-		}
-		else
-		{
-			//m_state = Damage;
+
 			m_damageflg = false;
 			m_isDamage = true;
 			g_game->Damage(1);
@@ -374,6 +406,7 @@ void Player::BulletHit()
 
 void Player::Draw(D3DXMATRIX* viewM, D3DXMATRIX* projM, bool shadowCaster,bool shadowRecive)
 {
+	//シャドウをセット
 	m_skinModel.SetCasterflg(shadowCaster);
 	m_skinModel.SetReciveflg(shadowRecive);
 	if (!shadowCaster)

@@ -14,8 +14,12 @@ public:
 	//カメラの回転
 	void RotCamera();
 
+	//追従カメラ
+	void trackingCamera();
+
 	//照準カメラ
 	void RockCamera();
+
 	//カメラの取得
 	Camera Getcamera()
 	{
@@ -31,9 +35,9 @@ private:
 	Pad			pad;					//パッド
 	Camera		m_camera;				//カメラ
 	//D3DXVECTOR3 position;				//座標
-	float		angleX = 0.0f;			//カメラ上下値
-	D3DXVECTOR3	toCameraPos;			//カメラ座標
-	float		angle = 0.0f;			//角度
+	//float		angleX = 0.0f;			//カメラ上下値
+	D3DXVECTOR3	m_position;			//カメラ座標
+	//float		angle = 0.0f;			//角度
 	const float RotSpeedY = 2.0f;		//Y軸回転速度
 	const float RotSpeedX = 1.0f;		//X軸回転速度
 	const float CameraUpLimit = 30.0f;	//カメラ上下限度

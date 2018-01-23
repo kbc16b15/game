@@ -94,17 +94,11 @@ public:
 private:
 	void Play(char* buff, unsigned int bufferSize);
 private:
-	//IXAudio2*				m_xAudio2 = nullptr;
-	//IXAudio2MasteringVoice* m_masteringVoice = nullptr;
-	//XAUDIO2_VOICE_STATE		xa2state;
-	//WAVEFORMATEX*			m_pwfx=nullptr;
-	//XAUDIO2_BUFFER			buffer;
-	//WaveFile				m_Wave;
-	IXAudio2SourceVoice*	SourceVoice = nullptr;
+	IXAudio2SourceVoice*		SourceVoice = nullptr;			//!<ソースボイス
 	std::shared_ptr<WaveFile>	m_waveFile;					//!<波形データ
 	bool						m_isLoop = false;			//!<ループフラグ。
 	bool						m_isPlaying = false;		//!<再生中フラグ。
-	unsigned int			m_readStartPos = 0;			//!<読み込み開始位置。
+	unsigned int				m_readStartPos = 0;				//!<読み込み開始位置。
 
 	FLOAT32 m_emitterAzimuths[INPUTCHANNELS];
 	FLOAT32 m_matrixCoefficients[INPUTCHANNELS * OUTPUTCHANNELS];

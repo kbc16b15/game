@@ -3,7 +3,7 @@
 class FallObject:public MapObject
 {
 public:
-	FallObject();
+	FallObject(int sType);
 	~FallObject();
 
 	//初期化
@@ -21,20 +21,36 @@ public:
 		return position;
 	}
 
+	/*void SetSpeedflg(bool addflg)
+	{
+		m_addflg = addflg;
+	}*/
 private:
-	D3DXVECTOR3		firstpos;						//初期座標
-	SkinModel		model;							//スキンモデル
-	SkinModelData	modelData;						//スキンモデルデータ
-	D3DXVECTOR3		position;						//座標
-	D3DXQUATERNION	rotation;						//回転
-	Light			light;							//ライト
-	MeshCollider	meshCollider;					//メッシュコライダー
-	RigidBody		rigidBody;						//剛体。
-	RigidBodyInfo	rbInfo;							//剛体情報
-	D3DXVECTOR3		RotDir = {0.0f, 0.0f, 1.0f};	//回転方向
-	D3DXVECTOR3		RotSpeed;						//回転速度
-	float			angle = 0.0f;					//角度
-	const float		FallSpeedx = 0.05f;
-	const float		FallSpeedy = 0.05f;
+	enum SpeedType {
+		NONE,
+		F,
+		B,
+		R,
+		L
+	};
+
+	int m_speed=NONE;
+
+	D3DXVECTOR3		firstpos;			//初期座標
+	SkinModel		model;				//スキンモデル
+	SkinModelData	modelData;			//スキンモデルデータ
+	D3DXVECTOR3		position;			//座標
+	D3DXQUATERNION	rotation;			//回転
+	Light			light;				//ライト
+	MeshCollider	meshCollider;		//メッシュコライダー
+	RigidBody		rigidBody;			//剛体。
+	RigidBodyInfo	rbInfo;				//剛体情報
+	D3DXVECTOR3		RotDir;				//回転方向
+	D3DXVECTOR3		RotSpeed;			//回転速度
+	float			angle = 0.0f;		//角度
+	const float		m_addSpeed = 0.5f;	//速度にする？
+	//bool			m_addflg = false;
+	//const float		m_subSpeed = 0.05f;	//減産速度にする？
+
 };
 

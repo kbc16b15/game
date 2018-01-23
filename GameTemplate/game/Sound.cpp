@@ -27,8 +27,6 @@ void Sound::Release()
 
 void Sound::Init(char* filePath, bool is3DSound)
 {
-	//SoundEngine* SE = new SoundEngine;
-	//m_waveFile = SoundEngine().GetWaveFileBank().FindWaveFile(0, filePath);
 	m_waveFile = g_soundEngine->GetWaveFileBank().FindWaveFile(0, filePath);
 	
 	if (!m_waveFile) {
@@ -50,8 +48,6 @@ void Sound::Init(char* filePath, bool is3DSound)
 
 void Sound::Init(const NameKey& nameKey,bool is3DSound)
 {
-	//SoundEngine* SE = new SoundEngine;
-	//m_waveFile = SoundEngine().GetWaveFileBank().FindWaveFile(0, filePath);
 	m_waveFile = g_soundEngine->GetWaveFileBank().FindWaveFile(0, nameKey);
 
 	if (!m_waveFile) {

@@ -11,10 +11,10 @@
  */
 Game::Game()
 {
-	srand((unsigned int)time(NULL));
+	//srand((unsigned int)time(NULL));
 	m_player = new Player;
 	m_map = new Map;
-	m_renderTarget = new CRenderTarget;
+	//m_renderTarget = new CRenderTarget;
 }
 /*!
  * @brief	デストラクタ。
@@ -25,13 +25,13 @@ Game::~Game()
 	delete m_player;
 	delete m_map;
 	//delete g_physicsWorld;
-	delete m_renderTarget;
+	//delete m_renderTarget;
 
-	if (m_bgmSound != nullptr)
+	/*if (m_bgmSound != nullptr)
 	{
 		m_bgmSound->Release();
 		m_bgmSound = nullptr;
-	}
+	}*/
 
 	//bulletの消去
 	for (auto bullet : m_bullets) {
@@ -43,14 +43,14 @@ Game::~Game()
 		bulletIt = m_bullets.erase(bulletIt);
 	}
 	//enemの消去
-	/*for (auto Enemynum : m_enem) {
+	for (auto Enemynum : m_enem) {
 		delete Enemynum;
 	}
 	auto enemyIt = m_enem.begin();
 	while (enemyIt != m_enem.end())
 	{
 		enemyIt = m_enem.erase(enemyIt);
-	}*/
+	}
 	//Tenemの消去
 	
 	auto TenemyIt = m_tenem.begin();
@@ -81,6 +81,8 @@ void Game::Init()
 	m_player->Start();
 	//マップを初期化。
 	m_map->Init();
+
+	//m_bossEnemy->Init();
 	//パーティクルの初期化
 	/*SParticleEmitParameter param;
 	param.texturePath = "star.png";
@@ -93,7 +95,7 @@ void Game::Init()
 	for (int i = 0;i <= m_hpMaxNum;i++)
 	{
 		m_hud[i].Initialize("Assets/Sprite/HP.png", m_hppos);
-		m_hppos.x += 100.0f;
+		m_hppos.x += m_hpMovePos;
 	}
 	//m_key.Initialize("Assets/Sprite/key.png", m_keypos);
 	//m_rock.Setalfa(0.5f);
@@ -102,13 +104,13 @@ void Game::Init()
 	CreateSprite();
 
 	
-	/*Sound*	*/m_bgmSound = new Sound();
+	/*Sound* m_bgmSound = new Sound();
 	m_bgmSound->Init("Assets/Sound/bgm.wav",false);
 	m_bgmSound->SetVolume(0.5f);
-	m_bgmSound->Play(true);
+	m_bgmSound->Play(true);*/
 
 
-	m_renderTarget->Create(
+	/*m_renderTarget->Create(
 		FRAME_BUFFER_WIDTH,
 		FRAME_BUFFER_HEIGHT,
 		1,
@@ -116,7 +118,7 @@ void Game::Init()
 		D3DFMT_D24S8,
 		D3DMULTISAMPLE_NONE,
 		0
-	);
+	);*/
 	//Player* pl = new Player();
 	//GoMgr.AddGameObject(pl);
 	//Enemy* en = new Enemy();
@@ -129,7 +131,7 @@ void Game::Init()
  */
 void Game::Update()
 {
-	m_bgmSound->Update();
+	//m_bgmSound->Update();
 	m_pad.Update();
 	//かげ用のライトの位置の設定
 	D3DXVECTOR3 toPos = m_player->Getpos();
@@ -202,10 +204,10 @@ void Game::Update()
 	//	game->AddBullets(bullet);
 	//}
 
-	/*for (auto enemy : m_enem)
+	for (auto enemy : m_enem)
 	{
 		enemy->Update();
-	}*/
+	}
 	for (auto Tenemy : m_tenem)
 	{
 		Tenemy->Update();
@@ -220,7 +222,7 @@ void Game::Update()
 		m_hud[i].Update();
 	}
 
-	/*auto enemyIt = m_enem.begin();
+	auto enemyIt = m_enem.begin();
 	while (enemyIt != m_enem.end()) {
 		if ((*enemyIt)->GetDeathflg()){
 			enemyIt = m_enem.erase(enemyIt);
@@ -228,16 +230,9 @@ void Game::Update()
 		else {
 			enemyIt++;
 		}
-	}*/
-
-	for (auto TEnemynum : m_tenem)
-	{
-		if (TEnemynum->GetDeathflg())
-		{
-			delete TEnemynum;
-			TEnemynum = nullptr;
-		}
 	}
+
+	
 	auto TenemyIt = m_tenem.begin();
 	while (TenemyIt != m_tenem.end()) {
 		if ((*TenemyIt)->GetDeathflg()) {
@@ -246,6 +241,15 @@ void Game::Update()
 		}
 		else {
 			TenemyIt++;
+		}
+	}
+
+	for (auto TEnemynum : m_tenem)
+	{
+		if (TEnemynum->GetDeathflg())
+		{
+			delete TEnemynum;
+			TEnemynum = nullptr;
 		}
 	}
 
@@ -265,6 +269,7 @@ void Game::Update()
 	m_gameCamera.Update();
 	m_player->Update();
 	m_map->Update();
+	//m_bossEnemy->Update();
 	//m_particleEmitter.Update();
 	
 	//if (GetAsyncKeyState('G'))
@@ -292,15 +297,15 @@ void Game::Render()
 	m_player->Draw(&m_gameCamera.Getcamera().GetViewMatrix(), &m_gameCamera.Getcamera().GetProjectionMatrix(), false, false);
 
 	//パーティクルの描画
-	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
-	//m_particleEmitter.Render(m_gameCamera.Getcamera().GetViewMatrix(), m_gameCamera.Getcamera().GetProjectionMatrix());
-	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+	/*g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+	m_particleEmitter.Render(m_gameCamera.Getcamera().GetViewMatrix(), m_gameCamera.Getcamera().GetProjectionMatrix());
+	g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);*/
 
 
-	//for (auto enemy : m_enem)
-	//{
-	//	enemy->Draw();
-	//}
+	for (auto enemy : m_enem)
+	{
+		enemy->Draw();
+	}
 
 	for (auto Tenemy : m_tenem)
 	{
@@ -322,8 +327,8 @@ void Game::Render()
 	{
 		m_rock.Draw(m_sprite);
 	}*/
-	//m_bloom.Draw();
-
+	m_bloom.Draw();//ブルームが重い、たまにバグるので修正するー
+	//m_bossEnemy->Draw();
 }
 
 void Game::GameEnd()

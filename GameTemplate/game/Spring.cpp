@@ -58,11 +58,13 @@ void Spring::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 	rigidBody.Create(rbInfo);
 	//作成した剛体を物理ワールドに追加。
 	g_physicsWorld->AddRigidBody(&rigidBody);
+	
 }
 
 void Spring::Update()
 {
-	D3DXVECTOR3 toPos;
+	D3DXVECTOR3 toPos=position;
+	toPos.y += 1.0f;
 	D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
 
 	float len = D3DXVec3Length(&toPos);
@@ -74,23 +76,50 @@ void Spring::Update()
 	}
 	else
 	{
-		Sflg = false;
+		/*Sflg = false;
 		if (scale.y > 1.0f) { return; }
-		scale.y += 0.03f;
+		scale.y += 0.03f;*/
 	}
 
 	if (Sflg)
 	{
-		D3DXVECTOR3 Ppos=g_game->GetPlayer()->Getpos();
+		/*D3DXVECTOR3 Ppos=g_game->GetPlayer()->Getpos();
 		Ppos.y = position.y + 2.0f;
 		g_game->GetPlayer()->Setpos({ position.x,position.y,position.z});
-		g_game->GetPlayer()->SetJumpflg(true);
-		if (scale.y < 0.2f) 
+		g_game->GetPlayer()->SetJumpflg(true);*///プレイヤーをジャンプさせる処理
+
+
+
+
+		if (scale.y < 0.0f) 
 		{
+			m_maxDownflg = true;//ボタンを押し切った
+			//delete this;
 			return; 
 		}
-		scale.y -= 0.03f;
+		scale.y -= 0.003f;
+		position.y -= 0.01f;
 	}
+
+
+	rigidBody.GetBody()->setActivationState(DISABLE_DEACTIVATION);
+	btTransform& trans = rigidBody.GetBody()->getWorldTransform();
+	btVector3 btPos;
+	btPos.setX(position.x);
+	btPos.setY(position.y);
+	btPos.setZ(position.z);
+	trans.setOrigin(btPos);
+	btQuaternion btRot;
+	btRot.setX(rotation.x);
+	btRot.setY(rotation.y);
+	btRot.setZ(rotation.z);
+	btRot.setW(rotation.w);
+	trans.setRotation(btRot);
+
+	//btTransform& Ttra = rigidBody.GetBody()->getWorldTransform();//剛体の移動処理
+	//Ttra.setOrigin({ position.x,position.y,position.z });
+	//Ttra.setRotation({ rotation.x,rotation.y,rotation.z,rotation.w });
+
 
 	model.UpdateWorldMatrix(position, rotation, scale);
 

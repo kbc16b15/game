@@ -37,7 +37,7 @@ void Fade::Update()
 					m_outtimer += m_frameDeltaTime;
 			
 				}
-				else if (m_outtimer < 0.8)
+				else if (m_outtimer < 0.5)
 				{
 					m_fadetex.Setalfa(1.0f);
 					m_outtimer += m_frameDeltaTime;
@@ -51,7 +51,7 @@ void Fade::Update()
 				break;
 			case eFadeIn:
 				m_outtimer += m_frameDeltaTime;
-				if (m_outtimer < 1.5) { return; }
+				if (m_outtimer < 0.5) { return; }
 
 				m_timer += m_frameDeltaTime;
 				if (m_timer < FADE_TIME)

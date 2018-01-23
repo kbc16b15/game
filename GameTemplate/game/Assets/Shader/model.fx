@@ -185,7 +185,7 @@ VS_OUTPUT VSMain( VS_INPUT In, uniform bool hasSkin )
 	}
 		o.worldPos=Pos.xyz;
 		//float4 worldPos=mul( Pos, g_worldMatrix );
-		o.world=mul(Pos,g_worldMatrix);
+		o.world=Pos;
         o.Pos = mul(float4(Pos.xyz, 1.0f), g_mViewProj);
         
         o.Normal = normalize(Normal);
@@ -263,17 +263,12 @@ float4 PSMain( VS_OUTPUT In ) : COLOR
 		shadowMapUV *= float2(0.5f,-0.5f);
 		
 		shadowMapUV += float2(0.5f,0.5f);
-		float x=tex2D(g_shadowMapTextureSampler,shadowMapUV).x;
-		float4 shadowVal=tex2D(g_shadowMapTextureSampler,shadowMapUV);
+		float x=tex2D(g_shadowMapTextureSampler,shadowMapUV).x;;
 		if(Zwrite>x+0.005f){
-		color *= shadowVal;
+			color *= 0.5f;
 		}
 	}
 	
-	
-	//if(g_isHasNormalMap){
-	//return float4(color.rgb,0.2f);
-	//}
 	return color;
 }
 

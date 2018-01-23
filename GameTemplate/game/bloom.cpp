@@ -44,7 +44,7 @@ Bloom::Bloom()
 			w,
 			h,
 			1,
-			D3DFMT_A16B16G16R16F,
+			D3DFMT_A8R8G8B8,
 			D3DFMT_D16,
 			D3DMULTISAMPLE_NONE,
 			0
@@ -55,7 +55,7 @@ Bloom::Bloom()
 			w ,
 			h ,
 			1,
-			D3DFMT_A16B16G16R16F,
+			D3DFMT_A8R8G8B8,
 			D3DFMT_D16,
 			D3DMULTISAMPLE_NONE,
 			0
@@ -116,7 +116,7 @@ void Bloom::Draw()
 			(float)(luminanceRenderTarget.GetHeight())
 		};*/
 		float offset[2];
-		offset[0] = 16.0f / size[0];
+		offset[0] = 8.0f / size[0];
 		offset[1] = 0.0f;
 		effect->SetValue("g_offset", offset, sizeof(offset));
 
@@ -155,7 +155,7 @@ void Bloom::Draw()
 
 		//オフセットを転送。
 		offset[0] = 0.0f;
-		offset[1] = 16.0f / size[1];
+		offset[1] = 8.0f / size[1];
 		effect->SetValue("g_offset", offset, sizeof(offset));
 
 		/* 
@@ -185,37 +185,38 @@ void Bloom::Draw()
 
 		luminanceTexW = downSamplingRenderTarget[i][1].GetWidth();
 		luminanceTexH = downSamplingRenderTarget[i][1].GetHeight();
-		blurTexture = downSamplingRenderTarget[i][1].GetTexture();
-		//最終合成
-		offset[0] = 0.5f / downSamplingRenderTarget[i][1].GetWidth();
-		offset[1] = 0.5f / downSamplingRenderTarget[i][1].GetHeight();
-
-		/*offset[] = {
-			0.5f / downSamplingRenderTarget[MGF_DOWN_SAMPLE_COUNT][1].GetWidth(),
-			0.5f / downSamplingRenderTarget[MGF_DOWN_SAMPLE_COUNT][1].GetHeight()
-		};*/
-		g_pd3dDevice->SetRenderTarget(0, g_renderTarget->GetRenderTarget());
-		g_pd3dDevice->SetDepthStencilSurface(g_renderTarget->GetDepthStencilBuffer());
-
-		//加算合成
-		g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-		g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
-		g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
-		effect->SetTechnique("Final");
-		effect->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
-		effect->BeginPass(0);
-		effect->SetTexture("g_blur", blurTexture);
-		effect->SetValue("g_offset", offset, sizeof(offset));
-		effect->CommitChanges();
-		DrawQuadPrimitive();
-
-		effect->EndPass();
-		effect->End();
-
-		g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-		g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-		g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+		
 	}
+	//最終合成
+
+	/*offset[] = {
+	0.5f / downSamplingRenderTarget[MGF_DOWN_SAMPLE_COUNT][1].GetWidth(),
+	0.5f / downSamplingRenderTarget[MGF_DOWN_SAMPLE_COUNT][1].GetHeight()
+	};*/
+	g_pd3dDevice->SetRenderTarget(0, g_renderTarget->GetRenderTarget());
+	g_pd3dDevice->SetDepthStencilSurface(g_renderTarget->GetDepthStencilBuffer());
+
+	//加算合成
+	g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+	g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	effect->SetTechnique("Final");
+	effect->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
+	effect->BeginPass(0);
+	effect->SetTexture("g_combineTex00", downSamplingRenderTarget[0][1].GetTexture());
+	effect->SetTexture("g_combineTex01", downSamplingRenderTarget[1][1].GetTexture());
+	effect->SetTexture("g_combineTex02", downSamplingRenderTarget[2][1].GetTexture());
+	effect->SetTexture("g_combineTex03", downSamplingRenderTarget[3][1].GetTexture());
+	effect->SetTexture("g_combineTex04", downSamplingRenderTarget[4][1].GetTexture());
+	effect->CommitChanges();
+	DrawQuadPrimitive();
+
+	effect->EndPass();
+	effect->End();
+
+	g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+	g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 #else
 g_pd3dDevice->SetRenderTarget(0, g_renderTarget->GetRenderTarget());
 g_pd3dDevice->SetDepthStencilSurface(g_renderTarget->GetDepthStencilBuffer());

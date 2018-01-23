@@ -3,6 +3,7 @@
 #include "Particle.h"
 
 using namespace std;
+
 ParticleEmitter::ParticleEmitter()
 {
 }

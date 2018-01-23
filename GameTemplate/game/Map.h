@@ -40,6 +40,11 @@ public:
 
 	}
 
+	std::vector<FallObject*> GetFall()
+	{
+		return m_fallList;
+	}
+
 	//ステージnum
 	enum STAGE
 	{
@@ -54,7 +59,7 @@ private:
 	//std::vector<MoveObject*> moveList;	//ムーブオブジェクトのリスト
 	//std::vector<TrapObject*> trapList;	//ダメージオブジェクトのリスト
 	//std::vector<RotObject*> rotList;		//回転オブジェクトのリスト
-	//std::vector<FallObject*> fallList;	//落下オブジェクトのリスト
+	std::vector<FallObject*> m_fallList;	//落下オブジェクトのリスト
 	//std::vector<GoalObject*> GoalList;	//ゴール地点
 	//std::vector<MoveCube*> mCubeList;		//移動床
 	std::vector<HealItem*>	m_healList;		//回復アイテム

@@ -11,7 +11,7 @@ public:
 	//p2	“ñ‚Â–Ú‚Ì‹…‚ÌÀ•W
 	//r1	ˆê‚Â–Ú‚Ì‹…‚Ì”¼Œa(‘å‚«‚³)
 	//r2	“ñ‚Â–Ú‚Ì‹…‚Ì”¼Œa(‘å‚«‚³)
-	bool Cubemass(D3DXVECTOR3 p1, D3DXVECTOR3 p2, float r1, float r2);
+	bool Cube(D3DXVECTOR3 p1, D3DXVECTOR3 p2, float r1, float r2);
 
 };
 

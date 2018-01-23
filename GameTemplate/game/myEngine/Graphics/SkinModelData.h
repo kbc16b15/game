@@ -77,4 +77,6 @@ private:
 private:
 	LPD3DXFRAME					frameRoot;		//フレームルート。
 	ID3DXAnimationController*   pAnimController;	//アニメーションコントローラ。
+	bool						m_isClone;//クローン
+	const SkinModelData*		m_original = nullptr;
 };

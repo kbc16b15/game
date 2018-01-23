@@ -59,10 +59,10 @@ private:
 	IXAudio2SubmixVoice* m_submixVoice = nullptr;	//!<サブミックスボイス。
 	DWORD m_channelMask = 0;						//!<オーディオチャンネルマスク。
 	DWORD m_nChannels = 0;							//!<チャンネル数。
-	float m_fListenerAngle = 0.0f;
-	bool m_UseListenerCone = false;
-	bool m_fUseInnerRadius = false;
-	bool m_useRedirectToLFE = false;
+	//float m_fListenerAngle = 0.0f;
+	//bool m_UseListenerCone = false;
+	//bool m_fUseInnerRadius = false;
+	//bool m_useRedirectToLFE = false;
 	bool m_isInited = false;
 	WaveFileBank m_waveFileBank;					//!<波形データのバンク。
 };

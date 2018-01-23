@@ -14,7 +14,7 @@ private:
 	LPD3DXEFFECT effect;
 	CRenderTarget luminanceRenderTarget;
 	CRenderTarget downSamplingRenderTarget[MGF_DOWN_SAMPLE_COUNT][2];
-	static const int NUM_WEIGHT = 8;
+	static const int NUM_WEIGHT = 4;
 	float weights[NUM_WEIGHT];
 };
 

@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "MoveObject.h"
+#include "Spring.h"
+#include "Map.h"
 
 MoveObject::MoveObject()
 {
@@ -59,102 +61,133 @@ void MoveObject::Init(const char* modelName,D3DXVECTOR3	pos,D3DXQUATERNION	rot)
 	//作成した剛体を物理ワールドに追加。
 	g_physicsWorld->AddRigidBody(&rigidBody);
 
-	UMovelenge.x = position.x - 20.0f;
+	/*UMovelenge.x = position.x - 20.0f;
 	LMovelenge.x = position.z - 2.0f;
 	RMovelenge.x = position.z + 2.0f;
-	DMovelenge.x = position.x;
+	DMovelenge.x = position.x;*/
 
 }
 
-
 void MoveObject::Update()
 {
-	D3DXVECTOR3 toPos;
-	D3DXVECTOR3 LPos = position;
-	D3DXVECTOR3 RPos = position;
-	D3DXVECTOR3 UPos = position;
-	D3DXVECTOR3 DPos = position;
-	LPos.z -= 2.4f;
-	RPos.z += 2.4f;
-	UPos.x -= 2.4f;
-	DPos.x += 2.4f;
+	//ムーブオブジェクトのインスタンスの取得
+	/*std::vector<Spring*> springstl=g_game->GetMap()->GetSpringObject();
+	for (auto ss : springstl)
+	{
 
-	D3DXVec3Subtract(&toPos, &LPos, &g_game->GetPlayer()->Getpos());
-	float Llen = D3DXVec3Length(&toPos);
-	D3DXVec3Subtract(&toPos, &RPos, &g_game->GetPlayer()->Getpos());
-	float Rlen = D3DXVec3Length(&toPos);
-	D3DXVec3Subtract(&toPos, &DPos, &g_game->GetPlayer()->Getpos());
-	float Dlen = D3DXVec3Length(&toPos);
-	D3DXVec3Subtract(&toPos, &g_game->GetPlayer()->Getpos(), &UPos);
-	float Ulen = D3DXVec3Length(&toPos);
-	if (Llen < 1.5f&&position.z>LMovelenge.x)
-	{
-		Lflg = true;
-	}
-	else
-	{
-		Lflg = false;
-	}
+		if (ss->Getmaxdown())
+		{
+			m_open1 = true;
+		}
 
-	if (Lflg)
-	{
-		position.z -= MoveSpeed;
-		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
-		speed.z -= PAddSpeed;
-		g_game->GetPlayer()->AddSpeed(speed);
-	}
+	}*/
 
-	if (Rlen < 1.5f&&position.z<RMovelenge.x)
+	D3DXVECTOR3 toPos = position;
+	D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
+
+	float len = D3DXVec3Length(&toPos);
+
+	if (len <length)
 	{
-		Rflg = true;
+		m_open1 = true;
 
 	}
-	else
+	if (m_open1)
 	{
-		Rflg = false;
+		if (m_maxUp > position.y)
+		{
+			position.y += m_upSpeed;
+			//m_maxUpの値まで上げる
+		}
 	}
 
-	if (Rflg)
-	{
-		position.z += MoveSpeed;
-		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
-		speed.z += PAddSpeed;
-		g_game->GetPlayer()->AddSpeed(speed);
-	}
 
-	if (Dlen < 1.0f&&position.x<DMovelenge.x)
-	{
-		Dflg = true;
-	}
-	else
-	{
-		Dflg = false;
-	}
+	//D3DXVECTOR3 toPos;
+	//D3DXVECTOR3 LPos = position;
+	//D3DXVECTOR3 RPos = position;
+	//D3DXVECTOR3 UPos = position;
+	//D3DXVECTOR3 DPos = position;
+	//LPos.z -= 2.4f;
+	//RPos.z += 2.4f;
+	//UPos.x -= 2.4f;
+	//DPos.x += 2.4f;
 
-	if (Dflg)
-	{
-		position.x += MoveSpeed;
-		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
-		speed.x += PAddSpeed;
-		g_game->GetPlayer()->AddSpeed(speed);
-	}
+	//D3DXVec3Subtract(&toPos, &LPos, &g_game->GetPlayer()->Getpos());
+	//float Llen = D3DXVec3Length(&toPos);
+	//D3DXVec3Subtract(&toPos, &RPos, &g_game->GetPlayer()->Getpos());
+	//float Rlen = D3DXVec3Length(&toPos);
+	//D3DXVec3Subtract(&toPos, &DPos, &g_game->GetPlayer()->Getpos());
+	//float Dlen = D3DXVec3Length(&toPos);
+	//D3DXVec3Subtract(&toPos, &g_game->GetPlayer()->Getpos(), &UPos);
+	//float Ulen = D3DXVec3Length(&toPos);
+	//if (Llen < 1.5f&&position.z>LMovelenge.x)
+	//{
+	//	Lflg = true;
+	//}
+	//else
+	//{
+	//	Lflg = false;
+	//}
 
-	if (Ulen < 1.0f&&position.x > UMovelenge.x)
-	{
-		Uflg = true;
-	}
-	else {
-		Uflg = false;
-	}
+	//if (Lflg)
+	//{
+	//	position.z -= MoveSpeed;
+	//	D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
+	//	speed.z -= PAddSpeed;
+	//	g_game->GetPlayer()->AddSpeed(speed);
+	//}
 
-	if (Uflg)
-	{
-		//moveSpeed.x = 4.0f;
-		position.x -= MoveSpeed;
-		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
-		speed.x -=PAddSpeed;
-		g_game->GetPlayer()->AddSpeed(speed);
-	}
+	//if (Rlen < 1.5f&&position.z<RMovelenge.x)
+	//{
+	//	Rflg = true;
+
+	//}
+	//else
+	//{
+	//	Rflg = false;
+	//}
+
+	//if (Rflg)
+	//{
+	//	position.z += MoveSpeed;
+	//	D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
+	//	speed.z += PAddSpeed;
+	//	g_game->GetPlayer()->AddSpeed(speed);
+	//}
+
+	//if (Dlen < 1.0f&&position.x<DMovelenge.x)
+	//{
+	//	Dflg = true;
+	//}
+	//else
+	//{
+	//	Dflg = false;
+	//}
+
+	//if (Dflg)
+	//{
+	//	position.x += MoveSpeed;
+	//	D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
+	//	speed.x += PAddSpeed;
+	//	g_game->GetPlayer()->AddSpeed(speed);
+	//}
+
+	//if (Ulen < 1.0f&&position.x > UMovelenge.x)
+	//{
+	//	Uflg = true;
+	//}
+	//else {
+	//	Uflg = false;
+	//}
+
+	//if (Uflg)
+	//{
+	//	//moveSpeed.x = 4.0f;
+	//	position.x -= MoveSpeed;
+	//	D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
+	//	speed.x -=PAddSpeed;
+	//	g_game->GetPlayer()->AddSpeed(speed);
+	//}
 
 	rigidBody.GetBody()->setActivationState(DISABLE_DEACTIVATION);
 	btTransform& trans = rigidBody.GetBody()->getWorldTransform();

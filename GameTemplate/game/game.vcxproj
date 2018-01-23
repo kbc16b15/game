@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bloom.cpp" />
+    <ClCompile Include="BossEnemy.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="CubeCollision.cpp" />
     <ClCompile Include="GravityObject.cpp" />
@@ -215,11 +216,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bloom.h" />
+    <ClInclude Include="BossEnemy.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="CubeCollision.h" />
     <ClInclude Include="GravityObject.h" />
     <ClInclude Include="Indexbuffer.h" />
     <ClInclude Include="MapObject.h" />
+    <ClInclude Include="NameKey.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleEmitter.h" />
     <ClInclude Include="Primitive.h" />

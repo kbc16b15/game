@@ -9,7 +9,10 @@ Sky::Sky()
 Sky::~Sky()
 {
 	m_modelData.Release();
-	m_cubeTex->Release();
+	if (m_cubeTex != NULL)
+	{
+		m_cubeTex->Release();
+	}
 }
 
 void Sky::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
@@ -32,9 +35,9 @@ void Sky::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 	m_model.UpdateWorldMatrix(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
 
 	//キューブマップの作成
-	D3DXCreateCubeTextureFromFile(g_pd3dDevice, "Assets/modelData/Texture2.dds", &m_cubeTex);
+	D3DXCreateCubeTextureFromFile(g_pd3dDevice, "Assets/modelData/pp.dds",&m_cubeTex);
 
-	if (m_cubeTex != nullptr)
+	if (m_cubeTex != NULL)
 	{
 		m_model.SetcubeMap(m_cubeTex);
 	}
@@ -53,6 +56,3 @@ void Sky::Draw()
 
 	m_model.Draw(&g_game->GetCamera()->GetViewMatrix(), &g_game->GetCamera()->GetProjectionMatrix());
 }
-
-	
-

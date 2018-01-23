@@ -52,7 +52,7 @@ void MoveCube::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 
 	rigidBody.Create(rbInfo);
 	rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
-	rigidBody.GetBody()->setUserIndex(enCollisionAttr_ObjectHit);
+	//rigidBody.GetBody()->setUserIndex(enCollisionAttr_ObjectHit);
 	rigidBody.GetBody()->setGravity({ 0.0f,0.0f,0.0f });
 
 	g_physicsWorld->AddRigidBody(&rigidBody);
@@ -65,107 +65,107 @@ void MoveCube::Update()
 	D3DXVECTOR3 toPos;
 	float len;
 	
-	switch (MoveDir)
-	{
-	case FORWARD:
-		D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
-		len = D3DXVec3Length(&toPos);
-		if (len < 3.0f&&position.x>Limitpos.x&&g_game->GetPlayer()->GetObjectHit())
-		{
+	//switch (MoveDir)
+	//{
+	//case FORWARD:
+	//	D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
+	//	len = D3DXVec3Length(&toPos);
+	//	if (len < 3.0f&&position.x>Limitpos.x&&g_game->GetPlayer()->GetObjectHit())
+	//	{
 
-			position.x -= 0.04f;
-			D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
-			speed.x -=2.4f;
-			g_game->GetPlayer()->AddSpeed(speed);
-		}
-		else if (len > 3.0f&&position.x<Spos.x)
-		{
-			position.x += 0.04f;
-		}
-		break;
-	case LEFT:
-		D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
-		len = D3DXVec3Length(&toPos);
-		if (len < 3.0f&&position.z>Limitpos.z&&g_game->GetPlayer()->GetObjectHit())
-		{
-			position.z -= 0.04f;
-			D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
-			speed.z -= 2.4f;
-			g_game->GetPlayer()->AddSpeed(speed);
-		}
-		else if (len > 3.0f&&position.z<Spos.z)
-		{
-			position.z += 0.04f;
-		}
-		break;
-	case RIGHT:
-		D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
-		len = D3DXVec3Length(&toPos);
-		if (len < 3.0f&&position.z<Limitpos.z&&g_game->GetPlayer()->GetObjectHit())
-		{
-			position.z += 0.04f;
-			D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
-			speed.z += 2.4f;
-			g_game->GetPlayer()->AddSpeed(speed);
-		}
-		else if (len > 3.0f&&position.z>Spos.z)
-		{
-			position.z -= 0.04f;
-		}
-		break;
-	case BACK:
-		D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
-		len = D3DXVec3Length(&toPos);
-		if (len < 3.0f&&position.x<Limitpos.x&&g_game->GetPlayer()->GetObjectHit())
-		{
-			position.x += 0.04f;
-			D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
-			speed.x += 1.f;
-			g_game->GetPlayer()->AddSpeed(speed);
-		}
-		else if (len > 3.0f&&position.x>Spos.x)
-		{
-			position.x -= 0.04f;
-		}
-		break;
-	case UP:
-		D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
-		len = D3DXVec3Length(&toPos);
-		if (len < 2.5f&&position.y<Limitpos.y&&g_game->GetPlayer()->GetObjectHit())
-		{
-			position.y += 0.04f;
-			D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
-			speed.y += 2.4f;
-			g_game->GetPlayer()->AddSpeed(speed);
-		}
-		else if (len > 2.5f&&position.y>Spos.y)
-		{
-			position.y -= 0.04f;
-		}
-		break;
-	case DOWN:
-		D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
-		len = D3DXVec3Length(&toPos);
-		
-		if (len < 3.0f&&position.y>Limitpos.y&&g_game->GetPlayer()->GetObjectHit())
-		{
-			Downflg = true;
-			g_game->GetPlayer()->SetObjectHit(false);
-		}
-		if (Downflg)
-		{
-			position.y -= 0.04f;
+	//		position.x -= 0.04f;
+	//		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
+	//		speed.x -=2.4f;
+	//		g_game->GetPlayer()->AddSpeed(speed);
+	//	}
+	//	else if (len > 3.0f&&position.x<Spos.x)
+	//	{
+	//		position.x += 0.04f;
+	//	}
+	//	break;
+	//case LEFT:
+	//	D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
+	//	len = D3DXVec3Length(&toPos);
+	//	if (len < 3.0f&&position.z>Limitpos.z&&g_game->GetPlayer()->GetObjectHit())
+	//	{
+	//		position.z -= 0.04f;
+	//		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
+	//		speed.z -= 2.4f;
+	//		g_game->GetPlayer()->AddSpeed(speed);
+	//	}
+	//	else if (len > 3.0f&&position.z<Spos.z)
+	//	{
+	//		position.z += 0.04f;
+	//	}
+	//	break;
+	//case RIGHT:
+	//	D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
+	//	len = D3DXVec3Length(&toPos);
+	//	if (len < 3.0f&&position.z<Limitpos.z&&g_game->GetPlayer()->GetObjectHit())
+	//	{
+	//		position.z += 0.04f;
+	//		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
+	//		speed.z += 2.4f;
+	//		g_game->GetPlayer()->AddSpeed(speed);
+	//	}
+	//	else if (len > 3.0f&&position.z>Spos.z)
+	//	{
+	//		position.z -= 0.04f;
+	//	}
+	//	break;
+	//case BACK:
+	//	D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
+	//	len = D3DXVec3Length(&toPos);
+	//	if (len < 3.0f&&position.x<Limitpos.x&&g_game->GetPlayer()->GetObjectHit())
+	//	{
+	//		position.x += 0.04f;
+	//		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
+	//		speed.x += 1.f;
+	//		g_game->GetPlayer()->AddSpeed(speed);
+	//	}
+	//	else if (len > 3.0f&&position.x>Spos.x)
+	//	{
+	//		position.x -= 0.04f;
+	//	}
+	//	break;
+	//case UP:
+	//	D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
+	//	len = D3DXVec3Length(&toPos);
+	//	if (len < 2.5f&&position.y<Limitpos.y&&g_game->GetPlayer()->GetObjectHit())
+	//	{
+	//		position.y += 0.04f;
+	//		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
+	//		speed.y += 2.4f;
+	//		g_game->GetPlayer()->AddSpeed(speed);
+	//	}
+	//	else if (len > 2.5f&&position.y>Spos.y)
+	//	{
+	//		position.y -= 0.04f;
+	//	}
+	//	break;
+	//case DOWN:
+	//	D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
+	//	len = D3DXVec3Length(&toPos);
+	//	
+	//	if (len < 3.0f&&position.y>Limitpos.y&&g_game->GetPlayer()->GetObjectHit())
+	//	{
+	//		Downflg = true;
+	//		//g_game->GetPlayer()->SetObjectHit(false);
+	//	}
+	//	if (Downflg)
+	//	{
+	//		position.y -= 0.04f;
 
-		}
-		break;
-	default:
-		break;
-	}
-	btTransform& Ttra = rigidBody.GetBody()->getWorldTransform();//çÑëÃÇÃà⁄ìÆèàóù
-	Ttra.setOrigin({ position.x,position.y,position.z });
-	Ttra.setRotation({ rotation.x,rotation.y,rotation.z,rotation.w });
+	//	}
+	//	break;
+	//default:
+	//	break;
+	//}
+	//btTransform& Ttra = rigidBody.GetBody()->getWorldTransform();//çÑëÃÇÃà⁄ìÆèàóù
+	//Ttra.setOrigin({ position.x,position.y,position.z });
+	//Ttra.setRotation({ rotation.x,rotation.y,rotation.z,rotation.w });
 
-	model.UpdateWorldMatrix(position, rotation, { 1.0f,1.0f,1.0f });
+	//model.UpdateWorldMatrix(position, rotation, { 1.0f,1.0f,1.0f });
 }
 
 void MoveCube::Draw()

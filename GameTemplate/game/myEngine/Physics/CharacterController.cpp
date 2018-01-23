@@ -18,7 +18,7 @@ namespace {
 		D3DXVECTOR3 hitNormal ={0.0f, 0.0f, 0.0f};			//衝突点の法線。
 		btCollisionObject* me = nullptr;					//自分自身。自分自身との衝突を除外するためのメンバ。
 		float dist = FLT_MAX;								//衝突点までの距離。一番近い衝突点を求めるため。FLT_MAXは単精度の浮動小数点が取りうる最大の値。
-		//bool ObjectHit = false;
+		const float Speed = 2.0f;
 															//衝突したときに呼ばれるコールバック関数。
 		virtual	btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 		{
@@ -31,12 +31,50 @@ namespace {
 			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Damage)//ユーザー定義のコリジョン属性
 			{
 				g_game->GetPlayer()->SetDamage();//プレイヤーにダメージ
-				//ObjectHit = true;
 			}
-			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_ObjectHit)//ユーザー定義のコリジョン属性
+			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeedR)//ユーザー定義のコリジョン属性
 			{
-				g_game->GetPlayer()->SetObjectHit(true);
+				g_game->GetPlayer()->SetDir(3);
 			}
+			else if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeedL)//ユーザー定義のコリジョン属性
+			{
+				g_game->GetPlayer()->SetDir(4);
+			}
+			else if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeedF)//ユーザー定義のコリジョン属性
+			{
+				g_game->GetPlayer()->SetDir(1);
+			}
+			else if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeedB)//ユーザー定義のコリジョン属性
+			{
+				g_game->GetPlayer()->SetDir(2);
+			}
+			else
+			{
+				g_game->GetPlayer()->SetDir(0);
+			}
+			
+			//if(convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeed)//ユーザー定義のコリジョン属性
+			//{
+
+				//g_game->GetMap()->GetFall().begin();
+				//m_bullets.begin();
+				/*auto objectIt = g_game->GetMap()->GetFall().begin();
+				while (objectIt != g_game->GetMap()->GetFall().end()) {
+					if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeed) {
+						objectIt = g_game->GetMap()->GetFall().erase(objectIt);
+					}
+					else {
+						objectIt++;
+					}
+				}*/
+
+				//コンストラクタで状態を渡し、Initでキャラコン状態を決める
+				//左右前後の状態を作り　一つずつプレイヤーの関数を呼んで渡す
+			//}
+			//if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_ObjectHit)//ユーザー定義のコリジョン属性
+			//{
+			//	g_game->GetPlayer()->SetObjectHit(true);
+			//}
 			//衝突点の法線を引っ張ってくる。
 			D3DXVECTOR3 hitNormalTmp = *(D3DXVECTOR3*)&convexResult.m_hitNormalLocal;
 			//上方向と法線のなす角度を求める。

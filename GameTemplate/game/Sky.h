@@ -23,6 +23,6 @@ private:
 	D3DXVECTOR3				m_position;								//座標
 	D3DXQUATERNION			m_rotation = {0.0f,0.0f,0.0f,1.0f};		//回転
 	Light					m_light;								//ライト
-	LPDIRECT3DCUBETEXTURE9	m_cubeTex = nullptr;				//!<キューブテクスチャ。
+	LPDIRECT3DCUBETEXTURE9	m_cubeTex = NULL;				//!<キューブテクスチャ。
 };
 

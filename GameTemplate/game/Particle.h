@@ -8,11 +8,12 @@ struct SParticleEmitParameter;
 //パーティクル
 class Particle{
 	Primitive		primitive;
-	LPDIRECT3DTEXTURE9 texture;
+	/*static */LPDIRECT3DTEXTURE9 texture;
 	ID3DXEffect* shaderEffect;
 	D3DXVECTOR3 moveSpeed;
 	D3DXVECTOR3 position;
 	int time=40;
+	//HRESULT hr;
 public:
 	//コンストラクタ
 	Particle();

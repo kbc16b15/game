@@ -17,6 +17,7 @@
 #include "RenderTarget.h"
 #include "bloom.h"
 #include "ParticleEmitter.h"
+#include "BossEnemy.h"
 //#include "BaseScene.h"
 //#include "IGameObject.h"
 //#include "GameObjectManager.h"
@@ -94,6 +95,10 @@ public:
 		m_tenem.push_back(enemy);
 	}
 
+	void AddBossEnemy(BossEnemy* BossEnemy)
+	{
+		this->m_bossEnemy = BossEnemy;
+	}
 	//追従敵の取得
 	/*std::vector<trackingEnemy*> GetTEnemy()
 	{
@@ -136,35 +141,27 @@ private:
 		BREAK,
 	};
 	//GameObjectManager GoMgr;						//
-	CRenderTarget*		m_renderTarget;				//ポストエフェクト用のレンダリングターゲット？
+	//CRenderTarget*		m_renderTarget;				//ポストエフェクト用のレンダリングターゲット？
 	Select				GAME = START;				//選択
 	EState				m_state = Run;				//フェードの状態
-	Sound*				m_bgmSound=nullptr;			//サウンド
-	//SoundEngine*		m_soundEngine=nullptr;		//サウンドエンジン
+	//Sound*				m_bgmSound=nullptr;			//サウンド
 	std::list<Bullet*>	m_bullets;					//バレットのリスト
 	std::vector<Enemy*>	m_enem;						//エネミーのvector
 	std::vector<trackingEnemy*> m_tenem;			//追従エネミー
 	gameCamera			m_gameCamera;				//ゲームカメラ
 	//Camera*			camera;						//カメラ
 	Player*				m_player;					//プレイヤー
+	BossEnemy*			m_bossEnemy;				//ボスエネミー
 	Map*				m_map;						//マップ
 	Bloom				m_bloom;					//ブルーム
-	//ParticleEmitter		m_particleEmitter;			//パーティクル
-	int					m_hpMaxNum = 2;				//最大HP量
+	LPD3DXSPRITE		m_sprite;					//スプライト
+	D3DXVECTOR2			m_hppos = { 120.0f,80.0f };	//HP座標
+	bool				m_nextflg = false;			//次のステージへ
+	Pad					m_pad;						//パッド
+	const int			m_hpMaxNum = 2;				//最大HP量
+	const float			m_hpMovePos = 100.0f;		//HP間隔
 	int					m_hpNum = 3;				//HP量
 	HUD					m_hud[3];					//画像表示の変数
-	//HUD					m_key;						//鍵
-	//HUD					m_rock;						//
-	LPD3DXSPRITE		m_sprite;					//スプライト
-	D3DXVECTOR2			m_hppos = { 120.0f,80.0f };		//HP座標
-	//D3DXVECTOR2			m_keypos = { 120.0f, 200.0f };	//鍵座標
-	//D3DXVECTOR2			m_rockpos = { 700.0f,250.0f };	//照準座標
-	bool				m_gunflg = false;
-	bool				m_nextflg = false;
-	Pad					m_pad;
-	//D3DXVECTOR3			m_rockCamera;
-
-
 };
 
 extern Game* g_game;

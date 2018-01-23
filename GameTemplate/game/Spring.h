@@ -16,6 +16,11 @@ public:
 	void Update();
 	//描画
 	void Draw();
+
+	bool Getmaxdown()
+	{
+		return m_maxDownflg;
+	}
 	//描画の無効を設定
 	//Rendflg　描画フラグ
 	//bool Rend(bool Rendflg);
@@ -31,7 +36,8 @@ private:
 	D3DXQUATERNION		rotation;				//回転
 	D3DXVECTOR3			scale;					//拡大
 	bool				Sflg = false;			//範囲フラグ
-	float				SpringSpeed=10.0f;		//バネ速度
-	const float			length = 1.8f;			//ひきつける範囲
+	bool				m_maxDownflg = false;	//ボタン
+	//float				SpringSpeed=10.0f;		//バネ速度
+	const float			length = 3.0f;			//ひきつける範囲
 };
 

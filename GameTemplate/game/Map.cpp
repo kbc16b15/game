@@ -72,7 +72,7 @@ void Map::Init(/*struct SMapChipLocInfo Info[]*/)
 
 	for (int i = 0; i < numObject; i++) {
 
-		if (strcmp(work[i].modelName, "MCube") == 0)//十字床
+		if (strcmp(work[i].modelName, "dore") == 0)//十字床
 		{
 			MoveObject* moveChip = new MoveObject;
 			moveChip->Init(work[i].modelName, work[i].pos, work[i].rotation);
@@ -241,11 +241,32 @@ void Map::Init(/*struct SMapChipLocInfo Info[]*/)
 			//rotList.push_back(rotChip);
 			m_mapList.push_back(rotChip);
 		}
-		else if (strcmp(work[i].modelName, "FCube") == 0)//落下オブジェクト
+		else if (strcmp(work[i].modelName, "FCubeF") == 0)
 		{
-			FallObject* fallChip = new FallObject;
+			FallObject* fallChip = new FallObject(1);
 			fallChip->Init(work[i].modelName, work[i].pos, work[i].rotation);
-			//fallList.push_back(fallChip);
+			m_fallList.push_back(fallChip);
+			m_mapList.push_back(fallChip);
+		}
+		else if (strcmp(work[i].modelName, "FCubeB") == 0)
+		{
+			FallObject* fallChip = new FallObject(2);
+			fallChip->Init(work[i].modelName, work[i].pos, work[i].rotation);
+			m_fallList.push_back(fallChip);
+			m_mapList.push_back(fallChip);
+		}
+		else if (strcmp(work[i].modelName, "FCubeR") == 0)
+		{
+			FallObject* fallChip = new FallObject(3);
+			fallChip->Init(work[i].modelName, work[i].pos, work[i].rotation);
+			m_fallList.push_back(fallChip);
+			m_mapList.push_back(fallChip);
+		}
+		else if (strcmp(work[i].modelName, "FCubeL") == 0)
+		{
+			FallObject* fallChip = new FallObject(4);
+			fallChip->Init(work[i].modelName, work[i].pos, work[i].rotation);
+			m_fallList.push_back(fallChip);
 			m_mapList.push_back(fallChip);
 		}
 		else if (strcmp(work[i].modelName, "HealItem") == 0|| strcmp(work[i].modelName, "apple") == 0 
@@ -289,17 +310,17 @@ void Map::Init(/*struct SMapChipLocInfo Info[]*/)
 			//seaList.push_back(seaChip);
 			m_mapList.push_back(seaChip);
 		}
-		else if (strcmp(work[i].modelName, "Enemy") == 0)//エネミーの位置設定
+		else if (strcmp(work[i].modelName, "Warrior") == 0)//追従エネミーの位置設定
 		{
 			Enemy* enemy = new Enemy;
 			g_game->AddEnemy(enemy);
-			enemy->Start(work[i].pos);
+			enemy->Init(work[i].pos, work[i].rotation);
 		}
 		else if (strcmp(work[i].modelName, "Drone") == 0)//追従エネミーの位置設定
 		{
 			trackingEnemy* Tenemy = new trackingEnemy;
 			g_game->AddTEnemy(Tenemy);
-			Tenemy->Init(work[i].modelName,work[i].pos, work[i].rotation);
+			Tenemy->Init(work[i].pos, work[i].rotation);
 		}
 		else if (strcmp(work[i].modelName, "unity") == 0)//プレイヤーの初期位置
 		{

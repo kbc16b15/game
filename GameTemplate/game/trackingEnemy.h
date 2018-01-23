@@ -10,7 +10,7 @@ public:
 	//デストラクタ
 	~trackingEnemy();
 	//初期化　座標の設定
-	void Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot);
+	void Init(D3DXVECTOR3	pos, D3DXQUATERNION	rot);
 	//更新
 	void Update();
 	//描画
@@ -41,7 +41,7 @@ private:
 	D3DXVECTOR3			m_scale;				//拡大
 	D3DXQUATERNION		m_rotation;				//回転
 	Light				m_light;				//ライト
-	int					m_bulletTime = 60;		//バレットの発射間隔
+	int					m_bulletintervalTime = 60;		//バレットの発射間隔
 	bool				m_isDead = false;		//死亡処理フラグ
 	bool				m_isDeath = false;		//死亡フラグ
 	int					m_deadTime = 100;		//死亡タイム
@@ -49,9 +49,16 @@ private:
 	CharacterController	m_characterController;	//キャラクターコントローラー
 	D3DXVECTOR3			m_moveSpeed;			//移動速度
 	LPDIRECT3DTEXTURE9	m_normalMap = NULL;		//法線マップ
-	D3DXVECTOR3			m_direction;//方向
-	bool				moveX = false;
-	//Sound*				m_beamSound=nullptr;
+	D3DXVECTOR3			m_direction;			//方向
+	bool				moveX = false;			//進行方向
+	const float			m_enemySpeed = 1.2f;	//敵の速度
+	const float			m_foundLenge = 12.0f;	//距離
+	const float			m_seachLenge = 12.5f;	//距離
+	const float			m_charaRadius = 0.5f;	//キャラの半径
+	const float			m_charaHeight = 0.5f;	//キャラの高さ
+	const float			m_beamVolume = 0.4f;	//ビーム音量
+	const int			m_maxBulletTime = 60;	//最大死亡タイム
+	//Sound*			m_beamSound=nullptr;
 	
 };
 
