@@ -42,6 +42,13 @@ public:
 	 */
 	void LoadModelData( const char* filePath, Animation* anim );
 	/*!
+	* @brief	モデルデータのクローンを作成。
+	* @details
+	*	スケルトンは新しく作成され、メッシュデータは共通のものが使用されます。
+	*@param[in]		modelData		モデルデータ。
+	*/
+	void CloneModelData(const SkinModelData& modelData, Animation* anim);
+	/*!
 	* @brief	リリース。
 	*/
 	void Release();
@@ -53,6 +60,16 @@ public:
 	{
 		return pAnimController;
 	}
+	//オリジナルのスケルトンを消去
+	//frame スケルトン
+	void DeleteSkeleton(LPD3DXFRAME frame);
+	//スケルトンのクローンを作成
+	//dstFrame　クローン先のスケルトンの格納先
+	//srcFrame　クローン元のスケルトン
+	void CloneSkeleton(LPD3DXFRAME& dstFrame, LPD3DXFRAME srcFrame);
+	//スケルトンのクローンを消去
+	//frame 消去するスケルトン
+	void DeleteCloneSkeleton(LPD3DXFRAME frame);
 	/*!
 	* @brief	ボーン行列を更新。
 	*/

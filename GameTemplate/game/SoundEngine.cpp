@@ -3,6 +3,8 @@
 #include "WaveFile.h"
 #include "Sound.h"
 
+SoundEngine *SoundEngine::m_soundEngine = NULL;
+
 #define NUM_PRESETS 30
 
 namespace {
@@ -83,7 +85,7 @@ void SoundEngine::Init()
 	HRESULT hr;
 	if (FAILED(hr = XAudio2Create(&m_xAudio2, flags)))
 	{
-		return;
+		//return;
 	}
 	//マスターボリュームの作成。
 	if (FAILED(hr = m_xAudio2->CreateMasteringVoice(&m_masteringVoice)))
@@ -141,20 +143,16 @@ void SoundEngine::Init()
 */
 void SoundEngine::Release()
 {
-
 	//波形データバンクを解放。
 	m_waveFileBank.ReleaseAll();
 	if (m_submixVoice != nullptr) {
 		m_submixVoice->DestroyVoice();
 		m_submixVoice = nullptr;
 	}
-
-	
 	if (m_reverbEffect != nullptr) {
 		m_reverbEffect->Release();
 		m_reverbEffect = nullptr;
 	}
-	
 	if (m_masteringVoice != nullptr) {
 		m_masteringVoice->DestroyVoice();
 		m_masteringVoice = nullptr;
@@ -164,7 +162,9 @@ void SoundEngine::Release()
 		m_xAudio2->Release();
 		m_xAudio2 = nullptr;
 	}
+
 	CoUninitialize();
+
 
 
 }
@@ -173,8 +173,8 @@ void SoundEngine::Release()
 */
 IXAudio2SourceVoice* SoundEngine::CreateXAudio2SourceVoice(WaveFile* waveFile, bool is3DSound)
 {
-	XAudio2Create(&m_xAudio2, 0);
-	m_xAudio2->CreateMasteringVoice(&m_masteringVoice);
+	//XAudio2Create(&m_xAudio2, 0);
+	//m_xAudio2->CreateMasteringVoice(&m_masteringVoice);
 	IXAudio2SourceVoice* pSourceVoice;
 	if (is3DSound == false) {
 		//2Dサウンド。

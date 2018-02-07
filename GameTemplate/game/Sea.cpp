@@ -24,9 +24,9 @@ void Sea::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 	m_model.Init(&m_modelData);
 
 	//ƒ‰ƒCƒg‚ð‰Šú‰»B
-	m_light.SetAmbientLight(D3DXVECTOR4(0.8f, 0.8f, 0.8f, 1.0f));
+	//m_light.SetAmbientLight(D3DXVECTOR4(0.8f, 0.8f, 0.8f, 1.0f));
 
-	m_model.SetLight(&m_light);
+	m_model.SetLight(&Game::GetInstance().GetLight());
 	m_position = pos;
 	m_rotation = rot;
 
@@ -61,6 +61,6 @@ void Sea::Update()
 void Sea::Draw()
 {
 
-	m_model.Draw(&g_game->GetCamera()->GetViewMatrix(), &g_game->GetCamera()->GetProjectionMatrix());
+	m_model.Draw(&Game::GetInstance().GetCamera()->GetViewMatrix(), &Game::GetInstance().GetCamera()->GetProjectionMatrix());
 
 }

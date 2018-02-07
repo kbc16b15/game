@@ -5,6 +5,7 @@
 #include "myEngine/Physics/Physics.h"
 #include "myEngine/Physics/CharacterController.h"
 #include "myEngine/Physics/CollisionAttr.h"
+#include "Player.h"
 
 namespace {
 	
@@ -30,38 +31,38 @@ namespace {
 			}
 			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Damage)//ユーザー定義のコリジョン属性
 			{
-				g_game->GetPlayer()->SetDamage();//プレイヤーにダメージ
+				Player::GetInstance().SetDamage();//プレイヤーにダメージ
 			}
 			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeedR)//ユーザー定義のコリジョン属性
 			{
-				g_game->GetPlayer()->SetDir(3);
+				Player::GetInstance().SetDir(3);
 			}
 			else if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeedL)//ユーザー定義のコリジョン属性
 			{
-				g_game->GetPlayer()->SetDir(4);
+				Player::GetInstance().SetDir(4);
 			}
 			else if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeedF)//ユーザー定義のコリジョン属性
 			{
-				g_game->GetPlayer()->SetDir(1);
+				Player::GetInstance().SetDir(1);
 			}
 			else if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeedB)//ユーザー定義のコリジョン属性
 			{
-				g_game->GetPlayer()->SetDir(2);
+				Player::GetInstance().SetDir(2);
 			}
 			else
 			{
-				g_game->GetPlayer()->SetDir(0);
+				Player::GetInstance().SetDir(0);
 			}
 			
 			//if(convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeed)//ユーザー定義のコリジョン属性
 			//{
 
-				//g_game->GetMap()->GetFall().begin();
+				//Game::GetInstance().GetMap()->GetFall().begin();
 				//m_bullets.begin();
-				/*auto objectIt = g_game->GetMap()->GetFall().begin();
-				while (objectIt != g_game->GetMap()->GetFall().end()) {
+				/*auto objectIt = Game::GetInstance().GetMap()->GetFall().begin();
+				while (objectIt != Game::GetInstance().GetMap()->GetFall().end()) {
 					if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeed) {
-						objectIt = g_game->GetMap()->GetFall().erase(objectIt);
+						objectIt = Game::GetInstance().GetMap()->GetFall().erase(objectIt);
 					}
 					else {
 						objectIt++;
@@ -73,7 +74,7 @@ namespace {
 			//}
 			//if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_ObjectHit)//ユーザー定義のコリジョン属性
 			//{
-			//	g_game->GetPlayer()->SetObjectHit(true);
+			//	Player::GetInstance().SetObjectHit(true);
 			//}
 			//衝突点の法線を引っ張ってくる。
 			D3DXVECTOR3 hitNormalTmp = *(D3DXVECTOR3*)&convexResult.m_hitNormalLocal;
@@ -178,8 +179,8 @@ void CharacterController::Init(float radius, float height, const D3DXVECTOR3& po
 	//@todo 未対応。trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
 	m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character);
 	m_rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
-	g_physicsWorld->AddRigidBody(&m_rigidBody);
-
+	//PhysicsWorld::GetInstance().AddRigidBody(&m_rigidBody);
+	PhysicsWorld::GetInstance().AddRigidBody(&m_rigidBody);
 }
 void CharacterController::Execute()
 {
@@ -226,7 +227,7 @@ void CharacterController::Execute()
 			callback.me = m_rigidBody.GetBody();
 			callback.startPos = posTmp;
 			//衝突検出。
-			g_physicsWorld->ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
+			PhysicsWorld::GetInstance().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
 
 			if (callback.isHit) {
 				//当たった。
@@ -314,7 +315,8 @@ void CharacterController::Execute()
 		callback.startPos = { start.getOrigin().x(), start.getOrigin().y(), start.getOrigin().z() };
 		//衝突検出。
 		if (fabsf(addPos.y) > FLT_EPSILON) {
-			g_physicsWorld->ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
+			//PhysicsWorld::GetInstance().
+			PhysicsWorld::GetInstance().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
 		}
 
 		if (callback.isHit){
@@ -347,6 +349,6 @@ void CharacterController::Execute()
 */
 void CharacterController::RemoveRigidBoby()
 {
-	g_physicsWorld->RemoveRigidBody(&m_rigidBody);
+	PhysicsWorld::GetInstance().RemoveRigidBody(&m_rigidBody);
+	//PhysicsWorld::GetInstance().RemoveRigidBody(&m_rigidBody);
 }
-

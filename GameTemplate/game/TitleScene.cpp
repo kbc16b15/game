@@ -1,7 +1,9 @@
 #include "stdafx.h"
-#include "Scene.h"
 #include "TitleScene.h"
-
+#include "game.h"
+#include "Fade.h"
+#include "GameObjectManager.h"
+TitleScene *TitleScene::m_title = NULL;
 
 TitleScene::TitleScene()
 {
@@ -14,66 +16,77 @@ TitleScene::~TitleScene()
 
 void TitleScene::Init()
 {
-//	g_fade->StartFadeIn();
-	m_title.Initialize("Assets/Sprite/T2.tga",m_titlePos);
-	//m_Title.Setalfa(10);
-	//m_Title.SetRGB(0, 0, 0);
+	m_titleHud.Initialize("Assets/Sprite/T2.tga",m_titlePos);
 	CreateSprite();
-	//g_fade->StartFadeIn();
 
+
+	//Fade::GetInstance().StartFadeIn();
 }
 
 void TitleScene::Update()
 {
-	//if (m_Title == NULL)return;
-	m_title.Update();
-	m_pad.Update();
-	
-	/*
-	if (pad.IsTrigger(pad.enButtonStart)) {
+	if (m_title == NULL) { return; };
+	m_titleHud.Update();
+	SceneFade();
+}
 
-		scene->SceneChange();
-	}*/
-	
 
-	switch (GAME){
-	case START:
+void TitleScene::Draw()
+{
+	g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
+	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+	m_titleHud.Draw(m_sprite);
+	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+	g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+//	g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+	//g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
+	
+}
+
+void TitleScene::SceneFade()
+{
+	//switch (GAME) {
+	//case START:
 		switch (m_state) {
 		case WaitFadeIn:
-			if (!g_fade->isExecute())
+			if (!Fade::GetInstance().isExecute())
 			{
 				m_state = Run;
 			}
 			break;
 		case Run:
-			if (m_pad.IsTrigger(m_pad.enButtonStart)||GetAsyncKeyState('S')){
-				g_fade->StartFadeOut();
+			if (Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonStart) || GetAsyncKeyState('S')) {
+				
 				m_state = WaitFadeOut;
+				Game::Create();
+				GameObjectManager::GetGameObjectManager().AddGameObject(&Game::GetInstance());
+				Game::GetInstance().Init();
+				
+				Fade::GetInstance().StartFadeOut();
 			}
 			break;
 		case WaitFadeOut:
-			if (!g_fade->isExecute())
+
+			if (!Fade::GetInstance().isExecute())
 			{
-				//delete this;
-				g_scene->SceneChange(g_scene->CHANGEGAME);
+				GameObjectManager::GetGameObjectManager().DeleteGameObject(&TitleScene::GetInstance());
+				TitleScene::GetInstance().Destroy();
+
 				return;
-				
 			}
-			//break;
+			break;
+		default:
+			break;
 		}
-		break;
-	default:
-		break;
-	}
-}
-
-
-void TitleScene::Render()
-{
-	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
-	m_title.Draw(m_sprite);
-	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
-	
+		//break;
+	//default:
+	//	break;
+	//}
 }
 
 HRESULT TitleScene::CreateSprite()

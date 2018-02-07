@@ -115,14 +115,14 @@ namespace {
 		else {
 			pEffect->SetBool("g_isHasNormalMap", false);
 		}
-		pEffect->SetFloat("g_Scroll",g_Scroll);
+		//pEffect->SetFloat("g_Scroll",g_Scroll);
 		//g_Scroll += 0.000002f;
 
 		if (ShadowRecive)
 		{
-			pEffect->SetMatrix("g_viewlightMatrix", &g_shadowmap->GetlightViewMatrix()/*&g_shadowmap->lightViewMatrix*/);
-			pEffect->SetMatrix("g_projlightMatrix", &g_shadowmap->GetlightProjectionMatrix()/*&g_shadowmap->lightProjectionMatrix*/);
-			pEffect->SetTexture("g_shadowMapTexture", g_shadowmap->GetTexture());
+			pEffect->SetMatrix("g_viewlightMatrix", &ShadowMap::GetInstance().GetlightViewMatrix());
+			pEffect->SetMatrix("g_projlightMatrix", &ShadowMap::GetInstance().GetlightProjectionMatrix());
+			pEffect->SetTexture("g_shadowMapTexture",ShadowMap::GetInstance().GetTexture());
 		}
 
 		if (pMeshContainer->pSkinInfo != NULL)
@@ -147,7 +147,8 @@ namespace {
 				}
 				//D3DXVECTOR4 CameraEye = game->GetCamera()->GetEyePt();//カメラの視点の座標
 				//CameraEye.w = 1.0f;
-				pEffect->SetVector("Eye", (D3DXVECTOR4*)&g_game->GetCamera()->GetEyePt()/*&CameraEye*/);
+				pEffect->SetVector("Eye", (D3DXVECTOR4*)&SpringCamera::GetInstance().GetPosition());
+				//pEffect->SetVector("Eye", (D3DXVECTOR4*)&SpringCamera::GetInstance().GetEyePt());
 				
 				pEffect->SetMatrixArray("g_mWorldMatrixArray", g_pBoneMatrices, pMeshContainer->NumPaletteEntries);
 				pEffect->SetInt("g_numBone", pMeshContainer->NumInfl);
@@ -322,21 +323,21 @@ void SkinModel::UpdateWorldMatrix(const D3DXVECTOR3& trans, const D3DXQUATERNION
 	}
 }
 
-void SkinModel::UpdateWorldMatrix(const D3DXVECTOR3& trans, const D3DXQUATERNION& rot, const D3DXVECTOR3& scale,D3DXMATRIX mat, D3DXMATRIX rotmat)
-{
-	D3DXMATRIX mTrans, mScale;
-	D3DXMatrixScaling(&mScale, scale.x, scale.y, scale.z);
-	D3DXMatrixTranslation(&mTrans, trans.x, trans.y, trans.z);
-
-	//mTrans= mat*mTrans;
-	D3DXMatrixRotationQuaternion(&rotationMatrix, &rot);
-
-	worldMatrix = mScale * rotationMatrix * mTrans*mat;
-
-	if (skinModelData) {
-		skinModelData->UpdateBoneMatrix(worldMatrix);	//ボーン行列を更新。
-	}
-}
+//void SkinModel::UpdateWorldMatrix(const D3DXVECTOR3& trans, const D3DXQUATERNION& rot, const D3DXVECTOR3& scale,D3DXMATRIX mat, D3DXMATRIX rotmat)
+//{
+//	D3DXMATRIX mTrans, mScale;
+//	D3DXMatrixScaling(&mScale, scale.x, scale.y, scale.z);
+//	D3DXMatrixTranslation(&mTrans, trans.x, trans.y, trans.z);
+//
+//	//mTrans= mat*mTrans;
+//	D3DXMatrixRotationQuaternion(&rotationMatrix, &rot);
+//
+//	worldMatrix = mScale * rotationMatrix * mTrans*mat;
+//
+//	if (skinModelData) {
+//		skinModelData->UpdateBoneMatrix(worldMatrix);	//ボーン行列を更新。
+//	}
+//}
 
 void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)
 {

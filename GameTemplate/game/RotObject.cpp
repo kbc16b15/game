@@ -31,19 +31,7 @@ void RotObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rot)
 	//ロードしたモデルデータを使ってSkinModelを初期化。
 	model.Init(&modelData);
 
-	//ライトを初期化。
-	light.SetDiffuseLightDirection(0, D3DXVECTOR4(0.707f, 0.0f, -0.707f, 1.0f));
-	light.SetDiffuseLightDirection(1, D3DXVECTOR4(-0.707f, 0.0f, -0.707f, 1.0f));
-	light.SetDiffuseLightDirection(2, D3DXVECTOR4(0.0f, 0.707f, -0.707f, 1.0f));
-	light.SetDiffuseLightDirection(3, D3DXVECTOR4(0.0f, -0.707f, -0.707f, 1.0f));
-
-	light.SetDiffuseLightColor(0, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	light.SetDiffuseLightColor(1, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	light.SetDiffuseLightColor(2, D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
-	light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
-
-	model.SetLight(&light);
+	model.SetLight(&Game::GetInstance().GetLight());
 	position = pos;
 	rotation = rot;
 
@@ -72,14 +60,14 @@ void RotObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rot)
 void RotObject::Update()
 {
 	D3DXVECTOR3 toPos;
-	D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
+	D3DXVec3Subtract(&toPos, &position, &Player::GetInstance().Getpos());
 
 	float len = D3DXVec3Length(&toPos);
 
-	/*if (len <length&&g_game->GetPlayer()->GetObjectHit())
+	/*if (len <length&&Player::GetInstance().GetObjectHit())
 	{
 		Tflg = true;
-		g_game->GetPlayer()->SetObjectHit(false);
+		Player::GetInstance().SetObjectHit(false);
 	}
 	else
 	{
@@ -90,10 +78,10 @@ void RotObject::Update()
 		case ROT:
 		if (Tflg)
 		{
-			D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
+			D3DXVECTOR3 speed = Player::GetInstance().GetSpeed();
 			speed.x = RotSpeed.x/*-1.2f*/;
 			speed.z = RotSpeed.z;
-			g_game->GetPlayer()->AddSpeed(speed);
+			Player::GetInstance().AddSpeed(speed);
 		}
 
 		angle += 0.01f;
@@ -101,10 +89,10 @@ void RotObject::Update()
 		//case CLOCK:
 		//	if (Tflg)
 		//	{
-		//		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
+		//		D3DXVECTOR3 speed = Player::GetInstance().GetSpeed();
 		//		speed.x = RotSpeed.x/*-1.2f*/;
 		//		speed.z = RotSpeed.z;
-		//		g_game->GetPlayer()->AddSpeed(speed);
+		//		Player::GetInstance().AddSpeed(speed);
 		//	}
 
 		//	if (ClockRotTime < 0)
@@ -159,5 +147,5 @@ void RotObject::Update()
 void RotObject::Draw()
 {
 	model.SetReciveflg(true);
-	model.Draw(&g_game->GetCamera()->GetViewMatrix(), &g_game->GetCamera()->GetProjectionMatrix());
+	model.Draw(&Game::GetInstance().GetCamera()->GetViewMatrix(), &Game::GetInstance().GetCamera()->GetProjectionMatrix());
 }

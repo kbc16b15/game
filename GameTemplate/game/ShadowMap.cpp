@@ -1,5 +1,9 @@
 #include "stdafx.h"
 #include "ShadowMap.h"
+#include "Player.h"
+#include "game.h"
+
+ShadowMap *ShadowMap::m_shadowMap = NULL;
 
 ShadowMap::ShadowMap()
 {
@@ -62,9 +66,8 @@ void ShadowMap::Draw()
 	g_pd3dDevice->SetDepthStencilSurface(m_renderTarget.GetDepthStencilBuffer());
 	//g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0xffffffff, 1.0f, 0);
 	g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
-	if (g_game != NULL && g_game->GetPlayer() != NULL)
-	{
-		g_game->GetPlayer()->Draw(&m_lightViewMatrix,&m_lightProjectionMatrix,true,false);
+	if (/*&Game::GetInstance() != NULL &&*/ &Player::GetInstance() != NULL){//プレイヤーしか影を落としていない？
+		Player::GetInstance().ShadowDraw(&m_lightViewMatrix,&m_lightProjectionMatrix,true,false);
 	}
 
 	g_pd3dDevice->SetRenderTarget(0, renderTargetBackup);

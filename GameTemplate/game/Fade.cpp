@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "Fade.h"
 
+Fade *Fade::m_fade = NULL;
 
 Fade::Fade()
 {
+
 }
 
 
@@ -11,9 +13,9 @@ Fade::~Fade()
 {
 }
 
-void Fade::Start()
+void Fade::Init()
 {
-	m_fadetex.Initialize("Assets/Sprite/TL.tga",m_fadepos);
+	m_fadetex.Initialize("Assets/Sprite/TL.tga", m_fadepos);
 	CreateSprite();
 	m_active = false;
 }
@@ -84,19 +86,24 @@ void Fade::Draw()
 {
 	if (m_active)
 	{
-		//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
-	
-		g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-		g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-		g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+		g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
+		//g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+		//g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		//g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+		//g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+		//g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 
 		//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+
+
 		m_fadetex.Draw(m_sprite);
 		//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
-		g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+		//g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	/*	g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, FALSE);
 		g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, FALSE);*/
-		//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+		//g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+		//g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
+		g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 	}
 
 		

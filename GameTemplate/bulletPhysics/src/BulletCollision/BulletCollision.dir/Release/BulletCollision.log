@@ -8,6 +8,7 @@
   btOverlappingPairCache.cpp
   btQuantizedBvh.cpp
   btSimpleBroadphase.cpp
+  SphereTriangleDetector.cpp
   btActivatingCollisionAlgorithm.cpp
   btBox2dBox2dCollisionAlgorithm.cpp
   btBoxBoxCollisionAlgorithm.cpp
@@ -17,9 +18,9 @@
   btCollisionWorld.cpp
   btCollisionWorldImporter.cpp
   btCompoundCollisionAlgorithm.cpp
-  btCompoundCompoundCollisionAlgorithm.cpp
   コードを生成中...
   コンパイル中...
+  btCompoundCompoundCollisionAlgorithm.cpp
   btConvex2dConvex2dAlgorithm.cpp
   btConvexConcaveCollisionAlgorithm.cpp
   btConvexConvexAlgorithm.cpp
@@ -35,7 +36,6 @@
   btSphereSphereCollisionAlgorithm.cpp
   btSphereTriangleCollisionAlgorithm.cpp
   btUnionFind.cpp
-  SphereTriangleDetector.cpp
   btBox2dShape.cpp
   btBoxShape.cpp
   btBvhTriangleMeshShape.cpp
@@ -57,8 +57,8 @@
   btEmptyShape.cpp
   btHeightfieldTerrainShape.cpp
   btMinkowskiSumShape.cpp
-  btMultimaterialTriangleMeshShape.cpp
   btMultiSphereShape.cpp
+  btMultimaterialTriangleMeshShape.cpp
   btOptimizedBvh.cpp
   btPolyhedralConvexShape.cpp
   btScaledBvhTriangleMeshShape.cpp
@@ -77,11 +77,11 @@
   btTriangleMeshShape.cpp
   btUniformScalingShape.cpp
   btContactProcessing.cpp
-  btGenericPoolAllocator.cpp
   btGImpactBvh.cpp
   btGImpactCollisionAlgorithm.cpp
   btGImpactQuantizedBvh.cpp
   btGImpactShape.cpp
+  btGenericPoolAllocator.cpp
   btTriangleShapeEx.cpp
   gim_box_set.cpp
   コードを生成中...

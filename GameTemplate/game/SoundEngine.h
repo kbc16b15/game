@@ -5,7 +5,6 @@
 class SoundEngine
 {
 public:
-	SoundEngine();
 	~SoundEngine();
 
 	//class CWaveFile;
@@ -51,7 +50,30 @@ public:
 		return m_waveFileBank;
 	}
 
+	//インスタンスの生成
+	static void SoundEngine::Create()
+	{
+		if (!m_soundEngine)
+		{
+			m_soundEngine = new SoundEngine;
+		}
+
+	}
+
+	//インスタンスの消去
+	static  void SoundEngine::Destroy()
+	{
+		delete m_soundEngine;
+		m_soundEngine = nullptr;
+	}
+	//インスタンスの取得
+	static SoundEngine& GetInstance()
+	{
+		return *m_soundEngine;
+	}
 private:
+	SoundEngine();
+	static SoundEngine* m_soundEngine;
 	IXAudio2* m_xAudio2 = nullptr;
 	IXAudio2MasteringVoice* m_masteringVoice = nullptr;
 	//X3DAUDIO_HANDLE m_hx3DAudio;					//!<3Dオーディオのハンドル。
@@ -67,4 +89,4 @@ private:
 	WaveFileBank m_waveFileBank;					//!<波形データのバンク。
 };
 
-extern SoundEngine* g_soundEngine;
+//extern SoundEngine* g_soundEngine;

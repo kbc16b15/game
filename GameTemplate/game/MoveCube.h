@@ -42,7 +42,7 @@ private:
 	SkinModelData		modelData;				//スキンモデルデータ
 	D3DXVECTOR3			position;				//座標
 	D3DXQUATERNION		rotation;				//回転
-	Light				light;					//ライト
+	Light				m_light;					//ライト
 	MeshCollider		meshCollider;			//メッシュコライダー
 	RigidBody			rigidBody;				//剛体。
 	RigidBodyInfo		rbInfo;					//剛体情報

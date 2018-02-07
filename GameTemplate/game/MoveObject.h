@@ -4,27 +4,20 @@ class MoveObject :public MapObject
 {
 public:
 	//コンストラクタ
-	MoveObject();
+	//MoveObject();
 	//デストラクタ
-	~MoveObject();
+	//~MoveObject();
 	//初期化
 	//modelName モデル名
 	//pos		モデルの座標
 	//rotation	モデルの回転
-	void Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rotation);
+	void Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rot) override;
 	//更新
-	void Update();
-	//描画
-	void Draw();
-
-	/*void SetMState(int mstate)
-	{
-		MState = mstate;
-	}*/
+	void Update() override;
 	//座標の取得
 	D3DXVECTOR3 Getpos()
 	{
-		return position;
+		return m_position;
 
 	}
 	//オブジェクトに乗っているフラグ
@@ -35,27 +28,7 @@ public:
 
 
 private:
-	SkinModel		model;						//スキンモデル
-	SkinModelData	modelData;					//スキンモデルデータ
-	D3DXVECTOR3		position;					//座標
-	D3DXQUATERNION	rotation;					//回転
-	Light			light;						//ライト
-	MeshCollider	meshCollider;				//メッシュコライダー
-	RigidBody		rigidBody;					//剛体。
-	RigidBodyInfo	rbInfo;						//剛体情報
 	bool			m_open1 = false;			//ひらくか否か
-	//CharacterController	characterController;	//キャラクターコントローラー
-	//D3DXVECTOR3		UMovelenge = position;
-	//D3DXVECTOR3		LMovelenge = position;
-	//D3DXVECTOR3		RMovelenge = position;
-	//D3DXVECTOR3		DMovelenge = position;
-	//bool			Render = false;				//描画フラグ
-	//bool			Rideflg = false;			//乗った時のフラグ
-
-	//bool Rflg = false;
-	//bool Lflg = false;
-	//bool Uflg = false;
-	//bool Dflg = false;
 	const float	length = 5.0f;//開く範囲
 	const float m_maxUp = 30.0f;
 	const float m_upSpeed = 0.02f;

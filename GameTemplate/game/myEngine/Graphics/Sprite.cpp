@@ -34,7 +34,7 @@ void Sprite::SetupMatrices()
 
 void Sprite::Draw(LPD3DXSPRITE pSprite)
 {
-	m_Sprite = pSprite;
+	//m_Sprite = pSprite;
 	pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 	pSprite->SetTransform(&m_transformMatrix);
 	pSprite->Draw(m_pTexture, &m_rect, &D3DXVECTOR3(m_texCenter.x, m_texCenter.y, 0.0f), NULL, m_backColor);//テクスチャの位置

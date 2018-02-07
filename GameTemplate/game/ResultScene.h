@@ -1,12 +1,8 @@
 #pragma once
-#include "HUD.h"
-#include "myEngine\HID\Pad.h"
-//#include "BaseScene.h"
-class ResultScene 
+
+class ResultScene:public IGameObject
 {
 public:
-	//コンストラクタ
-	ResultScene();
 	//デストラクタ
 	~ResultScene();
 	//初期化
@@ -14,27 +10,46 @@ public:
 	//更新
 	void Update();
 	//描画
-	void Render();
+	void Draw();
+	//フェード
+	void SceneFade();
 	//スプライト生成関数
 	HRESULT CreateSprite();
+
+	//インスタンスの生成
+	static  void ResultScene::Create()
+	{
+		if (!m_result)
+		{
+			m_result = new ResultScene;
+
+		}
+	}
+	//インスタンスの消去
+	static  void ResultScene::Destroy()
+	{
+		delete m_result;
+		m_result = nullptr;
+	}
+	//インスタンスの取得
+	static ResultScene& GetInstance()
+	{
+		return *m_result;
+	}
 private:
+	
+	//コンストラクタ
+	ResultScene();
+	static ResultScene* m_result;//インスタンス
 	//フェード
 	enum EState {
 		WaitFadeIn,
 		Run,
 		WaitFadeOut
 	};
-	//選択
-	enum Select {
-		NO,
-		START,
-		BREAK,
-	};
-	Select				GAME = START;
 	EState				m_state = Run;
 	LPD3DXSPRITE		m_sprite;						//スプライト
-	HUD					m_end;							//タイトル画像
-	const D3DXVECTOR2	m_endPos = { 700.0f,300.0f };	//タイトル画像の座標
-	Pad					m_pad;							//パッド
+	HUD					m_resultHud;							//タイトル画像
+	const D3DXVECTOR2	m_resultHudPos = { 700.0f,300.0f };	//タイトル画像の座標
 };
 

@@ -71,18 +71,17 @@ public:
 	}
 private:
 	std::unique_ptr<char[]>	m_readBuffer = nullptr;	//読み込み先のバッファ。
-	HMMIO			m_hmmio = nullptr;	//Waveファイルハンドル。
-	WAVEFORMATEX* 	m_pwfx = nullptr;  //waveファイルのフォーマット定義。
-	MMCKINFO 		m_ckRiff;      // Use in opening a WAVE file
-	DWORD			m_dwSize = 0;      // The size of the wave file
-	MMCKINFO		m_ck;          // Multimedia RIFF chunk
+	HMMIO			m_hmmio = nullptr;				//Waveファイルハンドル。
+	WAVEFORMATEX* 	m_pwfx = nullptr;				//waveファイルのフォーマット定義。
+	MMCKINFO 		m_ckRiff;						// Use in opening a WAVE file
+	DWORD			m_dwSize = 0;					// The size of the wave file
+	MMCKINFO		m_ck;							// Multimedia RIFF chunk
 	BYTE*			m_pbData = nullptr;
 	BYTE*			m_pbDataCur = nullptr;
 	ULONG			m_ulDataSize = 0;
-	volatile bool	m_isReadEnd = true;	//読み込み終了フラグ。
-	std::thread		m_readAsyncThread;	//非同期読み込みスレッド。
+	volatile bool	m_isReadEnd = true;				//読み込み終了フラグ。
+	std::thread		m_readAsyncThread;				//非同期読み込みスレッド。
 	bool			m_isInvokeReadAsyncThread = false;
-	std::string		m_filePath;			//ファイルパス。
-	unsigned int	m_filePathHash = 0;		//ファイルパスのハッシュコード。
+	std::string		m_filePath;						//ファイルパス。
+	unsigned int	m_filePathHash = 0;				//ファイルパスのハッシュコード
 };
-

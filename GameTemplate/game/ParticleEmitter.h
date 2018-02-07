@@ -27,6 +27,7 @@ public:
 
 	void Init(const SParticleEmitParameter& param);
 	void Update();
+	void Update(D3DXVECTOR3 pos);
 	void Render(const D3DXMATRIX& viewMatrix, const D3DXMATRIX& projMatrix);
 private:
 	SParticleEmitParameter	param;

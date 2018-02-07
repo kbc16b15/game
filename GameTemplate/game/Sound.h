@@ -1,6 +1,6 @@
 #pragma once
 #include "WaveFile.h"
-#include "SoundEngine.h"
+//#include "SoundEngine.h"
 #define INPUTCHANNELS 2  // number of source channels
 #define OUTPUTCHANNELS 8	//最大出力チャンネル数。
 class Sound
@@ -13,7 +13,7 @@ public:
 
 	void Init(char* filePath, bool is3DSound = false);
 
-	void Init(const NameKey& nameKey, bool is3DSound = false);
+	//void Init(const NameKey& nameKey, bool is3DSound = false);
 	void Play(bool isLoop);
 	/*!
 	* @brief	停止。

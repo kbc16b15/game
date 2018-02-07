@@ -2,31 +2,24 @@
 *@brief	ゲームテンプレート。
 */
 #include "stdafx.h"
-#include "myEngine/Graphics/Camera.h"
-#include "myEngine/Graphics/Light.h"
-#include "Scene.h"
+#include "myEngine\Physics\Physics.h"
+//#include "myEngine/Graphics/Camera.h"
 #include "Fade.h"
 #include "ShadowMap.h"
 #include "Primitive.h"
 #include "RenderTarget.h"
+#include "TitleScene.h"
+#include "SoundEngine.h"
+#include "GameObjectManager.h"
 
-
-LPD3DXEFFECT copyEffect;
-LPD3DXEFFECT monochromeEffect;		//!<18-4 モノクロフィルターをかけるシェーダー。
-Primitive*			m_primitive;				//プリミティブ
-
-Game* g_game=nullptr;
-Scene* g_scene=nullptr;
-Fade* g_fade = nullptr;
-ShadowMap* g_shadowmap= nullptr;
-CRenderTarget*		g_renderTarget;				//ポストエフェクト用のレンダリングターゲット？2
-SoundEngine* g_soundEngine = nullptr;
+LPD3DXEFFECT	copyEffect;
+LPD3DXEFFECT	monochromeEffect;			//!<18-4 モノクロフィルターをかけるシェーダー。
 
 void InitMainRenderTarget()
 {
-	//18-2 メインレンダリングターゲットを作成する。
-	g_renderTarget = new CRenderTarget;
-	g_renderTarget->Create(
+	//メインレンダリングターゲットを作成する。
+	RenderTarget::MainRenderTargetCreate();
+	RenderTarget::MainRenderTargetGetInstance().Create(
 		FRAME_BUFFER_WIDTH,
 		FRAME_BUFFER_HEIGHT,
 		1,
@@ -43,29 +36,30 @@ void DrawQuadPrimitive()
 	// 頂点ストリーム0番に板ポリの頂点バッファを設定する。
 	g_pd3dDevice->SetStreamSource(
 		0,												//頂点ストリームの番号。
-		m_primitive->GetVertexBuffer()->GetBody(),		//頂点バッファ。
+		Primitive::GetInstance().GetVertexBuffer()->GetBody(),		//頂点バッファ。
 		0,												//頂点バッファの読み込みを開始するオフセットのバイト数。
 														//今回は先頭から読み込むので0でいい。
-		m_primitive->GetVertexBuffer()->GetStride()		//頂点一つ分のサイズ。単位はバイト。
+		Primitive::GetInstance().GetVertexBuffer()->GetStride()		//頂点一つ分のサイズ。単位はバイト。
 	);
 	// インデックスバッファを設定。
-	g_pd3dDevice->SetIndices(m_primitive->GetIndexBuffer()->GetBody());
+	g_pd3dDevice->SetIndices(Primitive::GetInstance().GetIndexBuffer()->GetBody());
 	// 頂点定義を設定する。
-	g_pd3dDevice->SetVertexDeclaration(m_primitive->GetVertexDecl());
+	g_pd3dDevice->SetVertexDeclaration(Primitive::GetInstance().GetVertexDecl());
 	//　準備が整ったので描画。
 	g_pd3dDevice->DrawIndexedPrimitive(
-		m_primitive->GetD3DPrimitiveType(),	//プリミティブの種類を指定する。
+		Primitive::GetInstance().GetD3DPrimitiveType(),	//プリミティブの種類を指定する。
 		0,										//ベース頂点インデックス。0でいい。
 		0,										//最小の頂点インデックス。0でいい。
-		m_primitive->GetNumVertex(),			//頂点の数。
+		Primitive::GetInstance().GetNumVertex(),			//頂点の数。
 		0,										//開始インデックス。0でいい。
-		m_primitive->GetNumPolygon()			//プリミティブの数。
+		Primitive::GetInstance().GetNumPolygon()			//プリミティブの数。
 	);
 }
 
 void InitQuadPrimitive()
 {
-	m_primitive = new Primitive;
+	Primitive::Create();
+	//m_primitive = new Primitive;
 	//頂点の構造体。
 	struct SVertex {
 		float pos[4];	//頂点座標。
@@ -101,7 +95,7 @@ void InitQuadPrimitive()
 	};
 	//インデックスバッファ。
 	unsigned short indexBuffer[] = { 0, 1, 2, 3 };
-	m_primitive->Create(
+	Primitive::GetInstance().Create(
 		Primitive::eTriangleStrip,	//今回はプリミティブの種類はトライアングルストリップ。
 		4,							//頂点の数。四角形の板ポリでトライアングルストリップなので４。
 		sizeof(SVertex),			//頂点ストライド。一つの頂点の大きさ。単位はバイト。
@@ -116,7 +110,7 @@ void InitQuadPrimitive()
 
 void LoadShaders()
 {
-	// ハンズオン 4
+
 	LPD3DXBUFFER compileErrorBuffer = NULL;
 	HRESULT hr = D3DXCreateEffectFromFile(
 		g_pd3dDevice,
@@ -174,7 +168,7 @@ void CopyMainRTToCurrentRT()
 	shader->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
 	shader->BeginPass(0);
 	//シーンテクスチャを設定する
-	shader->SetTexture("g_tex", g_renderTarget->GetTexture());
+	shader->SetTexture("g_tex", RenderTarget::MainRenderTargetGetInstance().GetTexture()/*g_renderTarget->GetTexture()*/);
 	//定数レジスタへの変更をコミットする。
 	shader->CommitChanges();
 	DrawQuadPrimitive();
@@ -189,39 +183,53 @@ void CopyMainRTToCurrentRT()
 //-----------------------------------------------------------------------------
 void Init()
 {
+	//Camera::Create();
+	CubeCollision::Create();
 	InitMainRenderTarget();
 	//18-3 四角形の板ポリプリミティブを作成。
 	InitQuadPrimitive();
 	//18-3、18-4 シェーダーをロード。
 	LoadShaders();
-	//シーンの初期化
-	g_scene = new Scene;
-	g_scene->SceneChange(g_scene->CHANGETITLE);
+	GameObjectManager::Create();
 	//物理ワールドを初期化
-	g_physicsWorld = new PhysicsWorld;
-	g_physicsWorld->Init();
-	//フェードを初期化
-	g_fade = new Fade;
-	g_fade->Start();
-	//シャドウマップを初期化
-	g_shadowmap = new ShadowMap;
-	g_shadowmap->Init();
+	//g_physicsWorld = new PhysicsWorld;
+	//PhysicsWorld::GetInstance().Init();
+	PhysicsWorld::Create();
+	PhysicsWorld::GetInstance().Init();
+	//シーンの初期化
+	SoundEngine::Create();
+	SoundEngine::GetInstance().Init();
+	TitleScene::Create();
+	Pad::Create();
+	//フェード
+	Fade::Create();
 
-	g_soundEngine = new SoundEngine();
-	g_soundEngine->Init();
+	//シャドウマップ
+	ShadowMap::Create();
+	ShadowMap::GetInstance().Init();
+
+	Fade::GetInstance().Init();
+	TitleScene::GetInstance().Init();
+	GameObjectManager::GetGameObjectManager().AddGameObject(&Fade::GetInstance());
+	GameObjectManager::GetGameObjectManager().AddGameObject(&TitleScene::GetInstance());
+	//GameObjectManager::GetGameObjectManager().Init();
+
+	//TitleScene* title = TitleScene();インスタンスの生成を無効にしている？
+
+
+
 }
 //-----------------------------------------------------------------------------
 // Name: 描画処理。
 //-----------------------------------------------------------------------------
 VOID Render()
 {
-	g_shadowmap->Update();
-	
+	//g_shadowMap->Update();
 	if (SUCCEEDED(g_pd3dDevice->BeginScene()))
 	{
 		//シーンの描画開始。
-		g_shadowmap->Draw();
-
+		ShadowMap::GetInstance().Draw();
+		//g_shadowMap->Draw();
 		//あとで戻すためにフレームバッファのレンダリングターゲットとデプスステンシルバッファのバックアップを取る。
 		LPDIRECT3DSURFACE9 frameBufferRT;
 		LPDIRECT3DSURFACE9 frameBufferDS;
@@ -230,21 +238,20 @@ VOID Render()
 		// レンダリングターゲットをフレームバッファから変更する。
 		g_pd3dDevice->SetRenderTarget(
 			0,
-			g_renderTarget->GetRenderTarget()
+			RenderTarget::MainRenderTargetGetInstance().GetRenderTarget()
+			//g_renderTarget->GetRenderTarget()
 		);
 		//// デプスステンシルバッファも変更する。
-		g_pd3dDevice->SetDepthStencilSurface(g_renderTarget->GetDepthStencilBuffer());
+		g_pd3dDevice->SetDepthStencilSurface(RenderTarget::MainRenderTargetGetInstance().GetDepthStencilBuffer());
 		// レンダリングターゲットをクリア。
 		g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
 
 		g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 		g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 
-		
 		//シーンの描画
-		g_scene->Render();
-		//フェードの描画
-		g_fade->Draw();
+		GameObjectManager::GetGameObjectManager().Draw();
+
 		////シーンの描画が完了したのでレンダリングターゲットをフレームバッファに戻す。
 
 		g_pd3dDevice->SetRenderTarget(0, frameBufferRT);
@@ -257,7 +264,7 @@ VOID Render()
 
 	//// シーンの描画終了。
 	g_pd3dDevice->EndScene();
-	// バックバッファとフロントバッファを入れ替える。
+	// バックバッファとフロントバッファを入れ替える
 	g_pd3dDevice->Present(NULL, NULL, NULL, NULL);
 }
 /*!-----------------------------------------------------------------------------
@@ -265,30 +272,38 @@ VOID Render()
 -----------------------------------------------------------------------------*/
 void Update()
 {
-	g_physicsWorld->Update();
-	g_soundEngine->Update();//mainで呼ぶ？
-	g_scene->Update();
-	g_fade->Update();
+	ShadowMap::GetInstance().Update();
+	SoundEngine::GetInstance().Update();
+	PhysicsWorld::GetInstance().Update();
+
+	//PhysicsWorld::GetInstance().Update();
+	GameObjectManager::GetGameObjectManager().Update();
+	Pad::GetInstance().Update();
 }
 //-----------------------------------------------------------------------------
 //ゲームが終了するときに呼ばれる処理。
 //-----------------------------------------------------------------------------
 void Terminate()
 {
-	delete g_scene;
-	delete g_fade;
-	delete g_game;
-	delete g_effectManager;
-	delete g_shadowmap;
-	delete g_physicsWorld;
-	delete g_renderTarget;
-	delete m_primitive;
-	g_soundEngine->Release();
 	copyEffect->Release();
 	g_pd3dDevice->Release();
 	g_pD3D->Release();
+	delete g_effectManager;
+	//delete g_physicsWorld;
+	PhysicsWorld::GetInstance().Destroy();
+	//delete g_physicsWorld;
+	//delete m_primitive;
+	Primitive::GetInstance().Destroy();
+	RenderTarget::MainRenderTargetGetInstance().Destroy();
+	ShadowMap::GetInstance().Destroy();
+	Pad::GetInstance().Destroy();
+	GameObjectManager::GetGameObjectManager().DeleteGameObject(&Fade::GetInstance());
+	Fade::GetInstance().Destroy();
+	GameObjectManager::GetGameObjectManager().Destroy();
+	//SoundEngine::GetInstance().Release();
+
 }
-//ステージ１完成
-//バネカメラ、コースカメラ
-//クローン？
+//クローン
+//ボスの倒し方を考える
+//二つ目のマップを考える
 

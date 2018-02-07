@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Enemy.h"
-#include "Bullet.h"
+#include "Player.h"
+#include "BulletManager.h"
 
 Enemy::Enemy()
 {
@@ -98,7 +99,7 @@ void Enemy::Move()
 	m_moveSpeed.x = 0.0f;
 	m_moveSpeed.z = 0.0f;
 
-	D3DXVECTOR3 pos = g_game->GetPlayer()->Getpos();
+	D3DXVECTOR3 pos = Player::GetInstance().Getpos();
 	D3DXVECTOR3 toPos = pos - m_characterController.GetPosition();
 	float len = D3DXVec3Length(&toPos);
 
@@ -111,6 +112,7 @@ void Enemy::Move()
 
 	float s;
 	float halfAngle = /*angle*/atan2f(-Def.x, -Def.z) * 0.5f;
+	const float bulletSpeed = 0.2f;
 	switch (TState)
 	{
 	case SEACH:
@@ -154,17 +156,17 @@ void Enemy::Move()
 		m_rotation.z = 0.0f * s;
 
 		m_bulletTime--;
+
 		if (m_bulletTime < 0)
 		{
-			Bullet* bullet = new Bullet();
-			bullet->Start(m_characterController.GetPosition(),1);
-			g_game->AddBullets(bullet);
+			Bullet* bullet = BulletManager::GetInstance().CreateBullet();
+			bullet->Start(m_characterController.GetPosition(), bulletSpeed, bullet->ENEMY);
 			m_bulletTime = 60;
 
-			Sound* m_beamSound = new Sound();
+			/*Sound* m_beamSound = new Sound();
 			m_beamSound->Init("Assets/Sound/beamgun.wav");
 			m_beamSound->SetVolume(0.4f);
-			m_beamSound->Play(false);
+			m_beamSound->Play(false);*/
 		}
 		break;
 	default:
@@ -174,19 +176,19 @@ void Enemy::Move()
 
 void Enemy::Draw()
 {
-	m_skinModel.Draw(&g_game->GetCamera()->GetViewMatrix(), &g_game->GetCamera()->GetProjectionMatrix());
+	m_skinModel.Draw(&SpringCamera::GetInstance().GetViewMatrix(), &SpringCamera::GetInstance().GetProjectionMatrix());
 }
 
 void Enemy::Dead()
 {
-	if (g_game->GetPlayer()->PlayerDeath())
+	if (Player::GetInstance().PlayerDeath())
 	{
 		m_isDeath = true;
 	}
 	//CubeCollision Cubemath;
-	//if (Cmass.Cubemath(m_characterController.GetPosition(), g_game->GetPlayer()->Getpos(), 0.5f, 0.5f))
+	//if (Cmass.Cubemath(m_characterController.GetPosition(), Player::GetInstance().Getpos(), 0.5f, 0.5f))
 	//{
-	//	g_game->GetPlayer()->SetDamage();
+	//	Player::GetInstance().SetDamage();
 	////m_isDeath = true;
 	//}
 

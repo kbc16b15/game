@@ -69,6 +69,30 @@ public:
 	{
 		return m_vertexBuffer.GetVertexDecl();
 	}
+
+	//インスタンスの生成
+	static void Primitive::Create()
+	{
+		if (!m_primitive)
+		{
+			m_primitive = new Primitive;
+		}
+
+	}
+	//インスタンスの取得
+	static Primitive& GetInstance()
+	{
+		return *m_primitive;
+	}
+
+	//インスタンスの消去
+	static  void Primitive::Destroy()
+	{
+		delete m_primitive;
+		m_primitive = nullptr;
+	}
+private:
+	static Primitive* m_primitive;//インスタンス
 private:
 	int					m_numVertex;
 	int					m_vertexStride;

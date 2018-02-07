@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "Player.h"
-#include "MoveCube.h"
+#include "Sound.h"
+#include "PlayerHp.h"
 
+Player *Player::m_player = NULL;
 Player::Player()
 {
 	//m_JumpSound = new Sound();
@@ -11,27 +13,43 @@ Player::Player()
 	m_moveSpeed = { 0.0f,0.0f,0.0f };		//移動速度
 	m_dir = { 0.0f,0.0f,0.0f };				//かんせー
 	//m_Addvector = { 0.0f,0.0f,0.0f };		//加算速度
+
 }
 
 Player::~Player()
 {
-	m_characterController.RemoveRigidBoby();
+
 	m_skinModelData.Release();
-	/*if (m_JumpSound != nullptr)
-	{
-		delete m_JumpSound;
-		m_JumpSound = nullptr;
-	}*/
+	m_characterController.RemoveRigidBoby();
 	//法線マップ開放
 	if (m_normalMap != NULL)
 	{
 		m_normalMap->Release();
 	}
+
+	//スペキュラマップ開放
+	if (m_specularMap != NULL)
+	{
+		m_specularMap->Release();
+	}
+	
+	/*if (m_JumpSound != nullptr)
+	{
+		delete m_JumpSound;
+		m_JumpSound = nullptr;
+	}*/
+	
 }
 
-void Player::Start(){
+void Player::Init(){
 
 	m_scale *= 0.01f;
+	//m_scale *= 11500.0f;
+	Sound*	m_JumpSound = new Sound();//登録しておく？
+	m_JumpSound->Init("Assets/Sound/jump06.wav");
+	m_JumpSound->SetVolume(0);
+	m_JumpSound->Play(false);
+
 	//ライトのセット
 	m_light.SetDiffuseLightDirection(0, D3DXVECTOR4(0.707f, 0.0f, -0.707f, 1.0f));
 	m_light.SetDiffuseLightDirection(1, D3DXVECTOR4(-0.707f, 0.0f, -0.707f, 1.0f));
@@ -42,8 +60,7 @@ void Player::Start(){
 	m_light.SetDiffuseLightColor(1, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
 	m_light.SetDiffuseLightColor(2, D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
 	m_light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	m_light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
-
+	m_light.SetAmbientLight(D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.0f));
 	//スキンモデルのロード
 	m_skinModelData.LoadModelData("Assets/modelData/Unity2.X", &m_animation);
 	m_skinModel.Init(&m_skinModelData);
@@ -51,7 +68,7 @@ void Player::Start(){
 
 	//キャラクタコントローラを初期化。
 	m_characterController.Init(m_charaRadius,m_charaHeight, m_position);
-	m_characterController.SetGravity(m_Gravity);
+	m_characterController.SetGravity(m_gravity);
 
 	//アニメーションループフラグのセット
 	m_animation.SetAnimationLoopFlag(Jump, false);
@@ -59,13 +76,18 @@ void Player::Start(){
 	m_animation.SetAnimationLoopFlag(Dead, false);
 
 	//アニメーションエンドタイムのセット
-	m_animation.PlayAnimation(Stand, 0.3f);
-	m_animation.SetAnimationEndTime(Dash, 0.8f);
-	m_animation.SetAnimationEndTime(Jump, 1.5f);
-	m_animation.SetAnimationEndTime(Damage, 0.2f);
-	m_animation.SetAnimationEndTime(Dead, 3.0f);
+	const float StandEndTime= 0.3f;
+	const float DashEndTime= 0.8f;
+	const float JumpEndTime= 1.5f;
+	const float DamageEndTime= 0.2f;
+	const float DeadEndTime= 3.0f;
+	m_animation.PlayAnimation(Stand, StandEndTime);
+	m_animation.SetAnimationEndTime(Dash, DashEndTime);
+	m_animation.SetAnimationEndTime(Jump, JumpEndTime);
+	m_animation.SetAnimationEndTime(Damage, DamageEndTime);
+	m_animation.SetAnimationEndTime(Dead, DeadEndTime);
 
-	//m_skinModel.SetSpecularlight(true);
+	m_skinModel.SetSpecularlight(true);
 
 	//スペキュラマップ
 	D3DXCreateTextureFromFileA(g_pd3dDevice,
@@ -91,20 +113,19 @@ void Player::Start(){
 
 void Player::Update()
 {
-	if (m_deathflg)return;//死んでいたらリターン
+	//if (m_isDeathflg)return;//死んでいたらリターン
 	//m_JumpSound->Update();
-	if (GetAsyncKeyState('Q')) {
-		//m_skinModel.SetnormalMap(NULL);
-		m_skinModel.SetSpecularMap(NULL);
-	}
-	if (GetAsyncKeyState('E')) {
-		//m_skinModel.SetnormalMap(m_normalMap);
-		m_skinModel.SetSpecularMap(m_specularMap);
-	}
+	//if (GetAsyncKeyState('Q')) {
+	//	//m_skinModel.SetnormalMap(NULL);
+	//	m_skinModel.SetSpecularMap(NULL);
+	//}
+	//if (GetAsyncKeyState('E')) {
+	//	//m_skinModel.SetnormalMap(m_normalMap);
+	//	m_skinModel.SetSpecularMap(m_specularMap);
+	//}
 
 	//アニメーション
 	AnimationSet();
-	m_pad.Update();
 	//ダメージ関係
 	Hit();
 	//移動
@@ -119,17 +140,31 @@ void Player::Update()
 void Player::move()
 {
 	//移動しているがどうかのフラグのセット
-	/*if (m_moveStop)
-	{
-		m_ismove = false;
-	}
-	else */if (m_moveSpeed.x != 0.0f || m_moveSpeed.z != 0.0f)
+	/*if (m_moveSpeed.x != 0.0f || m_moveSpeed.z != 0.0f)
 	{
 		m_ismove = true;
 	}
 	else
 	{
 		m_ismove = false;
+	}*/
+	m_ismove = false;
+	if (Pad::GetInstance().GetLStickXF()<0.0)
+	{
+		m_ismove = true;
+	}
+	if (Pad::GetInstance().GetLStickXF()>0.0)
+	{
+		m_ismove = true;
+	}
+
+	if (Pad::GetInstance().GetLStickYF()<0.0)
+	{
+		m_ismove = true;
+	}
+	if (Pad::GetInstance().GetLStickYF()>0.0)
+	{
+		m_ismove = true;
 	}
 
 }
@@ -142,7 +177,7 @@ void Player::AnimationSet()
 	case Stand://待機
 		if (m_workState != Stand){m_animation.PlayAnimation(Stand, 0.3f);}
 		m_workState = m_state;//連続再生させないためのステート
-		if (m_isDead&&g_game->GetHp() <= 0) { m_state = Dead; }
+		if (m_isDead&&PlayerHp::GetInstance().GetPlayerHp() <= 0) { m_state = Dead; }
 		else if (m_isDamage) { m_state = Damage; }
 		else if (m_isjump) { m_state = Jump; }
 		else if (m_ismove) { m_state = Dash; }
@@ -151,7 +186,7 @@ void Player::AnimationSet()
 	case Dash://歩行
 		if (m_workState != Dash){m_animation.PlayAnimation(Dash, 0.5f);}
 		m_workState = m_state;
-		if (m_isDead&&g_game->GetHp() <= 0) { m_state = Dead; }
+		if (m_isDead&&PlayerHp::GetInstance().GetPlayerHp() <= 0) { m_state = Dead; }
 		else if (m_isDamage) { m_state = Damage; }
 		else if (m_isjump) { m_state = Jump; }
 		else if (m_ismove) { m_state = Dash; }
@@ -160,7 +195,7 @@ void Player::AnimationSet()
 	case Jump://ジャンプ
 		if (m_workState != Jump){m_animation.PlayAnimation(Jump, 0.5f);}
 		m_workState = m_state;
-		if (m_isDead&&g_game->GetHp() <= 0){ m_state = Dead; }
+		if (m_isDead&&PlayerHp::GetInstance().GetPlayerHp() <= 0){ m_state = Dead; }
 		else if (m_isDamage) { m_state = Damage; }
 		else if (m_isjump) { m_state = Jump; }
 		else if (m_ismove) { m_state = Dash; }
@@ -174,7 +209,7 @@ void Player::AnimationSet()
 	case Damage://ダメージ
 		if (m_workState != Damage){m_animation.PlayAnimation(Damage, 0.5f);}
 		m_workState = m_state;
-		if (m_isDead&&g_game->GetHp() <= 0) { m_state = Dead; }
+		if (m_isDead&&PlayerHp::GetInstance().GetPlayerHp() <= 0) { m_state = Dead; }
 		else if (m_isDamage) { m_state = Damage; }
 		else if (m_isjump) { m_state = Jump; }
 		else if (m_ismove) { m_state = Dash; }
@@ -186,7 +221,7 @@ void Player::AnimationSet()
 		if (m_workState != Dead){m_animation.PlayAnimation(Dead, 0.5f);}
 		m_workState = m_state;
 
-		if (!m_animation.IsPlay()){m_deathflg = true;}
+		if (!m_animation.IsPlay()){m_isDeathflg = true;}
 		break;
 	default:
 		break;
@@ -198,7 +233,7 @@ void Player::AnimationSet()
 
 void Player::Setangle()
 {
-	if (m_deathflg)return;
+	//if (m_isDeathflg)return;
 	//D3DXVECTOR3 Mpos = position;
 
 	m_moveSpeed = m_characterController.GetMoveSpeed();
@@ -207,10 +242,10 @@ void Player::Setangle()
 
 	D3DXVECTOR3 LocalDir;
 	LocalDir.y = 0.0f;
-	LocalDir.x = m_pad.GetLStickXF();
-	LocalDir.z = m_pad.GetLStickYF();
+	LocalDir.x = Pad::GetInstance().GetLStickXF();
+	LocalDir.z = Pad::GetInstance().GetLStickYF();
 	D3DXMATRIX m_inv;
-	D3DXMatrixInverse(&m_inv, NULL, &g_game->GetCamera()->GetViewMatrix());//逆行列を計算
+	D3DXMatrixInverse(&m_inv, NULL, &SpringCamera::GetInstance().GetViewMatrix());//逆行列を計算
 
 	D3DXVECTOR3 cameraZ;
 	cameraZ.y = 0.0f;
@@ -229,14 +264,17 @@ void Player::Setangle()
 	moveDir.y = 0.0f;
 	moveDir.z = cameraX.z *LocalDir.x + cameraZ.z * LocalDir.z;
 
-	if (!m_maxSflg)
+	/*if (!m_isMax)
 	{
 		m_dir.x += moveDir.x;
 		m_dir.z += moveDir.z;
-	}
-
-	SetSubmove();//慣性
+	}*/
 	
+	//SetSubmove();//慣性
+	
+
+	m_moveSpeed.x = moveDir.x*6.0f;
+	m_moveSpeed.z = moveDir.z*6.0f;
 	/*if (moveSpeed == D3DXVECTOR3{ 0.0f,0.0f,0.0f })
 	{
 		Addvector = { 0.0f,0.0f,0.0f };
@@ -255,7 +293,7 @@ void Player::Setangle()
 	//		//Grotflg = false;
 	//	}
 	//}
-	if ((moveDir.x*moveDir.x + moveDir.y*moveDir.y + moveDir.z*moveDir.z) > 0.0001f&&!m_moveStop&&!m_isDead)
+	if ((moveDir.x*moveDir.x + moveDir.y*moveDir.y + moveDir.z*moveDir.z) > 0.0001f&&!m_isMoveStop&&!m_isDead)
 	{
 		//回転させる　※
 		float s;
@@ -270,10 +308,13 @@ void Player::Setangle()
 	Setjump();//ジャンプ
 	//キャラクタが動く速度を設定。
 	m_characterController.SetMoveSpeed(m_moveSpeed);
-	
-	if (!m_isDead)//死んだときに移動を停止させる
+	if (!m_isDead&&!m_isMoveStop)//死んだときに移動を停止させる
 	{
 		//キャラクタコントローラーを実行
+		m_characterController.Execute();
+	}
+	else if (!m_characterController.IsOnGround())//地面で死ぬようにする
+	{
 		m_characterController.Execute();
 	}
 }
@@ -281,7 +322,7 @@ void Player::Setangle()
 void Player::Setjump()
 {
 	const float			jumpHeight = 8.0f;	//ジャンプの高さ
-	if (m_pad.IsTrigger(m_pad.enButtonA) && m_characterController.IsOnGround()) {
+	if (Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonA) && m_characterController.IsOnGround()) {
 		//ジャンプ
 		m_moveSpeed.y = jumpHeight;
 		//ジャンプしたことをキャラクタコントローラーに通知。
@@ -309,8 +350,7 @@ void Player::SetSubmove()
 {
 	const float			m_maxSpeed = 5.0f;		//最大移動速度の保存
 	const float			m_downSpeed = 0.3f;		//移動していないときに減速させる処理(摩擦？)
-	if (m_pad.GetLStickXF() == 0.0f&&m_pad.GetLStickYF() == 0.0f)
-	{
+	//if (Game::GetInstance().GetPad()->GetLStickXF() == 0.0f&&Game::GetInstance().GetPad()->GetLStickYF() == 0.0f){
 		//移動していないときに減速させる処理(摩擦？)
 
 		if (m_dir.x > 0.0f)
@@ -335,28 +375,28 @@ void Player::SetSubmove()
 		{
 			m_dir = { 0.0f,0.0f,0.0f };
 		}
-	}
+	//}
 	//最大移動速度の保存
-	m_maxSflg = false;
+	m_isMax = false;
 	if (m_dir.x >m_maxSpeed)
 	{
 		m_dir.x = m_maxSpeed;
-		m_maxSflg = true;
+		m_isMax = true;
 	}
 	else if (m_dir.x < -m_maxSpeed)
 	{
 		m_dir.x = -m_maxSpeed;
-		m_maxSflg = true;
+		m_isMax = true;
 	}
 	if (m_dir.z >m_maxSpeed)
 	{
 		m_dir.z = m_maxSpeed;
-		m_maxSflg = true;
+		m_isMax = true;
 	}
 	else if (m_dir.z < -m_maxSpeed)
 	{
 		m_dir.z = -m_maxSpeed;
-		m_maxSflg = true;
+		m_isMax = true;
 	}
 
 	m_moveSpeed.x = m_dir.x;
@@ -383,28 +423,28 @@ void Player::Hit()
 	}*/
 
 	//HPがなくなったら死亡
-	if (g_game->GetHp() <= 0 /*&& m_characterController.IsOnGround()*/)
+	if (PlayerHp::GetInstance().GetPlayerHp() <= 0)
 	{
 		m_isDead = true;
 	}
 
 	//ダメージ判定
-	if (m_damageflg&&m_damageTime<0)
+	if (m_isDamageflg&&m_damageTime<0)
 	{
 		if(m_isDead == false)
 		{
 
-			m_damageflg = false;
+			m_isDamageflg = false;
 			m_isDamage = true;
-			g_game->Damage(1);
-			m_damageTime = 200;
+			PlayerHp::GetInstance().PlayerDamage(1);
+			m_damageTime = m_damageMaxTime;
 		}
-		m_damageflg = false;
+		m_isDamageflg = false;
 	}
 	m_damageTime--;
 }
 
-void Player::Draw(D3DXMATRIX* viewM, D3DXMATRIX* projM, bool shadowCaster,bool shadowRecive)
+void Player::ShadowDraw(D3DXMATRIX* viewM, D3DXMATRIX* projM, bool shadowCaster,bool shadowRecive)
 {
 	//シャドウをセット
 	m_skinModel.SetCasterflg(shadowCaster);
@@ -416,4 +456,10 @@ void Player::Draw(D3DXMATRIX* viewM, D3DXMATRIX* projM, bool shadowCaster,bool s
 	m_skinModel.Draw(viewM, projM);
 	m_skinModel.SetCasterflg(false);
 	m_skinModel.SetReciveflg(false);
+}
+
+void Player::Draw()
+{
+	//シャドウをセット
+	ShadowDraw(&SpringCamera::GetInstance().GetViewMatrix(), &SpringCamera::GetInstance().GetProjectionMatrix(),false,false);
 }

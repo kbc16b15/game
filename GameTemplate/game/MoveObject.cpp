@@ -1,19 +1,6 @@
 #include "stdafx.h"
 #include "MoveObject.h"
-#include "Spring.h"
-#include "Map.h"
-
-MoveObject::MoveObject()
-{
-}
-
-
-MoveObject::~MoveObject()
-{
-	g_physicsWorld->RemoveRigidBody(&rigidBody);
-	rigidBody.Release();
-	modelData.Release();
-}
+#include "Player.h"
 
 void MoveObject::Init(const char* modelName,D3DXVECTOR3	pos,D3DXQUATERNION	rot)
 {
@@ -22,44 +9,32 @@ void MoveObject::Init(const char* modelName,D3DXVECTOR3	pos,D3DXQUATERNION	rot)
 	char modelPath[256];
 	sprintf(modelPath, "Assets/modelData/%s.x", /*locInfo.modelName*/modelName);
 	//モデルをロード。
-	modelData.LoadModelData(modelPath, NULL);
+	m_modelData.LoadModelData(modelPath, NULL);
 	//ロードしたモデルデータを使ってSkinModelを初期化。
-	model.Init(&modelData);
+	m_model.Init(&m_modelData);
 
-	//ライトを初期化。
-	light.SetDiffuseLightDirection(0, D3DXVECTOR4(0.707f, 0.0f, -0.707f, 1.0f));
-	light.SetDiffuseLightDirection(1, D3DXVECTOR4(-0.707f, 0.0f, -0.707f, 1.0f));
-	light.SetDiffuseLightDirection(2, D3DXVECTOR4(0.0f, 0.707f, -0.707f, 1.0f));
-	light.SetDiffuseLightDirection(3, D3DXVECTOR4(0.0f, -0.707f, -0.707f, 1.0f));
+	m_model.SetLight(&m_light);
+	m_position =pos;
+	m_rotation =rot;
 
-	light.SetDiffuseLightColor(0, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	light.SetDiffuseLightColor(1, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	light.SetDiffuseLightColor(2, D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
-	light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
-
-	model.SetLight(&light);
-	position =pos;
-	rotation =rot;
-
-	model.UpdateWorldMatrix({ 0.0f, 0.0f, 0.0f }, {0.0f, 0.0, 0.0f, 1.0}, { 1.0f, 1.0f, 1.0f });
+	m_model.UpdateWorldMatrix({ 0.0f, 0.0f, 0.0f }, {0.0f, 0.0, 0.0f, 1.0}, { 1.0f, 1.0f, 1.0f });
 	//ここから衝突判定絡みの初期化。
 	//スキンモデルからメッシュコライダーを作成する。
-	D3DXMATRIX* rootBoneMatrix = modelData.GetRootBoneWorldMatrix();
-	meshCollider.CreateFromSkinModel(&model, rootBoneMatrix);
+	D3DXMATRIX* rootBoneMatrix = m_modelData.GetRootBoneWorldMatrix();
+	m_meshCollider.CreateFromSkinModel(&m_model, rootBoneMatrix);
 	//続いて剛体を作成する。
 	//まずは剛体を作成するための情報を設定。
 	
-	rbInfo.collider = &meshCollider;//剛体のコリジョンを設定する。
-	rbInfo.mass = 0.0f;				//質量を0にすると動かない剛体になる。
-	rbInfo.pos = position;
-	rbInfo.rot = rotation;
+	m_rbInfo.collider = &m_meshCollider;//剛体のコリジョンを設定する。
+	m_rbInfo.mass = 0.0f;				//質量を0にすると動かない剛体になる。
+	m_rbInfo.pos = m_position;
+	m_rbInfo.rot = m_rotation;
 	//剛体を作成。
-	rigidBody.Create(rbInfo);
-	rigidBody.GetBody()->setCollisionFlags( btCollisionObject::CF_CHARACTER_OBJECT);
+	m_rigidBody.Create(m_rbInfo);
+	m_rigidBody.GetBody()->setCollisionFlags( btCollisionObject::CF_CHARACTER_OBJECT);
 
 	//作成した剛体を物理ワールドに追加。
-	g_physicsWorld->AddRigidBody(&rigidBody);
+	PhysicsWorld::GetInstance().AddRigidBody(&m_rigidBody);
 
 	/*UMovelenge.x = position.x - 20.0f;
 	LMovelenge.x = position.z - 2.0f;
@@ -71,7 +46,7 @@ void MoveObject::Init(const char* modelName,D3DXVECTOR3	pos,D3DXQUATERNION	rot)
 void MoveObject::Update()
 {
 	//ムーブオブジェクトのインスタンスの取得
-	/*std::vector<Spring*> springstl=g_game->GetMap()->GetSpringObject();
+	/*std::vector<Spring*> springstl=Game::GetInstance().GetMap()->GetSpringObject();
 	for (auto ss : springstl)
 	{
 
@@ -82,8 +57,8 @@ void MoveObject::Update()
 
 	}*/
 
-	D3DXVECTOR3 toPos = position;
-	D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
+	D3DXVECTOR3 toPos = m_position;
+	D3DXVec3Subtract(&toPos, &m_position, &Player::GetInstance().Getpos());
 
 	float len = D3DXVec3Length(&toPos);
 
@@ -94,102 +69,14 @@ void MoveObject::Update()
 	}
 	if (m_open1)
 	{
-		if (m_maxUp > position.y)
+		if (m_maxUp > m_position.y)
 		{
-			position.y += m_upSpeed;
+			m_position.y += m_upSpeed;
 			//m_maxUpの値まで上げる
 		}
 	}
 
-
-	//D3DXVECTOR3 toPos;
-	//D3DXVECTOR3 LPos = position;
-	//D3DXVECTOR3 RPos = position;
-	//D3DXVECTOR3 UPos = position;
-	//D3DXVECTOR3 DPos = position;
-	//LPos.z -= 2.4f;
-	//RPos.z += 2.4f;
-	//UPos.x -= 2.4f;
-	//DPos.x += 2.4f;
-
-	//D3DXVec3Subtract(&toPos, &LPos, &g_game->GetPlayer()->Getpos());
-	//float Llen = D3DXVec3Length(&toPos);
-	//D3DXVec3Subtract(&toPos, &RPos, &g_game->GetPlayer()->Getpos());
-	//float Rlen = D3DXVec3Length(&toPos);
-	//D3DXVec3Subtract(&toPos, &DPos, &g_game->GetPlayer()->Getpos());
-	//float Dlen = D3DXVec3Length(&toPos);
-	//D3DXVec3Subtract(&toPos, &g_game->GetPlayer()->Getpos(), &UPos);
-	//float Ulen = D3DXVec3Length(&toPos);
-	//if (Llen < 1.5f&&position.z>LMovelenge.x)
-	//{
-	//	Lflg = true;
-	//}
-	//else
-	//{
-	//	Lflg = false;
-	//}
-
-	//if (Lflg)
-	//{
-	//	position.z -= MoveSpeed;
-	//	D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
-	//	speed.z -= PAddSpeed;
-	//	g_game->GetPlayer()->AddSpeed(speed);
-	//}
-
-	//if (Rlen < 1.5f&&position.z<RMovelenge.x)
-	//{
-	//	Rflg = true;
-
-	//}
-	//else
-	//{
-	//	Rflg = false;
-	//}
-
-	//if (Rflg)
-	//{
-	//	position.z += MoveSpeed;
-	//	D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
-	//	speed.z += PAddSpeed;
-	//	g_game->GetPlayer()->AddSpeed(speed);
-	//}
-
-	//if (Dlen < 1.0f&&position.x<DMovelenge.x)
-	//{
-	//	Dflg = true;
-	//}
-	//else
-	//{
-	//	Dflg = false;
-	//}
-
-	//if (Dflg)
-	//{
-	//	position.x += MoveSpeed;
-	//	D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
-	//	speed.x += PAddSpeed;
-	//	g_game->GetPlayer()->AddSpeed(speed);
-	//}
-
-	//if (Ulen < 1.0f&&position.x > UMovelenge.x)
-	//{
-	//	Uflg = true;
-	//}
-	//else {
-	//	Uflg = false;
-	//}
-
-	//if (Uflg)
-	//{
-	//	//moveSpeed.x = 4.0f;
-	//	position.x -= MoveSpeed;
-	//	D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
-	//	speed.x -=PAddSpeed;
-	//	g_game->GetPlayer()->AddSpeed(speed);
-	//}
-
-	rigidBody.GetBody()->setActivationState(DISABLE_DEACTIVATION);
+	/*rigidBody.GetBody()->setActivationState(DISABLE_DEACTIVATION);
 	btTransform& trans = rigidBody.GetBody()->getWorldTransform();
 	btVector3 btPos;
 	btPos.setX(position.x);
@@ -201,17 +88,17 @@ void MoveObject::Update()
 	btRot.setY(rotation.y);
 	btRot.setZ(rotation.z);
 	btRot.setW(rotation.w);
-	trans.setRotation(btRot);
+	trans.setRotation(btRot);*/
 
-	//btTransform& Ttra = rigidBody.GetBody()->getWorldTransform();//剛体の移動処理
-	//Ttra.setOrigin({ position.x,position.y,position.z });
-	//Ttra.setRotation({ rotation.x,rotation.y,rotation.z,rotation.w });
+	btTransform& Ttra = m_rigidBody.GetBody()->getWorldTransform();//剛体の移動処理
+	Ttra.setOrigin({ m_position.x,m_position.y,m_position.z });
+	Ttra.setRotation({ m_rotation.x,m_rotation.y,m_rotation.z,m_rotation.w });
 	
-	model.UpdateWorldMatrix(position, rotation, { 1.0f,1.0f,1.0f, });
+	m_model.UpdateWorldMatrix(m_position, m_rotation, { 1.0f,1.0f,1.0f, });
 
 }
 
-void MoveObject::Draw()
-{
-	model.Draw(&g_game->GetCamera()->GetViewMatrix(), &g_game->GetCamera()->GetProjectionMatrix());
-}
+//void MoveObject::Draw()
+//{
+//	model.Draw(&SpringCamera::GetInstance().GetViewMatrix(), &SpringCamera::GetInstance().GetProjectionMatrix());
+//}

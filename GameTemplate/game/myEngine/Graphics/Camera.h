@@ -3,8 +3,10 @@
 /*!
  *@brief	カメラクラス。
  */
+
 class Camera {
 private:
+	//static Camera*			m_camera;
 	D3DXMATRIX				viewMatrix;			//!<ビュー行列。カメラ行列とも言う。
 	D3DXMATRIX				projectionMatrix;	//!<プロジェクション行列。ビュー空間から射影空間に変換する行列。
 	D3DXVECTOR3				vEyePt;				//!<カメラクラスを作るためのヒント。カメラの視点。この辺りはメンバ変数に変更する。
@@ -94,4 +96,25 @@ public:
 	 *@brief	カメラの初期化。
 	 */
 	void Init();
+
+	////インスタンスの生成
+	//static void Camera::Create()
+	//{
+	//	if (!m_camera)
+	//	{
+	//		m_camera = new Camera;
+	//	}
+	//}
+
+	////インスタンスの消去
+	//static  void Camera::Destroy()
+	//{
+	//	delete m_camera;
+	//	m_camera = nullptr;
+	//}
+	////インスタンスの取得
+	//static Camera& GetInstance()
+	//{
+	//	return *m_camera;
+	//}
 };

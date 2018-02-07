@@ -38,7 +38,7 @@ public:
 		*@param[in]	nameyKey	名前キー。。
 		*@return 波形データ。登録されていない場合はNULLが返る。
 		*/
-		CWaveFilePtr FindWaveFile(int groupID, const NameKey& nameKey);
+		//CWaveFilePtr FindWaveFile(int groupID, const NameKey& nameKey);
 		/*!
 		*@brief	グループ単位で解放。
 		*/

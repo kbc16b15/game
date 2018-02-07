@@ -25,18 +25,7 @@ void MoveCube::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 	modelData.LoadModelData(modelPath, NULL);
 	model.Init(&modelData);
 
-	light.SetDiffuseLightDirection(0, D3DXVECTOR4(0.707f, 0.0f, -0.707f, 1.0f));
-	light.SetDiffuseLightDirection(1, D3DXVECTOR4(-0.707f, 0.0f, -0.707f, 1.0f));
-	light.SetDiffuseLightDirection(2, D3DXVECTOR4(0.0f, 0.707f, -0.707f, 1.0f));
-	light.SetDiffuseLightDirection(3, D3DXVECTOR4(0.0f, -0.707f, -0.707f, 1.0f));
-
-	light.SetDiffuseLightColor(0, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	light.SetDiffuseLightColor(1, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	light.SetDiffuseLightColor(2, D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
-	light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
-
-	model.SetLight(&light);
+	model.SetLight(&Game::GetInstance().GetLight());
 	position = pos;
 	rotation = rot;
 
@@ -62,21 +51,21 @@ void MoveCube::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 
 void MoveCube::Update()
 {
-	D3DXVECTOR3 toPos;
-	float len;
+	/*D3DXVECTOR3 toPos;
+	float len;*/
 	
 	//switch (MoveDir)
 	//{
 	//case FORWARD:
-	//	D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
+	//	D3DXVec3Subtract(&toPos, &position, &Player::GetInstance().Getpos());
 	//	len = D3DXVec3Length(&toPos);
-	//	if (len < 3.0f&&position.x>Limitpos.x&&g_game->GetPlayer()->GetObjectHit())
+	//	if (len < 3.0f&&position.x>Limitpos.x&&Player::GetInstance().GetObjectHit())
 	//	{
 
 	//		position.x -= 0.04f;
-	//		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
+	//		D3DXVECTOR3 speed = Player::GetInstance().GetSpeed();
 	//		speed.x -=2.4f;
-	//		g_game->GetPlayer()->AddSpeed(speed);
+	//		Player::GetInstance().AddSpeed(speed);
 	//	}
 	//	else if (len > 3.0f&&position.x<Spos.x)
 	//	{
@@ -84,14 +73,14 @@ void MoveCube::Update()
 	//	}
 	//	break;
 	//case LEFT:
-	//	D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
+	//	D3DXVec3Subtract(&toPos, &position, &Player::GetInstance().Getpos());
 	//	len = D3DXVec3Length(&toPos);
-	//	if (len < 3.0f&&position.z>Limitpos.z&&g_game->GetPlayer()->GetObjectHit())
+	//	if (len < 3.0f&&position.z>Limitpos.z&&Player::GetInstance().GetObjectHit())
 	//	{
 	//		position.z -= 0.04f;
-	//		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
+	//		D3DXVECTOR3 speed = Player::GetInstance().GetSpeed();
 	//		speed.z -= 2.4f;
-	//		g_game->GetPlayer()->AddSpeed(speed);
+	//		Player::GetInstance().AddSpeed(speed);
 	//	}
 	//	else if (len > 3.0f&&position.z<Spos.z)
 	//	{
@@ -99,14 +88,14 @@ void MoveCube::Update()
 	//	}
 	//	break;
 	//case RIGHT:
-	//	D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
+	//	D3DXVec3Subtract(&toPos, &position, &Game::GetInstance().GetPlayer()->Getpos());
 	//	len = D3DXVec3Length(&toPos);
-	//	if (len < 3.0f&&position.z<Limitpos.z&&g_game->GetPlayer()->GetObjectHit())
+	//	if (len < 3.0f&&position.z<Limitpos.z&&Game::GetInstance().GetPlayer()->GetObjectHit())
 	//	{
 	//		position.z += 0.04f;
-	//		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
+	//		D3DXVECTOR3 speed = Game::GetInstance().GetPlayer()->GetSpeed();
 	//		speed.z += 2.4f;
-	//		g_game->GetPlayer()->AddSpeed(speed);
+	//		Game::GetInstance().GetPlayer()->AddSpeed(speed);
 	//	}
 	//	else if (len > 3.0f&&position.z>Spos.z)
 	//	{
@@ -114,14 +103,14 @@ void MoveCube::Update()
 	//	}
 	//	break;
 	//case BACK:
-	//	D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
+	//	D3DXVec3Subtract(&toPos, &position, &Game::GetInstance().GetPlayer()->Getpos());
 	//	len = D3DXVec3Length(&toPos);
-	//	if (len < 3.0f&&position.x<Limitpos.x&&g_game->GetPlayer()->GetObjectHit())
+	//	if (len < 3.0f&&position.x<Limitpos.x&&Game::GetInstance().GetPlayer()->GetObjectHit())
 	//	{
 	//		position.x += 0.04f;
-	//		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
+	//		D3DXVECTOR3 speed = Game::GetInstance().GetPlayer()->GetSpeed();
 	//		speed.x += 1.f;
-	//		g_game->GetPlayer()->AddSpeed(speed);
+	//		Game::GetInstance().GetPlayer()->AddSpeed(speed);
 	//	}
 	//	else if (len > 3.0f&&position.x>Spos.x)
 	//	{
@@ -129,14 +118,14 @@ void MoveCube::Update()
 	//	}
 	//	break;
 	//case UP:
-	//	D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
+	//	D3DXVec3Subtract(&toPos, &position, &Game::GetInstance().GetPlayer()->Getpos());
 	//	len = D3DXVec3Length(&toPos);
-	//	if (len < 2.5f&&position.y<Limitpos.y&&g_game->GetPlayer()->GetObjectHit())
+	//	if (len < 2.5f&&position.y<Limitpos.y&&Game::GetInstance().GetPlayer()->GetObjectHit())
 	//	{
 	//		position.y += 0.04f;
-	//		D3DXVECTOR3 speed = g_game->GetPlayer()->GetSpeed();
+	//		D3DXVECTOR3 speed = Game::GetInstance().GetPlayer()->GetSpeed();
 	//		speed.y += 2.4f;
-	//		g_game->GetPlayer()->AddSpeed(speed);
+	//		Game::GetInstance().GetPlayer()->AddSpeed(speed);
 	//	}
 	//	else if (len > 2.5f&&position.y>Spos.y)
 	//	{
@@ -144,13 +133,13 @@ void MoveCube::Update()
 	//	}
 	//	break;
 	//case DOWN:
-	//	D3DXVec3Subtract(&toPos, &position, &g_game->GetPlayer()->Getpos());
+	//	D3DXVec3Subtract(&toPos, &position, &Game::GetInstance().GetPlayer()->Getpos());
 	//	len = D3DXVec3Length(&toPos);
 	//	
-	//	if (len < 3.0f&&position.y>Limitpos.y&&g_game->GetPlayer()->GetObjectHit())
+	//	if (len < 3.0f&&position.y>Limitpos.y&&Game::GetInstance().GetPlayer()->GetObjectHit())
 	//	{
 	//		Downflg = true;
-	//		//g_game->GetPlayer()->SetObjectHit(false);
+	//		//Game::GetInstance().GetPlayer()->SetObjectHit(false);
 	//	}
 	//	if (Downflg)
 	//	{
@@ -171,5 +160,5 @@ void MoveCube::Update()
 void MoveCube::Draw()
 {
 	model.SetReciveflg(true);
-	model.Draw(&g_game->GetCamera()->GetViewMatrix(), &g_game->GetCamera()->GetProjectionMatrix());
+	model.Draw(&Game::GetInstance().GetCamera()->GetViewMatrix(), &Game::GetInstance().GetCamera()->GetProjectionMatrix());
 }

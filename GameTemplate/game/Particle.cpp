@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Particle.h"
 #include "ParticleEmitter.h"
-
+#include "Primitive.h"
 struct SShapeVertex_PT {
 	float	pos[4];
 	float	uv[2];
@@ -11,11 +11,11 @@ static const D3DVERTEXELEMENT9 scShapeVertex_PT_Element[] = {
 	{0,16,D3DDECLTYPE_FLOAT2,D3DDECLMETHOD_DEFAULT,D3DDECLUSAGE_TEXCOORD,0},
 	D3DDECL_END()
 };
-Particle::Particle():
-//texture(nullptr),
-shaderEffect(nullptr)
-{
 
+Particle::Particle()
+{
+	texture = nullptr;
+	shaderEffect = nullptr;//(nullptr)
 }
 
 
@@ -46,7 +46,7 @@ void Particle::Init(const SParticleEmitParameter& param)
 	
 	position.x += add*2.0f;//パーティクルの発生座標に乱数を加えたい
 	position.z += add*2.0f;
-	position.y += add*0.2f;
+	position.y += add*2.0f;
 	moveSpeed.x += add*0.0f;//初速度に乱数を加える
 	moveSpeed.y += add*0.0f;
 	moveSpeed.z += add*0.0f;
@@ -106,11 +106,23 @@ void Particle::Init(const SParticleEmitParameter& param)
 	}
 }
 
+//void Particle::Update(D3DXVECTOR3 pos)
+//{
+//	position = pos;
+//	time--;
+//	float deltaTime = 1.0f / 60.0f;
+//	//moveSpeed.y -= 0.1f;
+//
+//	D3DXVECTOR3 add = moveSpeed*deltaTime;
+//	position += add;
+//}
+
 void Particle::Update() 
 {
 	time--;
 	float deltaTime = 1.0f / 60.0f;
 	//moveSpeed.y -= 0.1f;
+
 	D3DXVECTOR3 add = moveSpeed*deltaTime;
 	position += add;
 #if 0

@@ -7,7 +7,7 @@
 //macine
 {
 	"macine",
-	D3DXVECTOR3(0.00f, -25.50f, 7.52f),             //平行移動
+	D3DXVECTOR3(0.00f, -34.00f, 7.50f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //BCube
@@ -31,552 +31,558 @@
 //BCube
 {
 	"BCube",
-	D3DXVECTOR3(-4.00f, -2.00f, -4.00f),             //平行移動
+	D3DXVECTOR3(-5.00f, -2.00f, -4.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //BCube
 {
 	"BCube",
-	D3DXVECTOR3(-4.00f, -2.00f, 4.00f),             //平行移動
+	D3DXVECTOR3(-5.00f, -2.00f, 0.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //BCube
 {
 	"BCube",
-	D3DXVECTOR3(-4.00f, -2.00f, 0.00f),             //平行移動
+	D3DXVECTOR3(-5.00f, -2.00f, 4.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //BCube
 {
 	"BCube",
-	D3DXVECTOR3(-12.15f, -0.17f, -4.00f),             //平行移動
+	D3DXVECTOR3(-12.00f, 1.00f, -4.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //BCube
 {
 	"BCube",
-	D3DXVECTOR3(-12.15f, -0.17f, 4.00f),             //平行移動
+	D3DXVECTOR3(-12.00f, 1.00f, 0.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //BCube
 {
 	"BCube",
-	D3DXVECTOR3(-12.15f, -0.17f, 0.00f),             //平行移動
+	D3DXVECTOR3(-12.00f, 1.00f, 4.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //BCube
 {
 	"BCube",
-	D3DXVECTOR3(-16.62f, -0.17f, -4.00f),             //平行移動
+	D3DXVECTOR3(-17.00f, 1.00f, -4.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //BCube
 {
 	"BCube",
-	D3DXVECTOR3(-16.62f, -0.17f, 4.00f),             //平行移動
+	D3DXVECTOR3(-17.00f, 1.00f, 0.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //BCube
 {
 	"BCube",
-	D3DXVECTOR3(-16.62f, -0.17f, 0.00f),             //平行移動
+	D3DXVECTOR3(-17.00f, 1.00f, 4.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //BCube2
 {
 	"BCube2",
-	D3DXVECTOR3(-27.99f, -2.64f, 4.35f),             //平行移動
+	D3DXVECTOR3(-28.00f, -2.00f, 1.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //BCube2
 {
 	"BCube2",
-	D3DXVECTOR3(-27.99f, 0.20f, 8.17f),             //平行移動
-	D3DXQUATERNION(0.71f, 0.00f, 0.00f, -0.71f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-27.99f, -2.64f, 0.87f),             //平行移動
+	D3DXVECTOR3(-28.00f, -2.00f, 5.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //BCube2
 {
 	"BCube2",
-	D3DXVECTOR3(-35.21f, -2.64f, -5.02f),             //平行移動
+	D3DXVECTOR3(-28.00f, 0.00f, 8.00f),             //平行移動
+	D3DXQUATERNION(0.71f, 0.00f, 0.00f, 0.71f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-38.00f, -2.00f, -1.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //BCube2
 {
 	"BCube2",
-	D3DXVECTOR3(-35.21f, 0.20f, -10.33f),             //平行移動
-	D3DXQUATERNION(0.71f, 0.00f, 0.00f, -0.71f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-35.21f, -2.64f, -8.50f),             //平行移動
+	D3DXVECTOR3(-38.00f, -2.00f, -5.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //BCube2
 {
 	"BCube2",
-	D3DXVECTOR3(-117.73f, -2.64f, -7.58f),             //平行移動
+	D3DXVECTOR3(-38.00f, 0.00f, -8.00f),             //平行移動
+	D3DXQUATERNION(0.71f, 0.00f, 0.00f, 0.71f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-50.00f, -2.00f, 1.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-50.00f, -2.00f, 5.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-50.00f, -2.00f, 9.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-55.00f, -2.00f, 1.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-55.00f, -2.00f, 5.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-55.00f, -2.00f, 9.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-60.00f, -2.00f, 1.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-60.00f, -2.00f, 5.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-60.00f, -2.00f, 9.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-65.12f, -2.00f, -10.71f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-65.12f, -2.00f, -6.71f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-65.12f, -2.00f, -2.71f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-70.12f, -2.00f, -10.71f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-70.12f, -2.00f, -6.71f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-70.12f, -2.00f, -2.71f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-75.12f, -2.00f, -10.71f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-75.12f, -2.00f, -6.71f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-75.12f, -2.00f, -2.71f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-80.18f, -2.00f, 1.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-80.18f, -2.00f, 5.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-80.18f, -2.00f, 9.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-85.18f, -2.00f, 1.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-85.18f, -2.00f, 5.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-85.18f, -2.00f, 9.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-90.18f, -2.00f, 1.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-90.18f, -2.00f, 5.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-90.18f, -2.00f, 9.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-95.40f, -2.00f, -10.46f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-95.40f, -2.00f, -6.46f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-95.40f, -2.00f, -2.46f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-100.40f, -2.00f, -10.46f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-100.40f, -2.00f, -6.46f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-100.40f, -2.00f, -2.46f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-105.40f, -2.00f, -10.46f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-105.40f, -2.00f, -6.46f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-105.40f, -2.00f, -2.46f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-115.00f, 0.00f, -4.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-115.00f, 0.00f, 0.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-124.00f, 0.00f, -4.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-119.35f, 0.00f, -4.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-119.35f, 0.00f, 0.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-124.00f, 0.00f, 0.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-128.74f, 0.00f, 1.11f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-128.74f, 0.00f, 5.11f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-137.74f, 0.00f, 1.11f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-133.09f, 0.00f, 1.11f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-133.09f, 0.00f, 5.11f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-137.74f, 0.00f, 5.11f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-180.00f, 0.00f, -4.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-180.00f, 0.00f, 0.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-180.00f, 0.00f, 4.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-184.00f, 0.00f, -4.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-184.00f, 0.00f, 4.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-188.00f, 0.00f, -4.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-188.00f, 0.00f, 0.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
+{
+	"BCube",
+	D3DXVECTOR3(-188.00f, 0.00f, 4.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-144.00f, -2.00f, -8.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
 },
 //BCube2
 {
 	"BCube2",
-	D3DXVECTOR3(-123.04f, 0.20f, -7.56f),             //平行移動
-	D3DXQUATERNION(0.50f, -0.50f, -0.50f, -0.50f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-121.21f, -2.64f, -7.57f),             //平行移動
+	D3DXVECTOR3(-148.00f, -2.00f, -8.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
 },
 //BCube2
 {
 	"BCube2",
-	D3DXVECTOR3(-126.97f, -2.64f, 5.56f),             //平行移動
+	D3DXVECTOR3(-150.00f, 0.00f, -8.00f),             //平行移動
+	D3DXQUATERNION(0.50f, 0.50f, -0.50f, 0.50f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-153.44f, -2.00f, 5.65f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
 },
 //BCube2
 {
 	"BCube2",
-	D3DXVECTOR3(-132.28f, 0.20f, 5.58f),             //平行移動
-	D3DXQUATERNION(0.50f, -0.50f, -0.50f, -0.50f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-130.45f, -2.64f, 5.57f),             //平行移動
+	D3DXVECTOR3(-157.44f, -2.00f, 5.65f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
 },
 //BCube2
 {
 	"BCube2",
-	D3DXVECTOR3(-140.68f, -2.60f, -3.62f),             //平行移動
+	D3DXVECTOR3(-159.44f, 0.00f, 5.65f),             //平行移動
+	D3DXQUATERNION(0.50f, 0.50f, -0.50f, 0.50f ),  //回転
+},
+//BCube2
+{
+	"BCube2",
+	D3DXVECTOR3(-167.07f, -2.00f, -3.65f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
 },
 //BCube2
 {
 	"BCube2",
-	D3DXVECTOR3(-145.99f, 0.24f, -3.60f),             //平行移動
-	D3DXQUATERNION(0.50f, -0.50f, -0.50f, -0.50f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-144.16f, -2.60f, -3.60f),             //平行移動
+	D3DXVECTOR3(-171.07f, -2.00f, -3.65f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
 },
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-157.76f, -0.90f, -4.02f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-157.76f, -0.90f, 3.98f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-162.23f, -0.90f, -4.02f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-162.23f, -0.90f, 3.98f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-162.23f, -0.90f, -0.02f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-153.67f, -0.90f, -4.02f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-153.67f, -0.90f, 3.98f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-153.67f, -0.90f, -0.02f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-87.67f, -0.17f, -4.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-87.67f, -0.17f, 0.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-92.14f, -0.17f, -4.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-92.14f, -0.17f, 0.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-96.55f, -0.17f, -4.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-96.55f, -0.17f, 0.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-105.10f, -0.17f, 4.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-105.10f, -0.17f, 0.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-100.70f, -0.17f, 4.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-100.70f, -0.17f, 0.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
 //BCube2
 {
 	"BCube2",
-	D3DXVECTOR3(-44.41f, -2.64f, 7.83f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-44.41f, -2.64f, 4.35f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-44.41f, -2.64f, 0.87f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-48.04f, -2.64f, 7.83f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-48.04f, -2.64f, 4.35f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-48.04f, -2.64f, 0.87f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-40.83f, -2.64f, 7.83f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-41.01f, -2.64f, 4.35f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-41.01f, -2.64f, 0.87f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-55.85f, -2.64f, -2.91f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-55.85f, -2.64f, -6.39f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-55.85f, -2.64f, -9.87f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-59.48f, -2.64f, -2.91f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-59.48f, -2.64f, -6.39f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-59.48f, -2.64f, -9.87f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-52.27f, -2.64f, -2.91f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-52.45f, -2.64f, -6.39f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-52.45f, -2.64f, -9.87f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-67.46f, -2.64f, 7.40f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-67.46f, -2.64f, 3.92f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-67.46f, -2.64f, 0.44f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-71.09f, -2.64f, 7.40f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-71.09f, -2.64f, 3.92f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-71.09f, -2.64f, 0.44f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-63.88f, -2.64f, 7.40f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-64.06f, -2.64f, 3.92f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-64.06f, -2.64f, 0.44f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-78.88f, -2.64f, -2.63f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-78.88f, -2.64f, -6.11f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-78.88f, -2.64f, -9.59f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-82.51f, -2.64f, -2.63f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-82.51f, -2.64f, -6.11f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-82.51f, -2.64f, -9.59f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-75.30f, -2.64f, -2.63f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-75.48f, -2.64f, -6.11f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube2
-{
-	"BCube2",
-	D3DXVECTOR3(-75.48f, -2.64f, -9.59f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-109.26f, -0.17f, 4.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//BCube
-{
-	"BCube",
-	D3DXVECTOR3(-109.26f, -0.17f, 0.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//TCircle
-{
-	"TCircle",
-	D3DXVECTOR3(-55.49f, 0.00f, -6.14f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//TCircle
-{
-	"TCircle",
-	D3DXVECTOR3(-44.53f, 0.00f, 4.36f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//TCircle
-{
-	"TCircle",
-	D3DXVECTOR3(-67.09f, 0.00f, 3.74f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//TCircle
-{
-	"TCircle",
-	D3DXVECTOR3(-78.41f, 0.00f, -5.78f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//Drone
-{
-	"Drone",
-	D3DXVECTOR3(-106.19f, 2.54f, -5.22f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//Drone
-{
-	"Drone",
-	D3DXVECTOR3(-91.51f, 2.54f, 7.02f),             //平行移動
-	D3DXQUATERNION(0.00f, 1.00f, 0.00f, 0.00f ),  //回転
+	D3DXVECTOR3(-173.07f, 0.00f, -3.65f),             //平行移動
+	D3DXQUATERNION(0.50f, 0.50f, -0.50f, 0.50f ),  //回転
 },
 //GoalCube
 {
 	"GoalCube",
-	D3DXVECTOR3(-158.08f, -0.87f, -0.02f),             //平行移動
+	D3DXVECTOR3(-184.00f, 0.00f, 0.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//TCircle
+{
+	"TCircle",
+	D3DXVECTOR3(-70.17f, 0.00f, -6.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//TCircle
+{
+	"TCircle",
+	D3DXVECTOR3(-55.06f, 0.00f, 5.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//TCircle
+{
+	"TCircle",
+	D3DXVECTOR3(-85.72f, 0.00f, 5.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//TCircle
+{
+	"TCircle",
+	D3DXVECTOR3(-100.04f, 0.00f, -6.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //Drone
 {
 	"Drone",
-	D3DXVECTOR3(-141.76f, -0.19f, 5.93f),             //平行移動
+	D3DXVECTOR3(-132.62f, 2.56f, -5.03f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //Drone
 {
 	"Drone",
-	D3DXVECTOR3(-120.01f, 0.18f, 2.92f),             //平行移動
+	D3DXVECTOR3(-116.62f, 2.50f, 6.79f),             //平行移動
 	D3DXQUATERNION(0.00f, 1.00f, 0.00f, 0.00f ),  //回転
 },
 //Drone
 {
 	"Drone",
-	D3DXVECTOR3(-133.97f, -0.19f, -9.70f),             //平行移動
+	D3DXVECTOR3(-145.62f, 0.00f, -13.38f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //Drone
 {
 	"Drone",
-	D3DXVECTOR3(-128.38f, -0.19f, 16.81f),             //平行移動
+	D3DXVECTOR3(-146.62f, 0.00f, 2.51f),             //平行移動
+	D3DXQUATERNION(0.00f, 1.00f, 0.00f, 0.00f ),  //回転
+},
+//Drone
+{
+	"Drone",
+	D3DXVECTOR3(-159.97f, 0.00f, -9.62f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //Drone
 {
 	"Drone",
-	D3DXVECTOR3(-118.65f, -0.19f, -13.81f),             //平行移動
+	D3DXVECTOR3(-154.81f, 0.00f, 13.99f),             //平行移動
+	D3DXQUATERNION(0.00f, 1.00f, 0.00f, 0.00f ),  //回転
+},
+//Drone
+{
+	"Drone",
+	D3DXVECTOR3(-168.00f, 0.00f, 3.80f),             //平行移動
+	D3DXQUATERNION(0.00f, 1.00f, 0.00f, 0.00f ),  //回転
+},
+//HealItem
+{
+	"HealItem",
+	D3DXVECTOR3(0.00f, 0.00f, 3.20f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },

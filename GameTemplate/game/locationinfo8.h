@@ -262,28 +262,10 @@
 	D3DXVECTOR3(-37.78f, 2.54f, -0.89f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
 },
-//Warrior
+//Boss
 {
-	"Warrior",
-	D3DXVECTOR3(-122.53f, 3.06f, -6.31f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//Warrior
-{
-	"Warrior",
-	D3DXVECTOR3(-122.53f, 3.06f, 9.79f),             //平行移動
-	D3DXQUATERNION(0.00f, 1.00f, 0.00f, 0.00f ),  //回転
-},
-//Warrior
-{
-	"Warrior",
-	D3DXVECTOR3(-108.23f, 3.06f, -6.31f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//Warrior
-{
-	"Warrior",
-	D3DXVECTOR3(-108.23f, 3.06f, 9.79f),             //平行移動
+	"Boss",
+	D3DXVECTOR3(-122.39f, 3.06f, -0.31f),             //平行移動
 	D3DXQUATERNION(0.00f, 1.00f, 0.00f, 0.00f ),  //回転
 },
 //metal

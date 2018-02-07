@@ -1,23 +1,7 @@
 #include "stdafx.h"
 #include "HealItem.h"
-
-
-HealItem::HealItem()
-{
-}
-
-
-HealItem::~HealItem()
-{
-	g_physicsWorld->RemoveRigidBody(&m_rigidBody);
-	m_rigidBody.Release();
-	m_modelData.Release();
-	/*if (m_HealSound != nullptr)
-	{
-		delete m_HealSound;
-		m_HealSound = nullptr;
-	}*/
-}
+#include "Player.h"
+#include "PlayerHp.h"
 
 void HealItem::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 {
@@ -39,7 +23,7 @@ void HealItem::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 	m_light.SetDiffuseLightColor(1, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
 	m_light.SetDiffuseLightColor(2, D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
 	m_light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	m_light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
+	m_light.SetAmbientLight(D3DXVECTOR4(6.8f, 0.8f, 0.8f, 1.0f));
 
 	m_model.SetLight(&m_light);
 	m_position =pos;
@@ -48,28 +32,18 @@ void HealItem::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 
 void HealItem::Update()
 {
-	D3DXVECTOR3 toPos = m_position - g_game->GetPlayer()->Getpos();
+	D3DXVECTOR3 toPos = m_position - Player::GetInstance().Getpos();
 	float len = D3DXVec3Length(&toPos);
 	if (len < 1.3f)
 	{
-		m_healSound = new Sound();
+		/*m_healSound = new Sound();
 		m_healSound->Init("Assets/Sound/powerup03.wav");
 		m_healSound->SetVolume(0.4f);
-		m_healSound->Play(false);
+		m_healSound->Play(false);*/
 
-		g_game->Heal(1);
+		PlayerHp::GetInstance().PlayerHeal(1);
 		m_healflg = true;
 	}
-	/*if (!m_HealSound->IsPlaying())
-	{
-		delete m_HealSound;
-		m_HealSound = nullptr;
-	}*/
 
 	m_model.UpdateWorldMatrix(m_position, m_rotation, { 0.3f,0.3f,0.3f, });
-}
-
-void HealItem::Draw()
-{
-	m_model.Draw(&g_game->GetCamera()->GetViewMatrix(), &g_game->GetCamera()->GetProjectionMatrix());
 }

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "bloom.h"
 
+Bloom *Bloom::m_bloom = NULL;
 
 void Bloom::UpdateWeight(float dispersion)
 {
@@ -68,6 +69,11 @@ Bloom::~Bloom()
 {
 }
 
+void Bloom::Update() 
+{
+
+
+}
 void Bloom::Draw()
 {
 	g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
@@ -81,7 +87,7 @@ void Bloom::Draw()
 		effect->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
 		effect->BeginPass(0);
 
-		effect->SetTexture("g_scene", g_renderTarget->GetTexture());
+		effect->SetTexture("g_scene", RenderTarget::MainRenderTargetGetInstance().GetTexture());
 
 		effect->CommitChanges();
 		DrawQuadPrimitive();
@@ -193,8 +199,8 @@ void Bloom::Draw()
 	0.5f / downSamplingRenderTarget[MGF_DOWN_SAMPLE_COUNT][1].GetWidth(),
 	0.5f / downSamplingRenderTarget[MGF_DOWN_SAMPLE_COUNT][1].GetHeight()
 	};*/
-	g_pd3dDevice->SetRenderTarget(0, g_renderTarget->GetRenderTarget());
-	g_pd3dDevice->SetDepthStencilSurface(g_renderTarget->GetDepthStencilBuffer());
+	g_pd3dDevice->SetRenderTarget(0, RenderTarget::MainRenderTargetGetInstance().GetRenderTarget());
+	g_pd3dDevice->SetDepthStencilSurface(RenderTarget::MainRenderTargetGetInstance().GetDepthStencilBuffer());
 
 	//‰ÁŽZ‡¬
 	g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
@@ -218,8 +224,8 @@ void Bloom::Draw()
 	g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 #else
-g_pd3dDevice->SetRenderTarget(0, g_renderTarget->GetRenderTarget());
-g_pd3dDevice->SetDepthStencilSurface(g_renderTarget->GetDepthStencilBuffer());
+g_pd3dDevice->SetRenderTarget(0, RenderTarget::MainRenderTargetGetInstance().GetRenderTarget());
+g_pd3dDevice->SetDepthStencilSurface(RenderTarget::MainRenderTargetGetInstance().GetDepthStencilBuffer());
 
 #endif
 	g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);

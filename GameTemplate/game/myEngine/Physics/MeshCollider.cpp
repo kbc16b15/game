@@ -109,5 +109,5 @@ void MeshCollider::CreateFromSkinModel( SkinModel* model, const D3DXMATRIX* offs
 		stridingMeshInterface->addIndexedMesh(indexedMesh);
 		
 	}
-	meshShape = new btBvhTriangleMeshShape(stridingMeshInterface, true);	
+	meshShape = new btBvhTriangleMeshShape(stridingMeshInterface, true);
 }

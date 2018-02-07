@@ -28,6 +28,10 @@ public:
 	~RigidBody();
 	void Release();
 	void Create(RigidBodyInfo& rbInfo);
+	btDefaultMotionState* GetMotionState()
+	{
+		return myMotionState;
+	}
 	btRigidBody* GetBody()
 	{
 		return rigidBody;

@@ -1,37 +1,13 @@
-/*!
- * @brief	ゲームクラス。
- */
-
 #pragma once
-#include "myEngine/Physics/Physics.h"
-#include "Player.h"
-#include "Bullet.h"
-#include "Enemy.h"
-#include "trackingEnemy.h"
-#include "Map.h"
-#include "HUD.h"
-#include "gameCamera.h"
-#include "ShadowMap.h"
+#include "IGameObject.h"
 #include "Sound.h"
-#include "SoundEngine.h"
-#include "RenderTarget.h"
-#include "bloom.h"
-#include "ParticleEmitter.h"
-#include "BossEnemy.h"
-//#include "BaseScene.h"
-//#include "IGameObject.h"
-//#include "GameObjectManager.h"
 
 /*!
  * @brief	ゲームクラス。
  */
-class Game 
+class Game:public IGameObject
 {
 public:
-	/*!
-	 * @brief	コンストラクタ。
-	 */
-	Game();
 	/*!
 	 * @brief	デストラクタ。
 	 */
@@ -47,86 +23,60 @@ public:
 	/*!
 	 * @brief	描画。
 	 */
-	void Render();
+	void Draw();
 
-	//ゲームオーバー
-	void GameEnd();
+	//シャドウの位置設定
+	void SetShadow();
 
-	//次のステージに行く
-	//void NextStage();
+	//フェード
+	void SceneFade();
 
-	//スプライト生成関数
-	HRESULT CreateSprite();
-	//カメラの取得
-	Camera* GetCamera()
+	//ゲームシーンの開放
+	void GameRelease();
+	
+	//ゲーム終了のフラグの取得
+	bool GetGameEnd()
 	{
-		return &m_gameCamera.Getcamera();
-		//return camera;
-	}
-	//プレイヤーの取得
-	Player* GetPlayer()
-	{
-		return m_player;
-	}
-	//マップの取得
-	Map* GetMap()
-	{
-		return m_map;
-	}
-
-	//弾の追加
-	void AddBullets(Bullet* bullet)
-	{
-		m_bullets.push_back(bullet);
-	}
-	//弾の取得
-	std::list<Bullet*> GetBullet()
-	{
-		return m_bullets;
-	}
-	//敵の追加
-	void AddEnemy(Enemy* enemy)
-	{
-		m_enem.push_back(enemy);
-	}
-	//追従敵の追加
-	void AddTEnemy(trackingEnemy* enemy)
-	{
-		m_tenem.push_back(enemy);
-	}
-
-	void AddBossEnemy(BossEnemy* BossEnemy)
-	{
-		this->m_bossEnemy = BossEnemy;
-	}
-	//追従敵の取得
-	/*std::vector<trackingEnemy*> GetTEnemy()
-	{
-		return m_tenem;
-	}*/
-
-	//ダメージ処理
-	void Damage(int dame)
-	{
-		m_hpNum -= dame;
-	}
-	//体力の回復
-	void Heal(int healval)
-	{
-		m_hpNum += healval;
-		if (m_hpNum >= m_hpMaxNum) { m_hpNum = m_hpMaxNum; }
-	}
-	//HPの取得
-	int GetHp()
-	{
-		return m_hpNum;
+		return m_isEnd;
 	}
 	//次のステージへ
 	void NextStage()
 	{
-		m_nextflg = true;
+		m_isNext = true;
+	}
+	//クリア
+	void ClearStage()
+	{
+		m_isClear = true;
+	}
+
+	//インスタンスの生成
+	static void Game::Create()
+	{
+		if (!m_game)
+		{
+			m_game = new Game;
+		}
 
 	}
+
+	//インスタンスの取得
+	static Game& GetInstance()
+	{
+		return *m_game;
+	}
+
+	//インスタンスの消去
+	static  void Game::Destroy()
+	{
+		delete m_game;
+		m_game = nullptr;
+	}
+private:
+	
+	//コンストラクタ
+	Game();
+	static Game* m_game;//インスタンス
 private:
 	//フェード
 	enum EState {
@@ -134,34 +84,10 @@ private:
 		Run,
 		WaitFadeOut
 	};
-	//選択
-	enum Select {
-		NO,
-		START,
-		BREAK,
-	};
-	//GameObjectManager GoMgr;						//
-	//CRenderTarget*		m_renderTarget;				//ポストエフェクト用のレンダリングターゲット？
-	Select				GAME = START;				//選択
 	EState				m_state = Run;				//フェードの状態
-	//Sound*				m_bgmSound=nullptr;			//サウンド
-	std::list<Bullet*>	m_bullets;					//バレットのリスト
-	std::vector<Enemy*>	m_enem;						//エネミーのvector
-	std::vector<trackingEnemy*> m_tenem;			//追従エネミー
-	gameCamera			m_gameCamera;				//ゲームカメラ
-	//Camera*			camera;						//カメラ
-	Player*				m_player;					//プレイヤー
-	BossEnemy*			m_bossEnemy;				//ボスエネミー
-	Map*				m_map;						//マップ
-	Bloom				m_bloom;					//ブルーム
-	LPD3DXSPRITE		m_sprite;					//スプライト
-	D3DXVECTOR2			m_hppos = { 120.0f,80.0f };	//HP座標
-	bool				m_nextflg = false;			//次のステージへ
-	Pad					m_pad;						//パッド
-	const int			m_hpMaxNum = 2;				//最大HP量
-	const float			m_hpMovePos = 100.0f;		//HP間隔
-	int					m_hpNum = 3;				//HP量
-	HUD					m_hud[3];					//画像表示の変数
+	Sound*				m_bgmSound=nullptr;			//サウンド
+	const float			m_killZ = -10.0f;			//プレイヤーが死ぬ高さ
+	bool				m_isNext = false;			//次のステージへ
+	bool				m_isClear = false;			//クリア
+	bool				m_isEnd = false;			//ゲームオーバー
 };
-
-extern Game* g_game;

@@ -1,13 +1,16 @@
 #include "stdafx.h"
-#include "Scene.h"
+#include "TitleScene.h"
 #include "ResultScene.h"
+#include "Fade.h"
+#include "HUD.h"
+#include "GameObjectManager.h"
 
+ResultScene *ResultScene::m_result = NULL;
 
 ResultScene::ResultScene()
 {
 
 }
-
 
 ResultScene::~ResultScene()
 {
@@ -16,55 +19,66 @@ ResultScene::~ResultScene()
 
 void ResultScene::Init()
 {
-	g_fade->StartFadeIn();
-	m_end.Initialize("Assets/Sprite/TE.tga", m_endPos);
+	Fade::GetInstance().StartFadeIn();
+	m_resultHud.Initialize("Assets/Sprite/TE.tga", m_resultHudPos);
 	CreateSprite();
+
 }
 
 void ResultScene::Update()
 {
-	m_pad.Update();
-	m_end.Update();
-	//if (GetAsyncKeyState('S') || pad.IsTrigger(pad.enButtonStart))
-	//{
-	//	//delete this;
-	//	scene->SceneChange();
-	//}
-
-	switch (GAME) {
-	case START:
-		switch (m_state) {
-		case WaitFadeIn:
-			if (!g_fade->isExecute())
-			{
-				m_state = Run;
-			}
-			break;
-		case Run:
-			if (m_pad.IsTrigger(m_pad.enButtonStart) || GetAsyncKeyState('S')) {
-				g_fade->StartFadeOut();
-				m_state = WaitFadeOut;
-			}
-			break;
-		case WaitFadeOut:
-			if (!g_fade->isExecute())
-			{
-				//delete this;
-				g_scene->SceneChange(g_scene->CHANGETITLE);
-				return;
-
-			}
-			break;
-		}
-		break;
-	}
+	if (m_result == NULL) { return; };
+	m_resultHud.Update();
+	SceneFade();
 }
 
-void ResultScene::Render()
+void ResultScene::Draw()
 {
+	g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
 	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
-	m_end.Draw(m_sprite);
+	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+	m_resultHud.Draw(m_sprite);
+	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
+	g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+	g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+	g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
+}
+
+void ResultScene::SceneFade()
+{
+	switch (m_state) {
+	case WaitFadeIn:
+		if (!Fade::GetInstance().isExecute())
+		{
+			m_state = Run;
+		}
+		break;
+	case Run:
+		if (Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonStart) || GetAsyncKeyState('S')) {
+			Fade::GetInstance().StartFadeOut();
+			m_state = WaitFadeOut;
+		}
+		break;
+	case WaitFadeOut:
+		if (!Fade::GetInstance().isExecute())
+		{
+			TitleScene::Create();
+			TitleScene::GetInstance().Init();
+			GameObjectManager::GetGameObjectManager().AddGameObject(&TitleScene::GetInstance());
+				
+			GameObjectManager::GetGameObjectManager().DeleteGameObject(&ResultScene::GetInstance());
+			ResultScene::GetInstance().Destroy();
+			return;
+
+		}
+		break;
+	default:
+		break;
+	}
 }
 
 HRESULT ResultScene::CreateSprite()

@@ -1,10 +1,9 @@
 #pragma once
-#include "myEngine\HID\Pad.h"
-class gameCamera
+
+class gameCamera:public IGameObject
 {
 public:
-	//コンストラクタ
-	gameCamera();
+
 	//デストラクタ
 	~gameCamera();
 	//初期化
@@ -15,35 +14,60 @@ public:
 	void RotCamera();
 
 	//追従カメラ
-	void trackingCamera();
+	void TrackingCamera();
 
 	//照準カメラ
 	void RockCamera();
-
-	//カメラの取得
-	Camera Getcamera()
-	{
-		return m_camera;
-	}
+	//ボス戦スタートカメラ　カメラ演出も入れる？
+	void BossStartCamera();
+	//ボス戦カメラ
+	void BossCamera();
+	//ボス戦エンドカメラ
+	void BossEndCamera();
+	//ボス固定カメラ
+	void BossRockCamera();
 	//照準フラグ
-	void SetRockCamera(bool Rcamera)
+	void SetRockCamera(bool isRock)
 	{
-		Rockonflg = Rcamera;
+		m_isRockOn = isRock;
 	}
 
+	//インスタンスの生成
+	static void gameCamera::Create()
+	{
+		if (!m_gameCamera)
+		{
+			m_gameCamera = new gameCamera;
+		}
+
+	}
+
+	//インスタンスの消去
+	static  void gameCamera::Destroy()
+	{
+		delete m_gameCamera;
+		m_gameCamera = nullptr;
+	}
+	//インスタンスの取得
+	static gameCamera& GetInstance()
+	{
+		return *m_gameCamera;
+	}
 private:
-	Pad			pad;					//パッド
-	Camera		m_camera;				//カメラ
-	//D3DXVECTOR3 position;				//座標
-	//float		angleX = 0.0f;			//カメラ上下値
-	D3DXVECTOR3	m_position;			//カメラ座標
-	//float		angle = 0.0f;			//角度
-	const float RotSpeedY = 2.0f;		//Y軸回転速度
-	const float RotSpeedX = 1.0f;		//X軸回転速度
-	const float CameraUpLimit = 30.0f;	//カメラ上下限度
-	bool		Rockonflg = false;
-	//bool	CameraTypeflg = false;
+	//コンストラクタ
+	gameCamera();
+	static gameCamera* m_gameCamera;			//インスタンス
+	D3DXVECTOR3		m_position;					//カメラ座標
+	const float		m_rotSpeed = 2.0f;			//回転速度
+	bool			m_isBossStartCamera = false;//ボス戦カメラ
+	int				m_stateCameraTime = 250;	//開始カメラの時間
+	bool			m_isBossEndCamera = false;	//ボス戦カメラ
+	int				m_endCameraTime = 300;		//終了カメラの時間
+	bool			m_isBossCamera = false;
+	bool			m_isRockOn = false;
+	//const float CameraUpLimit = 30.0f;		//カメラ上下限度
+	//bool			m_istoCamera = false;			//カメラを操作中かどうか
+	D3DXVECTOR3 vec = { 0.0f, 0.0f, 0.0f };
 
-	D3DXVECTOR3 vec = { 0.0f,0.0f,0.0f };
+
 };
-

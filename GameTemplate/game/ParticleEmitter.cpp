@@ -19,9 +19,28 @@ void ParticleEmitter::Init(const SParticleEmitParameter& param)
 	timer = 0.0f;
 }
 
+void ParticleEmitter::Update(D3DXVECTOR3 pos)
+{
+	param.position = pos;
+
+	if (timer >= param.intervalTime) {//一定時間経過したら
+									  //パーティクルを生成
+		Particle* p = new Particle;
+		p->Init(param);
+		timer = 0.0f;
+		particleList.push_back(p);
+	}
+
+	timer += 1.0f / 60.0f;
+	deleteTimer += 1.0f / 60.0f;
+	for (auto p : particleList) {
+		p->Update();
+	}
+}
+
 void ParticleEmitter::Update()
 {
-
+	
 	if (timer >= param.intervalTime) {//一定時間経過したら
 		//パーティクルを生成
 		Particle* p = new Particle;
@@ -38,20 +57,20 @@ void ParticleEmitter::Update()
 	//	deleteTime = 100.0f;
 	//}	
 
-	auto pIt = particleList.begin();
-	for (auto pt : particleList) {
-		if (pt->gettime() <= 0.0f)
-		{
-			delete pt;
-			pIt = particleList.erase(pIt);
-			deleteTimer = 0.0f;
-			
+	//auto pIt = particleList.begin();
+	//for (auto pt : particleList) {
+	//	if (pt->gettime() <= 0.0f)
+	//	{
+	//		delete pt;
+	//		pIt = particleList.erase(pIt);
+	//		deleteTimer = 0.0f;
+	//		
 
-		}
-		else {
-			pIt++;
-		}
-	}
+	//	}
+	//	else {
+	//		pIt++;
+	//	}
+	//}
 
 	
 	//while (pIt != particleList.end()) {

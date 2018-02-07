@@ -76,6 +76,13 @@ public:
 		ShadowRecive = Recive;
 	}
 	/*!
+	* @brief	ワールド行列を取得。
+	*/
+	const D3DXMATRIX& GetWorldMatrix() const
+	{
+		return worldMatrix;
+	}
+	/*!
 	*@brief	オリジナルメッシュの先頭を取得する。
 	*/
 	LPD3DXMESH GetOrgMeshFirst();

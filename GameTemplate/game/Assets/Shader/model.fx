@@ -21,7 +21,6 @@ float4x4 g_projlightMatrix;
 
 bool g_Reciver;
 bool g_isSpecularlight;
-float g_Scroll;
 
 float3 Eye;				//カメラ座標
 bool g_isHasNormalMap;			//法線マップ保持している？
@@ -215,7 +214,7 @@ float4 PSMain( VS_OUTPUT In ) : COLOR
 	if(g_isHasNormalMap){
 		//法線マップがある。
 		float3 tangent = normalize(In.Tangent);
-		float3 binSpaceNormal = tex2D( g_normalMapSampler, In.Tex0+ float2( g_Scroll, 0.0f ) );
+		float3 binSpaceNormal = tex2D( g_normalMapSampler, In.Tex0);
 		float4x4 tangentSpaceMatrix;
 		//法線とタンジェントから従法線を求める
 		float3 biNormal = normalize( cross( tangent, normal) );

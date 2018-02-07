@@ -104,10 +104,6 @@ public:
 	*/
 	void RemoveRigidBoby();
 
-	/*bool GetHit()
-	{
-		return m_isHit;
-	}*/
 private:
 	D3DXVECTOR3 		m_position;						//座標。
 	D3DXVECTOR3 		m_moveSpeed ;					//移動速度。

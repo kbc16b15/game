@@ -1,23 +1,18 @@
 #pragma once
-
 #include "myEngine/Physics/CharacterController.h"
-#include "myEngine\HID\Pad.h"
-#include "Sound.h"
-//#include "IGameObject.h"
-
-class Player/*:public IGameObject*/
+class Player:public IGameObject
 {
 public:
-	//コンストラクタ
-	Player();
 	//デストラクタ
 	~Player();
 	//初期化
-	void Start();
+	void Init();
 	//更新
 	void Update();
 	//描画
-	void Draw(D3DXMATRIX* viewM, D3DXMATRIX* projM,bool shadowCaster,bool shadowRecive);
+	void ShadowDraw(D3DXMATRIX* viewM, D3DXMATRIX* projM, bool shadowCaster, bool shadowRecive);
+	void Draw();
+
 	//アニメーション処理
 	void AnimationSet();
 	//移動処理
@@ -40,14 +35,9 @@ public:
 	//座標セット
 	void Setpos(D3DXVECTOR3 pos)
 	{
-		m_position = pos;
+		m_characterController.SetPosition(pos);
 
 	}
-	//プレイヤーのジャンプフラグ設定
-	/*void SetJumpflg(bool Jump)
-	{
-		m_jumpflg = Jump;
-	}*/
 	//プレイヤーの移動速度を設定
 	void AddSpeed(D3DXVECTOR3 addpos)
 	{
@@ -74,7 +64,7 @@ public:
 	void SetDamage()
 	{
 		if (m_damageTime > 0) { return; }
-		m_damageflg = true;
+		m_isDamageflg = true;
 	}
 
 	//移動しているかの取得
@@ -85,14 +75,48 @@ public:
 	//プレイヤーの死亡アニメーションの終了
 	bool PlayerDeath()
 	{
-		return m_deathflg;
+		return m_isDeathflg;
 	}
 	//プレイヤーが地面についているかどうか
 	bool GetGround()
 	{
 		return m_characterController.IsOnGround();
 	}
+
+	//インスタンスの生成
+	static void Player::Create()
+	{
+		if (!m_player)
+		{
+			m_player = new Player;
+		}
+
+	}
+
+	//インスタンスの消去
+	static  void Player::Destroy()
+	{
+		delete m_player;
+		m_player = nullptr;
+	}
+	//インスタンスの取得
+	static Player& GetInstance()
+	{
+		return *m_player;
+	}
+	//スキンモデルの取得
+	SkinModel* GetSkinModel()
+	{
+		return &m_skinModel;
+	}
+	void SetMove(bool isMove)
+	{
+		m_isMoveStop = isMove;
+	}
 private:
+	//コンストラクタ
+	Player();
+	static Player* m_player;//インスタンス
 	enum PlayerState							//プレイヤーアニメーションの状態
 	{Stand, Move, Dash, Jump,Damage,Dead};
 	PlayerState			m_state=Stand;
@@ -104,14 +128,14 @@ private:
 	bool				m_jumpflg = false;		//ジャンプアニメーションフラグ
 	bool				m_isDamage = false;		//ダメージアニメーションフラグ
 	bool				m_isStand = false;		//待機アニメーションフラグ
-	bool				m_damageflg = false;	//ダメージアニメーションフラグ
-	bool				m_deathflg = false;		//死亡フラグ
+	bool				m_isDamageflg = false;	//ダメージアニメーションフラグ
+	bool				m_isDeathflg = false;		//死亡フラグ
 	int					m_damageTime = 0;		//無敵時間
+	int					m_damageMaxTime = 200;	//最大無敵時間
 	SkinModel			m_skinModel;			//スキンモデル
 	SkinModelData		m_skinModelData;		//スキンモデルデータ
 	Light				m_light;				//ライト
 	Animation			m_animation;			//アニメーション
-	Pad					m_pad;					//パッド
 	CharacterController	m_characterController;	//キャラクターコントローラー
 	D3DXVECTOR3			m_position;				//座標
 	D3DXVECTOR3			m_scale;				//拡大
@@ -120,14 +144,11 @@ private:
 	const float			m_charaHeight=0.5f;		//キャラの高さ
 	D3DXVECTOR3			m_moveSpeed ;			//移動速度
 	D3DXVECTOR3			m_dir;					//かんせー
-	//D3DXVECTOR3			m_Addvector;			//加算速度
 	LPDIRECT3DTEXTURE9	m_normalMap = NULL;		//法線マップ
 	LPDIRECT3DTEXTURE9	m_specularMap = NULL;	//スペキュラマップ
-	//Sound*				m_JumpSound = nullpt//ジャンプ音
-	float				m_Gravity = -10.0f;		//重力
-	bool				m_moveStop = false;		//移動と回転をなくす
-	//bool				m_objectHit = false;	//オブジェクトと当たった
-	bool				m_maxSflg = false;		//最大移動速度のフラグ
+	float				m_gravity = -10.0f;		//重力
+	bool				m_isMoveStop = false;		//移動と回転をなくす
+	bool				m_isMax = false;		//最大移動速度のフラグ
 	int					m_addDir = 0;			//加算方向
 
 };

@@ -1,8 +1,10 @@
 #pragma once
 #include "RenderTarget.h"
+
 class ShadowMap
 {
 public:
+
 	//コンストラクタ
 	ShadowMap();
 	//デストラクタ。
@@ -39,15 +41,36 @@ public:
 		return m_lightViewMatrix;
 	}
 
-
+	//インスタンスの生成
+	static void ShadowMap::Create()
+	{
+		if (!m_shadowMap)
+		{
+			m_shadowMap = new ShadowMap;
+		}
+	}
+	//インスタンスの消去
+	static  void ShadowMap::Destroy()
+	{
+		delete m_shadowMap;
+		m_shadowMap = nullptr;
+	}
+	//インスタンスの取得
+	static ShadowMap& GetInstance()
+	{
+		return *m_shadowMap;
+	}
 private:
-	CRenderTarget	m_renderTarget;//シャドウマップを書きこむレンダリングターゲット
+	
+
+	static ShadowMap* m_shadowMap;//インスタンス
+private:
+	RenderTarget	m_renderTarget;//シャドウマップを書きこむレンダリングターゲット
 	D3DXMATRIX	m_lightViewMatrix;//ライトビューマトリクス。カメラ空間に変換
 	D3DXMATRIX	m_lightProjectionMatrix;//ライトプロジェクションマトリクス。スクリーン空間に変換
 	D3DXVECTOR3	m_viewPosition;//ライトビューの視点。
 	D3DXVECTOR3 m_viewTarget;//ライトビューの注視点。
-	//SkinModel	skinModel;
 };
 
-extern ShadowMap* g_shadowmap;
+//extern ShadowMap* g_shadowMap;
 

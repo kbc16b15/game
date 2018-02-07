@@ -1,32 +1,33 @@
 #pragma once
-//#include "IGameObject.h"
-
-class MapChip;
-class MoveObject;
-class TrapObject;
-class RotObject;
-class FallObject;
-class GoalObject;
+//#include "MapInfo.h"
 class HealItem;
-class Sky;
-class MoveCube;
-class MapObject;
-class Sea;
 
-class Map/*:public IGameObject*/
+struct SMapChipLocInfo {
+	const char* modelName;	//モデル。
+	D3DXVECTOR3	pos;		//座標。
+	D3DXQUATERNION	rot;	//回転。
+};
+
+
+//template <typename T>
+class Map:public IGameObject
 {
 public:
-	
-	//コンストラクタ
-	Map();
+
+
+
 	//デストラクタ
 	~Map();
 	//初期化
-	void Init(/*struct SMapChipLocInfo Info[]*/);
+	void Init(/*SMapChipLocInfo Info[]*/);
 	//描画
 	void Draw();
 	//更新
 	void Update();
+
+	void MapCreate(const char* mapName,int no,SMapChipLocInfo Info[]);
+
+
 	//ステージ切り替え
 	void SetStage(int StageNum)
 	{
@@ -39,33 +40,40 @@ public:
 		return m_stageNum;
 
 	}
-
-	std::vector<FallObject*> GetFall()
-	{
-		return m_fallList;
-	}
-
+	
 	//ステージnum
 	enum STAGE
 	{
 		STAGE1,
 		STAGE2,
 	};
-private:
-	//int m_Stage = STAGE1;
-	int m_stageNum= STAGE1;
-	//std::vector<MapChip*>	mapChipList;	//マップチップのリスト
-	//std::vector<Sky*>		skyList;		//空と海
-	//std::vector<MoveObject*> moveList;	//ムーブオブジェクトのリスト
-	//std::vector<TrapObject*> trapList;	//ダメージオブジェクトのリスト
-	//std::vector<RotObject*> rotList;		//回転オブジェクトのリスト
-	std::vector<FallObject*> m_fallList;	//落下オブジェクトのリスト
-	//std::vector<GoalObject*> GoalList;	//ゴール地点
-	//std::vector<MoveCube*> mCubeList;		//移動床
-	std::vector<HealItem*>	m_healList;		//回復アイテム
-	std::vector<MapObject*> m_mapList;		//基底クラスのリスト
 
-	D3DXVECTOR3 m_rDir = { 0.0f,1.0f,0.0f };//回転の向き
-	D3DXVECTOR3 m_rSpeed= { 0.0f,1.0f,0.0f };//回転速度
+	//インスタンスの生成
+	static void Map::Create()
+	{
+		if (!m_map)
+		{
+			m_map = new Map;
+		}
+
+	}
+
+	//インスタンスの消去
+	static  void Map::Destroy()
+	{
+		delete m_map;
+		m_map = nullptr;
+	}
+	//インスタンスの取得
+	static Map& GetInstance()
+	{
+		return *m_map;
+	}
+private:
+	//コンストラクタ
+	Map();
+	static Map* m_map;//インスタンス
+	int m_stageNum= STAGE1;
+	std::vector<HealItem*>	m_healList;		//回復アイテム
 
 };

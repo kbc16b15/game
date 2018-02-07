@@ -8,6 +8,7 @@
 
 Scene::Scene()
 {
+	//m_pad = new Pad;
 }
 Scene::~Scene()
 {
@@ -89,7 +90,6 @@ void Scene::Render()
 void Scene::Update()
 {
 	//m_bScene->Update();
-
 	switch (m_scene)
 	{
 	case TITLE:
@@ -172,7 +172,7 @@ void Scene::Update()
 	default:
 		break;
 	}
-
+	m_pad.Update();
 }
 
 void Scene::SceneChange(SCENE SceneNo)

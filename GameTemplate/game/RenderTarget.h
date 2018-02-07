@@ -1,9 +1,9 @@
 #pragma once
-class CRenderTarget
+class RenderTarget
 {
 public:
-	CRenderTarget();
-	~CRenderTarget();
+	RenderTarget();
+	~RenderTarget();
 	void Release();
 	void Create(
 		int w,
@@ -38,7 +38,31 @@ public:
 	{
 		return m_height;
 	}
+
+	//インスタンスの生成
+	static void RenderTarget::MainRenderTargetCreate()
+	{
+		if (!m_mainRenderTarget)
+		{
+			m_mainRenderTarget = new RenderTarget;
+		}
+
+	}
+
+	//インスタンスの取得
+	static RenderTarget& MainRenderTargetGetInstance()
+	{
+		return *m_mainRenderTarget;
+	}
+
+	//インスタンスの消去
+	static  void RenderTarget::Destroy()
+	{
+		delete m_mainRenderTarget;
+		m_mainRenderTarget = nullptr;
+	}
 private:
+	static RenderTarget* m_mainRenderTarget;//ポストエフェクト用のメインレンダリングターゲット
 	LPDIRECT3DSURFACE9 m_surface;		//サーフェイス
 	LPDIRECT3DTEXTURE9 m_texture;		//書き込み先のテクスチャ
 	LPDIRECT3DSURFACE9 m_depthSurface;	//深度バッファ用のサーフェイス

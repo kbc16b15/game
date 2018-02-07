@@ -5,7 +5,7 @@
 #pragma once
 
 #include <XInput.h> // XInput API
-
+#include "IGameObject.h"
 /*!
 *@brief	パッドステート。
 */
@@ -17,7 +17,7 @@ struct PAD_STATE
 /*!
 * @brief	ゲームパッドクラス。
 */
-class Pad
+class Pad/*:public IGameObject*/
 {
 public:
 	/*!
@@ -43,17 +43,15 @@ public:
 		enButtonNum,		//!<ボタンの数。
 	};
 	/*!
-	* @brief	コンストラクタ。
-	*/
-	Pad();
-	/*!
 	* @brief	デストラクタ。
 	*/
 	~Pad();
 	/*!
 	* @brief	初期化。
 	*/
+	//void Init();
 	void Update();
+	//void Draw();
 	/*!
 	*@brief	ボタンのトリガー判定。
 	*@return	trueが返ってきたらトリガー入力。
@@ -102,7 +100,33 @@ public:
 	{
 		return m_rStickY;
 	}
+
+	//インスタンスの生成
+	static  void Pad::Create()
+	{
+		if (!m_pad)
+		{
+			m_pad = new Pad;
+
+		}
+	}
+
+	//インスタンスの消去
+	static  void Pad::Destroy()
+	{
+		delete m_pad;
+		m_pad = nullptr;
+	}
+	//インスタンスの取得
+	static Pad& GetInstance()
+	{
+		return *m_pad;
+	}
 private:
+	//コンストラクタ。
+	Pad();
+
+	static Pad*		m_pad;
 	PAD_STATE	m_state;	//!<パッドステート。
 	int m_padNo = 0;
 	int m_trigger[enButtonNum];	//!<trigger入力のフラグ。

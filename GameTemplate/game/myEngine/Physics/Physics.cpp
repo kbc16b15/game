@@ -2,7 +2,8 @@
 #include "myEngine/Physics/Physics.h"
 #include "myEngine/Physics/RigidBody.h"
 
-PhysicsWorld* g_physicsWorld = nullptr;
+//PhysicsWorld* g_physicsWorld = nullptr;
+PhysicsWorld *PhysicsWorld::m_physicsWorld = NULL;
 
 PhysicsWorld::PhysicsWorld()
 {

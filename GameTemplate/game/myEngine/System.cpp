@@ -8,6 +8,7 @@ EffectManager*			g_effectManager = NULL;
 extern void Init();
 extern void Render();
 extern void Update();
+
 extern void Terminate();
 //-----------------------------------------------------------------------------
 // DirectX‚ğ‰Šú‰»B

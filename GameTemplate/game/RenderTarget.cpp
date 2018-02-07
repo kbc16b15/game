@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "RenderTarget.h"
 
+RenderTarget *RenderTarget::m_mainRenderTarget = NULL;
 
-CRenderTarget::CRenderTarget()
+RenderTarget::RenderTarget()
 {
 	m_surface = NULL;
 	m_texture = NULL;
@@ -10,12 +11,12 @@ CRenderTarget::CRenderTarget()
 }
 
 
-CRenderTarget::~CRenderTarget()
+RenderTarget::~RenderTarget()
 {
 	Release();
 }
 
-void CRenderTarget::Create(
+void RenderTarget::Create(
 	int w,
 	int h,
 	int mipLevel,
@@ -52,7 +53,7 @@ void CRenderTarget::Create(
 	m_height = h;
 }
 
-void CRenderTarget::Release()
+void RenderTarget::Release()
 {
 	if (m_texture != nullptr)
 	{

@@ -16,6 +16,7 @@
 #include <algorithm>
 #include <map>
 #include <string>
+#include <thread>
 #pragma comment(lib, "winmm.lib")
 #pragma comment(lib, "X3DAudio.lib")
 #include "btBulletDynamicsCommon.h"
@@ -23,17 +24,14 @@
 
 #include "myEngine/System.h"
 
-#include "myEngine/Graphics/Camera.h"
+//#include "myEngine/Graphics/Camera.h"
 #include "myEngine/Graphics/SkinModel.h"
 #include "myEngine/Graphics/SkinModelData.h"
-#include "myEngine/Graphics/Animation.h"
+#include "myEngine\Physics\Physics.h"
+//#include "myEngine/Graphics/Animation.h"
 #include "myEngine/Graphics/Light.h"
-#include "game.h"
+#include "myEngine\HID\Pad.h"
+#include "SpringCamera.h"
 #include "CubeCollision.h"
 
-
-
-extern LPD3DXEFFECT copyEffect;
-extern LPD3DXEFFECT monochromeEffect;		//!<18-4 モノクロフィルターをかけるシェーダー。
 extern void DrawQuadPrimitive();
-extern CRenderTarget* g_renderTarget;

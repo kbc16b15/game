@@ -32,10 +32,16 @@ public:
 	//シーンチェンジ
 	void SceneChange(SCENE SceneNo);
 
+	//パッドの取得
+	Pad GetPad()
+	{
+		return m_pad;
+	}
 private:
 	TitleScene*		m_title=nullptr;	//タイトル
 	ResultScene*	m_end = nullptr;	//リザルト
 	SCENE			m_scene;			//シーンの状態
+	Pad			m_pad;		//パッド
 	//BaseScene*	m_bScene=nullptr;
 };
 

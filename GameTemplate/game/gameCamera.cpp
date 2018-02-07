@@ -1,11 +1,15 @@
 #include "stdafx.h"
 #include "gameCamera.h"
+#include "SpringCamera.h"
+#include "BossEnemy.h"
+#include "Player.h"
+#include "BulletManager.h"
 
+gameCamera *gameCamera::m_gameCamera = NULL;
 
 gameCamera::gameCamera()
 {
 }
-
 
 gameCamera::~gameCamera()
 {
@@ -13,89 +17,82 @@ gameCamera::~gameCamera()
 
 void gameCamera::Init()
 {
-	m_camera.Init();
-	m_camera.SetEyePt(D3DXVECTOR3(5.0f, 6.0f, 2.0f));
-	m_camera.SetLookatPt(D3DXVECTOR3(0.0f, 2.5f, 0.0f));
-	m_camera.SetFar(1000.0f);
-	trackingCamera();
-	m_camera.Update();
-	m_position = m_camera.GetEyePt() - m_camera.GetLookatPt();
-	//position = m_camera.GetEyePt();
+	SpringCamera::Create();
+	D3DXVECTOR3 targetPos = Player::GetInstance().Getpos();
+	targetPos.y += 1.0f;
+	D3DXVECTOR3 cameraPos= Player::GetInstance().Getpos();
+	cameraPos.y += 5.0f;
+	cameraPos.x += 5.0f;
+	float cameraSpeed = 10.0f;
+	float Far = 1000.0f;
+	SpringCamera::GetInstance().Init(targetPos, cameraPos, cameraSpeed);
+	
+	SpringCamera::GetInstance().SetTarget(Player::GetInstance().Getpos());
+
+	SpringCamera::GetInstance().SetFar(Far);//奥行きの見える範囲
+	//カメラの注視点を設定する。
+	SpringCamera::GetInstance().SetTarTarget(targetPos);
+	SpringCamera::GetInstance().SetTarPosition(cameraPos);
+	TrackingCamera();
+	SpringCamera::GetInstance().Update();
+	
 }
 
 void gameCamera::Update()
 {
-	pad.Update();
-	RotCamera();
-	//trackingCamera();
-	if (g_game->GetPlayer()->GetPlayerMove())
+	//if (&SpringCamera::GetInstance() == NULL || &gameCamera::GetInstance() == NULL) { return; };
+	if (m_isBossStartCamera)
 	{
-		//trackingCamera();
+		BossStartCamera();
 	}
-	else {
-		
-		//RotCamera();
+	else if (m_isBossEndCamera)
+	{
+		BossEndCamera();
 	}
-	//RockCamera();
-	
-	m_camera.Update();
+	else if (m_isBossCamera)
+	{
+		RotCamera();
+		//BossCamera();
+	}
+	else if (m_isRockOn)
+	{
+		//TrackingCamera();
+		RockCamera();
+	}
+	else
+	{
+		RotCamera();
+		TrackingCamera();
+	}
+	SpringCamera::GetInstance().Update();
 }
 
 void gameCamera::RotCamera()
 {
+	
 	D3DXMATRIX XRot;
 	D3DXMATRIX YRot;
-	D3DXMatrixIdentity(&XRot);
-	D3DXMatrixIdentity(&YRot);
-	if (pad.GetRStickXF()<0.0)
-	{
-		D3DXMatrixRotationY(&XRot, D3DXToRadian(-RotSpeedY));
-
-	}
-	if (pad.GetRStickXF()>0.0)
-	{
-
-		D3DXMatrixRotationY(&XRot, D3DXToRadian(RotSpeedY));
-	}
-
-	D3DXVec3TransformCoord(&m_position, &m_position, &XRot);
-	//D3DXVECTOR3 toCpos = toCameraPos;
-	if (pad.GetRStickYF()<0.0)
-	{
-		D3DXVECTOR3 Axis;
-		D3DXVECTOR3 vUP(0.0f, 1.0f, 0.0f);
-		D3DXVec3Cross(&Axis, &m_position, &vUP);
-		D3DXMatrixRotationAxis(&YRot, &Axis, D3DXToRadian(RotSpeedX));
-	}
-	if (pad.GetRStickYF()>0.0)
-	{
-		D3DXVECTOR3 Axis;
-		D3DXVECTOR3 vUP(0.0f, 1.0f, 0.0f);
-		D3DXVec3Cross(&Axis, &m_position, &vUP);
-		D3DXMatrixRotationAxis(&YRot, &Axis, D3DXToRadian(-RotSpeedX));
-	}
+	//D3DXMatrixIdentity(&Rot);
+	D3DXMatrixRotationY(&YRot, D3DXToRadian(m_rotSpeed) * Pad::GetInstance().GetRStickXF());
 
 	D3DXVec3TransformCoord(&m_position, &m_position, &YRot);
-	//toCameraPos=toCpos + toCameraPos;
-	//D3DXMatrixMultiply(&YRot,&XRot, &YRot);
-	//プレイヤー追従カメラ。
-	D3DXVECTOR3 targetPos = g_game->GetPlayer()->Getpos();
-	/*if (targetPos.y < 0.0f)
-	{
-	targetPos.y = 0.0f;
-	}*/
-	//if (!Rockonflg)
-	targetPos.y += 1.0f;
-	m_camera.SetLookatPt(targetPos);
-	m_camera.SetEyePt(m_camera.GetLookatPt() + m_position);
+
+	D3DXVECTOR3 vUP(0.0f, 1.0f, 0.0f);
+	D3DXVECTOR3 Axis(0.0f,0.0f,0.0f);
+	D3DXVec3Cross(&Axis, &m_position, &vUP);
+	
+
+	D3DXMatrixRotationAxis(&XRot, &Axis, D3DXToRadian(-m_rotSpeed) * Pad::GetInstance().GetRStickYF());
+	D3DXVec3TransformCoord(&m_position, &m_position, &XRot);
+	//カメラの視点を設定する。
+	SpringCamera::GetInstance().SetTarPosition(SpringCamera::GetInstance().GetTarTarget() +m_position);
 }
 
-void gameCamera::trackingCamera()
+void gameCamera::TrackingCamera()
 {
 	//XZ平面上の注視点から視点までのベクトルを求めると長さを求める
-	D3DXVECTOR3 CameraPosXZ = m_camera.GetEyePt() - m_camera.GetLookatPt();
+	D3DXVECTOR3 CameraPosXZ = SpringCamera::GetInstance().GetTarPosition() - SpringCamera::GetInstance().GetTarTarget();
 
-	//CameraPosXZ.y -= 1.0f;
 	float height = CameraPosXZ.y;
 	CameraPosXZ.y = 0.0f;
 
@@ -105,13 +102,15 @@ void gameCamera::trackingCamera()
 
 	//新しい注視点をアクターの座標から求める
 
-	D3DXVECTOR3 target = g_game->GetPlayer()->Getpos();
+	D3DXVECTOR3 target = Player::GetInstance().Getpos();
 	target.y += 1.0f;
 
 	//新しい注視点と現在のカメラの視点を使って、XZ平面上での、
 	//注視点から視点までのベクトルを求める
 
-	D3DXVECTOR3 NewCameraPos = m_camera.GetEyePt() - target;
+	//D3DXVECTOR3 NewCameraPos = m_camera.GetEyePt() - target;
+
+	D3DXVECTOR3 NewCameraPos = SpringCamera::GetInstance().GetTarPosition() - target;
 
 	NewCameraPos.y = 0.0f;
 
@@ -133,43 +132,153 @@ void gameCamera::trackingCamera()
 
 	//視点と注視点を設定
 	
-	m_camera.SetEyePt(pos);
-
-	m_camera.SetLookatPt(target);
-
+	SpringCamera::GetInstance().SetTarTarget(target);
+	SpringCamera::GetInstance().SetTarPosition(pos);
+	m_position = pos - target;
 
 }
 
 void gameCamera::RockCamera()
 {
-	//if (Rockonflg)
-	//{
-	//	D3DXVECTOR3 ReyePos = g_game->GetPlayer()->Getpos();
-	//	D3DXVECTOR3 RtargetPos = g_game->GetPlayer()->Getpos();
-	//	ReyePos.x += 1.0f;
-	//	ReyePos.z += 0.8f;
-	//	ReyePos.y += 1.2f;
-	//	RtargetPos.x -= 10.0f;
 
-	//	/*if (GetAsyncKeyState('H') || pad.GetRStickXF() < 0.0f)
+	if (m_isRockOn)
+	{
+		D3DXVECTOR3 eyePos = Player::GetInstance().Getpos();
+		D3DXVECTOR3 targetPos = BossEnemy::GetInstance().Getpos();
+	//	
+		eyePos.x += 1.0f;
+		eyePos.z += 0.8f;
+		eyePos.y += 2.2f;
+
+	////	targetPos.x -= 10.0f;
+
+	//	if (Pad::GetInstance().GetRStickXF() < 0.0f)
 	//	{
 	//		vec.z += 0.5f;
 	//	}
-	//	else if (GetAsyncKeyState('K') || pad.GetRStickXF() > 0.0f)
+	//	else if (Pad::GetInstance().GetRStickXF() > 0.0f)
 	//	{
 	//		vec.z -= 0.5f;
 	//	}
-	//	else if (GetAsyncKeyState('N') || pad.GetRStickYF() < 0.0f)
+	//	else if (Pad::GetInstance().GetRStickYF() < 0.0f)
 	//	{
 	//		vec.y += 0.5f;
 	//	}
-	//	else if (GetAsyncKeyState('U') || pad.GetRStickYF() > 0.0f)
+	//	else if (Pad::GetInstance().GetRStickYF() > 0.0f)
 	//	{
 	//		vec.y -= 0.5f;
-	//	}*/
-	//	RtargetPos += vec;
-	//	m_camera.SetLookatPt(RtargetPos);
-	//	m_camera.SetEyePt(ReyePos);
-	//}
+	//	}
+	//	else
+	//	{
+	//		vec = { 0.0f, 0.0f, 0.0f };
+	//	}
+
+	//	targetPos += vec;
+		SpringCamera::GetInstance().SetTarTarget(targetPos);
+		SpringCamera::GetInstance().SetTarPosition(eyePos);
+	}
 }
+
+void gameCamera::BossStartCamera()
+{
+	m_stateCameraTime--;
+	if (m_stateCameraTime > 0) {
+		m_isBossStartCamera = true;
+	}
+	BossRockCamera();
+
+	if (m_stateCameraTime < 0) {
+		m_isBossStartCamera = false;
+		//m_bossCamera = true;
+	}
+}
+
+void gameCamera::BossEndCamera()
+{
+	m_endCameraTime--;
+	if (m_endCameraTime > 0) {
+		m_isBossEndCamera = true;
+		m_isBossCamera = false;
+	}
+	BossRockCamera();
+
+	if (m_endCameraTime < 0) {
+		m_isBossEndCamera = false;
+	}
+}
+
+//ボスとプレイヤーが常に移されるカメラ
+void gameCamera::BossCamera()
+{
+	if (&BossEnemy::GetInstance() == NULL||&Player::GetInstance()==NULL) {
+		m_isBossCamera = false; 
+		return;
+	}
+	m_isBossCamera = true;
+
+	//XZ平面上の注視点から視点までのベクトルを求めると長さを求める
+	D3DXVECTOR3 CameraPosXZ = Player::GetInstance().Getpos() - BossEnemy::GetInstance().Getpos();;
+	//CameraPosXZ.y -= 1.0f;
+	float height = CameraPosXZ.y;
+	CameraPosXZ.y = 0.0f;
+
+	float CameraPosXZLen = D3DXVec3Length(&CameraPosXZ);
+
+	D3DXVec3Normalize(&CameraPosXZ, &CameraPosXZ);
+
+	//新しい注視点をアクターの座標から求める
+
+	D3DXVECTOR3 target = BossEnemy::GetInstance().Getpos();
+	target.y += 1.0f;
+
+	//新しい注視点と現在のカメラの視点を使って、XZ平面上での、
+	//注視点から視点までのベクトルを求める
+	D3DXVECTOR3 NewCameraPos = SpringCamera::GetInstance().GetTarPosition() - target;
+
+	NewCameraPos.y = 0.0f;
+
+	D3DXVec3Normalize(&NewCameraPos, &NewCameraPos);
+
+	//新しい視点の決定
+
+	float weight = 0.7f;
+
+	NewCameraPos = NewCameraPos*weight + CameraPosXZ*(1.0f - weight);
+
+	D3DXVec3Normalize(&NewCameraPos, &NewCameraPos);
+
+	NewCameraPos *= CameraPosXZLen*1.2f;//距離を後ろにずらす?
+
+	NewCameraPos.y = height;
+
+	D3DXVECTOR3 pos = target+NewCameraPos;
+	pos.y += 0.7f;
+	//視点と注視点を設定
+	SpringCamera::GetInstance().SetTarTarget(target);
+	SpringCamera::GetInstance().SetTarPosition(pos);
+	if (BossEnemy::GetInstance().GetDeathflg())
+	{
+		m_isBossCamera = false;
+	}
+
+	//m_position = pos - target;
+}
+
+void gameCamera::BossRockCamera()
+{
+	const float flontUp = 2.0f;
+
+	D3DXVECTOR3 targetPos = Player::GetInstance().Getpos();
+	D3DXMATRIX matrix = Player::GetInstance().GetSkinModel()->GetWorldMatrix();//原点からのプレイヤーの向き
+																			   //D3DXMatrixInverse(&matrix, NULL, &matrix);
+	D3DXVECTOR3 flont;
+	flont.x = matrix.m[2][0];
+	flont.y = flontUp;
+	flont.z = matrix.m[2][2];
+	D3DXVec3Add(&flont, &flont, &targetPos);
+	SpringCamera::GetInstance().SetTarPosition(flont);
+	SpringCamera::GetInstance().SetTarTarget(BossEnemy::GetInstance().Getpos());
+
+}
+
 
