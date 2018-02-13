@@ -7,6 +7,7 @@
 #include "HealItem.h"
 #include "Spring.h"
 #include "BoxChip.h"
+#include "myEngine\Physics\Physics.h"
 
 MapObject::MapObject()
 {
@@ -106,7 +107,7 @@ MapObject* MapObject::MapReturn(const char* MapName)
 		ob = new FallObject(4);
 	}
 	else if (strcmp("GoalObject", MapName) == 0) {
-		ob = new BoxChip();
+		ob = new GoalObject();
 	}
 	else if (strcmp("Boss", MapName) == 0) {
 		//ob = new BoxChip();

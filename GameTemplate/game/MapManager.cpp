@@ -24,15 +24,16 @@ MapManager::~MapManager()
 
 void MapManager::Release()
 {
-	for (auto mapnum : m_mapList)
-	{
-		delete mapnum;
-	}
 	auto mapIt = m_mapList.begin();
 	while (mapIt != m_mapList.end())
 	{
 		mapIt = m_mapList.erase(mapIt);
 	}
+	for (auto mapnum : m_mapList)
+	{
+		delete mapnum;
+	}
+
 	MapManager::GetMapManager().Destroy();
 }
 

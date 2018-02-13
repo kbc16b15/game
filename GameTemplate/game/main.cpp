@@ -13,7 +13,7 @@
 #include "GameObjectManager.h"
 
 LPD3DXEFFECT	copyEffect;
-LPD3DXEFFECT	monochromeEffect;			//!<18-4 モノクロフィルターをかけるシェーダー。
+//LPD3DXEFFECT	monochromeEffect;			//!<18-4 モノクロフィルターをかけるシェーダー。
 
 void InitMainRenderTarget()
 {
@@ -224,7 +224,7 @@ void Init()
 //-----------------------------------------------------------------------------
 VOID Render()
 {
-	//g_shadowMap->Update();
+	ShadowMap::GetInstance().Update();
 	if (SUCCEEDED(g_pd3dDevice->BeginScene()))
 	{
 		//シーンの描画開始。
@@ -272,23 +272,19 @@ VOID Render()
 -----------------------------------------------------------------------------*/
 void Update()
 {
-	ShadowMap::GetInstance().Update();
-	SoundEngine::GetInstance().Update();
-	PhysicsWorld::GetInstance().Update();
 
-	//PhysicsWorld::GetInstance().Update();
+	SoundEngine::GetInstance().Update();
 	GameObjectManager::GetGameObjectManager().Update();
 	Pad::GetInstance().Update();
+	PhysicsWorld::GetInstance().Update();
 }
 //-----------------------------------------------------------------------------
 //ゲームが終了するときに呼ばれる処理。
 //-----------------------------------------------------------------------------
 void Terminate()
 {
-	copyEffect->Release();
-	g_pd3dDevice->Release();
-	g_pD3D->Release();
-	delete g_effectManager;
+
+
 	//delete g_physicsWorld;
 	PhysicsWorld::GetInstance().Destroy();
 	//delete g_physicsWorld;
@@ -297,10 +293,15 @@ void Terminate()
 	RenderTarget::MainRenderTargetGetInstance().Destroy();
 	ShadowMap::GetInstance().Destroy();
 	Pad::GetInstance().Destroy();
+
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&Fade::GetInstance());
 	Fade::GetInstance().Destroy();
 	GameObjectManager::GetGameObjectManager().Destroy();
 	//SoundEngine::GetInstance().Release();
+	copyEffect->Release();
+	g_pd3dDevice->Release();
+	g_pD3D->Release();
+	//delete g_effectManager;
 
 }
 //クローン

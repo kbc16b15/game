@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MoveObject.h"
 #include "Player.h"
+#include "myEngine\Physics\Physics.h"
 
 void MoveObject::Init(const char* modelName,D3DXVECTOR3	pos,D3DXQUATERNION	rot)
 {

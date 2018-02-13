@@ -118,7 +118,7 @@ private:
 	Player();
 	static Player* m_player;//インスタンス
 	enum PlayerState							//プレイヤーアニメーションの状態
-	{Stand, Move, Dash, Jump,Damage,Dead};
+	{Stand, Dash, Jump,Damage,Dead};
 	PlayerState			m_state=Stand;
 	PlayerState			m_workState = Stand;
 	bool				m_isDead = false;		//死亡アニメーションフラグ

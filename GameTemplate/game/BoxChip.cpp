@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "BoxChip.h"
-
+#include "myEngine\Physics\Physics.h"
 //BoxChip::BoxChip()
 //{
 //}
@@ -31,7 +31,7 @@ void BoxChip::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 	m_position = pos;
 	m_rotation = rot;
 
-	m_model.UpdateWorldMatrix(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
+	m_model.UpdateWorldMatrix({ 0.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f ,1.0f}, { 1.0f, 1.0f, 1.0f });
 	//è’ìÀîªíËóçÇ›ÇÃèâä˙âªÅB
 	m_boxCollider.Create({ 2.1f, 1.0f,2.1f });
 

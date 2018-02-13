@@ -314,9 +314,6 @@
     <ClInclude Include="myEngine\Graphics\Sprite.h">
       <Filter>ソース ファイル\myEngine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="TitleScene.h">
       <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
@@ -454,9 +451,6 @@
     </ClInclude>
     <ClInclude Include="BulletWeapon.h">
       <Filter>ソース ファイル\Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="MapInfo.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

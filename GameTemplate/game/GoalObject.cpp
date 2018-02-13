@@ -67,7 +67,7 @@ void GoalObject::Update()
 	//m_particleEmitter.Update();
 	D3DXVECTOR3 toPos = m_position - Player::GetInstance().Getpos();
 	float len = D3DXVec3Length(&toPos);
-	if (len < 2.5f)
+	if (len < 2.5f||GetAsyncKeyState('N'))
 	{
 		Game::GetInstance().NextStage();
 	}

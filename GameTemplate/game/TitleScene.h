@@ -1,6 +1,5 @@
 #pragma once
 #include "HUD.h"
-//#include "BaseScene.h"
 //#include "IGameObject.h"
 class TitleScene :public IGameObject
 {

@@ -1,4 +1,16 @@
-﻿//BCube
+﻿//unity
+{
+	"unity",
+	D3DXVECTOR3(-2.15f, 0.07f, -0.80f),             //平行移動
+	D3DXQUATERNION(0.50f, -0.50f, 0.50f, 0.50f ),  //回転
+},
+//macine
+{
+	"macine",
+	D3DXVECTOR3(-184.20f, -17.20f, 0.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//BCube
 {
 	"BCube",
 	D3DXVECTOR3(-1.32f, -2.00f, 4.00f),             //平行移動
@@ -244,35 +256,11 @@
 	D3DXVECTOR3(-72.21f, 2.18f, 0.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
-//macine
-{
-	"macine",
-	D3DXVECTOR3(-184.20f, -17.20f, 0.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//unity
-{
-	"unity",
-	D3DXVECTOR3(-2.15f, 0.07f, -0.80f),             //平行移動
-	D3DXQUATERNION(0.50f, -0.50f, 0.50f, 0.50f ),  //回転
-},
 //dore
 {
 	"dore",
 	D3DXVECTOR3(-37.78f, 2.54f, -0.89f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
-},
-//Boss
-{
-	"Boss",
-	D3DXVECTOR3(-122.39f, 3.06f, -0.31f),             //平行移動
-	D3DXQUATERNION(0.00f, 1.00f, 0.00f, 0.00f ),  //回転
-},
-//metal
-{
-	"metal",
-	D3DXVECTOR3(-116.98f, -3.69f, 0.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //dore
 {
@@ -334,30 +322,6 @@
 	D3DXVECTOR3(-178.19f, 0.00f, 16.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
 },
-//TCircle
-{
-	"TCircle",
-	D3DXVECTOR3(-153.14f, 3.00f, 15.94f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//TCircle
-{
-	"TCircle",
-	D3DXVECTOR3(-188.12f, 3.00f, 15.94f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//TCircle
-{
-	"TCircle",
-	D3DXVECTOR3(-228.00f, 3.00f, -13.84f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
-//TCircle
-{
-	"TCircle",
-	D3DXVECTOR3(-228.00f, 3.00f, 5.07f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},
 //FCubeF
 {
 	"FCubeF",
@@ -393,6 +357,36 @@
 	"FCubeL",
 	D3DXVECTOR3(-244.45f, 0.00f, 35.57f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
+},
+//TCircle
+{
+	"TCircle",
+	D3DXVECTOR3(-153.14f, 3.00f, 15.94f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//TCircle
+{
+	"TCircle",
+	D3DXVECTOR3(-188.12f, 3.00f, 15.94f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//TCircle
+{
+	"TCircle",
+	D3DXVECTOR3(-228.00f, 3.00f, -13.84f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//TCircle
+{
+	"TCircle",
+	D3DXVECTOR3(-228.00f, 3.00f, 5.07f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},
+//metal
+{
+	"metal",
+	D3DXVECTOR3(-116.98f, -3.69f, 0.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //Drone
 {

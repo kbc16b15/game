@@ -115,8 +115,8 @@ namespace {
 		else {
 			pEffect->SetBool("g_isHasNormalMap", false);
 		}
-		//pEffect->SetFloat("g_Scroll",g_Scroll);
-		//g_Scroll += 0.000002f;
+		pEffect->SetFloat("g_Scroll",g_Scroll);
+		g_Scroll += 0.000002f;
 
 		if (ShadowRecive)
 		{
@@ -145,8 +145,7 @@ namespace {
 						//D3DXMatrixMultiply(&g_pBoneMatrices[iPaletteEntry], &matTemp, &g_matView);
 					}
 				}
-				//D3DXVECTOR4 CameraEye = game->GetCamera()->GetEyePt();//ƒJƒƒ‰‚ÌŽ‹“_‚ÌÀ•W
-				//CameraEye.w = 1.0f;
+
 				pEffect->SetVector("Eye", (D3DXVECTOR4*)&SpringCamera::GetInstance().GetPosition());
 				//pEffect->SetVector("Eye", (D3DXVECTOR4*)&SpringCamera::GetInstance().GetEyePt());
 				

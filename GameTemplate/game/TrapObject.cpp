@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "TrapObject.h"
+#include "myEngine\Physics\Physics.h"
 
 void TrapObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rot)
 {

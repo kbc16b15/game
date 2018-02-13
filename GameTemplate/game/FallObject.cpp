@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "FallObject.h"
 #include "Player.h"
-
+#include "myEngine\Physics\Physics.h"
 
 FallObject::FallObject(int sType)
 {

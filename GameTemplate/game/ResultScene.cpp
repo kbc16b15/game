@@ -34,18 +34,18 @@ void ResultScene::Update()
 
 void ResultScene::Draw()
 {
-	g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-	g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+	//g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	//g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	//g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
 	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 	m_resultHud.Draw(m_sprite);
 	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
-	g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-	g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
-	g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
+	//g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+	//g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+	//g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
 }
 
 void ResultScene::SceneFade()
@@ -72,7 +72,7 @@ void ResultScene::SceneFade()
 				
 			GameObjectManager::GetGameObjectManager().DeleteGameObject(&ResultScene::GetInstance());
 			ResultScene::GetInstance().Destroy();
-			return;
+			//return;
 
 		}
 		break;

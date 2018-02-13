@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "BulletManager.h"
 #include "BulletHud.h"
+#include "GameObjectManager.h"
 
 BulletManager *BulletManager::m_bulletManager = NULL;
 
@@ -38,6 +39,7 @@ BulletManager::~BulletManager()
 			BulletWeaponnum = nullptr;
 		}
 	}
+	GameObjectManager::GetGameObjectManager().DeleteGameObject(&BulletHud::GetInstance());
 	BulletHud::GetInstance().Destroy();
 }
 

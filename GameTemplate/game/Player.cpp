@@ -43,8 +43,9 @@ Player::~Player()
 
 void Player::Init(){
 
-	m_scale *= 0.01f;
-	//m_scale *= 11500.0f;
+	//m_scale *= 0.01f;//unity
+	//m_scale *= 0.2f;//spacestand
+	m_scale *= 0.8f;//spacerun
 	Sound*	m_JumpSound = new Sound();//登録しておく？
 	m_JumpSound->Init("Assets/Sound/jump06.wav");
 	m_JumpSound->SetVolume(0);
@@ -62,52 +63,54 @@ void Player::Init(){
 	m_light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
 	m_light.SetAmbientLight(D3DXVECTOR4(0.5f, 0.5f, 0.5f, 1.0f));
 	//スキンモデルのロード
-	m_skinModelData.LoadModelData("Assets/modelData/Unity2.X", &m_animation);
+	m_skinModelData.LoadModelData("Assets/modelData/Spaceanim.X",&m_animation);
 	m_skinModel.Init(&m_skinModelData);
 	m_skinModel.SetLight(&m_light);
 
 	//キャラクタコントローラを初期化。
-	m_characterController.Init(m_charaRadius,m_charaHeight, m_position);
+	m_characterController.Init(m_charaRadius,m_charaHeight,m_position);
 	m_characterController.SetGravity(m_gravity);
 
+	const float StandInterTime= 0.3f;
+	m_animation.PlayAnimation(Stand, StandInterTime);
 	//アニメーションループフラグのセット
 	m_animation.SetAnimationLoopFlag(Jump, false);
 	m_animation.SetAnimationLoopFlag(Damage, false);
 	m_animation.SetAnimationLoopFlag(Dead, false);
 
 	//アニメーションエンドタイムのセット
-	const float StandEndTime= 0.3f;
-	const float DashEndTime= 0.8f;
-	const float JumpEndTime= 1.5f;
-	const float DamageEndTime= 0.2f;
-	const float DeadEndTime= 3.0f;
-	m_animation.PlayAnimation(Stand, StandEndTime);
-	m_animation.SetAnimationEndTime(Dash, DashEndTime);
-	m_animation.SetAnimationEndTime(Jump, JumpEndTime);
-	m_animation.SetAnimationEndTime(Damage, DamageEndTime);
-	m_animation.SetAnimationEndTime(Dead, DeadEndTime);
+
+	//const float DashEndTime= 1.5f;
+	//const float JumpEndTime= 5.5f;
+	//const float DamageEndTime= 0.2f;
+	//const float DeadEndTime= 3.0f;
+
+	//m_animation.SetAnimationEndTime(Dash, DashEndTime);
+	//m_animation.SetAnimationEndTime(Jump, JumpEndTime);
+	//m_animation.SetAnimationEndTime(Damage, DamageEndTime);
+	//m_animation.SetAnimationEndTime(Dead, DeadEndTime);
 
 	m_skinModel.SetSpecularlight(true);
 
 	//スペキュラマップ
-	D3DXCreateTextureFromFileA(g_pd3dDevice,
-		"Assets/modelData/utc_spec.tga",
-		&m_specularMap);
-	
-	if (m_specularMap != NULL)
-	{
-		m_skinModel.SetSpecularMap(m_specularMap);
-	}
+	//D3DXCreateTextureFromFileA(g_pd3dDevice,
+	//	"Assets/modelData/utc_spec.tga",
+	//	&m_specularMap);
+	//
+	//if (m_specularMap != NULL)
+	//{
+	//	m_skinModel.SetSpecularMap(m_specularMap);
+	//}
 
-	//法線マップ
-	D3DXCreateTextureFromFileA(g_pd3dDevice,
-		"Assets/modelData/utc_nomal.tga",
-		&m_normalMap);
+	////法線マップ
+	//D3DXCreateTextureFromFileA(g_pd3dDevice,
+	//	"Assets/modelData/utc_nomal.tga",
+	//	&m_normalMap);
 
-	if (m_normalMap != NULL)
-	{
-		m_skinModel.SetnormalMap(m_normalMap);
-	}
+	//if (m_normalMap != NULL)
+	//{
+	//	m_skinModel.SetnormalMap(m_normalMap);
+	//}
 
 }
 
@@ -171,11 +174,17 @@ void Player::move()
 
 void Player::AnimationSet()
 {
+	const float StandInterTime = 0.3f;
+	const float DashInterTime = 0.5f;
+	const float JumpInterTime = 0.5f;
+	const float DamageInterTime = 0.5f;
+	const float DeadInterTime = 0.5f;
 	//状態遷移？
 	switch (m_state)
 	{
 	case Stand://待機
-		if (m_workState != Stand){m_animation.PlayAnimation(Stand, 0.3f);}
+		
+		if (m_workState != Stand) { m_animation.PlayAnimation(Stand, StandInterTime);}
 		m_workState = m_state;//連続再生させないためのステート
 		if (m_isDead&&PlayerHp::GetInstance().GetPlayerHp() <= 0) { m_state = Dead; }
 		else if (m_isDamage) { m_state = Damage; }
@@ -184,7 +193,7 @@ void Player::AnimationSet()
 		else{ m_state = Stand;}
 		break;
 	case Dash://歩行
-		if (m_workState != Dash){m_animation.PlayAnimation(Dash, 0.5f);}
+		if (m_workState != Dash) { m_animation.PlayAnimation(Dash, DashInterTime); }
 		m_workState = m_state;
 		if (m_isDead&&PlayerHp::GetInstance().GetPlayerHp() <= 0) { m_state = Dead; }
 		else if (m_isDamage) { m_state = Damage; }
@@ -193,7 +202,7 @@ void Player::AnimationSet()
 		else { m_state = Stand; }
 		break;
 	case Jump://ジャンプ
-		if (m_workState != Jump){m_animation.PlayAnimation(Jump, 0.5f);}
+		if (m_workState != Jump){m_animation.PlayAnimation(Jump, JumpInterTime);}
 		m_workState = m_state;
 		if (m_isDead&&PlayerHp::GetInstance().GetPlayerHp() <= 0){ m_state = Dead; }
 		else if (m_isDamage) { m_state = Damage; }
@@ -207,7 +216,7 @@ void Player::AnimationSet()
 		}
 		break;
 	case Damage://ダメージ
-		if (m_workState != Damage){m_animation.PlayAnimation(Damage, 0.5f);}
+		if (m_workState != Damage){m_animation.PlayAnimation(Damage, DamageInterTime);}
 		m_workState = m_state;
 		if (m_isDead&&PlayerHp::GetInstance().GetPlayerHp() <= 0) { m_state = Dead; }
 		else if (m_isDamage) { m_state = Damage; }
@@ -218,7 +227,7 @@ void Player::AnimationSet()
 		if (!m_animation.IsPlay()){m_isDamage = false;}
 		break;
 	case Dead://死亡
-		if (m_workState != Dead){m_animation.PlayAnimation(Dead, 0.5f);}
+		if (m_workState != Dead){m_animation.PlayAnimation(Dead, DeadInterTime);}
 		m_workState = m_state;
 
 		if (!m_animation.IsPlay()){m_isDeathflg = true;}
@@ -460,6 +469,6 @@ void Player::ShadowDraw(D3DXMATRIX* viewM, D3DXMATRIX* projM, bool shadowCaster,
 
 void Player::Draw()
 {
-	//シャドウをセット
+
 	ShadowDraw(&SpringCamera::GetInstance().GetViewMatrix(), &SpringCamera::GetInstance().GetProjectionMatrix(),false,false);
 }

@@ -31,7 +31,7 @@ SMapChipLocInfo Info1[] = {
 
 SMapChipLocInfo Info2[] = {
 
-#include "locationinfo7.h"
+#include "locationinfo8.h"
 };
 
 
@@ -51,7 +51,7 @@ void Map::Init(/*SMapChipLocInfo Info[]*/)
 {
 	
 	SMapChipLocInfo Info[255];
-	int numObject = sizeof(Info1) / sizeof(Info1[0]);
+	int numObject=sizeof(Info1) / sizeof(Info1[0]);;
 	for (int i = 0; i < numObject; i++)
 	{
 		Info[i] = Info1[i];

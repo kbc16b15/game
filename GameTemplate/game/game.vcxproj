@@ -235,7 +235,6 @@
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="IGameObject.h" />
     <ClInclude Include="Indexbuffer.h" />
-    <ClInclude Include="MapInfo.h" />
     <ClInclude Include="MapManager.h" />
     <ClInclude Include="MapObject.h" />
     <ClInclude Include="MoveObject.h" />
@@ -272,7 +271,6 @@
     <ClInclude Include="myEngine\system.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RenderTarget.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="ShadowMap.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundEngine.h" />

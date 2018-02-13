@@ -103,7 +103,7 @@ void Animation::Update(float deltaTime)
 			}
 		}
 		if (isInterpolate) {
-			ID3DXAnimationSet* animSet = animationSets[2];
+			ID3DXAnimationSet* animSet = animationSets[1];
 			float period = (float)animSet->GetPeriod();
 			//•âŠÔ’†B
 			interpolateTime += deltaTime;

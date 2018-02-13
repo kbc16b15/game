@@ -27,36 +27,6 @@ Game::Game()
 {
 	//SetLight();
 	//srand((unsigned int)time(NULL));
-	Player::Create();
-	PlayerHp::Create();
-
-	BulletManager::Create();
-	EnemyManager::Create();
-	Map::Create();
-	gameCamera::Create();
-	Bloom::Create();
-
-
-	//マップを初期化。
-	/*if (Map::GetInstance().GetStage()==Map::GetInstance().STAGE1)
-	{
-		Map::GetInstance().Init(&InfoOne[0]);
-	}
-	else if (Map::GetInstance().GetStage() == Map::GetInstance().STAGE2)
-	{
-		Map::GetInstance().Init(&InfoTwo[0]);
-	}
-	else
-	{
-	}*/
-	//カメラ初期化。
-	gameCamera::GetInstance().Init();
-	//プレイヤー初期化
-	Player::GetInstance().Init();
-	PlayerHp::GetInstance().Init();
-	Map::GetInstance().Init();
-	//Map::GetInstance().Init(&Map::GetInstance().GetMap1());
-
 
 }
 /*!
@@ -64,7 +34,21 @@ Game::Game()
  */
 Game::~Game()
 {
-
+	Player::GetInstance().Destroy();
+	PlayerHp::GetInstance().Destroy();
+	EnemyManager::GetInstance().Destroy();
+	BulletManager::GetInstance().Destroy();
+	Map::GetInstance().Destroy();
+	gameCamera::GetInstance().Destroy();
+	Bloom::GetInstance().Destroy();
+	if (m_isNextTo)
+	{
+		/*Game::Create();
+		Game::GetInstance().Init();
+		Map::GetInstance().SetStage(Map::GetInstance().STAGE2);
+		GameObjectManager::GetGameObjectManager().AddGameObject(&Game::GetInstance());
+		m_isNextTo = false;*/
+	}
 }
 
 void Game::GameRelease()
@@ -78,14 +62,8 @@ void Game::GameRelease()
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&gameCamera::GetInstance());
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&Bloom::GetInstance());
 
+
 	Game::GetInstance().Destroy();
-	Player::GetInstance().Destroy();
-	PlayerHp::GetInstance().Destroy();
-	EnemyManager::GetInstance().Destroy();
-	BulletManager::GetInstance().Destroy();
-	Map::GetInstance().Destroy();
-	gameCamera::GetInstance().Destroy();
-	Bloom::GetInstance().Destroy();
 
 }
 /*!
@@ -93,14 +71,33 @@ void Game::GameRelease()
  */
 void Game::Init()
 {
+	Player::Create();
+	PlayerHp::Create();
 
-	GameObjectManager::GetGameObjectManager().AddGameObject(&BulletManager::GetInstance());
-	GameObjectManager::GetGameObjectManager().AddGameObject(&EnemyManager::GetInstance());
-	GameObjectManager::GetGameObjectManager().AddGameObject(&Map::GetInstance());
+	BulletManager::Create();
+	EnemyManager::Create();
+	Map::Create();
+	gameCamera::Create();
+	Bloom::Create();
+
+
+	//マップを初期化。
+
+	Map::GetInstance().Init();
+	//プレイヤー初期化
+	Player::GetInstance().Init();
+	PlayerHp::GetInstance().Init();
+	//カメラ初期化。
+	gameCamera::GetInstance().Init();
+
 	//登録
 	GameObjectManager::GetGameObjectManager().AddGameObject(&Player::GetInstance());
 	GameObjectManager::GetGameObjectManager().AddGameObject(&PlayerHp::GetInstance());
 	GameObjectManager::GetGameObjectManager().AddGameObject(&gameCamera::GetInstance());
+	GameObjectManager::GetGameObjectManager().AddGameObject(&BulletManager::GetInstance());
+	GameObjectManager::GetGameObjectManager().AddGameObject(&EnemyManager::GetInstance());
+	GameObjectManager::GetGameObjectManager().AddGameObject(&Map::GetInstance());
+
 	GameObjectManager::GetGameObjectManager().AddGameObject(&Bloom::GetInstance());
 
 	/*Sound**/ /*m_bgmSound = new Sound();
@@ -157,49 +154,58 @@ void Game::SceneFade()
 		break;
 	case Run:
 		if (Player::GetInstance().PlayerDeath() || toPos.y < m_killZ) {
-			Fade::GetInstance().StartFadeOut();
+
 			m_isEnd = true;
 			ResultScene::Create();
 			ResultScene::GetInstance().Init();
 			GameObjectManager::GetGameObjectManager().AddGameObject(&ResultScene::GetInstance());
+			Fade::GetInstance().StartFadeOut();
 			m_state = WaitFadeOut;
 		}
 		else if (m_isNext)
 		{
 			if (Map::GetInstance().GetStage() == Map::GetInstance().STAGE1)
 			{
-				Fade::GetInstance().StartFadeOut();
-				Game::GetInstance().GameRelease();
-				Game::Create();
+
+				/*Game::Create();
 				Game::GetInstance().Init();
 				Map::GetInstance().SetStage(Map::GetInstance().STAGE2);
-				GameObjectManager::GetGameObjectManager().AddGameObject(&Game::GetInstance());
-
+				GameObjectManager::GetGameObjectManager().AddGameObject(&Game::GetInstance());*/
+				m_isNextTo = true;
+				Fade::GetInstance().StartFadeOut();
+				m_state = WaitFadeOut;
+				m_isNext = false;
 
 			}
 			else if (Map::GetInstance().GetStage() == Map::GetInstance().STAGE2)
 			{
-				Fade::GetInstance().StartFadeOut();
+
 				TitleScene::Create();
 				TitleScene::GetInstance().Init();
 				GameObjectManager::GetGameObjectManager().AddGameObject(&TitleScene::GetInstance());
-				Game::GetInstance().GameRelease();
+				//Game::GetInstance().GameRelease();
+				Fade::GetInstance().StartFadeOut();
+				m_state = WaitFadeOut;
+				m_isNext = false;
 			}
 		}
 		else if (m_isClear)
 		{
-			Fade::GetInstance().StartFadeOut();
+
 			ClearScene::Create();
 			ClearScene::GetInstance().Init();
 			GameObjectManager::GetGameObjectManager().AddGameObject(&ClearScene::GetInstance());
-			Game::GetInstance().GameRelease();
+			//Game::GetInstance().GameRelease();
+			m_state = WaitFadeOut;
+			Fade::GetInstance().StartFadeOut();
+			m_isClear = false;
 		}
 		break;
 	case WaitFadeOut:
 		if(!Fade::GetInstance().isExecute())
 		{
-			
-			Game::GetInstance().GameRelease();
+			//Fade::GetInstance().StartFadeOut();
+			//Game::GetInstance().GameRelease();
 		}
 		break;
 	default:

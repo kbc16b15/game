@@ -151,7 +151,7 @@ void BossEnemy::Start()
 		BossState = STAND;
 		//gameCamera::GetInstance().BossCamera();
 		m_characterController.SetGravity(0.0f);
-		m_characterController.RemoveRigidBoby();
+		//m_characterController.RemoveRigidBoby();
 	}
 
 }
