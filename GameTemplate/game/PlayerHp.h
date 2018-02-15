@@ -10,14 +10,14 @@ public:
 
 	void Init();
 	void Update() {};
-	void Draw();
+	void PrePostDraw();
 	//スプライト生成関数
 	HRESULT CreateSprite();
 
 	//プレイヤーダメージ処理
 	void PlayerDamage(int dame)
 	{
-		m_playerHpNum -= dame;
+		//m_playerHpNum -= dame;
 		//プレイヤーHPのアップデート
 		for (int i = 0;i < m_playerHpNum;i++)
 		{

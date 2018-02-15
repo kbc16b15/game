@@ -49,14 +49,7 @@ private:
 		Run,
 		WaitFadeOut
 	};
-	//選択
-	//enum Select{
-	//	NO,
-	//	START,
-	//	BREAK,
-	//};
-	//Select				GAME = START;					//状態
-	EState				m_state = Run;					//フェード
+	EState				m_state = WaitFadeIn;			//フェード
 	LPD3DXSPRITE		m_sprite;						//スプライト
 	HUD					m_titleHud;						//タイトル画像
 	const D3DXVECTOR2	m_titlePos = { 595.0f,400.0f };	//タイトル画像の座標

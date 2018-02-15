@@ -9,26 +9,26 @@ EnemyManager::EnemyManager()
 
 EnemyManager::~EnemyManager()
 {
-	EnemyManager::GetInstance().Release();
+	//EnemyManager::GetInstance().Release();
 }
 
 void EnemyManager::Release()
 {
+	for (auto TEnemynum : m_tenem)
+	{
+		if (TEnemynum != nullptr)
+		{
+			delete TEnemynum;
+		}
+	}
 	//trackingEnemy‚ÌÁ‹Ž
 	auto trackingEnemyIt = m_tenem.begin();
 	while (trackingEnemyIt != m_tenem.end()) {
 
 		trackingEnemyIt = m_tenem.erase(trackingEnemyIt);
 	}
-	for (auto TEnemynum : m_tenem)
-	{
-		if (TEnemynum != nullptr)
-		{
-			delete TEnemynum;
-			TEnemynum = nullptr;
-		}
-	}
 
+	EnemyManager::GetInstance().Destroy();
 }
 
 void EnemyManager::Update()
@@ -38,9 +38,6 @@ void EnemyManager::Update()
 	{
 		trackingEnemyIt->Update();
 	}
-
-
-
 }
 
 void EnemyManager::Draw()
@@ -50,6 +47,4 @@ void EnemyManager::Draw()
 	{
 		trackingEnemyIt->Draw();
 	}
-
-
 }

@@ -145,7 +145,7 @@
 //BCube
 {
 	"BCube",
-	D3DXVECTOR3(-93.50f, -0.11f, -4.00f),             //平行移動
+	D3DXVECTOR3(-90.49f, -0.11f, -4.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //BCube
@@ -163,7 +163,7 @@
 //BCube
 {
 	"BCube",
-	D3DXVECTOR3(-93.50f, 3.35f, -7.61f),             //平行移動
+	D3DXVECTOR3(-90.49f, 3.35f, -7.61f),             //平行移動
 	D3DXQUATERNION(0.71f, 0.00f, 0.00f, 0.71f ),  //回転
 },
 //BCube
@@ -385,7 +385,7 @@
 //metal
 {
 	"metal",
-	D3DXVECTOR3(-116.98f, -3.69f, 0.00f),             //平行移動
+	D3DXVECTOR3(-111.90f, -3.69f, 0.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
 //Drone

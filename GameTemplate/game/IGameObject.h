@@ -7,16 +7,7 @@ public:
 	virtual void Init() {};
 	virtual void Update()=0;
 	virtual void Draw() {};
-	void SetDeathflg()
-	{
-		IsDeath=true;
-	}
-
-	bool GetDeathflg()
-	{
-		return IsDeath;
-	}
-private:
-	bool IsDeath=false;
+	virtual void PrePostDraw(){};
+	virtual void PostDraw() {};
 };
 

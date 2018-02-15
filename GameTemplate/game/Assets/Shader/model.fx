@@ -21,6 +21,7 @@ float4x4 g_projlightMatrix;
 
 bool g_Reciver;
 bool g_isSpecularlight;
+float g_Scroll;
 
 float3 Eye;				//カメラ座標
 bool g_isHasNormalMap;			//法線マップ保持している？
@@ -206,7 +207,7 @@ VS_OUTPUT VSMain( VS_INPUT In, uniform bool hasSkin )
  */
 float4 PSMain( VS_OUTPUT In ) : COLOR
 {
-	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0);
+	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0+float2(0.0f,g_Scroll));
 	
 	float3 normal = In.Normal;
 	

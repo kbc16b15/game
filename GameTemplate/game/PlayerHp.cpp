@@ -28,7 +28,7 @@ void PlayerHp::Init()
 	}
 }
 
-void PlayerHp::Draw()
+void PlayerHp::PrePostDraw()
 {
 	//ƒvƒŒƒCƒ„[HP‚Ì•`‰æ
 	for (int i = 0;i < m_playerHpNum;i++)

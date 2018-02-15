@@ -14,6 +14,8 @@ public:
 	void Update();
 	//•`‰æ
 	void Draw();
+
+	void Release();
 	//ƒoƒŒƒbƒg‚Ì¶¬
 	Bullet* CreateBullet(int id);
 	//’e‚Ì’Ç‰Á

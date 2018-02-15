@@ -28,7 +28,7 @@ public:
 	void BulletHit();
 
 	//死亡フラグの取得
-	bool GetBulletflg()
+	bool GetDeathflg()
 	{
 		return m_bulletDeadflg;
 	}
@@ -57,6 +57,6 @@ private:
 	const float			m_playerRadius=0.3f;//プレイヤーの半径
 	float				m_bulletSpeed= 0.2f;//バレットのスピード
 	const float			m_playerUp = 0.3f;	//プレイヤーのあげる幅
-	const float			m_bulletDeathlenge = 0.4f;//バレットが死ぬ距離
+	const float			m_bulletDeathlenge = 0.1f;//バレットが死ぬ距離
 };
 

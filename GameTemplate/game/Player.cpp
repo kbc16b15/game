@@ -32,13 +32,6 @@ Player::~Player()
 	{
 		m_specularMap->Release();
 	}
-	
-	/*if (m_JumpSound != nullptr)
-	{
-		delete m_JumpSound;
-		m_JumpSound = nullptr;
-	}*/
-	
 }
 
 void Player::Init(){
@@ -47,7 +40,7 @@ void Player::Init(){
 	//m_scale *= 0.2f;//spacestand
 	m_scale *= 0.8f;//spacerun
 	Sound*	m_JumpSound = new Sound();//登録しておく？
-	m_JumpSound->Init("Assets/Sound/jump06.wav");
+	m_JumpSound->Init("Assets/Sound/jump.wav");
 	m_JumpSound->SetVolume(0);
 	m_JumpSound->Play(false);
 
@@ -93,31 +86,28 @@ void Player::Init(){
 	m_skinModel.SetSpecularlight(true);
 
 	//スペキュラマップ
-	//D3DXCreateTextureFromFileA(g_pd3dDevice,
-	//	"Assets/modelData/utc_spec.tga",
-	//	&m_specularMap);
-	//
-	//if (m_specularMap != NULL)
-	//{
-	//	m_skinModel.SetSpecularMap(m_specularMap);
-	//}
+	D3DXCreateTextureFromFileA(g_pd3dDevice,
+		"Assets/modelData/SpaceSpecularMap.png",
+		&m_specularMap);
+	//法線マップ
+	D3DXCreateTextureFromFileA(g_pd3dDevice,
+		"Assets/modelData/SpaceNormalMap.png",
+		&m_normalMap);
+	if (m_specularMap != NULL)
+	{
+		m_skinModel.SetSpecularMap(m_specularMap);
+	}
 
-	////法線マップ
-	//D3DXCreateTextureFromFileA(g_pd3dDevice,
-	//	"Assets/modelData/utc_nomal.tga",
-	//	&m_normalMap);
-
-	//if (m_normalMap != NULL)
-	//{
-	//	m_skinModel.SetnormalMap(m_normalMap);
-	//}
+	if (m_normalMap != NULL)
+	{
+		m_skinModel.SetnormalMap(m_normalMap);
+	}
 
 }
 
 void Player::Update()
 {
-	//if (m_isDeathflg)return;//死んでいたらリターン
-	//m_JumpSound->Update();
+	if (m_isDeathflg)return;//死んでいたらリターン
 	//if (GetAsyncKeyState('Q')) {
 	//	//m_skinModel.SetnormalMap(NULL);
 	//	m_skinModel.SetSpecularMap(NULL);
@@ -243,7 +233,6 @@ void Player::AnimationSet()
 void Player::Setangle()
 {
 	//if (m_isDeathflg)return;
-	//D3DXVECTOR3 Mpos = position;
 
 	m_moveSpeed = m_characterController.GetMoveSpeed();
 	m_moveSpeed.x = 0.0f;
@@ -330,7 +319,7 @@ void Player::Setangle()
 
 void Player::Setjump()
 {
-	const float			jumpHeight = 8.0f;	//ジャンプの高さ
+	const float			jumpHeight = 7.5f;	//ジャンプの高さ
 	if (Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonA) && m_characterController.IsOnGround()) {
 		//ジャンプ
 		m_moveSpeed.y = jumpHeight;
@@ -338,8 +327,8 @@ void Player::Setjump()
 		m_characterController.Jump();
 		m_isjump = true;
 
-		Sound*	m_JumpSound = new Sound();//ジャンプ音の読み込みの時に遅くなる？
-		m_JumpSound->Init("Assets/Sound/jump06.wav");
+		Sound*	m_JumpSound = new Sound();
+		m_JumpSound->Init("Assets/Sound/jump.wav");
 		m_JumpSound->SetVolume(0.4f);
 		m_JumpSound->Play(false);
 	}

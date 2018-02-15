@@ -84,11 +84,12 @@ private:
 		Run,
 		WaitFadeOut
 	};
-	EState				m_state = Run;				//フェードの状態
+	EState				m_state = WaitFadeIn;		//フェードの状態
 	Sound*				m_bgmSound=nullptr;			//サウンド
-	const float			m_killZ = -30.0f;			//プレイヤーが死ぬ高さ
+	const float			m_killZ = -10.0f;			//プレイヤーが死ぬ高さ
 	bool				m_isNext = false;			//次のステージへ
-	bool				m_isNextTo = false;			//次のステージへ
+	bool				m_isNextTo = false;			//次のステージ
 	bool				m_isClear = false;			//クリア
 	bool				m_isEnd = false;			//ゲームオーバー
+	bool				m_isLoadEnd = false;
 };

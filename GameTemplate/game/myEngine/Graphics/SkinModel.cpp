@@ -116,7 +116,7 @@ namespace {
 			pEffect->SetBool("g_isHasNormalMap", false);
 		}
 		pEffect->SetFloat("g_Scroll",g_Scroll);
-		g_Scroll += 0.000002f;
+		//g_Scroll += 0.00005f;
 
 		if (ShadowRecive)
 		{
@@ -147,7 +147,6 @@ namespace {
 				}
 
 				pEffect->SetVector("Eye", (D3DXVECTOR4*)&SpringCamera::GetInstance().GetPosition());
-				//pEffect->SetVector("Eye", (D3DXVECTOR4*)&SpringCamera::GetInstance().GetEyePt());
 				
 				pEffect->SetMatrixArray("g_mWorldMatrixArray", g_pBoneMatrices, pMeshContainer->NumPaletteEntries);
 				pEffect->SetInt("g_numBone", pMeshContainer->NumInfl);

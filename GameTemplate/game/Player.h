@@ -146,6 +146,8 @@ private:
 	D3DXVECTOR3			m_dir;					//かんせー
 	LPDIRECT3DTEXTURE9	m_normalMap = NULL;		//法線マップ
 	LPDIRECT3DTEXTURE9	m_specularMap = NULL;	//スペキュラマップ
+	LPDIRECT3DTEXTURE9	m_normalMapGun = NULL;		//法線マップ
+	LPDIRECT3DTEXTURE9	m_specularMapGun = NULL;	//スペキュラマップ
 	float				m_gravity = -10.0f;		//重力
 	bool				m_isMoveStop = false;		//移動と回転をなくす
 	bool				m_isMax = false;		//最大移動速度のフラグ

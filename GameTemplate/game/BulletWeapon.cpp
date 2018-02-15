@@ -71,7 +71,6 @@ void BulletWeapon::Init(D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 void BulletWeapon::Update()
 {
 	if (m_isDead) { return; }
-	//m_beamSound->Update();
 	Move();
 	Dead();
 
@@ -138,14 +137,14 @@ void BulletWeapon::Move()
 
 		m_bulletIntervalTime--;
 
-		if (/*m_bulletIntervalTime < 0 && Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonB) ||*/m_bulletIntervalTime < 0 && GetAsyncKeyState('B') && m_isPlayerBulletCamera)
+		if (/*m_bulletIntervalTime < 0 && Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonB) ||*/m_bulletIntervalTime < 0 && Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonB)||GetAsyncKeyState('B') && m_isPlayerBulletCamera)
 		{
 
-			Bullet* bullet = BulletManager::GetInstance().CreateBullet(bullet->PLAYER);
+			/*Bullet* bullet = BulletManager::GetInstance().CreateBullet(bullet->PLAYER);
 			D3DXVECTOR3 BulletPos=m_position;
 			BulletPos.y += 1.0f;
 			bullet->Start(SpringCamera::GetInstance().GetTarTarget(), BulletPos, bulletSpeed, bullet->PLAYER);
-			m_bulletIntervalTime = m_maxBulletTime;
+			m_bulletIntervalTime = m_maxBulletTime;*/
 
 			Sound* m_beamSound = new Sound();
 			m_beamSound->Init("Assets/Sound/beamgun.wav");
@@ -153,7 +152,7 @@ void BulletWeapon::Move()
 			m_beamSound->Play(false);
 		}
 
-		if (Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonA)||GetAsyncKeyState('Z'))//ƒJƒƒ‰Ø‚è‘Ö‚¦
+		if (Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonB)||GetAsyncKeyState('Z'))//ƒJƒƒ‰Ø‚è‘Ö‚¦
 		{
 			if (!m_isPlayerBulletCamera)
 			{

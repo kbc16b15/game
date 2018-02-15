@@ -29,7 +29,7 @@ void ClearScene::Update()
 {
 	if (m_clear == NULL) { return; };
 	m_clearHud.Update();
-	//SceneFade();
+	SceneFade();
 }
 
 void ClearScene::Draw()

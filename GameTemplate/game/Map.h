@@ -1,54 +1,54 @@
-#pragma once
+ï»¿#pragma once
 //#include "MapInfo.h"
 class HealItem;
 
 struct SMapChipLocInfo {
-	const char* modelName;	//ƒ‚ƒfƒ‹B
-	D3DXVECTOR3	pos;		//À•WB
-	D3DXQUATERNION	rot;	//‰ñ“]B
+	const char* modelName;	//ãƒ¢ãƒ‡ãƒ«ã€‚
+	D3DXVECTOR3	pos;		//åº§æ¨™ã€‚
+	D3DXQUATERNION	rot;	//å›è»¢ã€‚
 };
 
 
 //template <typename T>
-class Map:public IGameObject
+class Map :public IGameObject
 {
 public:
+	//ã‚¹ãƒ†ãƒ¼ã‚¸num
+	enum STAGE
+	{
+		STAGE1,
+		STAGE2
+	};
 
 
-
-	//ƒfƒXƒgƒ‰ƒNƒ^
+	//ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	~Map();
-	//‰Šú‰»
-	void Init(/*SMapChipLocInfo Info[]*/);
-	//•`‰æ
+	//åˆæœŸåŒ–
+	void Init();
+	//æç”»
 	void Draw();
-	//XV
+	//æ›´æ–°
 	void Update();
 
-	void MapCreate(const char* mapName,int no,SMapChipLocInfo Info[]);
+	void MapLoad1();
+	void MapLoad2();
+	void MapCreate(const char* mapName, int no, SMapChipLocInfo Info[]);
 
 
-	//ƒXƒe[ƒWØ‚è‘Ö‚¦
+	//ã‚¹ãƒ†ãƒ¼ã‚¸åˆ‡ã‚Šæ›¿ãˆ
 	void SetStage(int StageNum)
 	{
 		m_stageNum = StageNum;
 
 	}
-	//ƒXƒe[ƒWƒiƒ“ƒo[‚Ìæ“¾
+	//ã‚¹ãƒ†ãƒ¼ã‚¸ãƒŠãƒ³ãƒãƒ¼ã®å–å¾—
 	int GetStage()
 	{
 		return m_stageNum;
 
 	}
-	
-	//ƒXƒe[ƒWnum
-	enum STAGE
-	{
-		STAGE1,
-		STAGE2,
-	};
 
-	//ƒCƒ“ƒXƒ^ƒ“ƒX‚Ì¶¬
+	//ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®ç”Ÿæˆ
 	static void Map::Create()
 	{
 		if (!m_map)
@@ -58,22 +58,22 @@ public:
 
 	}
 
-	//ƒCƒ“ƒXƒ^ƒ“ƒX‚ÌÁ‹
+	//ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®æ¶ˆå»
 	static  void Map::Destroy()
 	{
 		delete m_map;
 		m_map = nullptr;
 	}
-	//ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìæ“¾
+	//ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®å–å¾—
 	static Map& GetInstance()
 	{
 		return *m_map;
 	}
 private:
-	//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	Map();
-	static Map* m_map;//ƒCƒ“ƒXƒ^ƒ“ƒX
-	int m_stageNum= STAGE1;
-	std::vector<HealItem*>	m_healList;		//‰ñ•œƒAƒCƒeƒ€
+	static Map* m_map;//ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+	int m_stageNum = STAGE1;
+	std::vector<HealItem*>	m_healList;		//å›å¾©ã‚¢ã‚¤ãƒ†ãƒ 
 
 };

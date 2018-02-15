@@ -28,9 +28,9 @@ public:
 
 
 private:
-	bool			m_open1 = false;			//‚Ð‚ç‚­‚©”Û‚©
+	bool			m_open = false;			//‚Ð‚ç‚­‚©”Û‚©
 	const float	length = 5.0f;//ŠJ‚­”ÍˆÍ
 	const float m_maxUp = 30.0f;
-	const float m_upSpeed = 0.02f;
+	const float m_upSpeed = 0.07f;
 };
 

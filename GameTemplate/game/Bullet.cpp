@@ -64,54 +64,54 @@ void Bullet::Start(D3DXVECTOR3 targetpos,D3DXVECTOR3 pos, float speed, CHARA cha
 	m_rotation.y = 1.0f * s;
 	m_rotation.z = 0.0f * s;
 }
-void Bullet::Init(D3DXVECTOR3 pos, float speed,CHARA chara)
-{
-	//ライトを初期化。
-	m_light.SetDiffuseLightDirection(0, D3DXVECTOR4(0.707f, 0.0f, -0.707f, 1.0f));
-	m_light.SetDiffuseLightDirection(1, D3DXVECTOR4(-0.707f,0.0f,-0.707f,1.0f));
-	m_light.SetDiffuseLightDirection(2, D3DXVECTOR4(0.0f,  0.707f, -0.707f,1.0f));
-	m_light.SetDiffuseLightDirection(3, D3DXVECTOR4(0.0f, -0.707f, -0.707f, 1.0f));
-
-	m_light.SetDiffuseLightColor(0, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	m_light.SetDiffuseLightColor(1, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	m_light.SetDiffuseLightColor(2, D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
-	m_light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	m_light.SetAmbientLight(D3DXVECTOR4(7.8f, 0.8f, 0.8f, 1.0f));
-
-	if (m_skinModelData == NULL){
-		//モデルをロード。
-		
-		m_skinModelData = new SkinModelData;
-		m_skinModelData->LoadModelData("Assets/modelData/Bullet.X", NULL);
-	}
-	m_skinModel.Init(m_skinModelData);
-	m_skinModel.SetLight(&m_light);
-	
-	//D3DXQuaternionRotationAxis(&rotation, rotation,-5.0f);
-	m_direction = { 0.0f, 0.0f, 1.0f };
-
-	m_chara = chara;
-	//m_bulletId = Id;
-	m_position = pos;
-	m_bulletSpeed = speed;
-	m_targetPos= Player::GetInstance().Getpos();
-
-
-	D3DXVECTOR3 toPos = m_targetPos - m_position;
-	float len = D3DXVec3Length(&toPos);
-
-	float angle = atan2f(m_direction.x, m_direction.z);
-	D3DXVECTOR3 Def;
-	D3DXVec3Subtract(&Def, &m_position, &m_targetPos);
-	float s;
-	float halfAngle = /*angle*/atan2f(-Def.x, -Def.z) * 0.5f;
-
-	s = sin(halfAngle);
-	m_rotation.w = cos(halfAngle);
-	m_rotation.x = 0.0f * s;
-	m_rotation.y = 1.0f * s;
-	m_rotation.z = 0.0f * s;
-}
+//void Bullet::Init(D3DXVECTOR3 pos, float speed,CHARA chara)
+//{
+//	//ライトを初期化。
+//	m_light.SetDiffuseLightDirection(0, D3DXVECTOR4(0.707f, 0.0f, -0.707f, 1.0f));
+//	m_light.SetDiffuseLightDirection(1, D3DXVECTOR4(-0.707f,0.0f,-0.707f,1.0f));
+//	m_light.SetDiffuseLightDirection(2, D3DXVECTOR4(0.0f,  0.707f, -0.707f,1.0f));
+//	m_light.SetDiffuseLightDirection(3, D3DXVECTOR4(0.0f, -0.707f, -0.707f, 1.0f));
+//
+//	m_light.SetDiffuseLightColor(0, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
+//	m_light.SetDiffuseLightColor(1, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
+//	m_light.SetDiffuseLightColor(2, D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
+//	m_light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
+//	m_light.SetAmbientLight(D3DXVECTOR4(7.8f, 0.8f, 0.8f, 1.0f));
+//
+//	if (m_skinModelData == NULL){
+//		//モデルをロード。
+//		
+//		m_skinModelData = new SkinModelData;
+//		m_skinModelData->LoadModelData("Assets/modelData/Bullet.X", NULL);
+//	}
+//	m_skinModel.Init(m_skinModelData);
+//	m_skinModel.SetLight(&m_light);
+//	
+//	//D3DXQuaternionRotationAxis(&rotation, rotation,-5.0f);
+//	m_direction = { 0.0f, 0.0f, 1.0f };
+//
+//	m_chara = chara;
+//	//m_bulletId = Id;
+//	m_position = pos;
+//	m_bulletSpeed = speed;
+//	m_targetPos= Player::GetInstance().Getpos();
+//
+//
+//	D3DXVECTOR3 toPos = m_targetPos - m_position;
+//	float len = D3DXVec3Length(&toPos);
+//
+//	float angle = atan2f(m_direction.x, m_direction.z);
+//	D3DXVECTOR3 Def;
+//	D3DXVec3Subtract(&Def, &m_position, &m_targetPos);
+//	float s;
+//	float halfAngle = /*angle*/atan2f(-Def.x, -Def.z) * 0.5f;
+//
+//	s = sin(halfAngle);
+//	m_rotation.w = cos(halfAngle);
+//	m_rotation.x = 0.0f * s;
+//	m_rotation.y = 1.0f * s;
+//	m_rotation.z = 0.0f * s;
+//}
 
 
 void Bullet::Update()
@@ -155,9 +155,9 @@ void Bullet::TargetBullet()
 
 void Bullet::BulletHit()
 {
-	const float			BossRadius = 3.f;//プレイヤーの半径
+	const float			BossRadius = 3.0f;//プレイヤーの半径
 	D3DXVECTOR3 Ppos = Player::GetInstance().Getpos();
-	Ppos.y += m_playerUp;
+	//Ppos.y += m_playerUp;
 	//バレットの当たり判定
 	switch (m_chara)
 	{

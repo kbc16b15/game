@@ -18,8 +18,6 @@ void TitleScene::Init()
 {
 	m_titleHud.Initialize("Assets/Sprite/T2.tga",m_titlePos);
 	CreateSprite();
-
-
 	//Fade::GetInstance().StartFadeIn();
 }
 
@@ -43,7 +41,7 @@ void TitleScene::Draw()
 	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 	//g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-//	g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
+	//g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
 	//g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
 	
 }
@@ -56,27 +54,26 @@ void TitleScene::SceneFade()
 	case WaitFadeIn:
 		if (!Fade::GetInstance().isExecute())
 		{
+			Fade::GetInstance().StartFadeIn();
 			m_state = Run;
 		}
 		break;
 	case Run:
 		if (Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonStart) || GetAsyncKeyState('S')) {
-				
-			m_state = WaitFadeOut;
 
+			m_state = WaitFadeOut;
+			
 			Game::Create();
 			GameObjectManager::GetGameObjectManager().AddGameObject(&Game::GetInstance());
 			Game::GetInstance().Init();
 			Fade::GetInstance().StartFadeOut();
-				
+
 		}
 		break;
 	case WaitFadeOut:
 
 		if (!Fade::GetInstance().isExecute())
 		{
-
-
 			GameObjectManager::GetGameObjectManager().DeleteGameObject(&TitleScene::GetInstance());
 			TitleScene::GetInstance().Destroy();
 			//return;

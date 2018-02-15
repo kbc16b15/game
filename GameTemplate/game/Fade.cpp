@@ -39,7 +39,7 @@ void Fade::Update()
 					m_outtimer += m_frameDeltaTime;
 			
 				}
-				else if (m_outtimer < 0.5)
+				else if (m_outtimer < 1)
 				{
 					m_fadetex.Setalfa(1.0f);
 					m_outtimer += m_frameDeltaTime;
@@ -52,8 +52,8 @@ void Fade::Update()
 				}
 				break;
 			case eFadeIn:
-				m_outtimer += m_frameDeltaTime;
-				if (m_outtimer < 0.5) { return; }
+				/*m_outtimer += m_frameDeltaTime;
+				if (m_outtimer < 0.5) { return; }*/
 
 				m_timer += m_frameDeltaTime;
 				if (m_timer < FADE_TIME)
@@ -76,24 +76,25 @@ void Fade::Update()
 			if (!m_fadetex.Getalfa() == 1.0f || !m_fadetex.Getalfa() == 0.0f)
 			{
 				m_fadetex.Initialize("Assets/Sprite/TL.tga", m_fadepos);
-				//CreateSprite();
+				CreateSprite();
 			}
+			
 		}
 	}
 }
 
-void Fade::Draw()
+void Fade::PostDraw()
 {
 	if (m_active)
 	{
 		////g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
-		//g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-		//g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-		//g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+		g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+		g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 		////g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
-		//m_fadetex.Draw(m_sprite);
+		m_fadetex.Draw(m_sprite);
 		////g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
-		//g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+		g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 		//g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
 		//g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
 		////g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);

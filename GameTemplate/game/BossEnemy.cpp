@@ -224,18 +224,21 @@ void BossEnemy::rot()
 	m_rotation.y = 1.0f * s;
 	m_rotation.z = 0.0f * s;
 
-	//m_bulletTime--;
-	//if (m_bulletTime < 0)
-	//{
-	//	Bullet* bullet = BulletManager::GetInstance().CreateBullet(bullet->TANK);
-	//	bullet->Init(m_characterController.GetPosition(), bulletSpeed, bullet->TANK);
-	//	m_bulletTime = m_bulletMaxTime;
+	m_bulletTime--;
+	if (m_bulletTime < 0)
+	{
+		//Bullet* bullet = BulletManager::GetInstance().CreateBullet(bullet->TANK);
+		Bullet* bullet = new Bullet;
+		//bullet->Init(m_characterController.GetPosition(), bulletSpeed, bullet->TANK);
+		BulletManager::GetInstance().AddBullets(bullet);
+		bullet->Start(m_characterController.GetPosition(), m_position, bulletSpeed, bullet->TANK);
+		m_bulletTime = m_bulletMaxTime;
 
-	//	/*Sound* m_beamSound = new Sound();
-	//	m_beamSound->Init("Assets/Sound/beamgun.wav");
-	//	m_beamSound->SetVolume(0.4f);
-	//	m_beamSound->Play(false);*/
-	//}
+		/*Sound* m_beamSound = new Sound();
+		m_beamSound->Init("Assets/Sound/beamgun.wav");
+		m_beamSound->SetVolume(0.4f);
+		m_beamSound->Play(false);*/
+	}
 
 	if (m_rotTime < 0)
 	{

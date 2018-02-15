@@ -2,7 +2,7 @@
 #include "GoalObject.h"
 #include "Player.h"
 #include "game.h"
-
+#include "Map.h"
 //GoalObject::GoalObject()
 //{
 //}
@@ -70,6 +70,8 @@ void GoalObject::Update()
 	if (len < 2.5f||GetAsyncKeyState('N'))
 	{
 		Game::GetInstance().NextStage();
+		//Player::GetInstance().Setpos(Map::GetInstance().GetMapPlayerPos());
+		
 	}
 
 	m_model.UpdateWorldMatrix(m_position, m_rotation, { 1.0f,1.0f,1.0f, });

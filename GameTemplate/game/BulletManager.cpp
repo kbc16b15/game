@@ -14,6 +14,11 @@ BulletManager::BulletManager()
 
 BulletManager::~BulletManager()
 {
+	
+}
+
+void BulletManager::Release()
+{
 	//bulletの消去
 	for (auto bullet : m_bullets) {
 		delete bullet;
@@ -24,23 +29,24 @@ BulletManager::~BulletManager()
 		bulletIt = m_bullets.erase(bulletIt);
 	}
 
-
+	for (auto BulletWeaponnum : m_bulletWeapon)
+	{
+		if (BulletWeaponnum != nullptr)
+		{
+			delete BulletWeaponnum;
+			//BulletWeaponnum = nullptr;
+		}
+	}
 	//bulletWeaponの消去
 	auto BulletWeaponIt = m_bulletWeapon.begin();
 	while (BulletWeaponIt != m_bulletWeapon.end()) {
 
 		BulletWeaponIt = m_bulletWeapon.erase(BulletWeaponIt);
 	}
-	for (auto BulletWeaponnum : m_bulletWeapon)
-	{
-		if (BulletWeaponnum != nullptr)
-		{
-			delete BulletWeaponnum;
-			BulletWeaponnum = nullptr;
-		}
-	}
+
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&BulletHud::GetInstance());
 	BulletHud::GetInstance().Destroy();
+	BulletManager::GetInstance().Destroy();
 }
 
 void BulletManager::Update()
@@ -86,20 +92,20 @@ void BulletManager::Draw()
 	}
 }
 
-Bullet* BulletManager::CreateBullet(int id)
-{
-	//バレットの使いまわしをしたい
-	for (int i=0;i < m_bullets.size();i++)
-	{
-		if (m_bullets[i]->GetDeathflg() && id == m_bullets[i]->GetID()) {
-			return m_bullets[i];//既存のBulletを使用する
-		}
-	}
-	Bullet* newBullet = new Bullet;//新しいBulletの生成
-
-	if (newBullet)
-	{
-		m_bullets.push_back(newBullet);
-	}
-	return newBullet;
-}
+//Bullet* BulletManager::CreateBullet(int id)
+//{
+//	//バレットの使いまわしをしたい
+//	for (int i=0;i < m_bullets.size();i++)
+//	{
+//		if (m_bullets[i]->GetDeathflg() && id == m_bullets[i]->GetID()) {
+//			return m_bullets[i];//既存のBulletを使用する
+//		}
+//	}
+//	Bullet* newBullet = new Bullet;//新しいBulletの生成
+//
+//	if (newBullet)
+//	{
+//		m_bullets.push_back(newBullet);
+//	}
+//	return newBullet;
+//}

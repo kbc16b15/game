@@ -2,6 +2,7 @@
 #include "MoveObject.h"
 #include "Player.h"
 #include "myEngine\Physics\Physics.h"
+#include "Sound.h"
 
 void MoveObject::Init(const char* modelName,D3DXVECTOR3	pos,D3DXQUATERNION	rot)
 {
@@ -65,10 +66,13 @@ void MoveObject::Update()
 
 	if (len <length)
 	{
-		m_open1 = true;
-
+		m_open = true;
+		/*Sound*	m_openSound = new Sound();
+		m_openSound->Init("Assets/Sound/arm-action2.mp3");
+		m_openSound->SetVolume(0.4f);
+		m_openSound->Play(false);*/
 	}
-	if (m_open1)
+	if (m_open)
 	{
 		if (m_maxUp > m_position.y)
 		{

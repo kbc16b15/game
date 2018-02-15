@@ -82,6 +82,11 @@ void ParticleEmitter::Update()
 	//	}
 	//	
 	//}
+
+	/*particleList.erase(
+		std::remove(particleList.begin(), particleList.end(), go),
+		particleList.end()
+	);*/
 	timer += 1.0f / 60.0f;
 	deleteTimer += 1.0f / 60.0f;
 	for (auto p : particleList) {

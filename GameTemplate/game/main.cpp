@@ -192,8 +192,6 @@ void Init()
 	LoadShaders();
 	GameObjectManager::Create();
 	//物理ワールドを初期化
-	//g_physicsWorld = new PhysicsWorld;
-	//PhysicsWorld::GetInstance().Init();
 	PhysicsWorld::Create();
 	PhysicsWorld::GetInstance().Init();
 	//シーンの初期化
@@ -212,11 +210,6 @@ void Init()
 	TitleScene::GetInstance().Init();
 	GameObjectManager::GetGameObjectManager().AddGameObject(&Fade::GetInstance());
 	GameObjectManager::GetGameObjectManager().AddGameObject(&TitleScene::GetInstance());
-	//GameObjectManager::GetGameObjectManager().Init();
-
-	//TitleScene* title = TitleScene();インスタンスの生成を無効にしている？
-
-
 
 }
 //-----------------------------------------------------------------------------
@@ -274,37 +267,30 @@ void Update()
 {
 
 	SoundEngine::GetInstance().Update();
-	GameObjectManager::GetGameObjectManager().Update();
 	Pad::GetInstance().Update();
 	PhysicsWorld::GetInstance().Update();
+	GameObjectManager::GetGameObjectManager().Update();
+
 }
 //-----------------------------------------------------------------------------
 //ゲームが終了するときに呼ばれる処理。
 //-----------------------------------------------------------------------------
 void Terminate()
 {
-
-
-	//delete g_physicsWorld;
 	PhysicsWorld::GetInstance().Destroy();
-	//delete g_physicsWorld;
 	//delete m_primitive;
 	Primitive::GetInstance().Destroy();
 	RenderTarget::MainRenderTargetGetInstance().Destroy();
 	ShadowMap::GetInstance().Destroy();
 	Pad::GetInstance().Destroy();
-
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&Fade::GetInstance());
 	Fade::GetInstance().Destroy();
 	GameObjectManager::GetGameObjectManager().Destroy();
-	//SoundEngine::GetInstance().Release();
+	SoundEngine::GetInstance().Release();
 	copyEffect->Release();
 	g_pd3dDevice->Release();
 	g_pD3D->Release();
-	//delete g_effectManager;
+	delete g_effectManager;
 
 }
 //クローン
-//ボスの倒し方を考える
-//二つ目のマップを考える
-

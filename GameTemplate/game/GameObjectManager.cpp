@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "GameObjectManager.h"
+#include "game.h"
 
 GameObjectManager *GameObjectManager::m_goMgr = NULL;
 
@@ -62,6 +63,8 @@ void GameObjectManager::Update()
 		
 		gu->Update();
 	}
+
+
 }
 
 void GameObjectManager::Draw()
@@ -70,4 +73,15 @@ void GameObjectManager::Draw()
 	{
 		gl->Draw();
 	}
+
+	for (IGameObject* gppd : m_gameObjects)
+	{
+		gppd->PrePostDraw();
+	}
+
+	for (IGameObject* gpd : m_gameObjects)
+	{
+		gpd->PostDraw();
+	}
 }
+

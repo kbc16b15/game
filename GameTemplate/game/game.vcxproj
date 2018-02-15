@@ -201,6 +201,7 @@
     <ClCompile Include="myEngine\System.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RenderTarget.cpp" />
+    <ClCompile Include="SceneChange.cpp" />
     <ClCompile Include="ShadowMap.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
@@ -271,6 +272,7 @@
     <ClInclude Include="myEngine\system.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RenderTarget.h" />
+    <ClInclude Include="SceneChange.h" />
     <ClInclude Include="ShadowMap.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundEngine.h" />

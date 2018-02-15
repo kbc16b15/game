@@ -35,6 +35,7 @@ public:
 	}
 	
 
+
 private:
 	GameObjectManager();
 	static GameObjectManager* m_goMgr;

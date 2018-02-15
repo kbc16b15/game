@@ -88,8 +88,8 @@ private:
 	D3DXVECTOR3			m_scale;				//拡大
 	D3DXQUATERNION		m_rotation;				//回転
 	Light				m_light;				//ライト
-	int					m_bulletTime = 40;		//バレットの発射間隔
-	const int			m_bulletMaxTime = 40;	//バレットの最大発射間隔
+	int					m_bulletTime = 5;		//バレットの発射間隔
+	const int			m_bulletMaxTime = 5;	//バレットの最大発射間隔
 	bool				m_isDead = false;		//死亡処理フラグ
 	bool				m_isDeath = false;		//死亡フラグ
 	int					m_deadTime = 500;		//死亡タイム

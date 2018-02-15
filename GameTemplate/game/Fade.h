@@ -10,7 +10,7 @@ public:
 
 	void Update();
 
-	void Draw();
+	void PostDraw();
 
 	//スプライト生成関数
 	HRESULT CreateSprite();
@@ -23,6 +23,7 @@ public:
 	//!<フェードアウト。
 	void StartFadeOut()
 	{
+		m_fadetex.Setalfa(1.0f);
 		m_timer = 0.0f;
 		m_active = true;
 		m_isExecute = true;
@@ -53,7 +54,6 @@ public:
 	//インスタンスの消去
 	static  void Fade::Destroy()
 	{
-		Fade::GetInstance().SetDeathflg();//登録解除
 		delete m_fade;
 		m_fade = nullptr;
 	}
@@ -73,14 +73,14 @@ private:
 		eFadeIn		//!<フェードイン。
 	};
 	HUD					m_fadetex;						//ブラックアウト用のスプライト。
-	EnState				m_state = eFadeIn;				//フェードの状態
+	EnState				m_state = eFadeOut;				//フェードの状態
 	float				m_timer=1.0f;					//タイマー
 	float				m_outtimer = 0.0f;
 	bool				m_isExecute = false;			//フェードを実行中
 	bool				m_active = false;					//アクティブフラグ
 	LPD3DXSPRITE		m_sprite;						//スプライト
 	const D3DXVECTOR2	m_fadepos = { 680.0f,300.0f };	//座標
-	const float			FADE_TIME = 0.5f;				//フェード時間
+	const float			FADE_TIME = 0.13f;				//フェード時間
 	float				m_frameDeltaTime = 1.0f / 60.0f;//1フレームの時間
 };
 //extern Fade*   g_fade;

@@ -165,8 +165,6 @@ void SoundEngine::Release()
 
 	CoUninitialize();
 
-
-
 }
 /*!
 * @brief	XAudio2のソースボイスを作成。

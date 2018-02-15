@@ -18,6 +18,7 @@
 #include "EnemyManager.h"
 #include "BulletManager.h"
 #include "GameObjectManager.h"
+#include "SceneChange.h"
 //#include "MapInfo.h"
 
 Game *Game::m_game = NULL;
@@ -28,6 +29,14 @@ Game::Game()
 	//SetLight();
 	//srand((unsigned int)time(NULL));
 
+	Player::Create();
+	PlayerHp::Create();
+	BulletManager::Create();
+	EnemyManager::Create();
+	Map::Create();
+	gameCamera::Create();
+	Bloom::Create();
+	SceneChange::Create();
 }
 /*!
  * @brief	デストラクタ。
@@ -36,19 +45,11 @@ Game::~Game()
 {
 	Player::GetInstance().Destroy();
 	PlayerHp::GetInstance().Destroy();
-	EnemyManager::GetInstance().Destroy();
-	BulletManager::GetInstance().Destroy();
+	EnemyManager::GetInstance().Release();
+	BulletManager::GetInstance().Release();
 	Map::GetInstance().Destroy();
 	gameCamera::GetInstance().Destroy();
 	Bloom::GetInstance().Destroy();
-	if (m_isNextTo)
-	{
-		/*Game::Create();
-		Game::GetInstance().Init();
-		Map::GetInstance().SetStage(Map::GetInstance().STAGE2);
-		GameObjectManager::GetGameObjectManager().AddGameObject(&Game::GetInstance());
-		m_isNextTo = false;*/
-	}
 }
 
 void Game::GameRelease()
@@ -62,7 +63,6 @@ void Game::GameRelease()
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&gameCamera::GetInstance());
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&Bloom::GetInstance());
 
-
 	Game::GetInstance().Destroy();
 
 }
@@ -71,25 +71,14 @@ void Game::GameRelease()
  */
 void Game::Init()
 {
-	Player::Create();
-	PlayerHp::Create();
-
-	BulletManager::Create();
-	EnemyManager::Create();
-	Map::Create();
-	gameCamera::Create();
-	Bloom::Create();
-
-
-	//マップを初期化。
-
+	Map::GetInstance().SetStage(SceneChange::GetInstance().GetMapNo());
+	//マップを初期化
 	Map::GetInstance().Init();
 	//プレイヤー初期化
 	Player::GetInstance().Init();
 	PlayerHp::GetInstance().Init();
 	//カメラ初期化。
 	gameCamera::GetInstance().Init();
-
 	//登録
 	GameObjectManager::GetGameObjectManager().AddGameObject(&Player::GetInstance());
 	GameObjectManager::GetGameObjectManager().AddGameObject(&PlayerHp::GetInstance());
@@ -100,13 +89,14 @@ void Game::Init()
 
 	GameObjectManager::GetGameObjectManager().AddGameObject(&Bloom::GetInstance());
 
-	/*Sound**/ /*m_bgmSound = new Sound();
-	m_bgmSound->Init("Assets/Sound/bgm.wav",false);
+	/*m_bgmSound = new Sound();
+	m_bgmSound->Init("Assets/Sound/tw038.mp3",false);
 	m_bgmSound->SetVolume(0.5f);
 	m_bgmSound->Play(true);*/
 	//フェードイン
-	Fade::GetInstance().StartFadeIn();
+	//Fade::GetInstance().StartFadeIn();
 }
+
 /*!
  * @brief	更新。
  */
@@ -116,7 +106,7 @@ void Game::Update()
 	//シャドウ
 	SetShadow();
 	//フェード
-	SceneFade();//ゲームシーンをデリートする可能性があるからUpdateの一番下に置いている
+	SceneFade();//ゲームシーンをデリートする可能性がある?
 
 }
 /*!
@@ -131,8 +121,11 @@ void Game::Draw()
 	//g_pd3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESS);
 	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 
+	if (!m_isLoadEnd)
+	{
+		m_isLoadEnd = true;
+	}
 }
-
 
 void Game::SetShadow()
 {
@@ -148,7 +141,8 @@ void Game::SceneFade()
 	D3DXVECTOR3 toPos = Player::GetInstance().Getpos();
 	switch (m_state) {
 	case WaitFadeIn:
-		if (!Fade::GetInstance().isExecute()) {
+		if (!Fade::GetInstance().isExecute()&&m_isLoadEnd) {
+			Fade::GetInstance().StartFadeIn();
 			m_state = Run;
 		}
 		break;
@@ -166,16 +160,19 @@ void Game::SceneFade()
 		{
 			if (Map::GetInstance().GetStage() == Map::GetInstance().STAGE1)
 			{
+				/*
+				SceneChange::Create();
+				GameObjectManager::GetGameObjectManager().AddGameObject(&SceneChange::GetInstance());
+				*/
 
-				/*Game::Create();
-				Game::GetInstance().Init();
-				Map::GetInstance().SetStage(Map::GetInstance().STAGE2);
-				GameObjectManager::GetGameObjectManager().AddGameObject(&Game::GetInstance());*/
-				m_isNextTo = true;
+				ResultScene::Create();
+				ResultScene::GetInstance().Init();
+				SceneChange::GetInstance().SetChange(true);
+				GameObjectManager::GetGameObjectManager().AddGameObject(&ResultScene::GetInstance());
 				Fade::GetInstance().StartFadeOut();
 				m_state = WaitFadeOut;
 				m_isNext = false;
-
+				//m_isNextTo = true;
 			}
 			else if (Map::GetInstance().GetStage() == Map::GetInstance().STAGE2)
 			{
@@ -183,7 +180,6 @@ void Game::SceneFade()
 				TitleScene::Create();
 				TitleScene::GetInstance().Init();
 				GameObjectManager::GetGameObjectManager().AddGameObject(&TitleScene::GetInstance());
-				//Game::GetInstance().GameRelease();
 				Fade::GetInstance().StartFadeOut();
 				m_state = WaitFadeOut;
 				m_isNext = false;
@@ -191,11 +187,9 @@ void Game::SceneFade()
 		}
 		else if (m_isClear)
 		{
-
 			ClearScene::Create();
 			ClearScene::GetInstance().Init();
 			GameObjectManager::GetGameObjectManager().AddGameObject(&ClearScene::GetInstance());
-			//Game::GetInstance().GameRelease();
 			m_state = WaitFadeOut;
 			Fade::GetInstance().StartFadeOut();
 			m_isClear = false;
@@ -204,8 +198,7 @@ void Game::SceneFade()
 	case WaitFadeOut:
 		if(!Fade::GetInstance().isExecute())
 		{
-			//Fade::GetInstance().StartFadeOut();
-			//Game::GetInstance().GameRelease();
+			Game::GetInstance().GameRelease();
 		}
 		break;
 	default:
