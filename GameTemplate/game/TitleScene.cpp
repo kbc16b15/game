@@ -11,12 +11,13 @@ TitleScene::TitleScene()
 
 TitleScene::~TitleScene()
 {
-	
+	delete m_titleHud;
 }
 
 void TitleScene::Init()
 {
-	m_titleHud.Initialize("Assets/Sprite/T2.tga",m_titlePos);
+	m_titleHud = new HUD;
+	m_titleHud->Initialize("Assets/Sprite/T2.tga",m_titlePos);
 	CreateSprite();
 	//Fade::GetInstance().StartFadeIn();
 }
@@ -24,20 +25,21 @@ void TitleScene::Init()
 void TitleScene::Update()
 {
 	if (m_title == NULL) { return; };
-	m_titleHud.Update();
+	m_titleHud->Update();
 	SceneFade();
 }
 
 
-void TitleScene::Draw()
+void TitleScene::PrePostDraw()
 {
 	//g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	//g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	//g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-
 	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
-	m_titleHud.Draw(m_sprite);
+
+	m_titleHud->Draw(m_sprite);
+
 	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 	//g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
@@ -54,8 +56,16 @@ void TitleScene::SceneFade()
 	case WaitFadeIn:
 		if (!Fade::GetInstance().isExecute())
 		{
-			Fade::GetInstance().StartFadeIn();
-			m_state = Run;
+			if (m_isStart)
+			{
+				m_state = Run;
+				m_isStart = false;
+			}
+			else
+			{
+				Fade::GetInstance().StartFadeIn();
+				m_state = Run;
+			}
 		}
 		break;
 	case Run:
@@ -82,10 +92,6 @@ void TitleScene::SceneFade()
 	default:
 		break;
 	}
-		//break;
-	//default:
-	//	break;
-	//}
 }
 
 HRESULT TitleScene::CreateSprite()

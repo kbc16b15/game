@@ -142,13 +142,12 @@ void trackingEnemy::Move()
 
 		if (m_bulletIntervalTime < 0)
 		{
-			//const float PlayerRadius = 0.3f;
-			D3DXVECTOR3 PlayerPos = Player::GetInstance().Getpos();
+			
 			//PlayerPos.y += PlayerRadius;
 			//Bullet* bullet=BulletManager::GetInstance().CreateBullet(bullet->ENEMY);
 			Bullet* bullet = new Bullet;
 			BulletManager::GetInstance().AddBullets(bullet);
-			bullet->Start(PlayerPos,m_position, bulletSpeed, bullet->ENEMY);
+			bullet->Start(Player::GetInstance().GetMiddlepos(),m_position, bulletSpeed, bullet->ENEMY);
 			m_bulletIntervalTime = m_maxBulletTime;
 
 			Sound* m_beamSound = new Sound();
@@ -164,7 +163,7 @@ void trackingEnemy::Move()
 
 void trackingEnemy::Draw()
 {
-	m_skinModel.Draw(&SpringCamera::GetInstance().GetViewMatrix(), &SpringCamera::GetInstance().GetProjectionMatrix());
+	m_skinModel.Draw(&Camera::GetInstance().GetViewMatrix(), &Camera::GetInstance().GetProjectionMatrix());
 }
 
 void trackingEnemy::Dead()

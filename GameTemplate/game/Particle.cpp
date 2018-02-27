@@ -2,6 +2,7 @@
 #include "Particle.h"
 #include "ParticleEmitter.h"
 #include "Primitive.h"
+
 struct SShapeVertex_PT {
 	float	pos[4];
 	float	uv[2];
@@ -14,42 +15,47 @@ static const D3DVERTEXELEMENT9 scShapeVertex_PT_Element[] = {
 
 Particle::Particle()
 {
-	texture = nullptr;
-	shaderEffect = nullptr;//(nullptr)
+
+	m_texture = nullptr;
+	m_shaderEffect = nullptr;
 }
 
 
 Particle::~Particle()
 {
-	if (shaderEffect != nullptr)
+	if (m_shaderEffect != nullptr)
 	{
-		shaderEffect->Release();
+		m_shaderEffect->Release();
 	}
 
-	if (texture != nullptr) 
+	if (m_texture != nullptr) 
 	{
-		texture->Release();
+		m_texture->Release();
 	}
+	m_primitive.Release();
 }
 
 void Particle::Init(const SParticleEmitParameter& param)
 {
+	
+
+	srand((unsigned int)time(NULL));
 	float halfW = param.w*0.5f;
 	float halfH = param.h*0.5f;
-	float add = ((rand() % 255) - 128) / 128.0f;
+	float addx = ((rand() % 255) - 128) / 128.0f;
+	float addz = ((rand() % 255) - 128) / 128.0f;
+	float addy = ((rand() % 255) - 128) / 128.0f;
 	D3DXVECTOR4 uv(0.0f, 0.0f, 1.0f, 1.0f);
-	moveSpeed = param.initSpeed;
 
-	//position = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_moveSpeed = param.initSpeed;
+	m_position = param.position;//パーティクルの発生座標
 	
-	position = param.position;/*g_game->GetPlayer()->Getpos();*///パーティクルの発生座標
-	
-	position.x += add*2.0f;//パーティクルの発生座標に乱数を加えたい
-	position.z += add*2.0f;
-	position.y += add*2.0f;
-	moveSpeed.x += add*0.0f;//初速度に乱数を加える
-	moveSpeed.y += add*0.0f;
-	moveSpeed.z += add*0.0f;
+	m_position.x += addx*param.Multipos;//パーティクルの発生座標に乱数を加えたい
+	m_position.z += addz*param.Multipos;
+	m_position.y += addy*param.Multipos;
+	m_moveSpeed.x += addx*param.Multispeed.x;//初速度に乱数を加える
+	m_moveSpeed.y += addy*param.Multispeed.y;
+	m_moveSpeed.z += addz*param.Multispeed.z;
 
 	SShapeVertex_PT vb[] = {
 		{
@@ -72,7 +78,7 @@ void Particle::Init(const SParticleEmitParameter& param)
 	short index[]{
 		0,1,2,3
 	};
-	primitive.Create(
+	m_primitive.Create(
 		Primitive::eTriangleStrip,
 		4,
 		sizeof(SShapeVertex_PT),
@@ -83,7 +89,7 @@ void Particle::Init(const SParticleEmitParameter& param)
 		index
 	);
 
-	HRESULT hr = D3DXCreateTextureFromFileA(g_pd3dDevice,param.texturePath,&texture);
+	HRESULT hr = D3DXCreateTextureFromFileA(g_pd3dDevice,param.texturePath,&m_texture);
 
 	LPD3DXBUFFER compileErrorBuffer = NULL;
 	hr = D3DXCreateEffectFromFile(
@@ -97,7 +103,7 @@ void Particle::Init(const SParticleEmitParameter& param)
 		D3DXSHADER_SKIPVALIDATION,
 #endif
 		NULL,
-		&shaderEffect,
+		&m_shaderEffect,
 		&compileErrorBuffer
 	);
 	if (FAILED(hr)) {
@@ -106,25 +112,22 @@ void Particle::Init(const SParticleEmitParameter& param)
 	}
 }
 
-//void Particle::Update(D3DXVECTOR3 pos)
-//{
-//	position = pos;
-//	time--;
-//	float deltaTime = 1.0f / 60.0f;
-//	//moveSpeed.y -= 0.1f;
-//
-//	D3DXVECTOR3 add = moveSpeed*deltaTime;
-//	position += add;
-//}
-
 void Particle::Update() 
 {
-	time--;
+	if (m_isDead) { return; }
+	//time--;
 	float deltaTime = 1.0f / 60.0f;
-	//moveSpeed.y -= 0.1f;
+	m_life -= deltaTime;
+	//m_moveSpeed.y -= 0.1f;
 
-	D3DXVECTOR3 add = moveSpeed*deltaTime;
-	position += add;
+	D3DXVECTOR3 add = m_moveSpeed*deltaTime;
+	m_position += add;
+	if (m_life < 0)
+	{
+		//delete this;
+		m_isDead = true;
+		//delete this;
+	}
 #if 0
 	position.Add(addPos);
 	CMatrix mTrans;
@@ -174,20 +177,22 @@ void Particle::Update()
 #endif
 }
 
-void Particle::Render(const D3DXMATRIX& viewMatrix, const D3DXMATRIX& projMatrix)
+void Particle::HudDraw(/*const D3DXMATRIX& viewMatrix, const D3DXMATRIX& projMatrix*/)
 {
+	if (m_isDead) { return; }
+	g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 	D3DXMATRIX m, mTrans;
-	D3DXMatrixTranslation(&mTrans, position.x, position.y, position.z);
+	D3DXMatrixTranslation(&mTrans, m_position.x, m_position.y, m_position.z);
 	//カメラ行列の逆行列
 	D3DXMATRIX rot;
-	D3DXMatrixInverse(&rot, NULL, &viewMatrix);
+	D3DXMatrixInverse(&rot, NULL, &Camera::GetInstance().GetViewMatrix());
 	//それをワールド行列に乗算する
 	rot.m[3][0] = 0.0f;
 	rot.m[3][1] = 0.0f;
 	rot.m[3][2] = 0.0f;
 	rot.m[3][3] = 1.0f;
 	mTrans = rot*mTrans;
-	m = mTrans*viewMatrix*projMatrix;
+	m = mTrans*Camera::GetInstance().GetViewMatrix()*Camera::GetInstance().GetProjectionMatrix();
 
 	/*g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND,D3DBLEND_SRCALPHA);
@@ -198,27 +203,25 @@ void Particle::Render(const D3DXMATRIX& viewMatrix, const D3DXMATRIX& projMatrix
 	g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND,D3DBLEND_ONE);
 	
 	//shaderEffect->SetTechnique("ColorTexPrimTrans");
-	shaderEffect->SetTechnique("ColorTexPrimAdd");
+	m_shaderEffect->SetTechnique("ColorTexPrimAdd");
 
-	shaderEffect->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
-	shaderEffect->BeginPass(0);
+	m_shaderEffect->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
+	m_shaderEffect->BeginPass(0);
 	g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 
-	shaderEffect->SetValue("g_mWVP", &m, sizeof(m));
-	shaderEffect->SetTexture("g_texture", texture);
-	shaderEffect->CommitChanges();
+	m_shaderEffect->SetValue("g_mWVP", &m, sizeof(m));
+	m_shaderEffect->SetTexture("g_texture", m_texture);
+	m_shaderEffect->CommitChanges();
 
-	g_pd3dDevice->SetStreamSource(0, primitive.GetVertexBuffer()->GetBody(),0, primitive.GetVertexBuffer()->GetStride());
-	g_pd3dDevice->SetIndices(primitive.GetIndexBuffer()->GetBody());
-	g_pd3dDevice->SetVertexDeclaration(primitive.GetVertexDecl());
-	g_pd3dDevice->DrawIndexedPrimitive(primitive.GetD3DPrimitiveType(), 0, 0, primitive.GetNumVertex(), 0, primitive.GetNumPolygon());
-	shaderEffect->EndPass();
-	shaderEffect->End();
+	g_pd3dDevice->SetStreamSource(0, m_primitive.GetVertexBuffer()->GetBody(),0, m_primitive.GetVertexBuffer()->GetStride());
+	g_pd3dDevice->SetIndices(m_primitive.GetIndexBuffer()->GetBody());
+	g_pd3dDevice->SetVertexDeclaration(m_primitive.GetVertexDecl());
+	g_pd3dDevice->DrawIndexedPrimitive(m_primitive.GetD3DPrimitiveType(), 0, 0, m_primitive.GetNumVertex(), 0, m_primitive.GetNumPolygon());
+	m_shaderEffect->EndPass();
+	m_shaderEffect->End();
 	g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
 	g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
 	g_pd3dDevice->SetRenderState(D3DRS_ZENABLE,TRUE);
-
-
 
 }

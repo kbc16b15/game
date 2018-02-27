@@ -43,6 +43,10 @@ void BulletManager::Release()
 
 		BulletWeaponIt = m_bulletWeapon.erase(BulletWeaponIt);
 	}
+	//m_bullets.clear();
+	//m_bullets.shrink_to_fit();
+	//std::vector<int> vec;
+	//m_bullets.swap(m_bullets);
 
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&BulletHud::GetInstance());
 	BulletHud::GetInstance().Destroy();
@@ -65,15 +69,15 @@ void BulletManager::Update()
 
 	BulletHud::GetInstance().Update();
 	//ƒoƒŒƒbƒg‚ÌŽ€–S”»’è
-	//auto bulletIt = m_bullets.begin();
-	//while (bulletIt != m_bullets.end()) {
-	//	if (!(*bulletIt)->GetBulletflg()) {
-	//		bulletIt = m_bullets.erase(bulletIt);
-	//	}
-	//	else {
-	//		bulletIt++;
-	//	}
-	//}
+	auto bulletIt = m_bullets.begin();
+	while (bulletIt != m_bullets.end()) {
+		if ((*bulletIt)->GetDeathflg()){
+			bulletIt = m_bullets.erase(bulletIt);
+		}
+		else {
+			bulletIt++;
+		}
+	}
 }
 
 void BulletManager::Draw()

@@ -17,6 +17,7 @@ gameCamera::~gameCamera()
 
 void gameCamera::Init()
 {
+	Camera::Create();
 	SpringCamera::Create();
 	D3DXVECTOR3 targetPos = Player::GetInstance().Getpos();
 	targetPos.y += 1.0f;
@@ -24,12 +25,11 @@ void gameCamera::Init()
 	cameraPos.y += 5.0f;
 	cameraPos.x += 5.0f;
 	float cameraSpeed = 10.0f;
-	float Far = 1000.0f;
 	SpringCamera::GetInstance().Init(targetPos, cameraPos, cameraSpeed);
 	
-	SpringCamera::GetInstance().SetTarget(Player::GetInstance().Getpos());
+	//SpringCamera::GetInstance().SetTarget(Player::GetInstance().Getpos());
 
-	SpringCamera::GetInstance().SetFar(Far);//奥行きの見える範囲
+	//SpringCamera::GetInstance().SetFar(Far);//奥行きの見える範囲
 	//カメラの注視点を設定する。
 	SpringCamera::GetInstance().SetTarTarget(targetPos);
 	SpringCamera::GetInstance().SetTarPosition(cameraPos);
@@ -204,6 +204,8 @@ void gameCamera::BossEndCamera()
 
 	if (m_endCameraTime < 0) {
 		m_isBossEndCamera = false;
+		//for(int i=0;i<10;i++)
+		//TrackingCamera();
 	}
 }
 

@@ -64,59 +64,10 @@ void Bullet::Start(D3DXVECTOR3 targetpos,D3DXVECTOR3 pos, float speed, CHARA cha
 	m_rotation.y = 1.0f * s;
 	m_rotation.z = 0.0f * s;
 }
-//void Bullet::Init(D3DXVECTOR3 pos, float speed,CHARA chara)
-//{
-//	//ライトを初期化。
-//	m_light.SetDiffuseLightDirection(0, D3DXVECTOR4(0.707f, 0.0f, -0.707f, 1.0f));
-//	m_light.SetDiffuseLightDirection(1, D3DXVECTOR4(-0.707f,0.0f,-0.707f,1.0f));
-//	m_light.SetDiffuseLightDirection(2, D3DXVECTOR4(0.0f,  0.707f, -0.707f,1.0f));
-//	m_light.SetDiffuseLightDirection(3, D3DXVECTOR4(0.0f, -0.707f, -0.707f, 1.0f));
-//
-//	m_light.SetDiffuseLightColor(0, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-//	m_light.SetDiffuseLightColor(1, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-//	m_light.SetDiffuseLightColor(2, D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
-//	m_light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-//	m_light.SetAmbientLight(D3DXVECTOR4(7.8f, 0.8f, 0.8f, 1.0f));
-//
-//	if (m_skinModelData == NULL){
-//		//モデルをロード。
-//		
-//		m_skinModelData = new SkinModelData;
-//		m_skinModelData->LoadModelData("Assets/modelData/Bullet.X", NULL);
-//	}
-//	m_skinModel.Init(m_skinModelData);
-//	m_skinModel.SetLight(&m_light);
-//	
-//	//D3DXQuaternionRotationAxis(&rotation, rotation,-5.0f);
-//	m_direction = { 0.0f, 0.0f, 1.0f };
-//
-//	m_chara = chara;
-//	//m_bulletId = Id;
-//	m_position = pos;
-//	m_bulletSpeed = speed;
-//	m_targetPos= Player::GetInstance().Getpos();
-//
-//
-//	D3DXVECTOR3 toPos = m_targetPos - m_position;
-//	float len = D3DXVec3Length(&toPos);
-//
-//	float angle = atan2f(m_direction.x, m_direction.z);
-//	D3DXVECTOR3 Def;
-//	D3DXVec3Subtract(&Def, &m_position, &m_targetPos);
-//	float s;
-//	float halfAngle = /*angle*/atan2f(-Def.x, -Def.z) * 0.5f;
-//
-//	s = sin(halfAngle);
-//	m_rotation.w = cos(halfAngle);
-//	m_rotation.x = 0.0f * s;
-//	m_rotation.y = 1.0f * s;
-//	m_rotation.z = 0.0f * s;
-//}
-
 
 void Bullet::Update()
 {
-	if (m_bulletDeadflg) { return; };
+	//if (m_bulletDeadflg) { return; };
 	BulletHit();
 	TargetBullet();
 	//skinModel.UpdateWorldMatrix(position,rotation, scale);
@@ -143,10 +94,10 @@ void Bullet::TargetBullet()
 	
 	//移動
 	m_position += toPos*m_bulletSpeed;
-	m_btime--;
+	m_bulletTime--;
 
 	//バレットの寿命
-	if (m_btime <= 0 || len<m_bulletDeathlenge)
+	if (m_bulletTime <= 0 || len<m_bulletDeathlenge)
 	{
 		m_bulletDeadflg = true;
 		//m_btime = 300;
@@ -155,9 +106,8 @@ void Bullet::TargetBullet()
 
 void Bullet::BulletHit()
 {
-	const float			BossRadius = 3.0f;//プレイヤーの半径
-	D3DXVECTOR3 Ppos = Player::GetInstance().Getpos();
-	//Ppos.y += m_playerUp;
+	const float			BossRadius = 3.0f;//ボスの半径
+	const float			PlayerRadius = 0.3f;//プレイヤーの半径
 	//バレットの当たり判定
 	switch (m_chara)
 	{
@@ -165,16 +115,16 @@ void Bullet::BulletHit()
 	case CHARA::TANK:
 		m_light.SetAmbientLight(D3DXVECTOR4(7.8f, 7.8f, 0.8f, 1.0f));
 		m_skinModel.SetLight(&m_light);
-		if (CubeCollision::GetInstance().Cube(m_position, Ppos, m_bulletRadius, m_playerRadius))
+		if (CubeCollision::GetInstance().Cube(m_position, Player::GetInstance().GetMiddlepos(), m_bulletRadius, PlayerRadius))
 		{
 			Player::GetInstance().SetDamage();
 			m_bulletDeadflg = true;
 		}
 		break;
 	case CHARA::ENEMY:
-		//m_light.SetAmbientLight(D3DXVECTOR4(7.8f, 0.8f, 0.8f, 1.0f));
-		//m_skinModel.SetLight(&m_light);
-		if (CubeCollision::GetInstance().Cube(m_position, Ppos, m_bulletRadius, m_playerRadius))
+		m_light.SetAmbientLight(D3DXVECTOR4(7.8f, 0.8f, 0.8f, 1.0f));
+		m_skinModel.SetLight(&m_light);
+		if (CubeCollision::GetInstance().Cube(m_position, Player::GetInstance().GetMiddlepos(), m_bulletRadius, PlayerRadius))
 		{
 			Player::GetInstance().SetDamage();
 			m_bulletDeadflg = true;
@@ -193,8 +143,8 @@ void Bullet::BulletHit()
 
 		break;
 	case CHARA::PLAYER:
-		//m_light.SetAmbientLight(D3DXVECTOR4(0.8f, 0.8f, 8.8f, 1.0f));
-		//m_skinModel.SetLight(&m_light);
+		m_light.SetAmbientLight(D3DXVECTOR4(0.8f, 0.8f, 8.8f, 1.0f));
+		m_skinModel.SetLight(&m_light);
 		if (&BossEnemy::GetInstance() == NULL)
 		{
 			break;
@@ -212,8 +162,8 @@ void Bullet::BulletHit()
 
 void Bullet::Draw()
 {
-	if (m_bulletDeadflg) { return; };
+	//if (m_bulletDeadflg) { return; };
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 
-	m_skinModel.Draw(&SpringCamera::GetInstance().GetViewMatrix(), &SpringCamera::GetInstance().GetProjectionMatrix());
+	m_skinModel.Draw(&Camera::GetInstance().GetViewMatrix(), &Camera::GetInstance().GetProjectionMatrix());
 }

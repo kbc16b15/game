@@ -11,82 +11,82 @@ Fade::Fade()
 
 Fade::~Fade()
 {
+
 }
 
 void Fade::Init()
 {
+	m_isActive = false;
 	m_fadetex.Initialize("Assets/Sprite/TL.tga", m_fadepos);
 	CreateSprite();
-	m_active = false;
+	//m_fadetex.Update();
+	//m_active = false;
+	
 }
 
 void Fade::Update()
 {
-	if (m_active)
+	m_fadetex.Update();
+	if (m_isExecute)
 	{
-		m_fadetex.Update();
-		if (m_isExecute)
+		switch (m_state)
 		{
-			switch (m_state)
+		case eFadeOut:
+
+			m_timer += m_frameDeltaTime;
+			if (m_timer < FADE_TIME)
 			{
-			case eFadeOut:
-
-				m_timer += m_frameDeltaTime;
-				if (m_timer < FADE_TIME)
-				{
-					float t = m_timer / FADE_TIME;
-					m_fadetex.Setalfa(min(t, 1.0f));
-					m_outtimer += m_frameDeltaTime;
+				float t = m_timer / FADE_TIME;
+				m_fadetex.Setalfa(min(t, 1.0f));
+				m_outtimer += m_frameDeltaTime;
 			
-				}
-				else if (m_outtimer < 1)
-				{
-					m_fadetex.Setalfa(1.0f);
-					m_outtimer += m_frameDeltaTime;
-				}
-				else
-				{
-					m_fadetex.Setalfa(1.0f);
-					m_isExecute = false;
-					m_outtimer = 0;
-				}
-				break;
-			case eFadeIn:
-				/*m_outtimer += m_frameDeltaTime;
-				if (m_outtimer < 0.5) { return; }*/
-
-				m_timer += m_frameDeltaTime;
-				if (m_timer < FADE_TIME)
-				{
-					float t = m_timer / FADE_TIME;
-					m_fadetex.Setalfa(max(1.0f - t, 0.0f));
-				}
-				else
-				{
-					m_fadetex.Setalfa(0.0f);
-					m_active = false;
-					m_timer = FADE_TIME;
-					m_isExecute = false;
-					m_outtimer = 0;
-				}
-				break;
-
 			}
-
-			if (!m_fadetex.Getalfa() == 1.0f || !m_fadetex.Getalfa() == 0.0f)
+			else if (m_outtimer < 1)
 			{
-				m_fadetex.Initialize("Assets/Sprite/TL.tga", m_fadepos);
-				CreateSprite();
+				m_fadetex.Setalfa(1.0f);
+				m_outtimer += m_frameDeltaTime;
 			}
-			
+			else
+			{
+				m_fadetex.Setalfa(1.0f);
+				m_isExecute = false;
+				m_outtimer = 0;
+			}
+			break;
+		case eFadeIn:
+			/*m_outtimer += m_frameDeltaTime;
+			if (m_outtimer < 0.5) { return; }*/
+
+			m_timer += m_frameDeltaTime;
+			if (m_timer < FADE_TIME)
+			{
+				float t = m_timer / FADE_TIME;
+				m_fadetex.Setalfa(max(1.0f - t, 0.0f));
+			}
+			else
+			{
+				m_fadetex.Setalfa(0.0f);
+				//m_active = false;
+				m_isActive = false;
+				m_timer = FADE_TIME;
+				m_isExecute = false;
+				m_outtimer = 0;
+			}
+			break;
+
 		}
+
+		if (!m_fadetex.Getalfa() == 1.0f || !m_fadetex.Getalfa() == 0.0f)
+		{
+			m_fadetex.Initialize("Assets/Sprite/TL.tga", m_fadepos);
+			CreateSprite();
+		}
+		
 	}
 }
 
 void Fade::PostDraw()
 {
-	if (m_active)
-	{
 		////g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 		g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 		g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
@@ -98,8 +98,6 @@ void Fade::PostDraw()
 		//g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
 		//g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ZERO);
 		////g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
-	}
-
 		
 }
 

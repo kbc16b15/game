@@ -20,10 +20,13 @@ ResultScene::~ResultScene()
 
 void ResultScene::Init()
 {
-
+	if (SceneChange::GetInstance().GetChange())
+	{
+		return;
+	}
 	m_resultHud.Initialize("Assets/Sprite/TE.tga", m_resultHudPos);
 	CreateSprite();
-
+	
 }
 
 void ResultScene::Update()
@@ -33,7 +36,7 @@ void ResultScene::Update()
 	SceneFade();
 }
 
-void ResultScene::Draw()
+void ResultScene::PrePostDraw()
 {
 	if (SceneChange::GetInstance().GetChange())
 	{
@@ -56,7 +59,11 @@ void ResultScene::SceneFade()
 {
 	switch (m_state) {
 	case WaitFadeIn:
-		if (!Fade::GetInstance().isExecute())
+		if (SceneChange::GetInstance().GetChange())
+		{
+			m_state = Run;
+		}
+		else if (!Fade::GetInstance().isExecute())
 		{
 			m_state = Run;
 			Fade::GetInstance().StartFadeIn();
@@ -71,16 +78,6 @@ void ResultScene::SceneFade()
 			GameObjectManager::GetGameObjectManager().AddGameObject(&TitleScene::GetInstance());
 			m_state = WaitFadeOut;
 			Fade::GetInstance().StartFadeOut();
-		}
-		else if (SceneChange::GetInstance().GetChange()&&SceneChange::GetInstance().GetMapNo()==0)
-		{
-			Game::Create();
-			GameObjectManager::GetGameObjectManager().AddGameObject(&Game::GetInstance());
-			m_state = WaitFadeOut;
-			SceneChange::GetInstance().SetMapNo(1);
-			Game::GetInstance().Init();
-			Fade::GetInstance().StartFadeOut();
-			SceneChange::GetInstance().SetChange(false);
 		}
 		break;
 	case WaitFadeOut:

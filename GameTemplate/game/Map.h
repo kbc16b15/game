@@ -8,7 +8,6 @@ struct SMapChipLocInfo {
 	D3DXQUATERNION	rot;	//回転。
 };
 
-
 //template <typename T>
 class Map :public IGameObject
 {
@@ -19,8 +18,6 @@ public:
 		STAGE1,
 		STAGE2
 	};
-
-
 	//デストラクタ
 	~Map();
 	//初期化
@@ -34,17 +31,16 @@ public:
 	void MapLoad2();
 	void MapCreate(const char* mapName, int no, SMapChipLocInfo Info[]);
 
+	//ステージ
+	int GetStage()
+	{
+		return m_stageNum;
 
+	}
 	//ステージ切り替え
 	void SetStage(int StageNum)
 	{
 		m_stageNum = StageNum;
-
-	}
-	//ステージナンバーの取得
-	int GetStage()
-	{
-		return m_stageNum;
 
 	}
 
@@ -73,7 +69,7 @@ private:
 	//コンストラクタ
 	Map();
 	static Map* m_map;//インスタンス
-	int m_stageNum = STAGE1;
-	std::vector<HealItem*>	m_healList;		//回復アイテム
+	int m_stageNum=STAGE1;
+	std::vector<HealItem*>	m_healList;//回復アイテム
 
 };

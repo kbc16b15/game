@@ -51,17 +51,20 @@ void GameObjectManager::Init()
 {
 	
 	for (IGameObject* go : m_gameObjects) {
-
-		go->Init();
-		
+		if (go->GetActive())
+		{
+			go->Init();
+		}
 	}
 }
 
 void GameObjectManager::Update()
 {
 	for (IGameObject* gu : m_gameObjects) {
-		
-		gu->Update();
+		if (gu->GetActive())
+		{
+			gu->Update();
+		}
 	}
 
 
@@ -71,17 +74,34 @@ void GameObjectManager::Draw()
 {
 	for (IGameObject* gl : m_gameObjects)
 	{
-		gl->Draw();
+		if (gl->GetActive())
+		{
+			gl->Draw();
+		}
+	}
+
+	for (IGameObject* ghd : m_gameObjects)
+	{
+		if (ghd->GetActive())
+		{
+			ghd->HudDraw();
+		}
 	}
 
 	for (IGameObject* gppd : m_gameObjects)
 	{
-		gppd->PrePostDraw();
+		if (gppd->GetActive())
+		{
+			gppd->PrePostDraw();
+		}
 	}
 
 	for (IGameObject* gpd : m_gameObjects)
 	{
-		gpd->PostDraw();
+		if (gpd->GetActive())
+		{
+			gpd->PostDraw();
+		}
 	}
 }
 

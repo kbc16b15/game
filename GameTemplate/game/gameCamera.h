@@ -62,12 +62,12 @@ private:
 	bool			m_isBossStartCamera = false;//ボス戦カメラ
 	int				m_stateCameraTime = 250;	//開始カメラの時間
 	bool			m_isBossEndCamera = false;	//ボス戦カメラ
-	int				m_endCameraTime = 300;		//終了カメラの時間
+	int				m_endCameraTime = 500;		//終了カメラの時間
 	bool			m_isBossCamera = false;
 	bool			m_isRockOn = false;
 	//const float CameraUpLimit = 30.0f;		//カメラ上下限度
 	//bool			m_istoCamera = false;			//カメラを操作中かどうか
-	D3DXVECTOR3 vec = { 0.0f, 0.0f, 0.0f };
+	D3DXVECTOR3 vec = { 0.0f, 0.0f, 0.0f };//照準の座標
 
 
 };

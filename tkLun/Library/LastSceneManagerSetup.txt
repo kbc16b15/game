@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/MapInfo.unity
+- path: Assets/Boss.unity
   isLoaded: 1
   isActive: 1

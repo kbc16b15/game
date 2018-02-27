@@ -20,6 +20,7 @@ ShadowMap::ShadowMap()
 
 ShadowMap::~ShadowMap()
 {
+	m_renderTarget.Release();
 }
 
 void ShadowMap::Init()

@@ -19,7 +19,6 @@
 #include "BulletManager.h"
 #include "GameObjectManager.h"
 #include "SceneChange.h"
-//#include "MapInfo.h"
 
 Game *Game::m_game = NULL;
 
@@ -27,8 +26,8 @@ Game *Game::m_game = NULL;
 Game::Game()
 {
 	//SetLight();
-	//srand((unsigned int)time(NULL));
 
+	SceneChange::Create();
 	Player::Create();
 	PlayerHp::Create();
 	BulletManager::Create();
@@ -36,7 +35,7 @@ Game::Game()
 	Map::Create();
 	gameCamera::Create();
 	Bloom::Create();
-	SceneChange::Create();
+
 }
 /*!
  * @brief	デストラクタ。
@@ -59,7 +58,9 @@ void Game::GameRelease()
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&PlayerHp::GetInstance());
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&EnemyManager::GetInstance());
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&BulletManager::GetInstance());
+	
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&Map::GetInstance());
+	
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&gameCamera::GetInstance());
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&Bloom::GetInstance());
 
@@ -71,12 +72,14 @@ void Game::GameRelease()
  */
 void Game::Init()
 {
-	Map::GetInstance().SetStage(SceneChange::GetInstance().GetMapNo());
-	//マップを初期化
-	Map::GetInstance().Init();
+
 	//プレイヤー初期化
 	Player::GetInstance().Init();
 	PlayerHp::GetInstance().Init();
+	//マップを初期化
+	Map::GetInstance().SetStage(SceneChange::GetInstance().GetMapNo());
+	Map::GetInstance().Init();
+
 	//カメラ初期化。
 	gameCamera::GetInstance().Init();
 	//登録
@@ -115,9 +118,10 @@ void Game::Update()
 void Game::Draw()
 {
 	//物体に遮蔽されているときにだけ描画する
+
 	//g_pd3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_GREATER);
 	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE,FALSE);//Z値を書き込まないようにする
-	//Player::GetInstance().ShadowDraw(&SpringCamera::GetInstance().GetViewMatrix(), &SpringCamera::GetInstance().GetProjectionMatrix(),true, false);
+	//Player::GetInstance().ShadowDraw(&Camera::GetInstance().GetViewMatrix(), &Camera::GetInstance().GetProjectionMatrix(),true, false);
 	//g_pd3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESS);
 	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 
@@ -158,23 +162,21 @@ void Game::SceneFade()
 		}
 		else if (m_isNext)
 		{
-			if (Map::GetInstance().GetStage() == Map::GetInstance().STAGE1)
+			if (Map::GetInstance().GetStage() == Map::GetInstance().STAGE1&&!m_isNextTo)
 			{
-				/*
-				SceneChange::Create();
-				GameObjectManager::GetGameObjectManager().AddGameObject(&SceneChange::GetInstance());
-				*/
-
-				ResultScene::Create();
-				ResultScene::GetInstance().Init();
+				/*GameObjectManager::GetGameObjectManager().DeleteGameObject(&Map::GetInstance());
+				Map::GetInstance().Destroy();*/
+				SceneChange::GetInstance().Init();
 				SceneChange::GetInstance().SetChange(true);
-				GameObjectManager::GetGameObjectManager().AddGameObject(&ResultScene::GetInstance());
+				GameObjectManager::GetGameObjectManager().AddGameObject(&SceneChange::GetInstance());
+				//GameObjectManager::GetGameObjectManager().AddGameObject(&ResultScene::GetInstance());
+				SceneChange::GetInstance().SetMapNo(1);
 				Fade::GetInstance().StartFadeOut();
 				m_state = WaitFadeOut;
 				m_isNext = false;
-				//m_isNextTo = true;
+				m_isNextTo = true;
 			}
-			else if (Map::GetInstance().GetStage() == Map::GetInstance().STAGE2)
+			else if (Map::GetInstance().GetStage() == Map::GetInstance().STAGE2&&!m_isNextTo)
 			{
 
 				TitleScene::Create();
@@ -183,6 +185,7 @@ void Game::SceneFade()
 				Fade::GetInstance().StartFadeOut();
 				m_state = WaitFadeOut;
 				m_isNext = false;
+				m_isNextTo = true;
 			}
 		}
 		else if (m_isClear)
@@ -204,6 +207,4 @@ void Game::SceneFade()
 	default:
 		break;
 	}
-
-	
 }

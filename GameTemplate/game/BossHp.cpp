@@ -30,7 +30,7 @@ void BossHp::Init()
 	}
 }
 
-void BossHp::Draw()
+void BossHp::HudDraw()
 {
 	//ƒ{ƒXHP‚Ì•`‰æ
 	for (int i = 0;i < m_bossHpNum;i++)

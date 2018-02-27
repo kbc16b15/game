@@ -24,6 +24,12 @@ MapManager::~MapManager()
 
 void MapManager::Release()
 {
+	/*auto mapIt = m_mapList.begin();
+	while (m_mapList.size() > 0)
+	{
+		MapObject* temp = m_mapList.erase();
+		delete temp;
+	}*/
 
 	for (auto mapnum : m_mapList)
 	{
@@ -35,7 +41,9 @@ void MapManager::Release()
 		mapIt = m_mapList.erase(mapIt);
 	
 	}
-	
+	//m_mapList.clear();
+
+
 
 	MapManager::GetMapManager().Destroy();
 }

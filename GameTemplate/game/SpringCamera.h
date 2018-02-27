@@ -1,5 +1,5 @@
 #pragma once
-#include "myEngine/Graphics/Camera.h"
+//#include "myEngine/Graphics/Camera.h"
 class SpringCamera
 {
 public:
@@ -29,47 +29,48 @@ public:
 	*/
 	void SetTarget(const D3DXVECTOR3& target)
 	{
-		m_camera.SetLookatPt(target);
+		Camera::GetInstance().SetLookatPt(target);
+		//Camera::GetInstance().SetLookatPt(target);
 	}
 	/*!
 	* @brief	視点を設定。
 	*/
 	void SetPosition(const D3DXVECTOR3 position)
 	{
-		m_camera.SetEyePt(position);
+		//Camera::GetInstance().SetEyePt(position);
 	}
 	/*!
 	* @brief	遠平面を設定。
 	*/
 	void SetFar(float _far)
 	{
-		m_camera.SetFar(_far);
+		//Camera::GetInstance().SetFar(_far);
 	}
 	/*!
 	* @brief	注視点を取得。
 	*/
 	const D3DXVECTOR3& GetTarget()
 	{
-		return m_camera.GetLookatPt();
+		return Camera::GetInstance().GetLookatPt();
 
 	}
 	/*!
 	* @brief	視点を取得。
 	*/
-	const D3DXVECTOR3& GetPosition()
+	/*const D3DXVECTOR3& GetPosition()
 	{
-		return m_camera.GetEyePt();
-	}
+		return Camera::GetInstance().GetEyePt();
+	}*/
 	//プロジェクション行列のゲッター
-	D3DXMATRIX GetProjectionMatrix()
-	{
-		return m_camera.GetProjectionMatrix();
-	}
-	//ビュー行列のゲッター
-	D3DXMATRIX GetViewMatrix()
-	{
-		return m_camera.GetViewMatrix();
-	}
+	//D3DXMATRIX GetProjectionMatrix()
+	//{
+	//	return Camera::GetInstance().GetProjectionMatrix();
+	//}
+	////ビュー行列のゲッター
+	//D3DXMATRIX GetViewMatrix()
+	//{
+	//	return Camera::GetInstance().GetViewMatrix();
+	//}
 	/*!
 	* @brief	更新。
 	*/
@@ -77,10 +78,10 @@ public:
 	/*!
 	* @brief	カメラを取得。
 	*/
-	const Camera* GetCamera()
+	/*const Camera* GetCamera()
 	{
 		return &m_camera;
-	}
+	}*/
 	/*!
 	* @brief	バネの減衰率を設定。
 	*@detail
@@ -156,7 +157,7 @@ public:
 private:
 	SpringCamera();
 	static SpringCamera* m_springCamera;
-	Camera		m_camera;											//カメラ
+	//Camera		m_camera;											//カメラ
 	D3DXVECTOR3	m_target = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//目標となる注視点
 	D3DXVECTOR3	m_position = D3DXVECTOR3(0.0f, 0.0f, 0.0f);			//目標となる視点
 	D3DXVECTOR3	m_targetMoveSpeed = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	//注視点の移動速度

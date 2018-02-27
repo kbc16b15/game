@@ -12,6 +12,25 @@
 #include "SoundEngine.h"
 #include "GameObjectManager.h"
 
+
+//#include "game.h"
+//#include <stdlib.h>
+//#include <time.h>
+//#include "TitleScene.h"
+//#include "ResultScene.h"
+//#include "ClearScene.h"
+//#include "Fade.h"
+//#include "Map.h"
+//#include "ShadowMap.h"
+//#include "bloom.h"
+//#include "gameCamera.h"
+//#include "Player.h"
+//#include "PlayerHp.h"
+//#include "EnemyManager.h"
+//#include "BulletManager.h"
+//#include "GameObjectManager.h"
+//#include "SceneChange.h"
+
 LPD3DXEFFECT	copyEffect;
 //LPD3DXEFFECT	monochromeEffect;			//!<18-4 モノクロフィルターをかけるシェーダー。
 
@@ -36,29 +55,29 @@ void DrawQuadPrimitive()
 	// 頂点ストリーム0番に板ポリの頂点バッファを設定する。
 	g_pd3dDevice->SetStreamSource(
 		0,												//頂点ストリームの番号。
-		Primitive::GetInstance().GetVertexBuffer()->GetBody(),		//頂点バッファ。
+		Primitive::GetMainPrimitive().GetVertexBuffer()->GetBody(),		//頂点バッファ。
 		0,												//頂点バッファの読み込みを開始するオフセットのバイト数。
 														//今回は先頭から読み込むので0でいい。
-		Primitive::GetInstance().GetVertexBuffer()->GetStride()		//頂点一つ分のサイズ。単位はバイト。
+		Primitive::GetMainPrimitive().GetVertexBuffer()->GetStride()		//頂点一つ分のサイズ。単位はバイト。
 	);
 	// インデックスバッファを設定。
-	g_pd3dDevice->SetIndices(Primitive::GetInstance().GetIndexBuffer()->GetBody());
+	g_pd3dDevice->SetIndices(Primitive::GetMainPrimitive().GetIndexBuffer()->GetBody());
 	// 頂点定義を設定する。
-	g_pd3dDevice->SetVertexDeclaration(Primitive::GetInstance().GetVertexDecl());
+	g_pd3dDevice->SetVertexDeclaration(Primitive::GetMainPrimitive().GetVertexDecl());
 	//　準備が整ったので描画。
 	g_pd3dDevice->DrawIndexedPrimitive(
-		Primitive::GetInstance().GetD3DPrimitiveType(),	//プリミティブの種類を指定する。
+		Primitive::GetMainPrimitive().GetD3DPrimitiveType(),	//プリミティブの種類を指定する。
 		0,										//ベース頂点インデックス。0でいい。
 		0,										//最小の頂点インデックス。0でいい。
-		Primitive::GetInstance().GetNumVertex(),			//頂点の数。
+		Primitive::GetMainPrimitive().GetNumVertex(),			//頂点の数。
 		0,										//開始インデックス。0でいい。
-		Primitive::GetInstance().GetNumPolygon()			//プリミティブの数。
+		Primitive::GetMainPrimitive().GetNumPolygon()			//プリミティブの数。
 	);
 }
 
 void InitQuadPrimitive()
 {
-	Primitive::Create();
+	Primitive::CreateMainPrimitive();
 	//m_primitive = new Primitive;
 	//頂点の構造体。
 	struct SVertex {
@@ -95,7 +114,7 @@ void InitQuadPrimitive()
 	};
 	//インデックスバッファ。
 	unsigned short indexBuffer[] = { 0, 1, 2, 3 };
-	Primitive::GetInstance().Create(
+	Primitive::GetMainPrimitive().Create(
 		Primitive::eTriangleStrip,	//今回はプリミティブの種類はトライアングルストリップ。
 		4,							//頂点の数。四角形の板ポリでトライアングルストリップなので４。
 		sizeof(SVertex),			//頂点ストライド。一つの頂点の大きさ。単位はバイト。
@@ -183,7 +202,9 @@ void CopyMainRTToCurrentRT()
 //-----------------------------------------------------------------------------
 void Init()
 {
-	//Camera::Create();
+
+
+
 	CubeCollision::Create();
 	InitMainRenderTarget();
 	//18-3 四角形の板ポリプリミティブを作成。
@@ -207,10 +228,30 @@ void Init()
 	ShadowMap::GetInstance().Init();
 
 	Fade::GetInstance().Init();
+	TitleScene::GetInstance().SetStart(true);
 	TitleScene::GetInstance().Init();
 	GameObjectManager::GetGameObjectManager().AddGameObject(&Fade::GetInstance());
 	GameObjectManager::GetGameObjectManager().AddGameObject(&TitleScene::GetInstance());
 
+
+	//SceneChange::Create();
+	//Player::Create();
+	//PlayerHp::Create();
+	//BulletManager::Create();
+	//EnemyManager::Create();
+	//Map::Create();
+	//gameCamera::Create();
+	//Bloom::Create();
+
+	////プレイヤー初期化
+	//Player::GetInstance().Init();
+	//PlayerHp::GetInstance().Init();
+	////マップを初期化
+	//Map::GetInstance().SetStage(SceneChange::GetInstance().GetMapNo());
+	//Map::GetInstance().Init();
+
+	////カメラ初期化。
+	//gameCamera::GetInstance().Init();
 }
 //-----------------------------------------------------------------------------
 // Name: 描画処理。
@@ -279,7 +320,8 @@ void Terminate()
 {
 	PhysicsWorld::GetInstance().Destroy();
 	//delete m_primitive;
-	Primitive::GetInstance().Destroy();
+	Primitive::GetMainPrimitive().Release();
+	Primitive::GetMainPrimitive().DestroyMainPrimitive();
 	RenderTarget::MainRenderTargetGetInstance().Destroy();
 	ShadowMap::GetInstance().Destroy();
 	Pad::GetInstance().Destroy();
@@ -290,7 +332,8 @@ void Terminate()
 	copyEffect->Release();
 	g_pd3dDevice->Release();
 	g_pD3D->Release();
-	delete g_effectManager;
+	g_effectManager->Release();
+	//delete g_effectManager;
 
 }
 //クローン

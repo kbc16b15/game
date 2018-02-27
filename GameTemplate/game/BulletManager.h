@@ -17,7 +17,7 @@ public:
 
 	void Release();
 	//バレットの生成
-	Bullet* CreateBullet(int id);
+	//Bullet* CreateBullet(int id);
 	//弾の追加
 	void AddBullets(Bullet* bullet)
 	{
@@ -57,12 +57,12 @@ public:
 		m_bulletManager = nullptr;
 	}
 private:
-
 	//コンストラクタ
 	BulletManager();
 	static BulletManager* m_bulletManager;//インスタンス
 private:
 	std::vector<Bullet*>	m_bullets;			//バレットのリスト
+	//std::unique_ptr<Bullet*> m_bullets;
 	std::list<BulletWeapon*> m_bulletWeapon;		//バレット
 };
 

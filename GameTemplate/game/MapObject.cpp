@@ -76,7 +76,7 @@ void MapObject::Draw()
 {
 	m_model.SetReciveflg(true);
 
-	m_model.Draw(&SpringCamera::GetInstance().GetViewMatrix(), &SpringCamera::GetInstance().GetProjectionMatrix());
+	m_model.Draw(&Camera::GetInstance().GetViewMatrix(), &Camera::GetInstance().GetProjectionMatrix());
 
 }
 

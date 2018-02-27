@@ -120,9 +120,10 @@ SpringCamera::~SpringCamera()
 
 void SpringCamera::Init(const D3DXVECTOR3& target, const D3DXVECTOR3& position, float maxMoveSpeed)
 {
-	m_camera.Init();
-	m_camera.SetLookatPt(target);
-	m_camera.SetEyePt(position);
+
+	Camera::GetInstance().Init();
+	Camera::GetInstance().SetLookatPt(target);
+	Camera::GetInstance().SetEyePt(position);
 	m_target = target;
 	m_position = position;
 	m_targetMoveSpeed = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -134,15 +135,15 @@ void SpringCamera::Init(const D3DXVECTOR3& target, const D3DXVECTOR3& position, 
 void SpringCamera::UpdateSpringCamera()
 {
 	m_dampingRate = CalcSpringScalar(m_targetDampingRate, m_dampingRate, m_dampingRateVel);
-	D3DXVECTOR3 target = CalcSpringVector(m_camera.GetLookatPt(), m_target, m_targetMoveSpeed, m_maxMoveSpeed, m_dampingRate);
-	D3DXVECTOR3 position = CalcSpringVector(m_camera.GetEyePt(), m_position, m_positionMoveSpeed, m_maxMoveSpeed, m_dampingRate);
-	m_camera.SetLookatPt(target);
-	m_camera.SetEyePt(position);
+	D3DXVECTOR3 target = CalcSpringVector(Camera::GetInstance().GetLookatPt(), m_target, m_targetMoveSpeed, m_maxMoveSpeed, m_dampingRate);
+	D3DXVECTOR3 position = CalcSpringVector(Camera::GetInstance().GetEyePt(), m_position, m_positionMoveSpeed, m_maxMoveSpeed, m_dampingRate);
+	Camera::GetInstance().SetLookatPt(target);
+	Camera::GetInstance().SetEyePt(position);
 }
 
 void SpringCamera::Update()
 {
 	UpdateSpringCamera();
 	//UpdateCamera();
-	m_camera.Update();
+	Camera::GetInstance().Update();
 }

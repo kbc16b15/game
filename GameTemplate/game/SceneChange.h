@@ -1,10 +1,10 @@
 #pragma once
 #include "IGameObject.h"
+#include "HUD.h"
 class SceneChange :
 	public IGameObject
 {
 public:
-
 	//デストラクタ
 	~SceneChange();
 	//初期化
@@ -12,8 +12,9 @@ public:
 	//更新
 	void Update();
 	//描画
-	//void Draw();
+	void PrePostDraw();
 
+	void SceneFade();
 	int GetMapNo()
 	{
 		return m_stageNo;
@@ -33,6 +34,9 @@ public:
 	{
 		return m_isChange;
 	}
+
+	//スプライト生成関数
+	HRESULT CreateSprite();
 	//インスタンスの取得
 	static SceneChange& GetInstance()
 	{
@@ -60,5 +64,15 @@ private:
 	static SceneChange* m_change;//インスタンス
 	int m_stageNo = 0;
 	bool m_isChange=false;
+
+	enum EState {
+		WaitFadeIn,
+		Run,
+		WaitFadeOut
+	};
+	EState				m_state = WaitFadeIn;				//フェード
+	LPD3DXSPRITE		m_sprite;							//スプライト
+	HUD					m_changeHud;						//タイトル画像
+	const D3DXVECTOR2	m_changePos = { 595.0f,400.0f };	//タイトル画像の座標
 };
 

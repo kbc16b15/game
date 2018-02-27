@@ -146,7 +146,7 @@ namespace {
 					}
 				}
 
-				pEffect->SetVector("Eye", (D3DXVECTOR4*)&SpringCamera::GetInstance().GetPosition());
+				pEffect->SetVector("Eye", (D3DXVECTOR4*)&Camera::GetInstance().GetEyePt());
 				
 				pEffect->SetMatrixArray("g_mWorldMatrixArray", g_pBoneMatrices, pMeshContainer->NumPaletteEntries);
 				pEffect->SetInt("g_numBone", pMeshContainer->NumInfl);
@@ -293,7 +293,19 @@ SkinModel::SkinModel() :
 }
 SkinModel::~SkinModel()
 {
+	//pEffect->Release();
+	//skinModelData->Release();
+	////法線マップ開放
+	//if (normalMap != NULL)
+	//{
+	//	normalMap->Release();
+	//}
 
+	////スペキュラマップ開放
+	//if (specularMap != NULL)
+	//{
+	//	specularMap->Release();
+	//}
 }
 
 void SkinModel::Init(SkinModelData* modelData)

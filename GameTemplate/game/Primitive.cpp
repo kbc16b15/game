@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Primitive.h"
 
-Primitive *Primitive::m_primitive = NULL;
+Primitive *Primitive::m_mainPrimitive = NULL;
 
 Primitive::Primitive() :
 	m_numVertex(0),

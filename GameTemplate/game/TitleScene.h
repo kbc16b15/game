@@ -11,13 +11,16 @@ public:
 	//更新
 	void Update();
 	//描画
-	void Draw();
+	void PrePostDraw();
 	//フェード
 	void SceneFade();
 	//スプライト生成関数
 	HRESULT CreateSprite();
-
-	
+	//初回だけフェードインをなくす
+	void SetStart(bool start)
+	{
+		m_isStart = start;
+	}
 	//インスタンスの取得
 	static TitleScene& GetInstance()
 	{
@@ -51,8 +54,8 @@ private:
 	};
 	EState				m_state = WaitFadeIn;			//フェード
 	LPD3DXSPRITE		m_sprite;						//スプライト
-	HUD					m_titleHud;						//タイトル画像
+	HUD*				m_titleHud;						//タイトル画像
 	const D3DXVECTOR2	m_titlePos = { 595.0f,400.0f };	//タイトル画像の座標
-	
+	bool				m_isStart = false;
 };
 

@@ -12,12 +12,16 @@ struct SParticleEmitParameter
 	float w;
 	float h;
 	float intervalTime;
+	//float deleteTime;
+	float Multipos;
+	D3DXVECTOR3 Multispeed;;
+	//D3DXVECTOR3 random;
 	D3DXVECTOR3 initSpeed;
 	D3DXVECTOR3 position;
 };
 
 //パーティクルの発生器
-class ParticleEmitter
+class ParticleEmitter:public IGameObject
 {
 public:
 	//コンストラクタ
@@ -27,12 +31,15 @@ public:
 
 	void Init(const SParticleEmitParameter& param);
 	void Update();
-	void Update(D3DXVECTOR3 pos);
-	void Render(const D3DXMATRIX& viewMatrix, const D3DXMATRIX& projMatrix);
+	void HudDraw(/*const D3DXMATRIX& viewMatrix, const D3DXMATRIX& projMatrix*/);
+	void SetPos(D3DXVECTOR3 pos)
+	{
+		m_param.position = pos;
+	}
 private:
-	SParticleEmitParameter	param;
-	std::list<Particle*>	particleList;
-	float					timer;
-	float					deleteTimer;
+	SParticleEmitParameter	m_param;
+	std::list<Particle*>	m_particleList;
+	float					m_timer;
+	float					m_deleteTimer;
 };
 

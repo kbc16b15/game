@@ -71,28 +71,28 @@ public:
 	}
 
 	//インスタンスの生成
-	static void Primitive::Create()
+	static void Primitive::CreateMainPrimitive()
 	{
-		if (!m_primitive)
+		if (!m_mainPrimitive)
 		{
-			m_primitive = new Primitive;
+			m_mainPrimitive = new Primitive;
 		}
 
 	}
 	//インスタンスの取得
-	static Primitive& GetInstance()
+	static Primitive& GetMainPrimitive()
 	{
-		return *m_primitive;
+		return *m_mainPrimitive;
 	}
 
 	//インスタンスの消去
-	static  void Primitive::Destroy()
+	static  void Primitive::DestroyMainPrimitive()
 	{
-		delete m_primitive;
-		m_primitive = nullptr;
+		delete m_mainPrimitive;
+		m_mainPrimitive = nullptr;
 	}
 private:
-	static Primitive* m_primitive;//インスタンス
+	static Primitive*	m_mainPrimitive;//インスタンス
 private:
 	int					m_numVertex;
 	int					m_vertexStride;

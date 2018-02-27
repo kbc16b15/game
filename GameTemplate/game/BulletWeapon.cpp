@@ -140,11 +140,13 @@ void BulletWeapon::Move()
 		if (/*m_bulletIntervalTime < 0 && Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonB) ||*/m_bulletIntervalTime < 0 && Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonB)||GetAsyncKeyState('B') && m_isPlayerBulletCamera)
 		{
 
-			/*Bullet* bullet = BulletManager::GetInstance().CreateBullet(bullet->PLAYER);
+			//Bullet* bullet = BulletManager::GetInstance().CreateBullet(bullet->PLAYER);
+			Bullet* bullet = new Bullet;
+			BulletManager::GetInstance().AddBullets(bullet);
 			D3DXVECTOR3 BulletPos=m_position;
 			BulletPos.y += 1.0f;
-			bullet->Start(SpringCamera::GetInstance().GetTarTarget(), BulletPos, bulletSpeed, bullet->PLAYER);
-			m_bulletIntervalTime = m_maxBulletTime;*/
+			bullet->Start(Camera::GetInstance().GetLookatPt(), BulletPos, bulletSpeed, bullet->PLAYER);
+			m_bulletIntervalTime = m_maxBulletTime;
 
 			Sound* m_beamSound = new Sound();
 			m_beamSound->Init("Assets/Sound/beamgun.wav");
@@ -182,7 +184,7 @@ void BulletWeapon::Move()
 
 void BulletWeapon::Draw()
 {
-	m_skinModel.Draw(&SpringCamera::GetInstance().GetViewMatrix(), &SpringCamera::GetInstance().GetProjectionMatrix());
+	m_skinModel.Draw(&Camera::GetInstance().GetViewMatrix(), &Camera::GetInstance().GetProjectionMatrix());
 }
 
 void BulletWeapon::Dead()

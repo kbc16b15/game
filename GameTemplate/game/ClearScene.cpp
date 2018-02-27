@@ -5,6 +5,8 @@
 #include "Fade.h"
 #include "HUD.h"
 #include "GameObjectManager.h"
+#include "BossEnemy.h"
+#include "BossHp.h"
 
 ClearScene *ClearScene::m_clear = NULL;
 
@@ -19,7 +21,15 @@ ClearScene::~ClearScene()
 
 void ClearScene::Init()
 {
-	Fade::GetInstance().StartFadeIn();
+	if (BossEnemy::GetInstance().GetDeathflg())
+	{
+		GameObjectManager::GetGameObjectManager().DeleteGameObject(&BossEnemy::GetInstance());
+		GameObjectManager::GetGameObjectManager().DeleteGameObject(&BossHp::GetInstance());
+		BossEnemy::GetInstance().Destroy();
+		BossHp::GetInstance().Destroy();
+
+	}
+
 	m_clearHud.Initialize("Assets/Sprite/T2.tga", m_clearHudPos);
 	CreateSprite();
 
@@ -32,7 +42,7 @@ void ClearScene::Update()
 	SceneFade();
 }
 
-void ClearScene::Draw()
+void ClearScene::PrePostDraw()
 {
 
 	m_clearHud.Draw(m_sprite);
@@ -45,6 +55,7 @@ void ClearScene::SceneFade()
 	case WaitFadeIn:
 		if (!Fade::GetInstance().isExecute())
 		{
+			Fade::GetInstance().StartFadeIn();
 			m_state = Run;
 		}
 		break;

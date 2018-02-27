@@ -96,4 +96,5 @@ private:
 	ID3DXAnimationController*   pAnimController;	//アニメーションコントローラ。
 	bool						m_isClone;//クローン
 	const SkinModelData*		m_original = nullptr;
+	bool						m_isLoadEnd = false;
 };

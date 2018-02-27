@@ -2,6 +2,15 @@
 #include "HealItem.h"
 #include "Player.h"
 #include "PlayerHp.h"
+#include "myEngine\Physics\Physics.h"
+
+HealItem::~HealItem()
+{
+	PhysicsWorld::GetInstance().RemoveRigidBody(&m_rigidBody);
+	m_rigidBody.Release();
+	m_modelData.Release();
+}
+
 
 void HealItem::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 {

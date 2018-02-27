@@ -67,6 +67,16 @@ Bloom::Bloom()
 
 Bloom::~Bloom()
 {
+	luminanceRenderTarget.Release();
+	for (int i = 0;i < MGF_DOWN_SAMPLE_COUNT;i++)
+	{
+		//横ブラー
+		downSamplingRenderTarget[i][0].Release();
+		//縦ブラー
+		downSamplingRenderTarget[i][1].Release();
+	}
+	//effect->Release();
+	
 }
 
 void Bloom::Update() 

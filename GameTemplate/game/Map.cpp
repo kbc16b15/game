@@ -15,18 +15,21 @@
 //#include "Sky.h"
 #include "HealItem.h"
 #include "BossEnemy.h"
+#include "BossHp.h"
 #include "Player.h"
 #include "MapManager.h"
 #include "EnemyManager.h"
-#include "BossHp.h"
+#include "SceneChange.h"
 #include "GameObjectManager.h"
 #include "BulletWeapon.h"
 #include "BulletManager.h"
+#include "game.h"
 
 Map *Map::m_map = NULL;
 
 SMapChipLocInfo Info1[] = {
 #include "locationinfo7.h"
+//#include "Boss.h"
 };
 
 SMapChipLocInfo Info2[] = {
@@ -89,6 +92,7 @@ void Map::Update()
 			HealIt++;
 		}
 	}
+	
 }
 
 void Map::Draw()
@@ -173,12 +177,15 @@ void Map::MapLoad1()
 
 			GameObjectManager::GetGameObjectManager().AddGameObject(&BossEnemy::GetInstance());
 			GameObjectManager::GetGameObjectManager().AddGameObject(&BossHp::GetInstance());
-
+		}
+		else if (strcmp(Info1[i].modelName, "Weapon") == 0)
+		{
+			BulletWeapon* weapon = new BulletWeapon;
+			BulletManager::GetInstance().AddBulletWeapon(weapon);
+			weapon->Init(Info1[i].pos, Info1[i].rot);
 		}
 		else if (strcmp(Info1[i].modelName, "Drone") == 0)//エネミーの位置設定
 		{
-			/*BulletWeapon* weapon = new BulletWeapon;
-			BulletManager::GetInstance().AddBulletWeapon(weapon);*/
 			trackingEnemy* Tenemy = new trackingEnemy;
 			EnemyManager::GetInstance().AddTrackingEnemy(Tenemy);
 			Tenemy->Init(Info1[i].pos, Info1[i].rot);
@@ -258,7 +265,12 @@ void Map::MapLoad2()
 
 			GameObjectManager::GetGameObjectManager().AddGameObject(&BossEnemy::GetInstance());
 			GameObjectManager::GetGameObjectManager().AddGameObject(&BossHp::GetInstance());
-
+		}
+		else if (strcmp(Info1[i].modelName, "Weapon") == 0)
+		{
+			BulletWeapon* weapon = new BulletWeapon;
+			BulletManager::GetInstance().AddBulletWeapon(weapon);
+			weapon->Init(Info1[i].pos, Info1[i].rot);
 		}
 		else if (strcmp(Info2[i].modelName, "Drone") == 0)//エネミーの位置設定
 		{

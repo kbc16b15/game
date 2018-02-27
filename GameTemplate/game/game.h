@@ -40,12 +40,12 @@ public:
 		return m_isEnd;
 	}
 	//次のステージへ
-	void NextStage()
+	void StageNext()
 	{
 		m_isNext = true;
 	}
 	//クリア
-	void ClearStage()
+	void StageClear()
 	{
 		m_isClear = true;
 	}

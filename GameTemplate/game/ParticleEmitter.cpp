@@ -2,7 +2,7 @@
 #include "ParticleEmitter.h"
 #include "Particle.h"
 
-using namespace std;
+//using namespace std;
 
 ParticleEmitter::ParticleEmitter()
 {
@@ -11,93 +11,88 @@ ParticleEmitter::ParticleEmitter()
 
 ParticleEmitter::~ParticleEmitter()
 {
+
+	for (auto particleListnum : m_particleList)//消去ー
+	{
+		delete particleListnum;
+
+	}
+	auto particleListIt = m_particleList.begin();
+	while (particleListIt != m_particleList.end()) {
+			
+			particleListIt = m_particleList.erase(particleListIt);
+		
+	}
+
+	
 }
 
 void ParticleEmitter::Init(const SParticleEmitParameter& param)
 {
-	this->param = param;
-	timer = 0.0f;
-}
-
-void ParticleEmitter::Update(D3DXVECTOR3 pos)
-{
-	param.position = pos;
-
-	if (timer >= param.intervalTime) {//一定時間経過したら
-									  //パーティクルを生成
-		Particle* p = new Particle;
-		p->Init(param);
-		timer = 0.0f;
-		particleList.push_back(p);
-	}
-
-	timer += 1.0f / 60.0f;
-	deleteTimer += 1.0f / 60.0f;
-	for (auto p : particleList) {
-		p->Update();
-	}
+	this->m_param = param;
+	m_timer = 0.0f;
 }
 
 void ParticleEmitter::Update()
 {
 	
-	if (timer >= param.intervalTime) {//一定時間経過したら
+	if (m_timer >= m_param.intervalTime) {//一定時間経過したら
 		//パーティクルを生成
 		Particle* p = new Particle;
-		p->Init(param);
-		timer = 0.0f;
-		particleList.push_back(p);
-
+		p->Init(m_param);
+		m_timer = 0.0f;
+		m_particleList.push_back(p);
 
 	}
 
-	//if (p != nullptr) {
-	//	delete p;//パーティクルの消去
-	//	p = nullptr;
-	//	deleteTime = 100.0f;
-	//}	
-
-	//auto pIt = particleList.begin();
-	//for (auto pt : particleList) {
-	//	if (pt->gettime() <= 0.0f)
-	//	{
-	//		delete pt;
-	//		pIt = particleList.erase(pIt);
-	//		deleteTimer = 0.0f;
-	//		
-
-	//	}
-	//	else {
-	//		pIt++;
-	//	}
-	//}
-
 	
-	//while (pIt != particleList.end()) {
-	//	if (deleteTimer >= param.deleteTime) {
-	//		/*for (auto pt : particleList) {
-	//			delete pt;
-	//		}*/
-	//		
-	//	}
-	//	
-	//}
+	for (auto particleListnum : m_particleList)
+	{
+		if (particleListnum->GetDead())
+		{
+			delete particleListnum;
+		}
+	}
 
-	/*particleList.erase(
-		std::remove(particleList.begin(), particleList.end(), go),
-		particleList.end()
-	);*/
-	timer += 1.0f / 60.0f;
-	deleteTimer += 1.0f / 60.0f;
-	for (auto p : particleList) {
+	auto particleListIt = m_particleList.begin();
+	while (particleListIt != m_particleList.end()) {
+		if ((*particleListIt)->GetDead()){
+			
+			//delete &particleListIt;
+			particleListIt = m_particleList.erase(particleListIt);
+			
+		}
+		else {
+			particleListIt++;
+		}
+	}
+
+	//auto func = [](Particle* particle)->bool {//匿名関数。
+	//	if (particle->GetDead()) {
+	//		return true;
+	//	}
+	//	return false;
+	//};
+
+	/*m_particleList.erase(
+	remove_if(m_particleList.begin(), m_particleList.end(), func),
+	m_particleList.end());*/
+
+	//プレイヤーに回復パーティクル？
+
+	m_timer += 1.0f / 60.0f;
+	m_deleteTimer += 1.0f / 60.0f;
+	for (auto p : m_particleList)
+	{
 		p->Update();
 	}
 }
 
-void ParticleEmitter::Render(const D3DXMATRIX& viewMatrix, const D3DXMATRIX& projMatrix)
+void ParticleEmitter::HudDraw(/*const D3DXMATRIX& viewMatrix, const D3DXMATRIX& projMatrix*/)
 {
-	for (auto p : particleList)
+	for (auto p : m_particleList)
 	{
-		p->Render(viewMatrix, projMatrix);
+		//p->Draw(viewMatrix, projMatrix);
+		p->HudDraw();
 	}
 }

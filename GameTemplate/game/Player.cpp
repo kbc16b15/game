@@ -89,14 +89,15 @@ void Player::Init(){
 	D3DXCreateTextureFromFileA(g_pd3dDevice,
 		"Assets/modelData/SpaceSpecularMap.png",
 		&m_specularMap);
-	//法線マップ
-	D3DXCreateTextureFromFileA(g_pd3dDevice,
-		"Assets/modelData/SpaceNormalMap.png",
-		&m_normalMap);
 	if (m_specularMap != NULL)
 	{
 		m_skinModel.SetSpecularMap(m_specularMap);
 	}
+	//法線マップ
+	D3DXCreateTextureFromFileA(g_pd3dDevice,
+		"Assets/modelData/SpaceNormalMap.png",
+		&m_normalMap);
+	
 
 	if (m_normalMap != NULL)
 	{
@@ -125,7 +126,8 @@ void Player::Update()
 	this->move();
 	Setangle();
 	
-
+	m_middlePosition = m_characterController.GetPosition();
+	m_middlePosition.y += m_charaRadius;
 	m_skinModel.UpdateWorldMatrix(m_characterController.GetPosition(), m_rotation, m_scale);
 
 }
@@ -243,7 +245,7 @@ void Player::Setangle()
 	LocalDir.x = Pad::GetInstance().GetLStickXF();
 	LocalDir.z = Pad::GetInstance().GetLStickYF();
 	D3DXMATRIX m_inv;
-	D3DXMatrixInverse(&m_inv, NULL, &SpringCamera::GetInstance().GetViewMatrix());//逆行列を計算
+	D3DXMatrixInverse(&m_inv, NULL, &Camera::GetInstance().GetViewMatrix());//逆行列を計算
 
 	D3DXVECTOR3 cameraZ;
 	cameraZ.y = 0.0f;
@@ -291,9 +293,22 @@ void Player::Setangle()
 	//		//Grotflg = false;
 	//	}
 	//}
+
+	//if (m_isGaraviey)//X軸キャラ反転
+	//{
+	//	float s;
+	//	float halfAngle = /*atan2f(moveDir.x, moveDir.z)*/atan(10.0f);
+	//	s = sin(halfAngle);
+	//	m_rotation.w = cos(halfAngle);
+	//	m_rotation.x = 1.0f * s;
+	//	m_rotation.y = 0.0f * s;
+	//	m_rotation.z = 0.0f * s;
+	//}
+
+
 	if ((moveDir.x*moveDir.x + moveDir.y*moveDir.y + moveDir.z*moveDir.z) > 0.0001f&&!m_isMoveStop&&!m_isDead)
 	{
-		//回転させる　※
+		//回転させる　※Y軸回り?
 		float s;
 		float halfAngle = atan2f(moveDir.x, moveDir.z) * 0.5f;
 		s = sin(halfAngle);
@@ -459,5 +474,5 @@ void Player::ShadowDraw(D3DXMATRIX* viewM, D3DXMATRIX* projM, bool shadowCaster,
 void Player::Draw()
 {
 
-	ShadowDraw(&SpringCamera::GetInstance().GetViewMatrix(), &SpringCamera::GetInstance().GetProjectionMatrix(),false,false);
+	ShadowDraw(&Camera::GetInstance().GetViewMatrix(), &Camera::GetInstance().GetProjectionMatrix(),false,false);
 }

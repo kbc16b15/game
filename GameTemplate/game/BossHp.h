@@ -10,7 +10,7 @@ public:
 
 	void Init();
 	void Update() {};
-	void Draw();
+	void HudDraw();
 
 	//スプライト生成関数
 	HRESULT CreateSprite();

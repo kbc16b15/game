@@ -27,10 +27,15 @@ public:
 	void Setjump();
 	//キャラの慣性の設定
 	void SetSubmove();
-	//プレイヤー座標の取得
-	D3DXVECTOR3 Getpos()
+	//プレイヤー座標の取得（足元？）
+	const D3DXVECTOR3 Getpos()
 	{
 		return m_characterController.GetPosition();
+	}
+	//プレイヤー中心座標の取得
+	const D3DXVECTOR3 GetMiddlepos()
+	{
+		return m_middlePosition;
 	}
 	//座標セット
 	void Setpos(D3DXVECTOR3 pos)
@@ -56,7 +61,7 @@ public:
 		return m_addDir;
 	}
 	//プレイヤーの移動速度の取得
-	D3DXVECTOR3 GetSpeed()
+	const D3DXVECTOR3 GetSpeed()
 	{
 		return m_characterController.GetMoveSpeed();
 	}
@@ -68,7 +73,7 @@ public:
 	}
 
 	//移動しているかの取得
-	bool GetPlayerMove()
+	const bool GetPlayerMove()
 	{
 		return m_ismove;
 	}
@@ -78,7 +83,7 @@ public:
 		return m_isDeathflg;
 	}
 	//プレイヤーが地面についているかどうか
-	bool GetGround()
+	const bool GetGround()
 	{
 		return m_characterController.IsOnGround();
 	}
@@ -138,6 +143,7 @@ private:
 	Animation			m_animation;			//アニメーション
 	CharacterController	m_characterController;	//キャラクターコントローラー
 	D3DXVECTOR3			m_position;				//座標
+	D3DXVECTOR3			m_middlePosition;		//プレイヤーの中心座標
 	D3DXVECTOR3			m_scale;				//拡大
 	D3DXQUATERNION		m_rotation;				//回転
 	const float			m_charaRadius=0.6f;		//キャラの半径
@@ -146,11 +152,12 @@ private:
 	D3DXVECTOR3			m_dir;					//かんせー
 	LPDIRECT3DTEXTURE9	m_normalMap = NULL;		//法線マップ
 	LPDIRECT3DTEXTURE9	m_specularMap = NULL;	//スペキュラマップ
-	LPDIRECT3DTEXTURE9	m_normalMapGun = NULL;		//法線マップ
-	LPDIRECT3DTEXTURE9	m_specularMapGun = NULL;	//スペキュラマップ
+	//LPDIRECT3DTEXTURE9	m_normalMapGun = NULL;		//法線マップ
+	//LPDIRECT3DTEXTURE9	m_specularMapGun = NULL;	//スペキュラマップ
 	float				m_gravity = -10.0f;		//重力
 	bool				m_isMoveStop = false;		//移動と回転をなくす
 	bool				m_isMax = false;		//最大移動速度のフラグ
+	//bool				m_isGaraviey = true;
 	int					m_addDir = 0;			//加算方向
 
 };

@@ -633,32 +633,33 @@ void SkinModelData::Release()
 	frameRoot = nullptr;
 }
 
-//void SkinModelData::DeleteSkeleton(LPD3DXFRAME frame)
-//{
-//	if(!frame){
-//		return;
-//	}
-//	if (frame->pMeshContainer != NULL)
-//	{
-//		//メッシュコンテナがある
-//		InnerDestroyMeshContainer(frame->pMeshContainer);
-//	}
-//
-//	if (frame->pFrameSibling != NULL)
-//	{
-//		DeleteSkeleton(frame->pFrameSibling);
-//	}
-//
-//	if (frame->pFrameFirstChild != NULL)
-//	{
-//		DeleteSkeleton(frame->pFrameFirstChild);
-//	}
-//	SAFE_DELETE_ARRAY(frame->pFrameFirstChild);
-//	SAFE_DELETE(frame);
-//}
+void SkinModelData::DeleteSkeleton(LPD3DXFRAME frame)
+{
+	if(!frame){
+		return;
+	}
+	if (frame->pMeshContainer != NULL)
+	{
+		//メッシュコンテナがある
+		InnerDestroyMeshContainer(frame->pMeshContainer);
+	}
+
+	if (frame->pFrameSibling != NULL)
+	{
+		DeleteSkeleton(frame->pFrameSibling);
+	}
+
+	if (frame->pFrameFirstChild != NULL)
+	{
+		DeleteSkeleton(frame->pFrameFirstChild);
+	}
+	SAFE_DELETE_ARRAY(frame->pFrameFirstChild);
+	SAFE_DELETE(frame);
+}
 
 void SkinModelData::LoadModelData( const char* filePath, Animation* anim )
 {
+	m_isLoadEnd = false;
 	Release();
 	AllocateHierarchy alloc;
 	HRESULT hr = D3DXLoadMeshHierarchyFromX(
@@ -674,77 +675,75 @@ void SkinModelData::LoadModelData( const char* filePath, Animation* anim )
 	if (anim && pAnimController) {
 		anim->Init(pAnimController);
 	}
+	m_isLoadEnd = true;
 }
 
-//void SkinModelData::CloneSkeleton(LPD3DXFRAME& dstFrame, LPD3DXFRAME srcFrame)
-//{
-//	//名前と行列をコピー
-//	dstFrame->TransformationMatrix = srcFrame->TransformationMatrix;
-//	//メッシュコンテナをコピー。メッシュは使いまわす
-//	if(srcFrame->pMeshContainer){
-//		dstFrame->pMeshContainer = new D3DXMESHCONTAINER_DERIVED;
-//		memcpy(dstFrame->pMeshContainer, srcFrame->pMeshContainer,sizeof(D3DXMESHCONTAINER_DERIVED));
-//	}
-//	else
-//	{
-//		dstFrame->pMeshContainer = NULL;
-//	}
-//	AllocateName(srcFrame->Name, &dstFrame->Name);
-//
-//	if(srcFrame->pFrameSibling!=nullptr){
-//		dstFrame->pFrameSibling = new D3DXFRAME_DERIVED;
-//		dstFrame->pFrameSibling->pFrameFirstChild = nullptr;
-//		dstFrame->pFrameSibling->pFrameSibling = nullptr;
-//		dstFrame->pFrameSibling->pMeshContainer = nullptr;
-//		CloneSkeleton(dstFrame->pFrameSibling, srcFrame->pFrameSibling);
-//	}
-//
-//	if(srcFrame->pFrameFirstChild!=nullptr){
-//		dstFrame->pFrameFirstChild = new D3DXFRAME_DERIVED;
-//		dstFrame->pFrameFirstChild->pFrameFirstChild = nullptr;
-//		dstFrame->pFrameFirstChild->pFrameSibling = nullptr;
-//		dstFrame->pFrameFirstChild->pMeshContainer = nullptr;
-//	
-//		CloneSkeleton(dstFrame->pFrameFirstChild, srcFrame->pFrameFirstChild);
-//	}
-//}
-//
-//void SkinModelData::DeleteCloneSkeleton(LPD3DXFRAME frame)
-//{
-//	if(frame->pFrameSibling!=nullptr){
-//	
-//		DeleteCloneSkeleton(frame->pFrameSibling);
-//	}
-//	if(frame->pFrameFirstChild!=nullptr){
-//	
-//		DeleteCloneSkeleton(frame->pFrameFirstChild);
-//	}
-//	D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)(frame->pMeshContainer);
-//
-//	if(pMeshContainer){
-//		SAFE_DELETE_ARRAY(pMeshContainer->ppBoneMatrixPtrs);
-//		SAFE_DELETE(pMeshContainer);
-//	}
-//	SAFE_DELETE_ARRAY(frame->Name);
-//	SAFE_DELETE(frame);
-//}
-//
-//void SkinModelData::CloneModelData(const SkinModelData& modelData, Animation* anim)
-//{
-//	m_original = &modelData;
-//	//スケルトンの複製を作成
-//	m_isClone = true;
-//	frameRoot = new D3DXFRAME_DERIVED;
-//	frameRoot->pFrameFirstChild = nullptr;
-//	frameRoot->pFrameSibling = nullptr;
-//	frameRoot->pMeshContainer = nullptr;
-//	CloneSkeleton(frameRoot,modelData.frameRoot);
-//	//m_materials = modelData.m_materials;
-//	SetupBoneMatrixPointers(frameRoot, frameRoot);
-//
-//
-//
-//}
+void SkinModelData::CloneSkeleton(LPD3DXFRAME& dstFrame, LPD3DXFRAME srcFrame)
+{
+	//名前と行列をコピー
+	dstFrame->TransformationMatrix = srcFrame->TransformationMatrix;
+	//メッシュコンテナをコピー。メッシュは使いまわす
+	if(srcFrame->pMeshContainer){
+		dstFrame->pMeshContainer = new D3DXMESHCONTAINER_DERIVED;
+		memcpy(dstFrame->pMeshContainer, srcFrame->pMeshContainer,sizeof(D3DXMESHCONTAINER_DERIVED));
+	}
+	else
+	{
+		dstFrame->pMeshContainer = NULL;
+	}
+	AllocateName(srcFrame->Name, &dstFrame->Name);
+
+	if(srcFrame->pFrameSibling!=nullptr){
+		dstFrame->pFrameSibling = new D3DXFRAME_DERIVED;
+		dstFrame->pFrameSibling->pFrameFirstChild = nullptr;
+		dstFrame->pFrameSibling->pFrameSibling = nullptr;
+		dstFrame->pFrameSibling->pMeshContainer = nullptr;
+		CloneSkeleton(dstFrame->pFrameSibling, srcFrame->pFrameSibling);
+	}
+
+	if(srcFrame->pFrameFirstChild!=nullptr){
+		dstFrame->pFrameFirstChild = new D3DXFRAME_DERIVED;
+		dstFrame->pFrameFirstChild->pFrameFirstChild = nullptr;
+		dstFrame->pFrameFirstChild->pFrameSibling = nullptr;
+		dstFrame->pFrameFirstChild->pMeshContainer = nullptr;
+	
+		CloneSkeleton(dstFrame->pFrameFirstChild, srcFrame->pFrameFirstChild);
+	}
+}
+
+void SkinModelData::DeleteCloneSkeleton(LPD3DXFRAME frame)
+{
+	if(frame->pFrameSibling!=nullptr){
+	
+		DeleteCloneSkeleton(frame->pFrameSibling);
+	}
+	if(frame->pFrameFirstChild!=nullptr){
+	
+		DeleteCloneSkeleton(frame->pFrameFirstChild);
+	}
+	D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)(frame->pMeshContainer);
+
+	if(pMeshContainer){
+		SAFE_DELETE_ARRAY(pMeshContainer->ppBoneMatrixPtrs);
+		SAFE_DELETE(pMeshContainer);
+	}
+	SAFE_DELETE_ARRAY(frame->Name);
+	SAFE_DELETE(frame);
+}
+
+void SkinModelData::CloneModelData(const SkinModelData& modelData, Animation* anim)
+{
+	m_original = &modelData;
+	//スケルトンの複製を作成
+	m_isClone = true;
+	frameRoot = new D3DXFRAME_DERIVED;
+	frameRoot->pFrameFirstChild = nullptr;
+	frameRoot->pFrameSibling = nullptr;
+	frameRoot->pMeshContainer = nullptr;
+	CloneSkeleton(frameRoot,modelData.frameRoot);
+	//m_materials = modelData.m_materials;
+	SetupBoneMatrixPointers(frameRoot, frameRoot);
+}
 
 void SkinModelData::UpdateBoneMatrix(const D3DXMATRIX& matWorld)
 {

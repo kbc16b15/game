@@ -10,7 +10,7 @@ Sprite::Sprite()
 Sprite::~Sprite()
 {
 
-
+	
 }
 
 void Sprite::Initialize(LPCTSTR modelName,D3DXVECTOR2 position)
@@ -27,13 +27,16 @@ void Sprite::Initialize(LPCTSTR modelName,D3DXVECTOR2 position)
 void Sprite::SetupMatrices()
 {
 
-	D3DXMatrixIdentity(&m_transformMatrix);
+	/*D3DXMatrixIdentity(&m_transformMatrix);
 	D3DXMatrixTransformation2D(&m_transformMatrix, NULL, 0.0f, &m_scale, NULL, D3DXToRadian(m_angle), &m_position);
-
+*/
 }
 
 void Sprite::Draw(LPD3DXSPRITE pSprite)
 {
+	D3DXMatrixIdentity(&m_transformMatrix);
+	D3DXMatrixTransformation2D(&m_transformMatrix, NULL, 0.0f, &m_scale, NULL, D3DXToRadian(m_angle), &m_position);
+
 	//m_Sprite = pSprite;
 	pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 	pSprite->SetTransform(&m_transformMatrix);

@@ -11,7 +11,7 @@ public:
 	//更新
 	void Update();
 	//描画
-	void Draw();
+	void PrePostDraw();
 	//フェード
 	void SceneFade();
 	//スプライト生成関数

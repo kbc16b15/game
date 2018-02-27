@@ -6,15 +6,17 @@
 
 class Camera {
 private:
-	//static Camera*			m_camera;
-	D3DXMATRIX				viewMatrix;			//!<ビュー行列。カメラ行列とも言う。
-	D3DXMATRIX				projectionMatrix;	//!<プロジェクション行列。ビュー空間から射影空間に変換する行列。
-	D3DXVECTOR3				vEyePt;				//!<カメラクラスを作るためのヒント。カメラの視点。この辺りはメンバ変数に変更する。
-	D3DXVECTOR3				vLookatPt;			//!<カメラクラスを作るためのヒント。カメラの注視点。どこを見ているかという情報。この辺りはメンバ変数に変更する。
-	D3DXVECTOR3				vUpVec;				//!<カメラクラスを作るためのヒント。カメラの上方向。基本的にY方向でかまわない。基本的には・・・。この辺りはメンバ変数に変更する。
-	float					Far;				//!<遠平面。
-	float					Near;				//!<近平面。
-	float					aspect;				//!<アスペクト比
+	static Camera*			m_camera;
+	D3DXMATRIX				m_viewMatrix;			//!<ビュー行列。カメラ行列とも言う。
+	D3DXMATRIX				m_projectionMatrix;		//!<プロジェクション行列。ビュー空間から射影空間に変換する行列。
+	D3DXMATRIX				m_viewMatrixInv;		//カメラ行列の逆行列
+	D3DXMATRIX				m_rotationMatrix;		//回転行列
+	D3DXVECTOR3				m_vEyePt;				//!<カメラクラスを作るためのヒント。カメラの視点。この辺りはメンバ変数に変更する。
+	D3DXVECTOR3				m_vLookatPt;			//!<カメラクラスを作るためのヒント。カメラの注視点。どこを見ているかという情報。この辺りはメンバ変数に変更する。
+	D3DXVECTOR3				m_vUpVec;				//!<カメラクラスを作るためのヒント。カメラの上方向。基本的にY方向でかまわない。基本的には・・・。この辺りはメンバ変数に変更する。
+	float					m_far;					//!<遠平面。
+	float					m_near;					//!<近平面。
+	float					m_aspect;				//!<アスペクト比
 public:
 	/*!
 	 *@brief	コンストラクタ。
@@ -97,24 +99,38 @@ public:
 	 */
 	void Init();
 
-	////インスタンスの生成
-	//static void Camera::Create()
-	//{
-	//	if (!m_camera)
-	//	{
-	//		m_camera = new Camera;
-	//	}
-	//}
+	//カメラの回転行列を取得。
+	const D3DXMATRIX& GetCameraRotation() const
+	{
+		return m_rotationMatrix;
+	}
 
-	////インスタンスの消去
-	//static  void Camera::Destroy()
-	//{
-	//	delete m_camera;
-	//	m_camera = nullptr;
-	//}
-	////インスタンスの取得
-	//static Camera& GetInstance()
-	//{
-	//	return *m_camera;
-	//}
+	//ビュー行列の逆行列を取得。
+	
+	const D3DXMATRIX& GetViewMatrixInv() const
+	{
+		return m_viewMatrixInv;
+	}
+
+	//インスタンスの生成
+	static void Camera::Create()
+	{
+		if (!m_camera)
+		{
+			m_camera = new Camera;
+		}
+	}
+
+	//インスタンスの消去
+	static  void Camera::Destroy()
+	{
+		delete m_camera;
+		m_camera = nullptr;
+	}
+	//インスタンスの取得
+	static Camera& GetInstance()
+	{
+		return *m_camera;
+	}
+
 };
