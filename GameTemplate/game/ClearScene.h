@@ -51,6 +51,6 @@ private:
 	EState				m_state = Run;
 	LPD3DXSPRITE		m_sprite;						//スプライト
 	HUD					m_clearHud;							//タイトル画像
-	const D3DXVECTOR2	m_clearHudPos = { 595.0f,400.0f };	//タイトル画像の座標
+	const D3DXVECTOR2	m_clearHudPos = { 620.0f,400.0f };	//タイトル画像の座標
 };
 

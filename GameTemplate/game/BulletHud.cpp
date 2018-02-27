@@ -17,14 +17,14 @@ BulletHud::~BulletHud()
 void BulletHud::Init()
 {
 	m_rock.Setalfa(0.5f);
-	m_rock.Initialize("Assets/Sprite/Rock.jpg", D3DXVECTOR2(0.0f, 0.0f));
+	m_rock.Initialize("Assets/Sprite/Rock.jpg", m_rockPos);
 	CreateSprite();
 }
 
 void BulletHud::Update()
 {
 
-	m_rock.Initialize("Assets/Sprite/Rock.jpg", m_rockPos);
+	//m_rock.Initialize("Assets/Sprite/Rock.jpg", m_rockPos);
 	//const float playerBulletSpeed = 0.3f;
 	//if (GetAsyncKeyState('Z') || Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonRB1) && m_isGun)
 	//{
@@ -33,7 +33,7 @@ void BulletHud::Update()
 	//	Bullet* bullet = BulletManager::GetInstance().CreateBullet(bullet->PLAYER);
 	//	bullet->Start({ Cpos.x ,Cpos.y ,Cpos.z }, playerBulletSpeed, bullet->PLAYER);
 	//}
-	m_rock.Update();
+	//m_rock.Update();
 }
 
 void BulletHud::Draw()

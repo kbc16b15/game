@@ -20,6 +20,9 @@
 #include "GameObjectManager.h"
 #include "SceneChange.h"
 
+#include "BossEnemy.h"
+#include "BossHp.h"
+
 Game *Game::m_game = NULL;
 
 //コンストラクタ。
@@ -42,6 +45,7 @@ Game::Game()
  */
 Game::~Game()
 {
+	m_bgmSound->Release();
 	Player::GetInstance().Destroy();
 	PlayerHp::GetInstance().Destroy();
 	EnemyManager::GetInstance().Release();
@@ -72,7 +76,11 @@ void Game::GameRelease()
  */
 void Game::Init()
 {
-
+	const float SoundVolume = 0.2f;
+	m_bgmSound = new Sound();
+	m_bgmSound->Init("Assets/Sound/アバタール.wav", false);
+	m_bgmSound->SetVolume(SoundVolume);
+	m_bgmSound->Play(true);
 	//プレイヤー初期化
 	Player::GetInstance().Init();
 	PlayerHp::GetInstance().Init();
@@ -92,12 +100,6 @@ void Game::Init()
 
 	GameObjectManager::GetGameObjectManager().AddGameObject(&Bloom::GetInstance());
 
-	/*m_bgmSound = new Sound();
-	m_bgmSound->Init("Assets/Sound/tw038.mp3",false);
-	m_bgmSound->SetVolume(0.5f);
-	m_bgmSound->Play(true);*/
-	//フェードイン
-	//Fade::GetInstance().StartFadeIn();
 }
 
 /*!
@@ -105,7 +107,7 @@ void Game::Init()
  */
 void Game::Update()
 {
-	//m_bgmSound->Update();
+	m_bgmSound->Update();
 	//シャドウ
 	SetShadow();
 	//フェード
@@ -151,8 +153,16 @@ void Game::SceneFade()
 		}
 		break;
 	case Run:
-		if (Player::GetInstance().PlayerDeath() || toPos.y < m_killZ) {
-
+		//ゲームオーバー
+		if (Player::GetInstance().GetPlayerDeath() || toPos.y < m_killZ) {
+			Player::GetInstance().SetDeath(true);
+			if (&BossEnemy::GetInstance()!=NULL)
+			{
+				GameObjectManager::GetGameObjectManager().DeleteGameObject(&BossEnemy::GetInstance());
+				GameObjectManager::GetGameObjectManager().DeleteGameObject(&BossHp::GetInstance());
+				BossHp::GetInstance().Destroy();
+				BossEnemy::GetInstance().Destroy();
+			}
 			m_isEnd = true;
 			ResultScene::Create();
 			ResultScene::GetInstance().Init();
@@ -160,6 +170,7 @@ void Game::SceneFade()
 			Fade::GetInstance().StartFadeOut();
 			m_state = WaitFadeOut;
 		}
+		//次のステージへ
 		else if (m_isNext)
 		{
 			if (Map::GetInstance().GetStage() == Map::GetInstance().STAGE1&&!m_isNextTo)
@@ -170,7 +181,7 @@ void Game::SceneFade()
 				SceneChange::GetInstance().SetChange(true);
 				GameObjectManager::GetGameObjectManager().AddGameObject(&SceneChange::GetInstance());
 				//GameObjectManager::GetGameObjectManager().AddGameObject(&ResultScene::GetInstance());
-				SceneChange::GetInstance().SetMapNo(1);
+				SceneChange::GetInstance().SetMapNo(1);//マップ切り替え
 				Fade::GetInstance().StartFadeOut();
 				m_state = WaitFadeOut;
 				m_isNext = false;
@@ -188,13 +199,14 @@ void Game::SceneFade()
 				m_isNextTo = true;
 			}
 		}
+		//クリアシーン
 		else if (m_isClear)
 		{
 			ClearScene::Create();
 			ClearScene::GetInstance().Init();
 			GameObjectManager::GetGameObjectManager().AddGameObject(&ClearScene::GetInstance());
 			m_state = WaitFadeOut;
-			Fade::GetInstance().StartFadeOut();
+			//Fade::GetInstance().StartFadeOut();
 			m_isClear = false;
 		}
 		break;

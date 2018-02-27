@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "BossEnemy.h"
 #include "game.h"
-#include "Sound.h"
 #include "Player.h"
 #include "BossHp.h"
 #include "BulletManager.h"
@@ -23,8 +22,48 @@ BossEnemy::BossEnemy()
 
 BossEnemy::~BossEnemy()
 {
+	Release();
+	//m_skinModelData.Release();
+	//delete m_particleEmitter;
+	////m_characterController.RemoveRigidBoby();
+	////法線マップ開放
+	//if (m_normalMap != NULL)
+	//{
+	//	m_normalMap->Release();
+	//}
+
+	////スペキュラマップ開放
+	//if (m_specularMap != NULL)
+	//{
+	//	m_specularMap->Release();
+	//}
+	////サウンドの開放
+	//if (m_bgmSound != nullptr)
+	//{
+	//	m_bgmSound->Release();
+	//	m_bgmSound = nullptr;
+	//}
+	//if (m_beamSound != nullptr)
+	//{
+	//	m_beamSound->Release();
+	//	m_beamSound = nullptr;
+	//}
+	//if (m_groundSound != nullptr)
+	//{
+	//	m_groundSound->Release();
+	//	m_groundSound = nullptr;
+	//}
+}
+
+void BossEnemy::Release()
+{
 	m_skinModelData.Release();
-	delete m_particleEmitter;
+	m_characterController.RemoveRigidBoby();
+	if (m_particleEmitter != nullptr)
+	{
+		delete m_particleEmitter;
+		m_particleEmitter = nullptr;
+	}
 	//m_characterController.RemoveRigidBoby();
 	//法線マップ開放
 	if (m_normalMap != NULL)
@@ -37,6 +76,22 @@ BossEnemy::~BossEnemy()
 	{
 		m_specularMap->Release();
 	}
+	//サウンドの開放
+	if (m_bgmSound != nullptr)
+	{
+		m_bgmSound->Release();
+		m_bgmSound = nullptr;
+	}
+	if (m_beamSound != nullptr)
+	{
+		m_beamSound->Release();
+		m_beamSound = nullptr;
+	}
+	if (m_groundSound != nullptr)
+	{
+		m_groundSound->Release();
+		m_groundSound = nullptr;
+	}
 }
 
 void BossEnemy::Init(D3DXVECTOR3	pos, D3DXQUATERNION	rot)
@@ -44,11 +99,14 @@ void BossEnemy::Init(D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 	
 	const float			charaHeight = 2.4f;	//キャラの高さ
 	const float			charaGravity = -2.0f;//キャラの重力
-
-	Sound*	GroundSound = new Sound();
+	const float			BgmVolume = 0.2f;
+	m_groundSound = new Sound;
+	m_beamSound = new Sound;
+	m_breakSound = new Sound;
+	/*Sound*	GroundSound = new Sound();
 	GroundSound->Init("Assets/Sound/jump.wav");
 	GroundSound->SetVolume(0.0f);
-	GroundSound->Play(false);
+	GroundSound->Play(false);*/
 
 	m_sPos = pos;
 	m_position = pos;
@@ -108,12 +166,18 @@ void BossEnemy::Init(D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 	m_particleEmitter = new ParticleEmitter;
 	m_particleEmitter->Init(param);
 
+	Game::GetInstance().BgmStop();
+	m_bgmSound = new Sound();
+	m_bgmSound->Init("Assets/Sound/Edge of the galaxy.wav", false);
+	m_bgmSound->SetVolume(BgmVolume);
+	m_bgmSound->Play(true);
 }
 
 void BossEnemy::Update()
 {
 	if (&BossEnemy::GetInstance() == NULL || &BossHp::GetInstance() == NULL) { return; };
 	if (m_isDeath) { return; }
+	m_bgmSound->Update();
 	//エネミーの移動処理
 	m_moveSpeed = m_characterController.GetMoveSpeed();
 	m_moveSpeed.x = 0.0f;
@@ -123,6 +187,7 @@ void BossEnemy::Update()
 	{
 	case BossEnemyState::START:
 		StartState();
+		Damege();
 		break;
 	case BossEnemyState::STAND:
 		Stand();
@@ -139,10 +204,25 @@ void BossEnemy::Update()
 	case BossEnemyState::DEAD:
 		Dead();
 		if (m_isAddParticle) { break; }
+	
 		GameObjectManager::GetGameObjectManager().AddGameObject(m_particleEmitter);
 		m_isAddParticle = true;
+		break;
 	default:
 		break;
+	}
+
+	if (m_groundSound != nullptr) {
+		if (m_groundSound->IsPlaying())
+			m_groundSound->Update();
+	}
+	if (m_beamSound != nullptr) {
+		if (m_beamSound->IsPlaying())
+			m_beamSound->Update();
+	}
+	if (m_breakSound != nullptr) {
+		if (m_breakSound->IsPlaying())
+			m_breakSound->Update();
 	}
 
 	m_middlePosition = m_characterController.GetPosition();
@@ -155,6 +235,7 @@ void BossEnemy::Update()
 
 	m_skinModel.UpdateWorldMatrix(m_characterController.GetPosition(), m_rotation, m_scale);
 
+
 }
 
 void BossEnemy::StartState()
@@ -164,14 +245,15 @@ void BossEnemy::StartState()
 
 	if (m_characterController.IsOnGround() && m_startTime<0) {
 
-		Sound*	GroundSound = new Sound();
-		GroundSound->Init("Assets/Sound/jump.wav");
-		GroundSound->SetVolume(0.4f);
-		GroundSound->Play(false);
+		//Sound*	GroundSound = new Sound();
+		const float GroundVolume = 0.7f;
+		m_groundSound->Init("Assets/Sound/sceneswitch2.wav");
+		m_groundSound->SetVolume(GroundVolume);
+		m_groundSound->Play(false);
 		m_bossState = BossEnemyState::STAND;
 		//gameCamera::GetInstance().BossCamera();
 		m_characterController.SetGravity(0.0f);
-		m_characterController.RemoveRigidBoby();
+		//m_characterController.RemoveRigidBoby();
 	}
 
 }
@@ -192,7 +274,6 @@ void BossEnemy::Stand()
 
 void BossEnemy::Attack()
 {
-	//if (m_isDead) { return; }
 	m_attackTime--;
 	const float		bossRadius = 3.0f;	//ボスの半径
 	const float		playerRadius = 0.3f;//プレイヤーの半径
@@ -203,7 +284,7 @@ void BossEnemy::Attack()
 	float len=D3DXVec3Length(&toPos);
 	if (!m_isTarget) {
 		m_targetPos = Player::GetInstance().Getpos() - m_characterController.GetPosition();
-		m_targetLen = D3DXVec3Length(&m_targetPos);
+		//m_targetLen = D3DXVec3Length(&m_targetPos);
 		m_targetPos.y = 0.0f;
 		m_targetPos.x *= bossAddMove;
 		m_targetPos.z *= bossAddMove;
@@ -254,10 +335,10 @@ void BossEnemy::rot()
 		bullet->Start(Player::GetInstance().GetMiddlepos(), m_characterController.GetPosition(), bulletSpeed, bullet->TANK);
 		m_bulletTime = m_bulletMaxTime;
 		const float beamSoundVolume = 0.3f;
-		Sound* beamSound = new Sound();
-		beamSound->Init("Assets/Sound/beamgun.wav");
-		beamSound->SetVolume(beamSoundVolume);
-		beamSound->Play(false);
+		//Sound* beamSound = new Sound();
+		m_beamSound->Init("Assets/Sound/beamgun.wav");
+		m_beamSound->SetVolume(beamSoundVolume);
+		m_beamSound->Play(false);
 	}
 
 	if (m_rotTime < 0)
@@ -282,31 +363,38 @@ void BossEnemy::Damege()
 		m_isDamageflg = false;
 	}
 	m_damageTime--;
-
-	//ゲームが終了したら
-	if (Game::GetInstance().GetGameEnd())
-	{
-		m_isDeath = true;
-	}
 	//HPがなくなったら死亡
 	if (BossHp::GetInstance().GetBossHp() <= 0)
 	{
+
 		m_bossState = BossEnemyState::DEAD;
 	}
+	
+	if (Player::GetInstance().GetPlayerDeath())
+	{
+		m_isDeath = true;
+	}
+
 
 
 }
 
 void BossEnemy::Draw()
 {
-
+	if (m_isDeath) { return; }
 	//シャドウをセット
 	//m_skinModel.SetCasterflg(true);
 	//m_skinModel.SetReciveflg(true);
 	if (m_damageTime > 0 && (m_damageTime % 2) == 0) { return; }
 	m_skinModel.Draw(&Camera::GetInstance().GetViewMatrix(), &Camera::GetInstance().GetProjectionMatrix());
 
-	
+	//ゲームが終了したら
+	if (Game::GetInstance().GetGameEnd())
+	{
+		m_isDeath = true;
+		Release();
+		return;
+	}
 }
 
 void BossEnemy::HudDraw()
@@ -328,19 +416,19 @@ void BossEnemy::Dead()
 	if (m_soundBreakTime<0)
 	{
 		const float m_soundBreakVolume=0.4f;
-		Sound*	BreakSound = new Sound();
-		BreakSound->Init("Assets/Sound/sceneswitch2.wav");
-		BreakSound->SetVolume(m_soundBreakVolume);
-		BreakSound->Play(false);
+		//Sound*	BreakSound = new Sound();
+		m_breakSound->Init("Assets/Sound/sceneswitch2.wav");
+		m_breakSound->SetVolume(m_soundBreakVolume);
+		m_breakSound->Play(false);
 		m_soundBreakTime = m_soundBreakMaxTime;
 	}
 	//gameCamera::GetInstance().BossEndCamera();
 	if (m_deadTime < 0) 
 	{ 
-		Game::GetInstance().StageClear();
+		Game::GetInstance().StageClear(true);
 		GameObjectManager::GetGameObjectManager().DeleteGameObject(m_particleEmitter);
-		
+
 		m_isActive = false;
-		//m_isDeath = true;
+		m_isDeath = true;
 	}
 }

@@ -21,24 +21,24 @@ ClearScene::~ClearScene()
 
 void ClearScene::Init()
 {
+	Fade::GetInstance().StartFadeIn();
 	if (BossEnemy::GetInstance().GetDeathflg())
 	{
 		GameObjectManager::GetGameObjectManager().DeleteGameObject(&BossEnemy::GetInstance());
 		GameObjectManager::GetGameObjectManager().DeleteGameObject(&BossHp::GetInstance());
-		BossEnemy::GetInstance().Destroy();
 		BossHp::GetInstance().Destroy();
-
+		BossEnemy::GetInstance().Destroy();
 	}
 
-	m_clearHud.Initialize("Assets/Sprite/T2.tga", m_clearHudPos);
+	m_clearHud.Initialize("Assets/Sprite/GameClear.png", m_clearHudPos);
 	CreateSprite();
-
+	m_clearHud.Update();
 }
 
 void ClearScene::Update()
 {
 	if (m_clear == NULL) { return; };
-	m_clearHud.Update();
+	//m_clearHud.Update();
 	SceneFade();
 }
 
@@ -55,26 +55,26 @@ void ClearScene::SceneFade()
 	case WaitFadeIn:
 		if (!Fade::GetInstance().isExecute())
 		{
-			Fade::GetInstance().StartFadeIn();
+			/*Fade::GetInstance().StartFadeIn();*/
 			m_state = Run;
 		}
 		break;
 	case Run:
 		if (Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonStart) || GetAsyncKeyState('S')) {
-			Fade::GetInstance().StartFadeOut();
+			//Fade::GetInstance().StartFadeOut();
 			m_state = WaitFadeOut;
+			exit(0);
 		}
 		break;
 	case WaitFadeOut:
 		if (!Fade::GetInstance().isExecute())
 		{
-			TitleScene::Create();
+			/*TitleScene::Create();
 			TitleScene::GetInstance().Init();
 			GameObjectManager::GetGameObjectManager().AddGameObject(&TitleScene::GetInstance());
 
-			GameObjectManager::GetGameObjectManager().DeleteGameObject(&ResultScene::GetInstance());
-			ResultScene::GetInstance().Destroy();
-			return;
+			GameObjectManager::GetGameObjectManager().DeleteGameObject(&ClearScene::GetInstance());
+			ClearScene::GetInstance().Destroy();*/
 
 		}
 		break;

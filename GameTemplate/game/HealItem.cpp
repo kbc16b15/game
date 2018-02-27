@@ -37,22 +37,28 @@ void HealItem::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 	m_model.SetLight(&m_light);
 	m_position =pos;
 	m_rotation =rot;
+
+	m_healSound = new Sound();
 }
 
 void HealItem::Update()
 {
 	D3DXVECTOR3 toPos = m_position - Player::GetInstance().Getpos();
 	float len = D3DXVec3Length(&toPos);
-	if (len < 1.3f)
+	const float Heallenge = 1.3f;
+	if (len < Heallenge)
 	{
-		/*m_healSound = new Sound();
-		m_healSound->Init("Assets/Sound/powerup03.wav");
-		m_healSound->SetVolume(0.4f);
-		m_healSound->Play(false);*/
+		const float SoundVolume = 0.4f;
+		m_healSound->Init("Assets/Sound/heal02.wav");
+		m_healSound->SetVolume(SoundVolume);
+		m_healSound->Play(false);
 
 		PlayerHp::GetInstance().PlayerHeal(1);
 		m_healflg = true;
 	}
-
+	if (m_healSound != nullptr) {
+		if (m_healSound->IsPlaying())
+			m_healSound->Update();
+	}
 	m_model.UpdateWorldMatrix(m_position, m_rotation, { 0.3f,0.3f,0.3f, });
 }

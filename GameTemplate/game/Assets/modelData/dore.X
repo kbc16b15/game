@@ -818,7 +818,7 @@ Frame Box003 {
     0.000000;0.000000;0.000000;;
 
     TextureFilename Diffuse {
-     "tileable 4_Dwiths.tga";
+     "tilable2_dwith_s.tga";
     }
    }
   }

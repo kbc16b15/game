@@ -1,6 +1,8 @@
 #pragma once
 #include "IGameObject.h"
-#include "myEngine/Physics/CharacterController.h"
+//#include "myEngine/Physics/CharacterController.h"
+#include "Sound.h"
+#include "ParticleEmitter.h"
 class trackingEnemy:public IGameObject
 {
 public:
@@ -24,15 +26,25 @@ public:
 		return m_isDeath;
 	}
 
+	void  SetDeathflg(bool isDead)
+	{
+		m_isDead = isDead;
+	}
+
+	D3DXVECTOR3 GetPos()
+	{
+		return m_position;
+	}
+
 private:
-	enum TrackingEnemyState
+	enum EnemyState
 	{
 		SEACH,
 		FOUND,
 		DEAD
 	};
 
-	TrackingEnemyState	m_trackingState = SEACH;//敵の状態
+	EnemyState			m_trackingState = SEACH;//敵の状態
 	SkinModel			m_skinModel;			//スキンモデル
 	SkinModelData		m_skinModelData;		//スキンモデルデータ
 	D3DXVECTOR3			m_position;				//座標
@@ -43,9 +55,10 @@ private:
 	int					m_bulletIntervalTime = 60;//バレットの発射間隔
 	bool				m_isDead = false;		//死亡処理フラグ
 	bool				m_isDeath = false;		//死亡フラグ
+	bool				m_isParticle = false;	//パーティクルフラグ
 	int					m_deadTime = 100;		//死亡タイム
 	int					m_bulletDir = 0;		//バレット打つ方向
-	CharacterController	m_characterController;	//キャラクターコントローラー
+	//CharacterController	m_characterController;	//キャラクターコントローラー
 	D3DXVECTOR3			m_moveSpeed;			//移動速度
 	LPDIRECT3DTEXTURE9	m_normalMap = NULL;		//法線マップ
 	D3DXVECTOR3			m_direction;			//方向
@@ -56,6 +69,8 @@ private:
 	const float			m_charaHeight = 0.5f;	//キャラの高さ
 	const float			m_beamVolume = 0.4f;	//ビーム音量
 	const int			m_maxBulletTime = 60;	//最大死亡タイム
+	Sound*				m_beamSound = nullptr;	//ビーム音
+	ParticleEmitter*	m_particleEmitter;	//パーティクル
 	
 };
 

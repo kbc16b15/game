@@ -37,7 +37,6 @@ Particle::~Particle()
 
 void Particle::Init(const SParticleEmitParameter& param)
 {
-	
 
 	srand((unsigned int)time(NULL));
 	float halfW = param.w*0.5f;

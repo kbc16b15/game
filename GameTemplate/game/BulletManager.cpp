@@ -69,15 +69,15 @@ void BulletManager::Update()
 
 	BulletHud::GetInstance().Update();
 	//ƒoƒŒƒbƒg‚ÌŽ€–S”»’è
-	auto bulletIt = m_bullets.begin();
-	while (bulletIt != m_bullets.end()) {
-		if ((*bulletIt)->GetDeathflg()){
-			bulletIt = m_bullets.erase(bulletIt);
-		}
-		else {
-			bulletIt++;
-		}
-	}
+	//auto bulletIt = m_bullets.begin();
+	//while (bulletIt != m_bullets.end()) {
+	//	if (!(*bulletIt)->GetBulletflg()) {
+	//		bulletIt = m_bullets.erase(bulletIt);
+	//	}
+	//	else {
+	//		bulletIt++;
+	//	}
+	//}
 }
 
 void BulletManager::Draw()
@@ -87,7 +87,7 @@ void BulletManager::Draw()
 	{
 		bullet->Draw();
 	}
-	//BulletHud::GetInstance().Draw();
+	BulletHud::GetInstance().Draw();
 
 	//“G‚Ì•`‰æ
 	for (auto BulletWeaponIt : m_bulletWeapon)

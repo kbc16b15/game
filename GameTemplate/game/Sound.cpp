@@ -113,7 +113,8 @@ void Sound::UpdateOnMemory()
 			Play(m_isLoop);
 		}
 		else {
-			delete this;
+			Release();
+			//delete this;
 		}
 	}
 }

@@ -38,6 +38,26 @@ void EnemyManager::Update()
 	{
 		trackingEnemyIt->Update();
 	}
+
+	for (auto Enemynum : m_tenem)
+	{
+		if (Enemynum->GetDeathflg())
+		{
+			delete Enemynum;
+		}
+	}
+	//trackingEnemy‚ÌÁ‹Ž
+	auto EnemyIt = m_tenem.begin();
+	while (EnemyIt != m_tenem.end()) {
+		if ((*EnemyIt)->GetDeathflg())
+		{
+			EnemyIt = m_tenem.erase(EnemyIt);
+		}
+		else
+		{
+			EnemyIt++;
+		}
+	}
 }
 
 void EnemyManager::Draw()

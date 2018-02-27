@@ -5,7 +5,10 @@
 #include "HUD.h"
 #include "game.h"
 #include "GameObjectManager.h"
-#include "SceneChange.h"
+//#include "SceneChange.h"
+#include "BossEnemy.h"
+#include "BossHp.h"
+
 ResultScene *ResultScene::m_result = NULL;
 
 ResultScene::ResultScene()
@@ -20,28 +23,38 @@ ResultScene::~ResultScene()
 
 void ResultScene::Init()
 {
-	if (SceneChange::GetInstance().GetChange())
+	/*if (SceneChange::GetInstance().GetChange())
 	{
 		return;
-	}
+	}*/
+
+	//BossEnemy::GetInstance();
+	//if (BossEnemy::GetInstance().GetDeathflg())//プレイヤーが死んだときにボスが消えない（1回目だけ？）
+	//{
+	//	GameObjectManager::GetGameObjectManager().DeleteGameObject(&BossEnemy::GetInstance());
+	//	GameObjectManager::GetGameObjectManager().DeleteGameObject(&BossHp::GetInstance());
+	//	BossHp::GetInstance().Destroy();BossEnemy::GetInstance().Destroy();
+	//	BossEnemy::GetInstance().Destroy();
+	//	
+	//}
 	m_resultHud.Initialize("Assets/Sprite/TE.tga", m_resultHudPos);
 	CreateSprite();
-	
+	m_resultHud.Update();
 }
 
 void ResultScene::Update()
 {
 	if (m_result == NULL) { return; };
-	m_resultHud.Update();
+	/*m_resultHud.Update();*/
 	SceneFade();
 }
 
 void ResultScene::PrePostDraw()
 {
-	if (SceneChange::GetInstance().GetChange())
+	/*if (SceneChange::GetInstance().GetChange())
 	{
 		return;
-	}
+	}*/
 	//g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	//g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	//g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
@@ -59,11 +72,11 @@ void ResultScene::SceneFade()
 {
 	switch (m_state) {
 	case WaitFadeIn:
-		if (SceneChange::GetInstance().GetChange())
+		/*if (SceneChange::GetInstance().GetChange())
 		{
 			m_state = Run;
 		}
-		else if (!Fade::GetInstance().isExecute())
+		else */if (!Fade::GetInstance().isExecute())
 		{
 			m_state = Run;
 			Fade::GetInstance().StartFadeIn();

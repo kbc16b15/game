@@ -27,46 +27,46 @@ BulletWeapon::~BulletWeapon()
 	}
 }
 
-void BulletWeapon::Init(D3DXVECTOR3	pos, D3DXQUATERNION	rot)
-{
-	m_position = pos;
-	m_rotation = rot;
-	//読み込むモデルのファイルパスを作成。
-	m_skinModelData.LoadModelData("Assets/modelData/BulletWeapon.X", NULL);
-
-	m_skinModel.Init(&m_skinModelData);
-
-	//ライトを初期化。
-	m_light.SetDiffuseLightDirection(0, D3DXVECTOR4(0.707f, 0.0f, -0.707f, 1.0f));
-	m_light.SetDiffuseLightDirection(1, D3DXVECTOR4(-0.707f, 0.0f, -0.707f, 1.0f));
-	m_light.SetDiffuseLightDirection(2, D3DXVECTOR4(0.0f, 0.707f, -0.707f, 1.0f));
-	m_light.SetDiffuseLightDirection(3, D3DXVECTOR4(0.0f, -0.707f, -0.707f, 1.0f));
-
-	m_light.SetDiffuseLightColor(0, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	m_light.SetDiffuseLightColor(1, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	m_light.SetDiffuseLightColor(2, D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
-	m_light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
-	m_light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
-
-	m_skinModel.SetLight(&m_light);
-
-	//キャラクタコントローラを初期化。
-	//m_characterController.Init(m_charaRadius, m_charaHeight, m_position);
-	//m_characterController.SetGravity(0.0f);
-
-	m_skinModel.SetSpecularlight(true);
-
-	D3DXCreateTextureFromFileA(g_pd3dDevice,
-		"Assets/modelData/weapon_Normal.png",
-		&m_normalMap);
-
-	if (m_normalMap != NULL)
-	{
-		m_skinModel.SetnormalMap(m_normalMap);
-	}
-
-
-}
+//void BulletWeapon::Init(D3DXVECTOR3	pos, D3DXQUATERNION	rot)
+//{
+//	m_position = pos;
+//	m_rotation = rot;
+//	//読み込むモデルのファイルパスを作成。
+//	m_skinModelData.LoadModelData("Assets/modelData/BulletWeapon.X", NULL);
+//
+//	m_skinModel.Init(&m_skinModelData);
+//
+//	//ライトを初期化。
+//	m_light.SetDiffuseLightDirection(0, D3DXVECTOR4(0.707f, 0.0f, -0.707f, 1.0f));
+//	m_light.SetDiffuseLightDirection(1, D3DXVECTOR4(-0.707f, 0.0f, -0.707f, 1.0f));
+//	m_light.SetDiffuseLightDirection(2, D3DXVECTOR4(0.0f, 0.707f, -0.707f, 1.0f));
+//	m_light.SetDiffuseLightDirection(3, D3DXVECTOR4(0.0f, -0.707f, -0.707f, 1.0f));
+//
+//	m_light.SetDiffuseLightColor(0, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
+//	m_light.SetDiffuseLightColor(1, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
+//	m_light.SetDiffuseLightColor(2, D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
+//	m_light.SetDiffuseLightColor(3, D3DXVECTOR4(0.2f, 0.2f, 0.2f, 1.0f));
+//	m_light.SetAmbientLight(D3DXVECTOR4(0.3f, 0.3f, 0.3f, 1.0f));
+//
+//	m_skinModel.SetLight(&m_light);
+//
+//	//キャラクタコントローラを初期化。
+//	//m_characterController.Init(m_charaRadius, m_charaHeight, m_position);
+//	//m_characterController.SetGravity(0.0f);
+//
+//	//m_skinModel.SetSpecularlight(true);
+//
+//	//D3DXCreateTextureFromFileA(g_pd3dDevice,
+//	//	"Assets/modelData/weapon_Normal.png",
+//	//	&m_normalMap);
+//
+//	//if (m_normalMap != NULL)
+//	//{
+//	//	m_skinModel.SetnormalMap(m_normalMap);
+//	//}
+//
+//
+//}
 
 void BulletWeapon::Update()
 {
@@ -120,7 +120,7 @@ void BulletWeapon::Move()
 		{
 			m_bulletWeaponState = STAND;
 			m_isPlayerBulletCamera = false;
-			gameCamera::GetInstance().SetRockCamera(false);
+			//gameCamera::GetInstance().SetRockCamera(false);
 			Player::GetInstance().SetMove(false);
 			BulletHud::GetInstance().SetBullet(false);
 		}
@@ -135,47 +135,47 @@ void BulletWeapon::Move()
 			m_rotation.z = 0.0f * s;
 		}
 
-		m_bulletIntervalTime--;
+		//m_bulletIntervalTime--;
 
-		if (/*m_bulletIntervalTime < 0 && Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonB) ||*/m_bulletIntervalTime < 0 && Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonB)||GetAsyncKeyState('B') && m_isPlayerBulletCamera)
-		{
+		//if (/*m_bulletIntervalTime < 0 && Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonB) ||*/m_bulletIntervalTime < 0 && Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonRB1)||GetAsyncKeyState('B') && m_isPlayerBulletCamera)
+		//{
 
-			//Bullet* bullet = BulletManager::GetInstance().CreateBullet(bullet->PLAYER);
-			Bullet* bullet = new Bullet;
-			BulletManager::GetInstance().AddBullets(bullet);
-			D3DXVECTOR3 BulletPos=m_position;
-			BulletPos.y += 1.0f;
-			bullet->Start(Camera::GetInstance().GetLookatPt(), BulletPos, bulletSpeed, bullet->PLAYER);
-			m_bulletIntervalTime = m_maxBulletTime;
+		//	//Bullet* bullet = BulletManager::GetInstance().CreateBullet(bullet->PLAYER);
+		//	Bullet* bullet = new Bullet;
+		//	BulletManager::GetInstance().AddBullets(bullet);
+		//	D3DXVECTOR3 BulletPos=m_position;
+		//	BulletPos.y += 1.0f;
+		//	bullet->Start(Camera::GetInstance().GetLookatPt(), BulletPos, bulletSpeed, bullet->PLAYER);
+		//	m_bulletIntervalTime = m_maxBulletTime;
 
-			Sound* m_beamSound = new Sound();
-			m_beamSound->Init("Assets/Sound/beamgun.wav");
-			m_beamSound->SetVolume(m_beamVolume);
-			m_beamSound->Play(false);
-		}
+		//	Sound* m_beamSound = new Sound();
+		//	m_beamSound->Init("Assets/Sound/beamgun.wav");
+		//	m_beamSound->SetVolume(m_beamVolume);
+		//	m_beamSound->Play(false);
+		//}
 
-		if (Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonB)||GetAsyncKeyState('Z'))//カメラ切り替え
-		{
-			if (!m_isPlayerBulletCamera)
-			{
-				m_isPlayerBulletCamera = true;
-				m_isPlayerBullet = true;
-				//ボスだけでなく2ステージめでも砲台をつかえるようにする？
-				//砲台をボスの攻撃が当たらない場所に配置する
-				//砲台をボスのバレットで破壊するようにする?
-				gameCamera::GetInstance().SetRockCamera(true);
-				Player::GetInstance().SetMove(true);
-				BulletHud::GetInstance().SetBullet(true);
-				
-			}
-			else{
-				m_isPlayerBulletCamera = false;
-				gameCamera::GetInstance().SetRockCamera(false);
-				Player::GetInstance().SetMove(false);
-				BulletHud::GetInstance().SetBullet(false);
-			}
-			
-		}
+		//if (Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonLB1)||GetAsyncKeyState('Z'))//カメラ切り替え
+		//{
+		//	if (!m_isPlayerBulletCamera)
+		//	{
+		//		m_isPlayerBulletCamera = true;
+		//		m_isPlayerBullet = true;
+		//		//ボスだけでなく2ステージめでも砲台をつかえるようにする？
+		//		//砲台をボスの攻撃が当たらない場所に配置する
+		//		//砲台をボスのバレットで破壊するようにする?
+		//		gameCamera::GetInstance().SetRockCamera(true);
+		//		Player::GetInstance().SetMove(true);
+		//		BulletHud::GetInstance().SetBullet(true);
+		//		
+		//	}
+		//	else{
+		//		m_isPlayerBulletCamera = false;
+		//		gameCamera::GetInstance().SetRockCamera(false);
+		//		Player::GetInstance().SetMove(false);
+		//		BulletHud::GetInstance().SetBullet(false);
+		//	}
+		//	
+		//}
 		break;
 	default:
 		break;
@@ -189,7 +189,7 @@ void BulletWeapon::Draw()
 
 void BulletWeapon::Dead()
 {
-	if (Player::GetInstance().PlayerDeath())
+	if (Player::GetInstance().GetPlayerDeath())
 	{
 		m_isDeath = true;
 	}

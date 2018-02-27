@@ -45,9 +45,14 @@ public:
 		m_isNext = true;
 	}
 	//クリア
-	void StageClear()
+	void StageClear(bool isClear)
 	{
-		m_isClear = true;
+		m_isClear = isClear;
+	}
+	void BgmStop()
+	{
+		if(m_bgmSound!=nullptr)
+		m_bgmSound->Stop();
 	}
 
 	//インスタンスの生成

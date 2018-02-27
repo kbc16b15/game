@@ -26,11 +26,6 @@ public:
 	void BossEndCamera();
 	//ボス固定カメラ
 	void BossRockCamera();
-	//照準フラグ
-	void SetRockCamera(bool isRock)
-	{
-		m_isRockOn = isRock;
-	}
 
 	//インスタンスの生成
 	static void gameCamera::Create()
@@ -39,7 +34,6 @@ public:
 		{
 			m_gameCamera = new gameCamera;
 		}
-
 	}
 
 	//インスタンスの消去
@@ -64,10 +58,7 @@ private:
 	bool			m_isBossEndCamera = false;	//ボス戦カメラ
 	int				m_endCameraTime = 500;		//終了カメラの時間
 	bool			m_isBossCamera = false;
-	bool			m_isRockOn = false;
+	//D3DXVECTOR3		m_targetPos = { 0.0f,0.0f,0.0f };
 	//const float CameraUpLimit = 30.0f;		//カメラ上下限度
 	//bool			m_istoCamera = false;			//カメラを操作中かどうか
-	D3DXVECTOR3 vec = { 0.0f, 0.0f, 0.0f };//照準の座標
-
-
 };

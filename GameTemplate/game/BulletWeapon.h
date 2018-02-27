@@ -11,7 +11,7 @@ public:
 	//デストラクタ
 	~BulletWeapon();
 	//初期化　座標の設定
-	void Init(D3DXVECTOR3	pos, D3DXQUATERNION	rot);
+	//void Init(D3DXVECTOR3	pos, D3DXQUATERNION	rot);
 	//更新
 	void Update();
 	//描画
@@ -53,6 +53,7 @@ private:
 	LPDIRECT3DTEXTURE9	m_normalMap = NULL;		//法線マップ
 	D3DXVECTOR3			m_direction;			//方向
 	const float			m_enemySpeed = 1.2f;	//敵の速度
+
 	const float			m_playerBulletLenge = 2.0f;	//バレットが打てる距離
 	const float			m_standLenge = 2.0f;	//距離
 	const float			m_charaRadius = 0.5f;	//キャラの半径

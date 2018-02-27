@@ -20,7 +20,12 @@ public:
 	void Draw();
 
 	void Release();
-
+	
+	//“G‚Ìæ“¾
+	std::list<trackingEnemy*> GetEnemy()
+	{
+		return m_tenem;
+	}
 	//’Ç]“G‚Ì’Ç‰Á
 	void AddTrackingEnemy(trackingEnemy* enemy)
 	{

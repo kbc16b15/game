@@ -1,5 +1,6 @@
 #pragma once
 #include "HUD.h"
+#include "Sound.h"
 //#include "IGameObject.h"
 class TitleScene :public IGameObject
 {
@@ -57,5 +58,6 @@ private:
 	HUD*				m_titleHud;						//タイトル画像
 	const D3DXVECTOR2	m_titlePos = { 595.0f,400.0f };	//タイトル画像の座標
 	bool				m_isStart = false;
+	Sound*				m_buttonSound = nullptr;			//サウンド
 };
 

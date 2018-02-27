@@ -76,11 +76,11 @@ void Fade::Update()
 
 		}
 
-		if (!m_fadetex.Getalfa() == 1.0f || !m_fadetex.Getalfa() == 0.0f)
+		/*if (!m_fadetex.Getalfa() == 1.0f || !m_fadetex.Getalfa() == 0.0f)
 		{
 			m_fadetex.Initialize("Assets/Sprite/TL.tga", m_fadepos);
 			CreateSprite();
-		}
+		}*/
 		
 	}
 }

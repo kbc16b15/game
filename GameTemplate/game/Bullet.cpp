@@ -2,6 +2,7 @@
 #include "Bullet.h"
 #include "BossEnemy.h"
 #include "Player.h"
+#include "EnemyManager.h"
 
 SkinModelData* Bullet::m_skinModelData = NULL;
 
@@ -16,7 +17,6 @@ Bullet::~Bullet()
 {
 	delete m_skinModelData;
 	m_skinModelData = NULL;
-
 }
 
 void Bullet::Start(D3DXVECTOR3 targetpos,D3DXVECTOR3 pos, float speed, CHARA chara)
@@ -63,13 +63,19 @@ void Bullet::Start(D3DXVECTOR3 targetpos,D3DXVECTOR3 pos, float speed, CHARA cha
 	m_rotation.x = 0.0f * s;
 	m_rotation.y = 1.0f * s;
 	m_rotation.z = 0.0f * s;
+
+	m_breakSound = new Sound;
 }
 
 void Bullet::Update()
 {
-	//if (m_bulletDeadflg) { return; };
+	if (m_bulletDeadflg) { return; };
 	BulletHit();
 	TargetBullet();
+	if (m_breakSound != nullptr) {
+		if (m_breakSound->IsPlaying())
+			m_breakSound->Update();
+	}
 	//skinModel.UpdateWorldMatrix(position,rotation, scale);
 
 }
@@ -100,7 +106,7 @@ void Bullet::TargetBullet()
 	if (m_bulletTime <= 0 || len<m_bulletDeathlenge)
 	{
 		m_bulletDeadflg = true;
-		//m_btime = 300;
+		m_isActive = false;
 	}
 }
 
@@ -108,12 +114,13 @@ void Bullet::BulletHit()
 {
 	const float			BossRadius = 3.0f;//ボスの半径
 	const float			PlayerRadius = 0.3f;//プレイヤーの半径
+	std::list<trackingEnemy*> enestl = EnemyManager::GetInstance().GetEnemy();
 	//バレットの当たり判定
 	switch (m_chara)
 	{
 
 	case CHARA::TANK:
-		m_light.SetAmbientLight(D3DXVECTOR4(7.8f, 7.8f, 0.8f, 1.0f));
+		m_light.SetAmbientLight(D3DXVECTOR4(8.0f, 0.0f, 8.0f, 1.0f));
 		m_skinModel.SetLight(&m_light);
 		if (CubeCollision::GetInstance().Cube(m_position, Player::GetInstance().GetMiddlepos(), m_bulletRadius, PlayerRadius))
 		{
@@ -136,15 +143,25 @@ void Bullet::BulletHit()
 		}
 		if (CubeCollision::GetInstance().Cube(m_position, BossEnemy::GetInstance().Getpos(), m_bulletRadius, BossRadius))
 		{
-			//Player::GetInstance().SetDamage();
 			BossEnemy::GetInstance().SetDamage();
 			m_bulletDeadflg = true;
 		}
 
 		break;
 	case CHARA::PLAYER:
-		m_light.SetAmbientLight(D3DXVECTOR4(0.8f, 0.8f, 8.8f, 1.0f));
+		m_light.SetAmbientLight(D3DXVECTOR4(7.8f, 7.8f, 0.8f, 1.0f));
 		m_skinModel.SetLight(&m_light);
+		for (auto ene : enestl)
+		{
+			if (CubeCollision::GetInstance().Cube(m_position,ene->GetPos(), m_bulletRadius,0.5f))
+			{
+				ene->SetDeathflg(true);
+				m_bulletDeadflg = true;
+				m_breakSound->Init("Assets/Sound/sceneswitch2.wav");
+				m_breakSound->SetVolume(0.4f);
+				m_breakSound->Play(false);
+			}
+		}
 		if (&BossEnemy::GetInstance() == NULL)
 		{
 			break;
@@ -162,7 +179,7 @@ void Bullet::BulletHit()
 
 void Bullet::Draw()
 {
-	//if (m_bulletDeadflg) { return; };
+	if (m_bulletDeadflg) { return; };
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 
 	m_skinModel.Draw(&Camera::GetInstance().GetViewMatrix(), &Camera::GetInstance().GetProjectionMatrix());

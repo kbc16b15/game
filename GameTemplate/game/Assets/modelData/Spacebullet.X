@@ -17648,7 +17648,7 @@ AnimTicksPerSecond fps {
  4800;
 }
 
-AnimationSet Bullet {
+AnimationSet  {
  
 
  Animation Anim- {

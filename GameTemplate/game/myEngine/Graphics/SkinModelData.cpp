@@ -629,8 +629,11 @@ void SkinModelData::Release()
 		pAnimController->Release();
 		pAnimController = nullptr;
 	}
-	ReleaseFrame(frameRoot);
-	frameRoot = nullptr;
+	if (frameRoot != nullptr)
+	{
+		ReleaseFrame(frameRoot);
+		frameRoot = nullptr;
+	}
 }
 
 void SkinModelData::DeleteSkeleton(LPD3DXFRAME frame)

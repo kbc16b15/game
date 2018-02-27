@@ -1,11 +1,14 @@
 #pragma once
 #include "myEngine/Physics/CharacterController.h"
 #include "ParticleEmitter.h"
+#include "Sound.h"
 class BossEnemy:public IGameObject
 {
 public:
 
 	~BossEnemy();
+	//解放
+	void Release();
 	//初期化　座標の設定
 	void Init(D3DXVECTOR3	pos, D3DXQUATERNION	rot);
 	//更新
@@ -110,12 +113,16 @@ private:
 	bool				m_isTarget = false;		//目標座標が決まった
 	float				m_targetLen=0.0f;		//目標座標との距離
 	float				m_stopAttackLen = 40.0f;//目標座標の距離
-	int					m_startTime = 200;		//開始時間
+	int					m_startTime = 150;		//開始時間
 	int					m_damageTime = 0;		//無敵時間
 	int					m_damageMaxTime = 200;	//最大無敵時間
 	bool				m_isDamageflg = false;	//ダメージフラグ
 	bool				m_isAddParticle=false;	//パーティクルフラグ
+	Sound*				m_beamSound = nullptr;	//ビーム音
+	Sound*				m_groundSound = nullptr;//着地音
+	Sound*				m_breakSound = nullptr;	//破壊音
+	Sound*				m_bgmSound = nullptr;	//bgm音
 	float				m_soundBreakTime = 0.6f;//撃破サウンドの間隔
 	const float			m_soundBreakMaxTime = 0.6f;//撃破サウンドの最大間隔
-	ParticleEmitter*	m_particleEmitter;	//パーティクル
+	ParticleEmitter*	m_particleEmitter;		//パーティクル
 };

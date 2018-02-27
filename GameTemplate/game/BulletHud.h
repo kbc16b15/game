@@ -20,6 +20,11 @@ public:
 	{
 		m_isGun = isBullet;
 	}
+
+	void Setpos(D3DXVECTOR2 pos)
+	{
+		m_rockPos = pos;
+	}
 	//インスタンスの生成
 	static void BulletHud::Create()
 	{

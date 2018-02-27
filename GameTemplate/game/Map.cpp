@@ -1,18 +1,6 @@
 #include "stdafx.h"
 #include "Map.h"
 #include "MapObject.h"
-//#include "MoveObject.h"
-//#include "TrapObject.h"
-//#include "FallObject.h"
-//#include "GoalObject.h"
-//#include "MapChip.h"
-//#include "Spring.h"
-//#include "BoxChip.h"
-//#include "RotObject.h"
-//#include "GravityObject.h"
-//#include "MoveCube.h"
-//#include "Sea.h"
-//#include "Sky.h"
 #include "HealItem.h"
 #include "BossEnemy.h"
 #include "BossHp.h"
@@ -28,12 +16,14 @@
 Map *Map::m_map = NULL;
 
 SMapChipLocInfo Info1[] = {
+
+
 #include "locationinfo7.h"
-//#include "Boss.h"
 };
 
 SMapChipLocInfo Info2[] = {
 
+//#include "Boss.h"
 #include "locationinfo8.h"
 };
 
@@ -180,9 +170,9 @@ void Map::MapLoad1()
 		}
 		else if (strcmp(Info1[i].modelName, "Weapon") == 0)
 		{
-			BulletWeapon* weapon = new BulletWeapon;
+			/*BulletWeapon* weapon = new BulletWeapon;
 			BulletManager::GetInstance().AddBulletWeapon(weapon);
-			weapon->Init(Info1[i].pos, Info1[i].rot);
+			weapon->Init(Info1[i].pos, Info1[i].rot);*/
 		}
 		else if (strcmp(Info1[i].modelName, "Drone") == 0)//エネミーの位置設定
 		{
@@ -268,9 +258,9 @@ void Map::MapLoad2()
 		}
 		else if (strcmp(Info1[i].modelName, "Weapon") == 0)
 		{
-			BulletWeapon* weapon = new BulletWeapon;
+			/*BulletWeapon* weapon = new BulletWeapon;
 			BulletManager::GetInstance().AddBulletWeapon(weapon);
-			weapon->Init(Info1[i].pos, Info1[i].rot);
+			weapon->Init(Info1[i].pos, Info1[i].rot);*/
 		}
 		else if (strcmp(Info2[i].modelName, "Drone") == 0)//エネミーの位置設定
 		{

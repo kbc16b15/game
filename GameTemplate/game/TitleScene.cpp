@@ -19,16 +19,21 @@ void TitleScene::Init()
 	m_titleHud = new HUD;
 	m_titleHud->Initialize("Assets/Sprite/T2.tga",m_titlePos);
 	CreateSprite();
+	m_buttonSound = new Sound;
+	m_titleHud->Update();
 	//Fade::GetInstance().StartFadeIn();
 }
 
 void TitleScene::Update()
 {
 	if (m_title == NULL) { return; };
-	m_titleHud->Update();
+	/*m_titleHud->Update();*/
+	if (m_buttonSound != nullptr) {
+		if (m_buttonSound->IsPlaying())
+			m_buttonSound->Update();
+	}
 	SceneFade();
 }
-
 
 void TitleScene::PrePostDraw()
 {
@@ -70,13 +75,15 @@ void TitleScene::SceneFade()
 		break;
 	case Run:
 		if (Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonStart) || GetAsyncKeyState('S')) {
-
+			Fade::GetInstance().StartFadeOut();
 			m_state = WaitFadeOut;
-			
+			m_buttonSound->Init("Assets/Sound/select2.wav");
+			m_buttonSound->SetVolume(0.4f);
+			m_buttonSound->Play(false);
 			Game::Create();
 			GameObjectManager::GetGameObjectManager().AddGameObject(&Game::GetInstance());
 			Game::GetInstance().Init();
-			Fade::GetInstance().StartFadeOut();
+			
 
 		}
 		break;

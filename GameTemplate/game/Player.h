@@ -1,5 +1,6 @@
 #pragma once
 #include "myEngine/Physics/CharacterController.h"
+#include "Sound.h"
 class Player:public IGameObject
 {
 public:
@@ -11,8 +12,10 @@ public:
 	void Update();
 	//描画
 	void ShadowDraw(D3DXMATRIX* viewM, D3DXMATRIX* projM, bool shadowCaster, bool shadowRecive);
+	//描画
 	void Draw();
-
+	//サウンド
+	void PlayerSound();
 	//アニメーション処理
 	void AnimationSet();
 	//移動処理
@@ -27,6 +30,8 @@ public:
 	void Setjump();
 	//キャラの慣性の設定
 	void SetSubmove();
+
+	void PlayerBullet();
 	//プレイヤー座標の取得（足元？）
 	const D3DXVECTOR3 Getpos()
 	{
@@ -72,15 +77,21 @@ public:
 		m_isDamageflg = true;
 	}
 
+	
+
 	//移動しているかの取得
 	const bool GetPlayerMove()
 	{
 		return m_ismove;
 	}
 	//プレイヤーの死亡アニメーションの終了
-	bool PlayerDeath()
+	bool GetPlayerDeath()
 	{
 		return m_isDeathflg;
+	}
+	void SetDeath(bool isdeath)
+	{
+		m_isDeathflg = isdeath;
 	}
 	//プレイヤーが地面についているかどうか
 	const bool GetGround()
@@ -99,7 +110,7 @@ public:
 	}
 
 	//インスタンスの消去
-	static  void Player::Destroy()
+	static void Player::Destroy()
 	{
 		delete m_player;
 		m_player = nullptr;
@@ -123,7 +134,7 @@ private:
 	Player();
 	static Player* m_player;//インスタンス
 	enum PlayerState							//プレイヤーアニメーションの状態
-	{Stand, Dash, Jump,Damage,Dead};
+	{Stand, Dash, Jump,Damage,Dead,Bullets};
 	PlayerState			m_state=Stand;
 	PlayerState			m_workState = Stand;
 	bool				m_isDead = false;		//死亡アニメーションフラグ
@@ -135,6 +146,7 @@ private:
 	bool				m_isStand = false;		//待機アニメーションフラグ
 	bool				m_isDamageflg = false;	//ダメージアニメーションフラグ
 	bool				m_isDeathflg = false;		//死亡フラグ
+	bool				m_isBulletflg = false;
 	int					m_damageTime = 0;		//無敵時間
 	int					m_damageMaxTime = 200;	//最大無敵時間
 	SkinModel			m_skinModel;			//スキンモデル
@@ -159,5 +171,18 @@ private:
 	bool				m_isMax = false;		//最大移動速度のフラグ
 	//bool				m_isGaraviey = true;
 	int					m_addDir = 0;			//加算方向
+	D3DXVECTOR3			m_cameraTar;
+	D3DXVECTOR3			m_cameraPos;
 
+	const float			m_playerBulletLenge = 2.0f;	//バレットが打てる距離
+	const float			m_beamVolume = 0.4f;	//ビーム音量
+	const int			m_maxBulletTime = 60;	//最大死亡タイム
+
+	int					m_bulletIntervalTime = 20;	//バレットの発射間隔
+	//bool				m_isDead = false;		//死亡処理フラグ
+	//bool				m_isDeath = false;		//死亡フラグ
+	bool				m_isPlayerBulletCamera = false;//バレットカメラ
+	bool				m_isPlayerBullet = false;
+	Sound*				m_jumpSound=nullptr;
+	Sound*				m_beamSound=nullptr;
 };

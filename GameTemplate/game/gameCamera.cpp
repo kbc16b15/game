@@ -4,6 +4,7 @@
 #include "BossEnemy.h"
 #include "Player.h"
 #include "BulletManager.h"
+#include "BulletHud.h"
 
 gameCamera *gameCamera::m_gameCamera = NULL;
 
@@ -54,11 +55,11 @@ void gameCamera::Update()
 		RotCamera();
 		//BossCamera();
 	}
-	else if (m_isRockOn)
-	{
-		//TrackingCamera();
-		RockCamera();
-	}
+	//else if (m_isRockOn)
+	//{
+	//	//TrackingCamera();
+	//	RockCamera();
+	//}
 	else
 	{
 		RotCamera();
@@ -136,47 +137,6 @@ void gameCamera::TrackingCamera()
 	SpringCamera::GetInstance().SetTarPosition(pos);
 	m_position = pos - target;
 
-}
-
-void gameCamera::RockCamera()
-{
-
-	if (m_isRockOn)
-	{
-		D3DXVECTOR3 eyePos = Player::GetInstance().Getpos();
-		D3DXVECTOR3 targetPos = BossEnemy::GetInstance().Getpos();
-	//	
-		eyePos.x += 1.0f;
-		eyePos.z += 0.8f;
-		eyePos.y += 2.2f;
-
-	////	targetPos.x -= 10.0f;
-
-	//	if (Pad::GetInstance().GetRStickXF() < 0.0f)
-	//	{
-	//		vec.z += 0.5f;
-	//	}
-	//	else if (Pad::GetInstance().GetRStickXF() > 0.0f)
-	//	{
-	//		vec.z -= 0.5f;
-	//	}
-	//	else if (Pad::GetInstance().GetRStickYF() < 0.0f)
-	//	{
-	//		vec.y += 0.5f;
-	//	}
-	//	else if (Pad::GetInstance().GetRStickYF() > 0.0f)
-	//	{
-	//		vec.y -= 0.5f;
-	//	}
-	//	else
-	//	{
-	//		vec = { 0.0f, 0.0f, 0.0f };
-	//	}
-
-	//	targetPos += vec;
-		SpringCamera::GetInstance().SetTarTarget(targetPos);
-		SpringCamera::GetInstance().SetTarPosition(eyePos);
-	}
 }
 
 void gameCamera::BossStartCamera()
@@ -282,5 +242,3 @@ void gameCamera::BossRockCamera()
 	SpringCamera::GetInstance().SetTarTarget(BossEnemy::GetInstance().Getpos());
 
 }
-
-

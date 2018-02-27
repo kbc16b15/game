@@ -63,9 +63,9 @@ void SceneChange::SceneFade()
 			m_state = WaitFadeOut;
 
 			Game::Create();
-			Map::Create();
-			Map::GetInstance().SetStage(1);
-			Map::GetInstance().Init();
+			//Map::Create();
+			//Map::GetInstance().SetStage(1);
+			//Map::GetInstance().Init();
 			GameObjectManager::GetGameObjectManager().AddGameObject(&Game::GetInstance());
 			Game::GetInstance().Init();
 			

@@ -1,7 +1,17 @@
 #include "stdafx.h"
 #include "Player.h"
-#include "Sound.h"
+
 #include "PlayerHp.h"
+#include "Bullet.h"
+#include "BulletWeapon.h"
+#include "BulletManager.h"
+//#include "GameObjectManager.h"
+#include "gameCamera.h"
+#include "BulletHud.h"
+#include "BossEnemy.h"
+#include "SpringCamera.h"
+#include "EnemyManager.h"
+#include "BossEnemy.h"
 
 Player *Player::m_player = NULL;
 Player::Player()
@@ -32,6 +42,16 @@ Player::~Player()
 	{
 		m_specularMap->Release();
 	}
+	if (m_beamSound != nullptr)
+	{
+		m_beamSound->Release();
+		m_beamSound = nullptr;
+	}
+	if (m_jumpSound != nullptr)
+	{
+		m_jumpSound->Release();
+		m_jumpSound = nullptr;
+	}
 }
 
 void Player::Init(){
@@ -39,11 +59,12 @@ void Player::Init(){
 	//m_scale *= 0.01f;//unity
 	//m_scale *= 0.2f;//spacestand
 	m_scale *= 0.8f;//spacerun
-	Sound*	m_JumpSound = new Sound();//登録しておく？
-	m_JumpSound->Init("Assets/Sound/jump.wav");
-	m_JumpSound->SetVolume(0);
-	m_JumpSound->Play(false);
-
+	//Sound*	m_JumpSound = new Sound();//登録しておく？
+	//m_JumpSound->Init("Assets/Sound/jump.wav");
+	//m_JumpSound->SetVolume(0);
+	//m_JumpSound->Play(false);
+	m_beamSound = new Sound();
+	m_jumpSound = new Sound();
 	//ライトのセット
 	m_light.SetDiffuseLightDirection(0, D3DXVECTOR4(0.707f, 0.0f, -0.707f, 1.0f));
 	m_light.SetDiffuseLightDirection(1, D3DXVECTOR4(-0.707f, 0.0f, -0.707f, 1.0f));
@@ -70,7 +91,6 @@ void Player::Init(){
 	m_animation.SetAnimationLoopFlag(Jump, false);
 	m_animation.SetAnimationLoopFlag(Damage, false);
 	m_animation.SetAnimationLoopFlag(Dead, false);
-
 	//アニメーションエンドタイムのセット
 
 	//const float DashEndTime= 1.5f;
@@ -109,15 +129,8 @@ void Player::Init(){
 void Player::Update()
 {
 	if (m_isDeathflg)return;//死んでいたらリターン
-	//if (GetAsyncKeyState('Q')) {
-	//	//m_skinModel.SetnormalMap(NULL);
-	//	m_skinModel.SetSpecularMap(NULL);
-	//}
-	//if (GetAsyncKeyState('E')) {
-	//	//m_skinModel.SetnormalMap(m_normalMap);
-	//	m_skinModel.SetSpecularMap(m_specularMap);
-	//}
-
+	//サウンド
+	PlayerSound();
 	//アニメーション
 	AnimationSet();
 	//ダメージ関係
@@ -125,9 +138,13 @@ void Player::Update()
 	//移動
 	this->move();
 	Setangle();
-	
+
+	//バレット
+	PlayerBullet();
+	m_characterController.SetPosition(m_characterController.GetPosition());
 	m_middlePosition = m_characterController.GetPosition();
 	m_middlePosition.y += m_charaRadius;
+
 	m_skinModel.UpdateWorldMatrix(m_characterController.GetPosition(), m_rotation, m_scale);
 
 }
@@ -162,6 +179,13 @@ void Player::move()
 		m_ismove = true;
 	}
 
+	if (m_ismove)
+	{
+		m_isBulletflg = false;
+		m_isPlayerBulletCamera = false;
+		Player::GetInstance().SetMove(false);
+	}
+
 }
 
 void Player::AnimationSet()
@@ -171,6 +195,7 @@ void Player::AnimationSet()
 	const float JumpInterTime = 0.5f;
 	const float DamageInterTime = 0.5f;
 	const float DeadInterTime = 0.5f;
+	const float BulletInterTime = 0.5f;
 	//状態遷移？
 	switch (m_state)
 	{
@@ -182,6 +207,7 @@ void Player::AnimationSet()
 		else if (m_isDamage) { m_state = Damage; }
 		else if (m_isjump) { m_state = Jump; }
 		else if (m_ismove) { m_state = Dash; }
+		else if (m_isBulletflg) { m_state = Bullets; }
 		else{ m_state = Stand;}
 		break;
 	case Dash://歩行
@@ -191,6 +217,7 @@ void Player::AnimationSet()
 		else if (m_isDamage) { m_state = Damage; }
 		else if (m_isjump) { m_state = Jump; }
 		else if (m_ismove) { m_state = Dash; }
+		else if (m_isBulletflg) { m_state = Bullets; }
 		else { m_state = Stand; }
 		break;
 	case Jump://ジャンプ
@@ -200,6 +227,7 @@ void Player::AnimationSet()
 		else if (m_isDamage) { m_state = Damage; }
 		else if (m_isjump) { m_state = Jump; }
 		else if (m_ismove) { m_state = Dash; }
+		else if (m_isBulletflg) { m_state = Bullets; }
 		else { m_state = Stand; }
 		if (!m_animation.IsPlay()|| m_characterController.IsOnGround())
 		{
@@ -214,6 +242,7 @@ void Player::AnimationSet()
 		else if (m_isDamage) { m_state = Damage; }
 		else if (m_isjump) { m_state = Jump; }
 		else if (m_ismove) { m_state = Dash; }
+		else if (m_isBulletflg) { m_state = Bullets; }
 		else { m_state = Stand; }
 
 		if (!m_animation.IsPlay()){m_isDamage = false;}
@@ -223,6 +252,16 @@ void Player::AnimationSet()
 		m_workState = m_state;
 
 		if (!m_animation.IsPlay()){m_isDeathflg = true;}
+		break;
+	case Bullets://歩行
+		if (m_workState != Bullets) { m_animation.PlayAnimation(Bullets, BulletInterTime); }
+		m_workState = m_state;
+		if (m_isDead&&PlayerHp::GetInstance().GetPlayerHp() <= 0) { m_state = Dead; }
+		else if (m_isDamage) { m_state = Damage; }
+		else if (m_isjump) { m_state = Jump; }
+		else if (m_ismove) { m_state = Dash; }
+		else if (m_isBulletflg) { m_state = Bullets; }
+		else { m_state = Stand; }
 		break;
 	default:
 		break;
@@ -335,28 +374,18 @@ void Player::Setangle()
 void Player::Setjump()
 {
 	const float			jumpHeight = 7.5f;	//ジャンプの高さ
-	if (Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonA) && m_characterController.IsOnGround()) {
+	if (Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonA) && m_characterController.IsOnGround()&&!m_isMoveStop) {
 		//ジャンプ
 		m_moveSpeed.y = jumpHeight;
 		//ジャンプしたことをキャラクタコントローラーに通知。
 		m_characterController.Jump();
 		m_isjump = true;
 
-		Sound*	m_JumpSound = new Sound();
-		m_JumpSound->Init("Assets/Sound/jump.wav");
-		m_JumpSound->SetVolume(0.4f);
-		m_JumpSound->Play(false);
+		///*Sound**/	m_jumpSound = new Sound();
+		m_jumpSound->Init("Assets/Sound/jump.wav");
+		m_jumpSound->SetVolume(0.4f);
+		m_jumpSound->Play(false);
 	}
-
-	//if (m_jumpflg)
-	//{
-	//	//ジャンプ
-	//	m_moveSpeed.y = m_jumpHeight;
-	//	//ジャンプしたことをキャラクタコントローラーに通知
-	//	m_characterController.Jump();
-	//	m_jumpflg = false;
-	//	m_isjump = true;
-	//}
 }
 
 void Player::SetSubmove()
@@ -451,10 +480,107 @@ void Player::Hit()
 			m_isDamage = true;
 			PlayerHp::GetInstance().PlayerDamage(1);
 			m_damageTime = m_damageMaxTime;
+			//構え解除
+			m_isBulletflg = false;
+			m_isPlayerBulletCamera = false;
+			Player::GetInstance().SetMove(false);
 		}
 		m_isDamageflg = false;
 	}
 	m_damageTime--;
+}
+
+void Player::PlayerBullet()
+{
+	D3DXVECTOR3 BossPos = {0.0f,0.0f,0.0f};
+	D3DXVECTOR3 EnemyPos = { 0.0f,0.0f,0.0f };
+	const float Bulletlenge = 15.0f;
+	bool isBossExist = false;
+	float Bosslen;
+	std::list<trackingEnemy*> enestl;
+	
+
+	if (&BossEnemy::GetInstance() != NULL){
+		isBossExist = true;
+	}
+
+	m_bulletIntervalTime--;
+	const float bulletSpeed = 0.2f;
+	if (/*m_bulletIntervalTime < 0 && Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonB) ||*/m_bulletIntervalTime < 0 && Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonRB1) /*|| GetAsyncKeyState('B')*/ && m_isPlayerBulletCamera){
+		if (!isBossExist) {
+			if (&EnemyManager::GetInstance().GetEnemy() != NULL) {
+				std::list<trackingEnemy*> enestl = EnemyManager::GetInstance().GetEnemy();
+
+				for (auto ene : enestl)
+				{
+					EnemyPos = ene->GetPos() - m_middlePosition;
+					float Enemylen = D3DXVec3Length(&EnemyPos);
+					if (Enemylen < Bulletlenge) {
+
+						//Bullet* bullet = BulletManager::GetInstance().CreateBullet(bullet->PLAYER);
+						Bullet* bullet = new Bullet;
+						BulletManager::GetInstance().AddBullets(bullet);
+						bullet->Start(ene->GetPos()/*SpringCamera::GetInstance().GetTarTarget()*/, m_middlePosition, bulletSpeed, bullet->PLAYER);
+						m_bulletIntervalTime = m_maxBulletTime;
+
+						///*Sound**/ m_beamSound = new Sound();
+						m_beamSound->Init("Assets/Sound/beamgun.wav");
+						m_beamSound->SetVolume(m_beamVolume);
+						m_beamSound->Play(false);
+						break;
+					}
+				}
+			}
+		}
+		else
+		{
+			BossPos = BossEnemy::GetInstance().Getpos();
+			BossPos = m_middlePosition - BossPos;
+			Bosslen = D3DXVec3Length(&BossPos);
+
+			if (Bosslen < Bulletlenge) {
+
+				Bullet* bullet = new Bullet;
+				BulletManager::GetInstance().AddBullets(bullet);
+				bullet->Start(BossEnemy::GetInstance().Getpos()/*SpringCamera::GetInstance().GetTarTarget()*/, m_middlePosition, bulletSpeed, bullet->PLAYER);
+				m_bulletIntervalTime = m_maxBulletTime;
+
+				///*Sound**/ m_beamSound = new Sound();
+				m_beamSound->Init("Assets/Sound/beamgun.wav");
+				m_beamSound->SetVolume(m_beamVolume);
+				m_beamSound->Play(false);
+			}
+		}
+	}
+
+	if (Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonLB1) || GetAsyncKeyState('Z'))//カメラ切り替え
+	{
+		if (!m_isPlayerBulletCamera)
+		{
+		
+			m_isPlayerBullet = true;
+			m_isPlayerBulletCamera = true;
+			//ボスだけでなく2ステージめでも砲台をつかえるようにする？
+			//砲台をボスの攻撃が当たらない場所に配置する
+			//砲台をボスのバレットで破壊するようにする?
+			//gameCamera::GetInstance().SetRockCamera(true);
+			//gameCamera::GetInstance().SetonCamera(false);
+			Player::GetInstance().SetMove(true);
+			//BulletHud::GetInstance().SetBullet(true);
+			//m_cameraPos = Camera::GetInstance().GetEyePt();
+			//m_cameraTar = Camera::GetInstance().GetLookatPt();
+			m_isBulletflg = true;
+		}
+		else {
+			//BulletHud::GetInstance().SetBullet(false);
+			m_isBulletflg = false;
+			m_isPlayerBulletCamera = false;
+			Player::GetInstance().SetMove(false);
+			//SpringCamera::GetInstance().SetTarPosition(m_cameraPos);
+			//SpringCamera::GetInstance().SetTarTarget(m_cameraTar);
+		}
+
+	}
 }
 
 void Player::ShadowDraw(D3DXMATRIX* viewM, D3DXMATRIX* projM, bool shadowCaster,bool shadowRecive)
@@ -473,6 +599,17 @@ void Player::ShadowDraw(D3DXMATRIX* viewM, D3DXMATRIX* projM, bool shadowCaster,
 
 void Player::Draw()
 {
-
 	ShadowDraw(&Camera::GetInstance().GetViewMatrix(), &Camera::GetInstance().GetProjectionMatrix(),false,false);
+}
+
+void Player::PlayerSound()
+{
+	if (m_jumpSound != nullptr) {
+		if (m_jumpSound->IsPlaying())
+			m_jumpSound->Update();
+	}
+	if (m_beamSound != nullptr) {
+		if (m_beamSound->IsPlaying())
+			m_beamSound->Update();
+	}
 }

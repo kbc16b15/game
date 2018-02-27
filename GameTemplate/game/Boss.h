@@ -58,30 +58,6 @@
 	D3DXVECTOR3(-7.46f, 4.04f, -19.60f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 },
-//Weapon
-{
-	"Weapon",
-	D3DXVECTOR3(-32.52f, 3.53f, 0.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 1.00f, 0.00f, 0.00f ),  //回転
-},
-//Weapon
-{
-	"Weapon",
-	D3DXVECTOR3(8.55f, 3.36f, 0.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 1.00f, 0.00f, 0.00f ),  //回転
-},
-//Weapon
-{
-	"Weapon",
-	D3DXVECTOR3(-12.01f, 3.24f, 21.38f),             //平行移動
-	D3DXQUATERNION(0.00f, 1.00f, 0.00f, 0.00f ),  //回転
-},
-//Weapon
-{
-	"Weapon",
-	D3DXVECTOR3(-12.01f, 3.38f, -20.55f),             //平行移動
-	D3DXQUATERNION(0.00f, 1.00f, 0.00f, 0.00f ),  //回転
-},
 //BCube
 {
 	"BCube",
