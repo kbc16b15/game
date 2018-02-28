@@ -2,7 +2,7 @@
 #include "WaveFileBank.h"
 #define INPUTCHANNELS 2  // number of source channels
 #define OUTPUTCHANNELS 8	//最大出力チャンネル数。
-class SoundEngine
+class SoundEngine:public IGameObject
 {
 public:
 	~SoundEngine();

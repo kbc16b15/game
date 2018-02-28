@@ -1,19 +1,21 @@
 #pragma once
-#include "IGameObject.h"
 #include "Sound.h"
-
+#include "IScene.h"
+class Silhouette;
 /*!
  * @brief	ゲームクラス。
  */
-class Game:public IGameObject
+class Game:public IScene
 {
 public:
+	//コンストラクタ
+	Game();
 	/*!
 	 * @brief	デストラクタ。
 	 */
 	~Game();
 	/*!
-	 * @brief	ゲームが起動してから一度だけ呼ばれる関数。
+	 * @brief	起動関数。
 	 */
 	void Init();
 	/*!
@@ -49,39 +51,17 @@ public:
 	{
 		m_isClear = isClear;
 	}
+	//BGMストップ
 	void BgmStop()
 	{
 		if(m_bgmSound!=nullptr)
 		m_bgmSound->Stop();
 	}
-
-	//インスタンスの生成
-	static void Game::Create()
+	//ステージセット
+	void SetStage(int No)
 	{
-		if (!m_game)
-		{
-			m_game = new Game;
-		}
-
+		m_stageNo = No;
 	}
-
-	//インスタンスの取得
-	static Game& GetInstance()
-	{
-		return *m_game;
-	}
-
-	//インスタンスの消去
-	static  void Game::Destroy()
-	{
-		delete m_game;
-		m_game = nullptr;
-	}
-private:
-	
-	//コンストラクタ
-	Game();
-	static Game* m_game;//インスタンス
 private:
 	//フェード
 	enum EState {
@@ -89,6 +69,7 @@ private:
 		Run,
 		WaitFadeOut
 	};
+	Silhouette*			m_silhouette = nullptr;
 	EState				m_state = WaitFadeIn;		//フェードの状態
 	Sound*				m_bgmSound=nullptr;			//サウンド
 	const float			m_killZ = -10.0f;			//プレイヤーが死ぬ高さ
@@ -97,4 +78,5 @@ private:
 	bool				m_isClear = false;			//クリア
 	bool				m_isEnd = false;			//ゲームオーバー
 	bool				m_isLoadEnd = false;
+	int					m_stageNo=0;
 };

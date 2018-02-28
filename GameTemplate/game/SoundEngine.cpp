@@ -171,8 +171,7 @@ void SoundEngine::Release()
 */
 IXAudio2SourceVoice* SoundEngine::CreateXAudio2SourceVoice(WaveFile* waveFile, bool is3DSound)
 {
-	//XAudio2Create(&m_xAudio2, 0);
-	//m_xAudio2->CreateMasteringVoice(&m_masteringVoice);
+
 	IXAudio2SourceVoice* pSourceVoice;
 	if (is3DSound == false) {
 		//2Dサウンド。

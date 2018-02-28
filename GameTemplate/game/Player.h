@@ -4,6 +4,8 @@
 class Player:public IGameObject
 {
 public:
+	//コンストラクタ
+	Player();
 	//デストラクタ
 	~Player();
 	//初期化
@@ -102,9 +104,9 @@ public:
 	//インスタンスの生成
 	static void Player::Create()
 	{
-		if (!m_player)
+		if (!player)
 		{
-			m_player = new Player;
+			player = new Player;
 		}
 
 	}
@@ -112,13 +114,13 @@ public:
 	//インスタンスの消去
 	static void Player::Destroy()
 	{
-		delete m_player;
-		m_player = nullptr;
+		delete player;
+		player = nullptr;
 	}
 	//インスタンスの取得
 	static Player& GetInstance()
 	{
-		return *m_player;
+		return *player;
 	}
 	//スキンモデルの取得
 	SkinModel* GetSkinModel()
@@ -130,9 +132,8 @@ public:
 		m_isMoveStop = isMove;
 	}
 private:
-	//コンストラクタ
-	Player();
-	static Player* m_player;//インスタンス
+
+	static Player* player;//インスタンス
 	enum PlayerState							//プレイヤーアニメーションの状態
 	{Stand, Dash, Jump,Damage,Dead,Bullets};
 	PlayerState			m_state=Stand;

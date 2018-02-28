@@ -17,7 +17,12 @@ trackingEnemy::~trackingEnemy()
 {
 	m_skinModelData.Release();
 	//m_characterController.RemoveRigidBoby();
-	delete m_particleEmitter;
+	if (m_particleEmitter != nullptr)
+	{
+		delete m_particleEmitter;
+		m_particleEmitter = nullptr;
+	}
+	
 	if (m_normalMap != NULL)
 	{
 		m_normalMap->Release();
@@ -80,7 +85,7 @@ void trackingEnemy::Init(D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 	param.Multispeed = { 0.5f,0.5f,0.5f };
 	param.intervalTime = 0.3f;
 	param.initSpeed = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	param.position =m_position /*m_characterController.GetPosition()*/;
+	param.position =m_position;
 
 	m_particleEmitter = new ParticleEmitter;
 	m_particleEmitter->Init(param);

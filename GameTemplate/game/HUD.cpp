@@ -9,7 +9,7 @@ HUD::HUD()
 
 HUD::~HUD()
 {
-	m_pTexture->Release();
+	//m_pTexture->Release();
 }
 
 void HUD::Initialize(LPCTSTR modelName,D3DXVECTOR2 position)

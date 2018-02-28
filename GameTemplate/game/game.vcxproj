@@ -168,6 +168,7 @@
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="IGameObject.cpp" />
     <ClCompile Include="Indexbuffer.cpp" />
+    <ClCompile Include="IScene.cpp" />
     <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="MoveObject.cpp" />
@@ -201,8 +202,9 @@
     <ClCompile Include="myEngine\System.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RenderTarget.cpp" />
-    <ClCompile Include="SceneChange.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ShadowMap.cpp" />
+    <ClCompile Include="Silhouette.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
     <ClCompile Include="Spring.cpp" />
@@ -236,6 +238,7 @@
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="IGameObject.h" />
     <ClInclude Include="Indexbuffer.h" />
+    <ClInclude Include="IScene.h" />
     <ClInclude Include="MapManager.h" />
     <ClInclude Include="MapObject.h" />
     <ClInclude Include="MoveObject.h" />
@@ -272,8 +275,9 @@
     <ClInclude Include="myEngine\system.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RenderTarget.h" />
-    <ClInclude Include="SceneChange.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ShadowMap.h" />
+    <ClInclude Include="Silhouette.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundEngine.h" />
     <ClInclude Include="Spring.h" />

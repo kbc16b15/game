@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "BossEnemy.h"
 #include "game.h"
+//#include "SceneManager.h"
 #include "Player.h"
 #include "BossHp.h"
 #include "BulletManager.h"
@@ -58,13 +59,12 @@ BossEnemy::~BossEnemy()
 void BossEnemy::Release()
 {
 	m_skinModelData.Release();
-	m_characterController.RemoveRigidBoby();
+	//m_characterController.RemoveRigidBoby();
 	if (m_particleEmitter != nullptr)
 	{
 		delete m_particleEmitter;
 		m_particleEmitter = nullptr;
 	}
-	//m_characterController.RemoveRigidBoby();
 	//法線マップ開放
 	if (m_normalMap != NULL)
 	{
@@ -103,12 +103,7 @@ void BossEnemy::Init(D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 	m_groundSound = new Sound;
 	m_beamSound = new Sound;
 	m_breakSound = new Sound;
-	/*Sound*	GroundSound = new Sound();
-	GroundSound->Init("Assets/Sound/jump.wav");
-	GroundSound->SetVolume(0.0f);
-	GroundSound->Play(false);*/
 
-	m_sPos = pos;
 	m_position = pos;
 	m_rotation = rot;
 	m_skinModelData.LoadModelData("Assets/modelData/Tank.X", NULL);
@@ -166,7 +161,8 @@ void BossEnemy::Init(D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 	m_particleEmitter = new ParticleEmitter;
 	m_particleEmitter->Init(param);
 
-	Game::GetInstance().BgmStop();
+	SceneManager::GetInstance().GetGame().BgmStop();
+	//Game::GetInstance().BgmStop();
 	m_bgmSound = new Sound();
 	m_bgmSound->Init("Assets/Sound/Edge of the galaxy.wav", false);
 	m_bgmSound->SetVolume(BgmVolume);
@@ -177,7 +173,10 @@ void BossEnemy::Update()
 {
 	if (&BossEnemy::GetInstance() == NULL || &BossHp::GetInstance() == NULL) { return; };
 	if (m_isDeath) { return; }
-	m_bgmSound->Update();
+	if (m_bgmSound != nullptr) {
+		if (m_bgmSound->IsPlaying())
+			m_bgmSound->Update();
+	}
 	//エネミーの移動処理
 	m_moveSpeed = m_characterController.GetMoveSpeed();
 	m_moveSpeed.x = 0.0f;
@@ -253,7 +252,7 @@ void BossEnemy::StartState()
 		m_bossState = BossEnemyState::STAND;
 		//gameCamera::GetInstance().BossCamera();
 		m_characterController.SetGravity(0.0f);
-		//m_characterController.RemoveRigidBoby();
+		m_characterController.RemoveRigidBoby();
 	}
 
 }
@@ -284,7 +283,6 @@ void BossEnemy::Attack()
 	float len=D3DXVec3Length(&toPos);
 	if (!m_isTarget) {
 		m_targetPos = Player::GetInstance().Getpos() - m_characterController.GetPosition();
-		//m_targetLen = D3DXVec3Length(&m_targetPos);
 		m_targetPos.y = 0.0f;
 		m_targetPos.x *= bossAddMove;
 		m_targetPos.z *= bossAddMove;
@@ -352,9 +350,9 @@ void BossEnemy::Damege()
 {
 
 	//ダメージ判定
-	if (m_isDamageflg&&m_damageTime<0|| GetAsyncKeyState('G'))
+	if (m_isDamageflg&&m_damageTime<0)
 	{
-		if (m_bossState!=BossEnemyState::DEAD/*m_isDead == false*/)
+		if (m_bossState!=BossEnemyState::DEAD)
 		{
 			m_isDamageflg = false;
 			BossHp::GetInstance().BossDamage(1);
@@ -389,20 +387,12 @@ void BossEnemy::Draw()
 	m_skinModel.Draw(&Camera::GetInstance().GetViewMatrix(), &Camera::GetInstance().GetProjectionMatrix());
 
 	//ゲームが終了したら
-	if (Game::GetInstance().GetGameEnd())
+	if (SceneManager::GetInstance().GetGame().GetGameEnd())
 	{
 		m_isDeath = true;
 		Release();
 		return;
 	}
-}
-
-void BossEnemy::HudDraw()
-{
-	//if (!m_isDead) {return;}
-	//if (m_bossState != BossEnemyState::DEAD) { return; }
-	//パーティクルの描画
-	//m_particleEmitter->HudDraw(/*Camera::GetInstance().GetViewMatrix(), Camera::GetInstance().GetProjectionMatrix()*/);
 }
 
 void BossEnemy::Dead()
@@ -425,7 +415,7 @@ void BossEnemy::Dead()
 	//gameCamera::GetInstance().BossEndCamera();
 	if (m_deadTime < 0) 
 	{ 
-		Game::GetInstance().StageClear(true);
+		SceneManager::GetInstance().GetGame().StageClear(true);
 		GameObjectManager::GetGameObjectManager().DeleteGameObject(m_particleEmitter);
 
 		m_isActive = false;

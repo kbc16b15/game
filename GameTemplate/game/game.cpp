@@ -5,9 +5,7 @@
 #include "game.h"
 #include <stdlib.h>
 #include <time.h>
-#include "TitleScene.h"
-#include "ResultScene.h"
-#include "ClearScene.h"
+#include "SceneManager.h"
 #include "Fade.h"
 #include "Map.h"
 #include "ShadowMap.h"
@@ -18,19 +16,13 @@
 #include "EnemyManager.h"
 #include "BulletManager.h"
 #include "GameObjectManager.h"
-#include "SceneChange.h"
-
 #include "BossEnemy.h"
 #include "BossHp.h"
-
-Game *Game::m_game = NULL;
+#include "Silhouette.h"
 
 //コンストラクタ。
 Game::Game()
 {
-	//SetLight();
-
-	SceneChange::Create();
 	Player::Create();
 	PlayerHp::Create();
 	BulletManager::Create();
@@ -38,14 +30,19 @@ Game::Game()
 	Map::Create();
 	gameCamera::Create();
 	Bloom::Create();
-
+	m_silhouette = new Silhouette;
 }
 /*!
  * @brief	デストラクタ。
  */
 Game::~Game()
 {
-	m_bgmSound->Release();
+	if (m_bgmSound != nullptr)
+	{
+		m_bgmSound->Release();
+		m_bgmSound = nullptr;
+	}
+	
 	Player::GetInstance().Destroy();
 	PlayerHp::GetInstance().Destroy();
 	EnemyManager::GetInstance().Release();
@@ -53,22 +50,19 @@ Game::~Game()
 	Map::GetInstance().Destroy();
 	gameCamera::GetInstance().Destroy();
 	Bloom::GetInstance().Destroy();
+	delete m_silhouette;
 }
 
 void Game::GameRelease()
 {
-	GameObjectManager::GetGameObjectManager().DeleteGameObject(&Game::GetInstance());
+	GameObjectManager::GetGameObjectManager().DeleteGameObject(&Map::GetInstance());
+	GameObjectManager::GetGameObjectManager().DeleteGameObject(m_silhouette);
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&Player::GetInstance());
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&PlayerHp::GetInstance());
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&EnemyManager::GetInstance());
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&BulletManager::GetInstance());
-	
-	GameObjectManager::GetGameObjectManager().DeleteGameObject(&Map::GetInstance());
-	
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&gameCamera::GetInstance());
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&Bloom::GetInstance());
-
-	Game::GetInstance().Destroy();
 
 }
 /*!
@@ -76,6 +70,8 @@ void Game::GameRelease()
  */
 void Game::Init()
 {
+
+
 	const float SoundVolume = 0.2f;
 	m_bgmSound = new Sound();
 	m_bgmSound->Init("Assets/Sound/アバタール.wav", false);
@@ -85,18 +81,21 @@ void Game::Init()
 	Player::GetInstance().Init();
 	PlayerHp::GetInstance().Init();
 	//マップを初期化
-	Map::GetInstance().SetStage(SceneChange::GetInstance().GetMapNo());
+	Map::GetInstance().SetStage(m_stageNo);
 	Map::GetInstance().Init();
 
 	//カメラ初期化。
 	gameCamera::GetInstance().Init();
 	//登録
+	GameObjectManager::GetGameObjectManager().AddGameObject(&Map::GetInstance());
+	GameObjectManager::GetGameObjectManager().AddGameObject(m_silhouette);
 	GameObjectManager::GetGameObjectManager().AddGameObject(&Player::GetInstance());
+	
 	GameObjectManager::GetGameObjectManager().AddGameObject(&PlayerHp::GetInstance());
 	GameObjectManager::GetGameObjectManager().AddGameObject(&gameCamera::GetInstance());
 	GameObjectManager::GetGameObjectManager().AddGameObject(&BulletManager::GetInstance());
 	GameObjectManager::GetGameObjectManager().AddGameObject(&EnemyManager::GetInstance());
-	GameObjectManager::GetGameObjectManager().AddGameObject(&Map::GetInstance());
+
 
 	GameObjectManager::GetGameObjectManager().AddGameObject(&Bloom::GetInstance());
 
@@ -107,7 +106,11 @@ void Game::Init()
  */
 void Game::Update()
 {
-	m_bgmSound->Update();
+	if (m_bgmSound != nullptr) {
+		if (m_bgmSound->IsPlaying())
+			m_bgmSound->Update();
+	}
+
 	//シャドウ
 	SetShadow();
 	//フェード
@@ -119,14 +122,6 @@ void Game::Update()
  */
 void Game::Draw()
 {
-	//物体に遮蔽されているときにだけ描画する
-
-	//g_pd3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_GREATER);
-	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE,FALSE);//Z値を書き込まないようにする
-	//Player::GetInstance().ShadowDraw(&Camera::GetInstance().GetViewMatrix(), &Camera::GetInstance().GetProjectionMatrix(),true, false);
-	//g_pd3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESS);
-	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
-
 	if (!m_isLoadEnd)
 	{
 		m_isLoadEnd = true;
@@ -164,35 +159,25 @@ void Game::SceneFade()
 				BossEnemy::GetInstance().Destroy();
 			}
 			m_isEnd = true;
-			ResultScene::Create();
-			ResultScene::GetInstance().Init();
-			GameObjectManager::GetGameObjectManager().AddGameObject(&ResultScene::GetInstance());
 			Fade::GetInstance().StartFadeOut();
 			m_state = WaitFadeOut;
+			
 		}
 		//次のステージへ
 		else if (m_isNext)
 		{
 			if (Map::GetInstance().GetStage() == Map::GetInstance().STAGE1&&!m_isNextTo)
 			{
-				/*GameObjectManager::GetGameObjectManager().DeleteGameObject(&Map::GetInstance());
-				Map::GetInstance().Destroy();*/
-				SceneChange::GetInstance().Init();
-				SceneChange::GetInstance().SetChange(true);
-				GameObjectManager::GetGameObjectManager().AddGameObject(&SceneChange::GetInstance());
-				//GameObjectManager::GetGameObjectManager().AddGameObject(&ResultScene::GetInstance());
-				SceneChange::GetInstance().SetMapNo(1);//マップ切り替え
+				m_stageNo = 1;
 				Fade::GetInstance().StartFadeOut();
 				m_state = WaitFadeOut;
 				m_isNext = false;
 				m_isNextTo = true;
+
 			}
 			else if (Map::GetInstance().GetStage() == Map::GetInstance().STAGE2&&!m_isNextTo)
 			{
-
-				TitleScene::Create();
-				TitleScene::GetInstance().Init();
-				GameObjectManager::GetGameObjectManager().AddGameObject(&TitleScene::GetInstance());
+				m_stageNo = 2;
 				Fade::GetInstance().StartFadeOut();
 				m_state = WaitFadeOut;
 				m_isNext = false;
@@ -202,19 +187,32 @@ void Game::SceneFade()
 		//クリアシーン
 		else if (m_isClear)
 		{
-			ClearScene::Create();
-			ClearScene::GetInstance().Init();
-			GameObjectManager::GetGameObjectManager().AddGameObject(&ClearScene::GetInstance());
 			m_state = WaitFadeOut;
-			//Fade::GetInstance().StartFadeOut();
-			m_isClear = false;
+			//m_isClear = false;
 		}
 		break;
 	case WaitFadeOut:
 		if(!Fade::GetInstance().isExecute())
 		{
-			Game::GetInstance().GameRelease();
+			GameRelease();
+			if (m_isClear)
+			{
+				SceneManager::ChangeScene(SceneManager::CLEAR);
+			}
+			else if (m_isEnd)
+			{
+				SceneManager::ChangeScene(SceneManager::RESULT);
+			}
+			else if (m_stageNo == 1 && m_isNextTo)
+			{
+				SceneManager::ChangeScene(SceneManager::GAME2);
+			}
+			else if(m_stageNo==2&&m_isNextTo)
+			{
+				SceneManager::ChangeScene(SceneManager::GAME3);
+			}
 		}
+		
 		break;
 	default:
 		break;

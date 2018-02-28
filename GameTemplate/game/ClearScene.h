@@ -1,9 +1,12 @@
 #pragma once
 //#include "IGameObject.h"
+#include "IScene.h"
 #include "HUD.h"
-class ClearScene :public IGameObject
+class ClearScene :public IScene
 {
 public:
+	//コンストラクタ
+	ClearScene();
 	//デストラクタ
 	~ClearScene();
 	//初期化
@@ -11,38 +14,15 @@ public:
 	//更新
 	void Update();
 	//描画
-	void PrePostDraw();
+	void /*PrePost*/Draw();
 	//フェード
 	void SceneFade();
 	//スプライト生成関数
 	HRESULT CreateSprite();
 
-	//インスタンスの生成
-	static  void ClearScene::Create()
-	{
-		if (!m_clear)
-		{
-			m_clear = new ClearScene;
-
-		}
-	}
-	//インスタンスの消去
-	static  void ClearScene::Destroy()
-	{
-		delete m_clear;
-		m_clear = nullptr;
-	}
-	//インスタンスの取得
-	static ClearScene& GetInstance()
-	{
-		return *m_clear;
-	}
+	
 private:
-
-	//コンストラクタ
-	ClearScene();
-	static ClearScene* m_clear;//インスタンス
-								 //フェード
+	//フェード
 	enum EState {
 		WaitFadeIn,
 		Run,

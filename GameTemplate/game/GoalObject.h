@@ -20,5 +20,6 @@ public:
 
 private:
 	ParticleEmitter*	m_particleEmitter;	//パーティクル
+	bool				m_isGoal = false;
 };
 

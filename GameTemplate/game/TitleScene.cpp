@@ -2,32 +2,34 @@
 #include "TitleScene.h"
 #include "game.h"
 #include "Fade.h"
-#include "GameObjectManager.h"
-TitleScene *TitleScene::m_title = NULL;
+#include "SceneManager.h"
+//TitleScene *TitleScene::m_title = NULL;
 
 TitleScene::TitleScene()
 {
+
 }
 
 TitleScene::~TitleScene()
 {
 	delete m_titleHud;
+	if (m_buttonSound != nullptr) {
+		delete m_buttonSound;
+		m_buttonSound = nullptr;
+	}
 }
 
 void TitleScene::Init()
 {
 	m_titleHud = new HUD;
-	m_titleHud->Initialize("Assets/Sprite/T2.tga",m_titlePos);
+	m_titleHud->Initialize("Assets/Sprite/T2.tga", m_titlePos);
 	CreateSprite();
 	m_buttonSound = new Sound;
 	m_titleHud->Update();
-	//Fade::GetInstance().StartFadeIn();
 }
 
 void TitleScene::Update()
 {
-	if (m_title == NULL) { return; };
-	/*m_titleHud->Update();*/
 	if (m_buttonSound != nullptr) {
 		if (m_buttonSound->IsPlaying())
 			m_buttonSound->Update();
@@ -35,7 +37,7 @@ void TitleScene::Update()
 	SceneFade();
 }
 
-void TitleScene::PrePostDraw()
+void TitleScene::Draw()
 {
 	//g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	//g_pd3dDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
@@ -80,10 +82,6 @@ void TitleScene::SceneFade()
 			m_buttonSound->Init("Assets/Sound/select2.wav");
 			m_buttonSound->SetVolume(0.4f);
 			m_buttonSound->Play(false);
-			Game::Create();
-			GameObjectManager::GetGameObjectManager().AddGameObject(&Game::GetInstance());
-			Game::GetInstance().Init();
-			
 
 		}
 		break;
@@ -91,9 +89,7 @@ void TitleScene::SceneFade()
 
 		if (!Fade::GetInstance().isExecute())
 		{
-			GameObjectManager::GetGameObjectManager().DeleteGameObject(&TitleScene::GetInstance());
-			TitleScene::GetInstance().Destroy();
-			//return;
+			SceneManager::ChangeScene(SceneManager::GAME);
 		}
 		break;
 	default:

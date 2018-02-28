@@ -14,7 +14,7 @@ public:
 	//更新
 	void Update();
 	//描画
-	void HudDraw();
+	//void HudDraw();
 	//描画
 	void Draw();
 	//開始
@@ -87,7 +87,6 @@ private:
 	SkinModelData		m_skinModelData;		//スキンモデルデータ
 	D3DXVECTOR3			m_position;				//座標
 	D3DXVECTOR3			m_middlePosition;		//ボスの中心座標
-	D3DXVECTOR3			m_sPos;					//初期座標
 	D3DXVECTOR3			m_targetPos;			//目的座標
 	D3DXVECTOR3			m_scale;				//拡大
 	D3DXQUATERNION		m_rotation;				//回転

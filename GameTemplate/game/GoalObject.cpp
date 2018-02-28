@@ -83,8 +83,11 @@ void GoalObject::Update()
 	const float GoalLenge = 2.5f;
 	if (len < GoalLenge||GetAsyncKeyState('N'))
 	{
-		Game::GetInstance().StageNext();
-
+		//Game::GetInstance().StageNext();
+		
+		SceneManager::GetInstance().GetGame().StageNext();
+		
+		
 	}
 
 	m_model.UpdateWorldMatrix(m_position, m_rotation, { 1.0f,1.0f,1.0f, });

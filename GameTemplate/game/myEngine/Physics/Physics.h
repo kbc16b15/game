@@ -6,7 +6,7 @@ class RigidBody;
 /*!
  * @brief	物理ワールド。
  */
-class PhysicsWorld
+class PhysicsWorld:public IGameObject
 {
 	//コンストラクタ
 	PhysicsWorld();

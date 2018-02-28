@@ -1,8 +1,10 @@
 #pragma once
-
-class ResultScene:public IGameObject
+#include "IScene.h"
+class ResultScene :public IScene
 {
 public:
+	//コンストラクタ
+	ResultScene();
 	//デストラクタ
 	~ResultScene();
 	//初期化
@@ -10,37 +12,13 @@ public:
 	//更新
 	void Update();
 	//描画
-	void PrePostDraw();
+	void Draw();
 	//フェード
 	void SceneFade();
 	//スプライト生成関数
 	HRESULT CreateSprite();
 
-	//インスタンスの生成
-	static  void ResultScene::Create()
-	{
-		if (!m_result)
-		{
-			m_result = new ResultScene;
-
-		}
-	}
-	//インスタンスの消去
-	static  void ResultScene::Destroy()
-	{
-		delete m_result;
-		m_result = nullptr;
-	}
-	//インスタンスの取得
-	static ResultScene& GetInstance()
-	{
-		return *m_result;
-	}
 private:
-	
-	//コンストラクタ
-	ResultScene();
-	static ResultScene* m_result;//インスタンス
 	//フェード
 	enum EState {
 		WaitFadeIn,

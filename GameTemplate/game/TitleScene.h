@@ -1,10 +1,13 @@
 #pragma once
 #include "HUD.h"
 #include "Sound.h"
+#include "IScene.h"
 //#include "IGameObject.h"
-class TitleScene :public IGameObject
+class TitleScene :public IScene
 {
 public:
+	//コンストラクタ
+	TitleScene();
 	//デストラクタ
 	~TitleScene();
 	//初期化
@@ -12,7 +15,7 @@ public:
 	//更新
 	void Update();
 	//描画
-	void PrePostDraw();
+	void Draw();
 	//フェード
 	void SceneFade();
 	//スプライト生成関数
@@ -22,31 +25,9 @@ public:
 	{
 		m_isStart = start;
 	}
-	//インスタンスの取得
-	static TitleScene& GetInstance()
-	{
-		return *m_title;
-	}
-	//インスタンスの生成
-	static void TitleScene::Create()
-	{
-		if (!m_title)
-		{
-			m_title = new TitleScene;
-		}
-	
-	}
-	//インスタンスの消去
-	static  void TitleScene::Destroy()
-	{
-		delete m_title;
-		m_title = nullptr;
-	}
+
 private:
-	
-	//コンストラクタ
-	TitleScene();
-	static TitleScene* m_title;//インスタンス
+
 	//ステート
 	enum EState {
 		WaitFadeIn,

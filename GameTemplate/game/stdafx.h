@@ -33,5 +33,6 @@
 #include "myEngine\HID\Pad.h"
 //#include "SpringCamera.h"
 #include "CubeCollision.h"
+#include "SceneManager.h"
 
 extern void DrawQuadPrimitive();

@@ -406,3 +406,9 @@
 	D3DXVECTOR3(-208.81f, 3.00f, 11.40f),             //平行移動
 	D3DXQUATERNION(0.00f, 1.00f, 0.00f, 0.00f ),  //回転
 },
+//GoalCube
+{
+	"GoalCube",
+	D3DXVECTOR3(-252.30f, 0.76f, 35.62f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+},

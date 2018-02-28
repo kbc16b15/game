@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "GameObjectManager.h"
-#include "game.h"
+//#include "game.h"
 
 GameObjectManager *GameObjectManager::m_goMgr = NULL;
 
@@ -104,4 +104,16 @@ void GameObjectManager::Draw()
 		}
 	}
 }
+
+//IGameObject* IGameObject::ObjectFactory(const char* ObjectName)
+//{
+//	/*IGameObject* ob = nullptr;
+//	if (strcmp("Player", ObjectName) == 0) {
+//		m_player = new Player();
+//		ob = m_player;
+//	}
+//
+//
+//	return ob;*/
+//}
 

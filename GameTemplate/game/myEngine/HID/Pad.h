@@ -17,7 +17,7 @@ struct PAD_STATE
 /*!
 * @brief	ゲームパッドクラス。
 */
-class Pad/*:public IGameObject*/
+class Pad:public IGameObject
 {
 public:
 	/*!

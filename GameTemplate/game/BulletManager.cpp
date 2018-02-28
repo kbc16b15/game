@@ -62,12 +62,12 @@ void BulletManager::Update()
 	}
 
 	//敵のアップデート
-	for (auto BulletWeaponIt : m_bulletWeapon)
+	/*for (auto BulletWeaponIt : m_bulletWeapon)
 	{
 		BulletWeaponIt->Update();
 	}
 
-	BulletHud::GetInstance().Update();
+	BulletHud::GetInstance().Update();*/
 	//バレットの死亡判定
 	//auto bulletIt = m_bullets.begin();
 	//while (bulletIt != m_bullets.end()) {

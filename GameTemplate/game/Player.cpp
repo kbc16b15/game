@@ -13,7 +13,7 @@
 #include "EnemyManager.h"
 #include "BossEnemy.h"
 
-Player *Player::m_player = NULL;
+Player *Player::player = NULL;
 Player::Player()
 {
 	//m_JumpSound = new Sound();
@@ -506,7 +506,7 @@ void Player::PlayerBullet()
 
 	m_bulletIntervalTime--;
 	const float bulletSpeed = 0.2f;
-	if (/*m_bulletIntervalTime < 0 && Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonB) ||*/m_bulletIntervalTime < 0 && Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonRB1) /*|| GetAsyncKeyState('B')*/ && m_isPlayerBulletCamera){
+	if (/*m_bulletIntervalTime < 0 && Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonB) ||*/m_bulletIntervalTime < 0 && Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonRB1)  && m_isPlayerBulletCamera|| GetAsyncKeyState('B')){
 		if (!isBossExist) {
 			if (&EnemyManager::GetInstance().GetEnemy() != NULL) {
 				std::list<trackingEnemy*> enestl = EnemyManager::GetInstance().GetEnemy();

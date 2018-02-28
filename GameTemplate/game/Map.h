@@ -16,7 +16,8 @@ public:
 	enum STAGE
 	{
 		STAGE1,
-		STAGE2
+		STAGE2,
+		STAGE3
 	};
 	//デストラクタ
 	~Map();
@@ -26,9 +27,13 @@ public:
 	void Draw();
 	//更新
 	void Update();
-
+	//ステージ1のロード
 	void MapLoad1();
+	//ステージ2のロード
 	void MapLoad2();
+	//ステージ3のロード
+	void MapLoad3();
+	//マップ作成
 	void MapCreate(const char* mapName, int no, SMapChipLocInfo Info[]);
 
 	//ステージ

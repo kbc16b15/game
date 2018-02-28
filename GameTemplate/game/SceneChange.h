@@ -15,6 +15,8 @@ public:
 	void PrePostDraw();
 
 	void SceneFade();
+
+	void Change();
 	int GetMapNo()
 	{
 		return m_stageNo;
@@ -65,12 +67,12 @@ private:
 	int m_stageNo = 0;
 	bool m_isChange=false;
 
-	enum EState {
-		WaitFadeIn,
-		Run,
-		WaitFadeOut
-	};
-	EState				m_state = WaitFadeIn;				//フェード
+	//enum EState {
+	//	WaitFadeIn,
+	//	Run,
+	//	WaitFadeOut
+	//};
+	//EState				m_state = WaitFadeIn;				//フェード
 	LPD3DXSPRITE		m_sprite;							//スプライト
 	HUD					m_changeHud;						//タイトル画像
 	const D3DXVECTOR2	m_changePos = { 595.0f,400.0f };	//タイトル画像の座標

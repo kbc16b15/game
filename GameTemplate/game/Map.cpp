@@ -7,11 +7,11 @@
 #include "Player.h"
 #include "MapManager.h"
 #include "EnemyManager.h"
-#include "SceneChange.h"
+//#include "SceneChange.h"
 #include "GameObjectManager.h"
-#include "BulletWeapon.h"
-#include "BulletManager.h"
-#include "game.h"
+//#include "BulletWeapon.h"
+//#include "BulletManager.h"
+//#include "game.h"
 
 Map *Map::m_map = NULL;
 
@@ -25,6 +25,12 @@ SMapChipLocInfo Info2[] = {
 
 //#include "Boss.h"
 #include "locationinfo8.h"
+};
+
+SMapChipLocInfo Info3[] = {
+
+#include "Boss.h"
+	//#include "locationinfo8.h"
 };
 
 Map::Map()
@@ -54,6 +60,9 @@ void Map::Init(/*SMapChipLocInfo Info[]*/)
 		break;
 	case STAGE::STAGE2://ステージ２
 		MapLoad2();
+		break;
+	case STAGE::STAGE3://ステージ3
+		MapLoad3();
 		break;
 	default:
 		break;
@@ -274,6 +283,87 @@ void Map::MapLoad2()
 		}
 		else {
 			MapCreate("map", i, &Info2[0]);
+		}
+
+	}
+}
+
+void Map::MapLoad3()
+{
+	int numObject = sizeof(Info3) / sizeof(Info3[0]);
+
+	for (int i = 0; i < numObject; i++) {
+
+		if (strcmp(Info3[i].modelName, "dore") == 0)
+		{
+			MapCreate("MoveObject", i, &Info3[0]);
+		}
+		else if (strcmp(Info3[i].modelName, "BCube") == 0)
+		{
+			MapCreate("BoxChip", i, &Info3[0]);
+		}
+		else if (strcmp(Info3[i].modelName, "BCube2") == 0)
+		{
+			MapCreate("BoxChip", i, &Info3[0]);
+		}
+		else if (strcmp(Info3[i].modelName, "TCircle") == 0)//回転　ダメージオブジェクト
+		{
+			MapCreate("TCircle", i, &Info3[0]);
+		}
+		else if (strcmp(Info3[i].modelName, "FCubeF") == 0)
+		{
+			MapCreate("FCubeF", i, &Info3[0]);
+		}
+		else if (strcmp(Info3[i].modelName, "FCubeB") == 0)
+		{
+			MapCreate("FCubeB", i, &Info3[0]);
+		}
+		else if (strcmp(Info3[i].modelName, "FCubeR") == 0)
+		{
+			MapCreate("FCubeR", i, &Info3[0]);
+		}
+		else if (strcmp(Info3[i].modelName, "FCubeL") == 0)
+		{
+			MapCreate("FCubeL", i, &Info3[0]);
+		}
+		else if (strcmp(Info3[i].modelName, "GoalCube") == 0)//ゴール地点
+		{
+			MapCreate("GoalObject", i, &Info3[0]);
+		}
+		else if (strcmp(Info3[i].modelName, "HealItem") == 0)//回復アイテム
+		{
+			HealItem* healChip = new HealItem;
+			healChip->Init(Info3[i].modelName, Info3[i].pos, Info3[i].rot);
+			m_healList.push_back(healChip);
+		}
+		else if (strcmp(Info3[i].modelName, "Boss") == 0)
+		{
+			BossEnemy::Create();
+			BossHp::Create();
+			BossEnemy::GetInstance().Init(Info3[i].pos, Info3[i].rot);
+			BossHp::GetInstance().Init();
+
+			GameObjectManager::GetGameObjectManager().AddGameObject(&BossEnemy::GetInstance());
+			GameObjectManager::GetGameObjectManager().AddGameObject(&BossHp::GetInstance());
+		}
+		else if (strcmp(Info1[i].modelName, "Weapon") == 0)
+		{
+			/*BulletWeapon* weapon = new BulletWeapon;
+			BulletManager::GetInstance().AddBulletWeapon(weapon);
+			weapon->Init(Info1[i].pos, Info1[i].rot);*/
+		}
+		else if (strcmp(Info3[i].modelName, "Drone") == 0)//エネミーの位置設定
+		{
+			trackingEnemy* Tenemy = new trackingEnemy;
+			EnemyManager::GetInstance().AddTrackingEnemy(Tenemy);
+			Tenemy->Init(Info3[i].pos, Info3[i].rot);
+		}
+		else if (strcmp(Info3[i].modelName, "unity") == 0)//プレイヤーの初期位置
+		{
+			Player::GetInstance().Setpos(Info3[i].pos);
+		}
+		else {
+			MapCreate("map", i, &Info3[0]);
 		}
 
 	}

@@ -11,25 +11,7 @@
 #include "TitleScene.h"
 #include "SoundEngine.h"
 #include "GameObjectManager.h"
-
-
-//#include "game.h"
-//#include <stdlib.h>
-//#include <time.h>
-//#include "TitleScene.h"
-//#include "ResultScene.h"
-//#include "ClearScene.h"
-//#include "Fade.h"
-//#include "Map.h"
-//#include "ShadowMap.h"
-//#include "bloom.h"
-//#include "gameCamera.h"
-//#include "Player.h"
-//#include "PlayerHp.h"
-//#include "EnemyManager.h"
-//#include "BulletManager.h"
-//#include "GameObjectManager.h"
-//#include "SceneChange.h"
+#include "SceneManager.h"
 
 LPD3DXEFFECT	copyEffect;
 //LPD3DXEFFECT	monochromeEffect;			//!<18-4 モノクロフィルターをかけるシェーダー。
@@ -202,56 +184,40 @@ void CopyMainRTToCurrentRT()
 //-----------------------------------------------------------------------------
 void Init()
 {
-
-
-
+	GameObjectManager::Create();
+	SceneManager::Create();
 	CubeCollision::Create();
+
 	InitMainRenderTarget();
 	//18-3 四角形の板ポリプリミティブを作成。
 	InitQuadPrimitive();
 	//18-3、18-4 シェーダーをロード。
 	LoadShaders();
-	GameObjectManager::Create();
+
 	//物理ワールドを初期化
 	PhysicsWorld::Create();
 	PhysicsWorld::GetInstance().Init();
 	//シーンの初期化
 	SoundEngine::Create();
 	SoundEngine::GetInstance().Init();
-	TitleScene::Create();
+
 	Pad::Create();
 	//フェード
 	Fade::Create();
-
+	Fade::GetInstance().Init();
 	//シャドウマップ
 	ShadowMap::Create();
 	ShadowMap::GetInstance().Init();
 
-	Fade::GetInstance().Init();
-	TitleScene::GetInstance().SetStart(true);
-	TitleScene::GetInstance().Init();
+	GameObjectManager::GetGameObjectManager().AddGameObject(&Pad::GetInstance());
+	GameObjectManager::GetGameObjectManager().AddGameObject(&PhysicsWorld::GetInstance());
+	GameObjectManager::GetGameObjectManager().AddGameObject(&SoundEngine::GetInstance());
 	GameObjectManager::GetGameObjectManager().AddGameObject(&Fade::GetInstance());
-	GameObjectManager::GetGameObjectManager().AddGameObject(&TitleScene::GetInstance());
-
-
-	//SceneChange::Create();
-	//Player::Create();
-	//PlayerHp::Create();
-	//BulletManager::Create();
-	//EnemyManager::Create();
-	//Map::Create();
-	//gameCamera::Create();
-	//Bloom::Create();
-
-	////プレイヤー初期化
-	//Player::GetInstance().Init();
-	//PlayerHp::GetInstance().Init();
-	////マップを初期化
-	//Map::GetInstance().SetStage(SceneChange::GetInstance().GetMapNo());
-	//Map::GetInstance().Init();
-
-	////カメラ初期化。
-	//gameCamera::GetInstance().Init();
+	SceneManager::ChangeScene(SceneManager::TITLE);
+	GameObjectManager::GetGameObjectManager().AddGameObject(&SceneManager::GetInstance());
+	
+	
+	
 }
 //-----------------------------------------------------------------------------
 // Name: 描画処理。
@@ -307,9 +273,9 @@ VOID Render()
 void Update()
 {
 
-	SoundEngine::GetInstance().Update();
-	Pad::GetInstance().Update();
-	PhysicsWorld::GetInstance().Update();
+	//SoundEngine::GetInstance().Update();
+	//Pad::GetInstance().Update();
+	//PhysicsWorld::GetInstance().Update();
 	GameObjectManager::GetGameObjectManager().Update();
 
 }
@@ -318,22 +284,25 @@ void Update()
 //-----------------------------------------------------------------------------
 void Terminate()
 {
+	GameObjectManager::GetGameObjectManager().DeleteGameObject(&PhysicsWorld::GetInstance());
 	PhysicsWorld::GetInstance().Destroy();
 	//delete m_primitive;
 	Primitive::GetMainPrimitive().Release();
 	Primitive::GetMainPrimitive().DestroyMainPrimitive();
 	RenderTarget::MainRenderTargetGetInstance().Destroy();
 	ShadowMap::GetInstance().Destroy();
+	GameObjectManager::GetGameObjectManager().DeleteGameObject(&Pad::GetInstance());
 	Pad::GetInstance().Destroy();
 	GameObjectManager::GetGameObjectManager().DeleteGameObject(&Fade::GetInstance());
 	Fade::GetInstance().Destroy();
-	GameObjectManager::GetGameObjectManager().Destroy();
+	
+	GameObjectManager::GetGameObjectManager().DeleteGameObject(&SoundEngine::GetInstance());
 	SoundEngine::GetInstance().Release();
 	copyEffect->Release();
 	g_pd3dDevice->Release();
 	g_pD3D->Release();
 	g_effectManager->Release();
 	//delete g_effectManager;
+	GameObjectManager::GetGameObjectManager().Destroy();
 
 }
-//クローン
