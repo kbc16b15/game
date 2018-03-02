@@ -11,7 +11,7 @@ FallObject::FallObject(int sType)
 
 void FallObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rot)
 {
-	firstpos = pos;
+	//firstpos = pos;
 	//読み込むモデルのファイルパスを作成。
 	char modelPath[256];
 	sprintf(modelPath, "Assets/modelData/%s.x", /*locInfo.modelName*/modelName);
@@ -49,6 +49,7 @@ void FallObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rot
 	//剛体を作成。
 	m_rigidBody.Create(m_rbInfo);
 	//rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+	//m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_AddSpeed);
 	switch (m_speed)
 	{
 	case F:
@@ -56,81 +57,62 @@ void FallObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION rot
 		break;
 	case B:
 		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_AddSpeedB);
+		//m_model.SetTextureMove(1);
 		break;
 	case R:
 		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_AddSpeedR);
+		//m_model.SetTextureMove(1);
 		break;
 	case L:
 		m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_AddSpeedL);
+		//m_model.SetTextureMove(1);
 		break;
 	default:
 		break;
 	}
+	m_model.SetTextureMove(true);
 	//作成した剛体を物理ワールドに追加。
 	PhysicsWorld::GetInstance().AddRigidBody(&m_rigidBody);
 }
 
 void FallObject::Update()
 {
-	D3DXVECTOR3 Pspeed = Player::GetInstance().GetSpeed();
-	D3DXVECTOR3 Ppos = Player::GetInstance().Getpos();
+	D3DXVECTOR3 Pspeed = SceneManager::GetGame().GetPlayer().GetSpeed();
+	D3DXVECTOR3 Ppos = SceneManager::GetGame().GetPlayer().Getpos();
 	D3DXVECTOR3 speed = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_speed = NONE;
-	m_speed = Player::GetInstance().GetDir();
-	if (!Player::GetInstance().GetGround())
+	m_speed = SceneManager::GetGame().GetPlayer().GetDir();
+	if (!SceneManager::GetGame().GetPlayer().GetGround())
 	{
+		//m_isGround = true;
 		m_speed = NONE;
 	}
 
-
-	switch (m_speed)
-	{
-	case F:
-		//if (Ppos.x<position.x + 1.8f&&Ppos.x>position.x - 1.8f){
+		switch (m_speed)
+		{
+		case F:
 			speed.y = Pspeed.y;
 			speed.z = m_addSpeed;
-			Player::GetInstance().AddSpeed(speed);
-		//}
-		break;
-	case B:
-		//if (Ppos.x<position.x + 1.8f&&Ppos.x>position.x - 1.8f){
+			SceneManager::GetGame().GetPlayer().AddSpeed(speed);
+			break;
+		case B:
 			speed.y = Pspeed.y;
 			speed.z = -m_addSpeed;
-			Player::GetInstance().AddSpeed(speed);
-		//}
-		break;
-	case R:
-		//if (Ppos.z<position.z + 1.8f&&Ppos.z>position.z - 1.8f){
+			SceneManager::GetGame().GetPlayer().AddSpeed(speed);
+			break;
+		case R:
 			speed.y = Pspeed.y;
 			speed.x = m_addSpeed;
-			Player::GetInstance().AddSpeed(speed);
-		//}
-		break;
-	case L:
-		//if (Ppos.z<position.z + 1.8f&&Ppos.z>position.z - 2.0f){
+			SceneManager::GetGame().GetPlayer().AddSpeed(speed);
+			break;
+		case L:
 			speed.y = Pspeed.y;
 			speed.x = -m_addSpeed;
-			Player::GetInstance().AddSpeed(speed);
-		//}
-		//else if(Ppos.z>position.z+5.0f)
-		//{
-		//	speed.y = Pspeed.y;
-		//	speed.z = -0.3f/*m_addSpeed*/;
-		//	Player::GetInstance().AddSpeed(speed);
-		//}
-		//else if (Ppos.z<position.z-5.0f)
-		//{
-		//	speed.y = Pspeed.y;
-		//	speed.z = -0.3f/*m_addSpeed*/;
-		//	Player::GetInstance().AddSpeed(speed);
-		//}
-		break;
-	
-	default:
+			SceneManager::GetGame().GetPlayer().AddSpeed(speed);
+			break;
 
-
-		break;
-	} 
+		default:
+			break;
+		}
 
 	m_model.UpdateWorldMatrix(m_position, m_rotation, { 1.0f,1.0f,1.0f, });
 

@@ -26,7 +26,8 @@ namespace {
 		LPDIRECT3DCUBETEXTURE9 cubeMap,
 		bool ShadowCaster,
 		bool ShadowRecive,
-		bool Specularlight
+		bool Specularlight,
+		bool isMoveTex
 	)
 	{
 		D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
@@ -115,8 +116,17 @@ namespace {
 		else {
 			pEffect->SetBool("g_isHasNormalMap", false);
 		}
-		pEffect->SetFloat("g_Scroll",g_Scroll);
-		//g_Scroll += 0.00005f;
+		if (!isMoveTex)
+		{
+			pEffect->SetInt("g_MoveDir", false);
+		}
+		else
+		{
+			pEffect->SetFloat("g_Scroll", g_Scroll);
+			pEffect->SetInt("g_MoveDir", true);
+		}
+		const float TexSpeed = 0.0002f;
+		g_Scroll +=TexSpeed;
 
 		if (ShadowRecive)
 		{
@@ -210,7 +220,8 @@ namespace {
 		LPDIRECT3DCUBETEXTURE9 cubeMap,
 		bool ShadowCaster,
 		bool ShadowRecive,
-		bool Specularlight
+		bool Specularlight,
+		bool isMoveTex
 	)
 	{
 		LPD3DXMESHCONTAINER pMeshContainer;
@@ -234,7 +245,8 @@ namespace {
 				cubeMap,
 				ShadowCaster,
 				ShadowRecive,
-				Specularlight
+				Specularlight,
+				isMoveTex
 				);
 
 			pMeshContainer = pMeshContainer->pNextMeshContainer;
@@ -257,7 +269,8 @@ namespace {
 				cubeMap,
 				ShadowCaster,
 				ShadowRecive,
-				Specularlight
+				Specularlight,
+				isMoveTex
 				);
 		}
 
@@ -278,7 +291,8 @@ namespace {
 				cubeMap,
 				ShadowCaster,
 				ShadowRecive,
-				Specularlight
+				Specularlight,
+				isMoveTex
 				);
 		}
 	}
@@ -300,7 +314,6 @@ SkinModel::~SkinModel()
 	//{
 	//	normalMap->Release();
 	//}
-
 	////スペキュラマップ開放
 	//if (specularMap != NULL)
 	//{
@@ -367,7 +380,8 @@ void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)
 			cubeMap,
 			ShadowCaster,
 			ShadowRecive,
-			Specularlight
+			Specularlight,
+			m_ismoveTex
 		);
 	}
 }

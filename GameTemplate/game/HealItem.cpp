@@ -4,12 +4,12 @@
 #include "PlayerHp.h"
 #include "myEngine\Physics\Physics.h"
 
-HealItem::~HealItem()
-{
-	PhysicsWorld::GetInstance().RemoveRigidBody(&m_rigidBody);
-	m_rigidBody.Release();
-	m_modelData.Release();
-}
+//HealItem::~HealItem()
+//{
+//	PhysicsWorld::GetInstance().RemoveRigidBody(&m_rigidBody);
+//	m_rigidBody.Release();
+//	m_modelData.Release();
+//}
 
 
 void HealItem::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
@@ -43,7 +43,7 @@ void HealItem::Init(const char* modelName, D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 
 void HealItem::Update()
 {
-	D3DXVECTOR3 toPos = m_position - Player::GetInstance().Getpos();
+	D3DXVECTOR3 toPos = m_position - SceneManager::GetGame().GetPlayer().Getpos();
 	float len = D3DXVec3Length(&toPos);
 	const float Heallenge = 1.3f;
 	if (len < Heallenge)
@@ -53,7 +53,7 @@ void HealItem::Update()
 		m_healSound->SetVolume(SoundVolume);
 		m_healSound->Play(false);
 
-		PlayerHp::GetInstance().PlayerHeal(1);
+		SceneManager::GetGame().GetPlayerHp().PlayerHeal(1);
 		m_healflg = true;
 	}
 	if (m_healSound != nullptr) {

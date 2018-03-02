@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "EnemyManager.h"
 
-EnemyManager *EnemyManager::m_enemyManager = NULL;
+//EnemyManager *EnemyManager::m_enemyManager = NULL;
 
 EnemyManager::EnemyManager()
 {
@@ -9,7 +9,7 @@ EnemyManager::EnemyManager()
 
 EnemyManager::~EnemyManager()
 {
-	//EnemyManager::GetInstance().Release();
+	Release();
 }
 
 void EnemyManager::Release()
@@ -27,8 +27,8 @@ void EnemyManager::Release()
 
 		trackingEnemyIt = m_tenem.erase(trackingEnemyIt);
 	}
-
-	EnemyManager::GetInstance().Destroy();
+	//delete this;
+	//SceneManager::GetGame().GetEnemyManager.Destroy();
 }
 
 void EnemyManager::Update()
@@ -36,18 +36,21 @@ void EnemyManager::Update()
 	//“G‚ÌƒAƒbƒvƒf[ƒg
 	for (auto trackingEnemyIt : m_tenem)
 	{
-		trackingEnemyIt->Update();
+		if (trackingEnemyIt->GetActive())
+		{
+			trackingEnemyIt->Update();
+		}
 	}
 
 	for (auto Enemynum : m_tenem)
 	{
 		if (Enemynum->GetDeathflg())
 		{
-			delete Enemynum;
+			/*delete */Enemynum->SetActive(false);
 		}
 	}
 	//trackingEnemy‚ÌÁ‹Ž
-	auto EnemyIt = m_tenem.begin();
+	/*auto EnemyIt = m_tenem.begin();
 	while (EnemyIt != m_tenem.end()) {
 		if ((*EnemyIt)->GetDeathflg())
 		{
@@ -57,7 +60,7 @@ void EnemyManager::Update()
 		{
 			EnemyIt++;
 		}
-	}
+	}*/
 }
 
 void EnemyManager::Draw()
@@ -65,6 +68,9 @@ void EnemyManager::Draw()
 	//“G‚Ì•`‰æ
 	for (auto trackingEnemyIt : m_tenem)
 	{
-		trackingEnemyIt->Draw();
+		if (trackingEnemyIt->GetActive())
+		{
+			trackingEnemyIt->Draw();
+		}
 	}
 }

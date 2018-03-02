@@ -2,10 +2,9 @@
 #include "ClearScene.h"
 #include "SceneManager.h"
 #include "Fade.h"
-#include "HUD.h"
 #include "GameObjectManager.h"
-#include "BossEnemy.h"
-#include "BossHp.h"
+//#include "BossEnemy.h"
+//#include "BossHp.h"
 
 
 ClearScene::ClearScene()
@@ -16,22 +15,23 @@ ClearScene::ClearScene()
 
 ClearScene::~ClearScene()
 {
+	m_clearTexture.Release();
 }
 
 void ClearScene::Init()
 {
 	Fade::GetInstance().StartFadeIn();
-	if (BossEnemy::GetInstance().GetDeathflg())
+	/*if (BossEnemy::GetInstance().GetDeathflg())
 	{
 		GameObjectManager::GetGameObjectManager().DeleteGameObject(&BossEnemy::GetInstance());
 		GameObjectManager::GetGameObjectManager().DeleteGameObject(&BossHp::GetInstance());
 		BossHp::GetInstance().Destroy();
 		BossEnemy::GetInstance().Destroy();
-	}
+	}*/
 
-	m_clearHud.Initialize("Assets/Sprite/GameClear.png", m_clearHudPos);
-	CreateSprite();
-	m_clearHud.Update();
+	m_clearTexture.Load("Assets/Sprite/GameClear.png");
+	m_clearSprite.Init(&m_clearTexture);
+	m_clearSprite.SetSize(m_clearScale);
 }
 
 void ClearScene::Update()
@@ -43,7 +43,7 @@ void ClearScene::Update()
 void ClearScene::Draw()
 {
 
-	m_clearHud.Draw(m_sprite);
+	m_clearSprite.Draw();
 
 }
 
@@ -74,14 +74,4 @@ void ClearScene::SceneFade()
 	default:
 		break;
 	}
-}
-
-HRESULT ClearScene::CreateSprite()
-{
-	if (FAILED(D3DXCreateSprite(g_pd3dDevice, &m_sprite)))
-	{
-		MessageBox(0, TEXT("ÉXÉvÉâÉCÉgçÏê¨é∏îs"), NULL, MB_OK);
-		return E_FAIL;//é∏îsï‘ãp
-	}
-	return S_OK;
 }

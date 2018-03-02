@@ -5,7 +5,7 @@
 #include "BulletManager.h"
 //#include "GameObjectManager.h"
 #include "gameCamera.h"
-#include "BulletHud.h"
+//#include "BulletHud.h"
 #include "BossEnemy.h"
 
 BulletWeapon::BulletWeapon()
@@ -122,7 +122,7 @@ void BulletWeapon::Move()
 			m_isPlayerBulletCamera = false;
 			//gameCamera::GetInstance().SetRockCamera(false);
 			Player::GetInstance().SetMove(false);
-			BulletHud::GetInstance().SetBullet(false);
+			//BulletHud::GetInstance().SetBullet(false);
 		}
 
 

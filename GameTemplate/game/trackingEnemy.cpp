@@ -31,7 +31,7 @@ trackingEnemy::~trackingEnemy()
 
 void trackingEnemy::Init(D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 {
-	m_sPos = pos;
+	//m_sPos = pos;
 	m_position = pos;
 	m_rotation = rot;
 	//読み込むモデルのファイルパスを作成。
@@ -84,6 +84,7 @@ void trackingEnemy::Init(D3DXVECTOR3	pos, D3DXQUATERNION	rot)
 	param.Multipos = 0.5f;
 	param.Multispeed = { 0.5f,0.5f,0.5f };
 	param.intervalTime = 0.3f;
+	param.lifeTime = 0.6f;
 	param.initSpeed = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	param.position =m_position;
 
@@ -126,12 +127,12 @@ void trackingEnemy::Move()
 	//m_moveSpeed.x = 0.0f;
 	//m_moveSpeed.z = 0.0f;
 
-	D3DXVECTOR3 toPos = Player::GetInstance().Getpos() - m_position/*m_characterController.GetPosition()*/;
+	D3DXVECTOR3 toPos = SceneManager::GetGame().GetPlayer().Getpos() - m_position/*m_characterController.GetPosition()*/;
 	float len = D3DXVec3Length(&toPos);
 
 	float angle = atan2f(m_direction.x, m_direction.z);
 	D3DXVECTOR3 Def;
-	D3DXVec3Subtract(&Def, &m_position/*m_characterController.GetPosition()*/, &Player::GetInstance().Getpos());
+	D3DXVec3Subtract(&Def, &m_position/*m_characterController.GetPosition()*/, &SceneManager::GetGame().GetPlayer().Getpos());
 
 	float s;
 	float halfAngle = /*angle*/atan2f(-Def.x, -Def.z) * 0.5f;
@@ -168,8 +169,8 @@ void trackingEnemy::Move()
 			//PlayerPos.y += PlayerRadius;
 			//Bullet* bullet=BulletManager::GetInstance().CreateBullet(bullet->ENEMY);
 			Bullet* bullet = new Bullet;
-			BulletManager::GetInstance().AddBullets(bullet);
-			bullet->Start(Player::GetInstance().GetMiddlepos(),m_position, bulletSpeed, bullet->ENEMY);
+			SceneManager::GetGame().GetBulletManager().AddBullets(bullet);
+			bullet->Start(SceneManager::GetGame().GetPlayer().GetMiddlepos(),m_position, bulletSpeed, bullet->ENEMY);
 			m_bulletIntervalTime = m_maxBulletTime;
 
 			//Sound* m_beamSound = new Sound();
@@ -190,7 +191,7 @@ void trackingEnemy::Draw()
 
 void trackingEnemy::Dead()
 {
-	if (Player::GetInstance().GetPlayerDeath())
+	if (SceneManager::GetGame().GetPlayer().GetPlayerDeath())
 	{
 		m_isDeath = true;
 	}

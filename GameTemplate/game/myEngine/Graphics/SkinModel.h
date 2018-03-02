@@ -75,6 +75,11 @@ public:
 	{
 		ShadowRecive = Recive;
 	}
+	//テクスチャ設定
+	void SetTextureMove(bool isMoveTex)
+	{
+		m_ismoveTex = isMoveTex;
+	}
 	/*!
 	* @brief	ワールド行列を取得。
 	*/
@@ -98,6 +103,7 @@ private:
 	LPDIRECT3DTEXTURE9		shadowMap = NULL;		//!シャドウマップ
 	LPDIRECT3DCUBETEXTURE9	cubeMap = NULL;			//!キューブマップ
 	//bool				Cubeflg = false;
+	bool				m_ismoveTex = false;
 	bool				Specularlight = false;
 	bool				ShadowCaster = false;
 	bool				ShadowRecive = false;

@@ -50,10 +50,17 @@ public:
 	{
 		return *m_sMgr;
 	}
-
+	//ゲームシーンの取得
 	static Game& GetGame()
 	{
 		return *m_game;
 	}
+	//現在のシーンの取得
+	static int GetScene()
+	{
+		return m_scene;
+	}
+private:
+	static int m_scene;
 };
 

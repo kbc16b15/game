@@ -16,7 +16,7 @@ public:
 	//フェード
 	void SceneFade();
 	//スプライト生成関数
-	HRESULT CreateSprite();
+	//HRESULT CreateSprite();
 
 private:
 	//フェード
@@ -26,8 +26,9 @@ private:
 		WaitFadeOut
 	};
 	EState				m_state = WaitFadeIn;
-	LPD3DXSPRITE		m_sprite;						//スプライト
-	HUD					m_resultHud;							//タイトル画像
-	const D3DXVECTOR2	m_resultHudPos = { 700.0f,300.0f };	//タイトル画像の座標
+	Sprite				m_resultSprite;						//スプライト。
+	Texture				m_resultTexture;						//背景のテクスチャ。
+	const D3DXVECTOR2	m_resultPos = { 0.0f,100.0f };	//画像の座標
+	const D3DXVECTOR2	m_resultScale = { 1300.0f,1200.0f };//拡大
 };
 

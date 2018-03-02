@@ -1,14 +1,22 @@
 #pragma once
 #include "IGameObject.h"
-
 class GameObjectManager
 {
 public:
 	~GameObjectManager();
-	//template<class T>
+
 	void AddGameObject(IGameObject* go);
 	void DeleteGameObject(IGameObject* go);
-
+	/*IGameObject* FindGameObject(const char* Name);
+	IGameObject* GameObjectManager::FindGameObject(const char* Name){
+		for (IGameObject* gd : m_gameObjects)
+		{
+			if (strcmp(gd->GetName(), Name) == 0)
+			{
+				return gd->GetInstance();
+			}
+		}
+	}*/
 	void Init();
 	void Update();
 	void Draw();
@@ -33,8 +41,6 @@ public:
 	{
 		return *m_goMgr;
 	}
-	
-
 
 private:
 	GameObjectManager();

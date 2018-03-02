@@ -12,7 +12,7 @@ TitleScene::TitleScene()
 
 TitleScene::~TitleScene()
 {
-	delete m_titleHud;
+	m_titleTexture.Release();
 	if (m_buttonSound != nullptr) {
 		delete m_buttonSound;
 		m_buttonSound = nullptr;
@@ -21,11 +21,14 @@ TitleScene::~TitleScene()
 
 void TitleScene::Init()
 {
-	m_titleHud = new HUD;
-	m_titleHud->Initialize("Assets/Sprite/T2.tga", m_titlePos);
-	CreateSprite();
+	
+	m_titleTexture.Load("Assets/Sprite/T2.tga");
+	//m_titleSprite.SetPosition(m_titlePos);
+	
+	m_titleSprite.Init(&m_titleTexture);
+	m_titleSprite.SetSize(m_titleScale);
 	m_buttonSound = new Sound;
-	m_titleHud->Update();
+	//m_titleHud->Update();
 }
 
 void TitleScene::Update()
@@ -45,8 +48,8 @@ void TitleScene::Draw()
 	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 
-	m_titleHud->Draw(m_sprite);
-
+	//m_titleHud->Draw(m_sprite);
+	m_titleSprite.Draw();
 	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 	//g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
@@ -97,12 +100,12 @@ void TitleScene::SceneFade()
 	}
 }
 
-HRESULT TitleScene::CreateSprite()
-{
-	if (FAILED(D3DXCreateSprite(g_pd3dDevice, &m_sprite)))
-	{
-		MessageBox(0, TEXT("スプライト作成失敗"), NULL, MB_OK);
-		return E_FAIL;//失敗返却
-	}
-	return S_OK;
-}
+//HRESULT TitleScene::CreateSprite()
+//{
+//	if (FAILED(D3DXCreateSprite(g_pd3dDevice, &m_sprite)))
+//	{
+//		MessageBox(0, TEXT("スプライト作成失敗"), NULL, MB_OK);
+//		return E_FAIL;//失敗返却
+//	}
+//	return S_OK;
+//}

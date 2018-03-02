@@ -1,17 +1,20 @@
 #pragma once
-class Player;
+//class Player;
+
 class IGameObject
 {
 public:
 	IGameObject();
 	virtual ~IGameObject();
 	virtual void Init() {};
-	virtual void Update() =0;
+	virtual void Update() = 0;
 	virtual void Draw() {};
 	virtual void HudDraw() {};
 	virtual void PrePostDraw() {};
 	virtual void PostDraw() {};
-	IGameObject* ObjectFactory(const char* ObjctName);
+	//template<typename T>
+	//virtual T& GetInstance() {};
+	//IGameObject* ObjectFactory(const char* ObjctName);
 	bool GetActive()
 	{
 		return m_isActive;
@@ -20,12 +23,17 @@ public:
 	{
 		m_isActive = active;
 	}
-	Player& GetPlayer()
+	
+	const char* GetName()
 	{
-		return *m_player;
+		return m_modelName;
+	}
+
+	void SetName(char* Name)
+	{
+		m_modelName = Name;
 	}
 protected:
-	Player* m_player=nullptr;
-	bool m_isActive = true;
+	bool	m_isActive = true;
+	char*	m_modelName=nullptr;
 };
-

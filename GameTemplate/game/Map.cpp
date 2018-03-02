@@ -13,11 +13,11 @@
 //#include "BulletManager.h"
 //#include "game.h"
 
-Map *Map::m_map = NULL;
+//Map *Map::m_map = NULL;
 
 SMapChipLocInfo Info1[] = {
 
-
+//#include "Boss.h"
 #include "locationinfo7.h"
 };
 
@@ -41,6 +41,16 @@ Map::Map()
 Map::~Map()
 {
 	MapManager::GetMapManager().Release();
+	//for (auto healnum : m_healList)
+	//{
+	//	delete healnum;
+	//}
+	//auto healIt = m_healList.begin();
+	//while (healIt != m_healList.end())
+	//{
+	//	healIt = m_healList.erase(healIt);
+
+	//}
 }
 
 void Map::Init(/*SMapChipLocInfo Info[]*/)
@@ -169,13 +179,23 @@ void Map::MapLoad1()
 		}
 		else if (strcmp(Info1[i].modelName, "Boss") == 0)
 		{
-			BossEnemy::Create();
+			SceneManager::GetInstance().GetGame().SetBossBattle(true);
+			/*BossEnemy* bossEnemy = new BossEnemy;
+			BossHp* bossHp = new BossHp;
+			bossEnemy->Init(Info1[i].pos, Info1[i].rot);
+			bossHp->Init();
+			SceneManager::GetGame().CreateBoss(bossEnemy);
+			SceneManager::GetGame().CreateBossHp(bossHp);*/
+			//GameObjectManager::GetGameObjectManager().AddGameObject(bossEnemy);
+			//GameObjectManager::GetGameObjectManager().AddGameObject(bossHp);
+
+			/*BossEnemy::Create();
 			BossHp::Create();
 			BossEnemy::GetInstance().Init(Info1[i].pos, Info1[i].rot);
 			BossHp::GetInstance().Init();
 
 			GameObjectManager::GetGameObjectManager().AddGameObject(&BossEnemy::GetInstance());
-			GameObjectManager::GetGameObjectManager().AddGameObject(&BossHp::GetInstance());
+			GameObjectManager::GetGameObjectManager().AddGameObject(&BossHp::GetInstance());*/
 		}
 		else if (strcmp(Info1[i].modelName, "Weapon") == 0)
 		{
@@ -186,12 +206,12 @@ void Map::MapLoad1()
 		else if (strcmp(Info1[i].modelName, "Drone") == 0)//エネミーの位置設定
 		{
 			trackingEnemy* Tenemy = new trackingEnemy;
-			EnemyManager::GetInstance().AddTrackingEnemy(Tenemy);
+			SceneManager::GetGame().GetEnemyManager().AddTrackingEnemy(Tenemy);
 			Tenemy->Init(Info1[i].pos, Info1[i].rot);
 		}
 		else if (strcmp(Info1[i].modelName, "unity") == 0)//プレイヤーの初期位置
 		{
-			Player::GetInstance().Setpos(Info1[i].pos);
+			SceneManager::GetGame().GetPlayer().Setpos(Info1[i].pos);
 		}
 		else {
 			//オブジェクトを一個ずつロードしていく。
@@ -257,13 +277,15 @@ void Map::MapLoad2()
 		}
 		else if (strcmp(Info2[i].modelName, "Boss") == 0)
 		{
-			BossEnemy::Create();
-			BossHp::Create();
-			BossEnemy::GetInstance().Init(Info2[i].pos, Info2[i].rot);
-			BossHp::GetInstance().Init();
-
-			GameObjectManager::GetGameObjectManager().AddGameObject(&BossEnemy::GetInstance());
-			GameObjectManager::GetGameObjectManager().AddGameObject(&BossHp::GetInstance());
+			SceneManager::GetInstance().GetGame().SetBossBattle(true);
+			/*BossEnemy* bossEnemy = new BossEnemy;
+			BossHp* bossHp = new BossHp;
+			bossEnemy->Init(Info1[i].pos, Info1[i].rot);
+			bossHp->Init();
+			SceneManager::GetGame().CreateBoss(bossEnemy);
+			SceneManager::GetGame().CreateBossHp(bossHp);
+			GameObjectManager::GetGameObjectManager().AddGameObject(bossEnemy);
+			GameObjectManager::GetGameObjectManager().AddGameObject(bossHp);*/
 		}
 		else if (strcmp(Info1[i].modelName, "Weapon") == 0)
 		{
@@ -274,12 +296,12 @@ void Map::MapLoad2()
 		else if (strcmp(Info2[i].modelName, "Drone") == 0)//エネミーの位置設定
 		{
 			trackingEnemy* Tenemy = new trackingEnemy;
-			EnemyManager::GetInstance().AddTrackingEnemy(Tenemy);
+			SceneManager::GetGame().GetEnemyManager().AddTrackingEnemy(Tenemy);
 			Tenemy->Init(Info2[i].pos, Info2[i].rot);
 		}
 		else if (strcmp(Info2[i].modelName, "unity") == 0)//プレイヤーの初期位置
 		{
-			Player::GetInstance().Setpos(Info2[i].pos);
+			SceneManager::GetGame().GetPlayer().Setpos(Info2[i].pos);
 		}
 		else {
 			MapCreate("map", i, &Info2[0]);
@@ -338,13 +360,15 @@ void Map::MapLoad3()
 		}
 		else if (strcmp(Info3[i].modelName, "Boss") == 0)
 		{
-			BossEnemy::Create();
-			BossHp::Create();
-			BossEnemy::GetInstance().Init(Info3[i].pos, Info3[i].rot);
-			BossHp::GetInstance().Init();
-
-			GameObjectManager::GetGameObjectManager().AddGameObject(&BossEnemy::GetInstance());
-			GameObjectManager::GetGameObjectManager().AddGameObject(&BossHp::GetInstance());
+			SceneManager::GetInstance().GetGame().SetBossBattle(true);
+			/*BossEnemy* bossEnemy = new BossEnemy;
+			BossHp* bossHp = new BossHp;
+			bossEnemy->Init(Info1[i].pos, Info1[i].rot);
+			bossHp->Init();
+			SceneManager::GetGame().CreateBoss(bossEnemy);
+			SceneManager::GetGame().CreateBossHp(bossHp);
+			GameObjectManager::GetGameObjectManager().AddGameObject(bossEnemy);
+			GameObjectManager::GetGameObjectManager().AddGameObject(bossHp);*/
 		}
 		else if (strcmp(Info1[i].modelName, "Weapon") == 0)
 		{
@@ -355,12 +379,12 @@ void Map::MapLoad3()
 		else if (strcmp(Info3[i].modelName, "Drone") == 0)//エネミーの位置設定
 		{
 			trackingEnemy* Tenemy = new trackingEnemy;
-			EnemyManager::GetInstance().AddTrackingEnemy(Tenemy);
+			SceneManager::GetGame().GetEnemyManager().AddTrackingEnemy(Tenemy);
 			Tenemy->Init(Info3[i].pos, Info3[i].rot);
 		}
 		else if (strcmp(Info3[i].modelName, "unity") == 0)//プレイヤーの初期位置
 		{
-			Player::GetInstance().Setpos(Info3[i].pos);
+			SceneManager::GetGame().GetPlayer().Setpos(Info3[i].pos);
 		}
 		else {
 			MapCreate("map", i, &Info3[0]);

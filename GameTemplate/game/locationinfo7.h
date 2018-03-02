@@ -580,9 +580,3 @@
 	D3DXVECTOR3(-168.00f, 0.00f, 3.80f),             //平行移動
 	D3DXQUATERNION(0.00f, 1.00f, 0.00f, 0.00f ),  //回転
 },
-//HealItem
-{
-	"HealItem",
-	D3DXVECTOR3(0.00f, 0.00f, 3.20f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-},

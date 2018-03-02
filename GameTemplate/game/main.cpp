@@ -224,12 +224,11 @@ void Init()
 //-----------------------------------------------------------------------------
 VOID Render()
 {
-	ShadowMap::GetInstance().Update();
+	
 	if (SUCCEEDED(g_pd3dDevice->BeginScene()))
 	{
 		//シーンの描画開始。
 		ShadowMap::GetInstance().Draw();
-		//g_shadowMap->Draw();
 		//あとで戻すためにフレームバッファのレンダリングターゲットとデプスステンシルバッファのバックアップを取る。
 		LPDIRECT3DSURFACE9 frameBufferRT;
 		LPDIRECT3DSURFACE9 frameBufferDS;
@@ -251,7 +250,7 @@ VOID Render()
 
 		//シーンの描画
 		GameObjectManager::GetGameObjectManager().Draw();
-
+	
 		////シーンの描画が完了したのでレンダリングターゲットをフレームバッファに戻す。
 
 		g_pd3dDevice->SetRenderTarget(0, frameBufferRT);
@@ -272,12 +271,12 @@ VOID Render()
 -----------------------------------------------------------------------------*/
 void Update()
 {
-
+	ShadowMap::GetInstance().Update();
 	//SoundEngine::GetInstance().Update();
 	//Pad::GetInstance().Update();
 	//PhysicsWorld::GetInstance().Update();
 	GameObjectManager::GetGameObjectManager().Update();
-
+	
 }
 //-----------------------------------------------------------------------------
 //ゲームが終了するときに呼ばれる処理。

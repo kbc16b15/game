@@ -1,20 +1,20 @@
 #include "stdafx.h"
 #include "BulletManager.h"
-#include "BulletHud.h"
+//#include "BulletHud.h"
 #include "GameObjectManager.h"
 
-BulletManager *BulletManager::m_bulletManager = NULL;
+//BulletManager *BulletManager::m_bulletManager = NULL;
 
 BulletManager::BulletManager()
 {
-	BulletHud::Create();
-	BulletHud::GetInstance().Init();
+	//BulletHud::Create();
+	//BulletHud::GetInstance().Init();
 }
 
 
 BulletManager::~BulletManager()
 {
-	
+	Release();
 }
 
 void BulletManager::Release()
@@ -29,28 +29,29 @@ void BulletManager::Release()
 		bulletIt = m_bullets.erase(bulletIt);
 	}
 
-	for (auto BulletWeaponnum : m_bulletWeapon)
-	{
-		if (BulletWeaponnum != nullptr)
-		{
-			delete BulletWeaponnum;
-			//BulletWeaponnum = nullptr;
-		}
-	}
-	//bulletWeaponの消去
-	auto BulletWeaponIt = m_bulletWeapon.begin();
-	while (BulletWeaponIt != m_bulletWeapon.end()) {
+	//for (auto BulletWeaponnum : m_bulletWeapon)
+	//{
+	//	if (BulletWeaponnum != nullptr)
+	//	{
+	//		delete BulletWeaponnum;
+	//		//BulletWeaponnum = nullptr;
+	//	}
+	//}
+	////bulletWeaponの消去
+	//auto BulletWeaponIt = m_bulletWeapon.begin();
+	//while (BulletWeaponIt != m_bulletWeapon.end()) {
 
-		BulletWeaponIt = m_bulletWeapon.erase(BulletWeaponIt);
-	}
+	//	BulletWeaponIt = m_bulletWeapon.erase(BulletWeaponIt);
+	//}
 	//m_bullets.clear();
 	//m_bullets.shrink_to_fit();
 	//std::vector<int> vec;
 	//m_bullets.swap(m_bullets);
 
-	GameObjectManager::GetGameObjectManager().DeleteGameObject(&BulletHud::GetInstance());
-	BulletHud::GetInstance().Destroy();
-	BulletManager::GetInstance().Destroy();
+	//GameObjectManager::GetGameObjectManager().DeleteGameObject(&BulletHud::GetInstance());
+	//BulletHud::GetInstance().Destroy();
+	//delete this;
+	//BulletManager::GetInstance().Destroy();
 }
 
 void BulletManager::Update()
@@ -58,7 +59,10 @@ void BulletManager::Update()
 	//バレットのアップデート
 	for (auto bullet : m_bullets)
 	{
-		bullet->Update();
+		if (bullet->GetActive())
+		{
+			bullet->Update();
+		}
 	}
 
 	//敵のアップデート
@@ -85,15 +89,18 @@ void BulletManager::Draw()
 	//バレットの描画
 	for (auto bullet : m_bullets)
 	{
-		bullet->Draw();
+		if (bullet->GetActive())
+		{
+			bullet->Draw();
+		}
 	}
-	BulletHud::GetInstance().Draw();
+	//BulletHud::GetInstance().Draw();
 
 	//敵の描画
-	for (auto BulletWeaponIt : m_bulletWeapon)
+	/*for (auto BulletWeaponIt : m_bulletWeapon)
 	{
 		BulletWeaponIt->Draw();
-	}
+	}*/
 }
 
 //Bullet* BulletManager::CreateBullet(int id)

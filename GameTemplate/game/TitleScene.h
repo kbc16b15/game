@@ -1,8 +1,6 @@
 #pragma once
-#include "HUD.h"
 #include "Sound.h"
 #include "IScene.h"
-//#include "IGameObject.h"
 class TitleScene :public IScene
 {
 public:
@@ -18,8 +16,6 @@ public:
 	void Draw();
 	//フェード
 	void SceneFade();
-	//スプライト生成関数
-	HRESULT CreateSprite();
 	//初回だけフェードインをなくす
 	void SetStart(bool start)
 	{
@@ -35,10 +31,11 @@ private:
 		WaitFadeOut
 	};
 	EState				m_state = WaitFadeIn;			//フェード
-	LPD3DXSPRITE		m_sprite;						//スプライト
-	HUD*				m_titleHud;						//タイトル画像
-	const D3DXVECTOR2	m_titlePos = { 595.0f,400.0f };	//タイトル画像の座標
+	Sprite				m_titleSprite;					//タイトル画面の背景のスプライト。
+	Texture				m_titleTexture;					//タイトル画面の背景のテクスチャ。
+	const D3DXVECTOR2	m_titlePos = { 0.0f,0.0f };		//タイトル画像の座標
+	const D3DXVECTOR2	m_titleScale = { 1300.0f,1200.0f };//タイトル画像の拡大
 	bool				m_isStart = false;
-	Sound*				m_buttonSound = nullptr;			//サウンド
+	Sound*				m_buttonSound = nullptr;		//サウンド
 };
 

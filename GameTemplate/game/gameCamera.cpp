@@ -6,7 +6,7 @@
 #include "BulletManager.h"
 #include "BulletHud.h"
 
-gameCamera *gameCamera::m_gameCamera = NULL;
+//gameCamera *gameCamera::m_gameCamera = NULL;
 
 gameCamera::gameCamera()
 {
@@ -20,15 +20,15 @@ void gameCamera::Init()
 {
 	Camera::Create();
 	SpringCamera::Create();
-	D3DXVECTOR3 targetPos = Player::GetInstance().Getpos();
+	D3DXVECTOR3 targetPos = SceneManager::GetGame().GetPlayer().Getpos();
 	targetPos.y += 1.0f;
-	D3DXVECTOR3 cameraPos= Player::GetInstance().Getpos();
+	D3DXVECTOR3 cameraPos= SceneManager::GetGame().GetPlayer().Getpos();
 	cameraPos.y += 5.0f;
 	cameraPos.x += 5.0f;
 	float cameraSpeed = 10.0f;
 	SpringCamera::GetInstance().Init(targetPos, cameraPos, cameraSpeed);
 	
-	//SpringCamera::GetInstance().SetTarget(Player::GetInstance().Getpos());
+	//SpringCamera::GetInstance().SetTarget(SceneManager::GetGame().GetPlayer().Getpos());
 
 	//SpringCamera::GetInstance().SetFar(Far);//奥行きの見える範囲
 	//カメラの注視点を設定する。
@@ -55,11 +55,6 @@ void gameCamera::Update()
 		RotCamera();
 		//BossCamera();
 	}
-	//else if (m_isRockOn)
-	//{
-	//	//TrackingCamera();
-	//	RockCamera();
-	//}
 	else
 	{
 		RotCamera();
@@ -103,7 +98,7 @@ void gameCamera::TrackingCamera()
 
 	//新しい注視点をアクターの座標から求める
 
-	D3DXVECTOR3 target = Player::GetInstance().Getpos();
+	D3DXVECTOR3 target = SceneManager::GetGame().GetPlayer().Getpos();
 	target.y += 1.0f;
 
 	//新しい注視点と現在のカメラの視点を使って、XZ平面上での、
@@ -172,14 +167,14 @@ void gameCamera::BossEndCamera()
 //ボスとプレイヤーが常に移されるカメラ
 void gameCamera::BossCamera()
 {
-	if (&BossEnemy::GetInstance() == NULL||&Player::GetInstance()==NULL) {
+	if (&SceneManager::GetGame().GetBoss() == NULL||&SceneManager::GetGame().GetPlayer() ==NULL) {
 		m_isBossCamera = false; 
 		return;
 	}
 	m_isBossCamera = true;
 
 	//XZ平面上の注視点から視点までのベクトルを求めると長さを求める
-	D3DXVECTOR3 CameraPosXZ = Player::GetInstance().Getpos() - BossEnemy::GetInstance().Getpos();;
+	D3DXVECTOR3 CameraPosXZ = SceneManager::GetGame().GetPlayer().Getpos() - SceneManager::GetGame().GetBoss().Getpos();;
 	//CameraPosXZ.y -= 1.0f;
 	float height = CameraPosXZ.y;
 	CameraPosXZ.y = 0.0f;
@@ -190,7 +185,7 @@ void gameCamera::BossCamera()
 
 	//新しい注視点をアクターの座標から求める
 
-	D3DXVECTOR3 target = BossEnemy::GetInstance().Getpos();
+	D3DXVECTOR3 target = SceneManager::GetGame().GetBoss().Getpos();
 	target.y += 1.0f;
 
 	//新しい注視点と現在のカメラの視点を使って、XZ平面上での、
@@ -218,7 +213,7 @@ void gameCamera::BossCamera()
 	//視点と注視点を設定
 	SpringCamera::GetInstance().SetTarTarget(target);
 	SpringCamera::GetInstance().SetTarPosition(pos);
-	if (BossEnemy::GetInstance().GetDeathflg())
+	if (SceneManager::GetGame().GetBoss().GetDeathflg())
 	{
 		m_isBossCamera = false;
 	}
@@ -230,8 +225,8 @@ void gameCamera::BossRockCamera()
 {
 	const float flontUp = 2.0f;
 
-	D3DXVECTOR3 targetPos = Player::GetInstance().Getpos();
-	D3DXMATRIX matrix = Player::GetInstance().GetSkinModel()->GetWorldMatrix();//原点からのプレイヤーの向き
+	D3DXVECTOR3 targetPos = SceneManager::GetGame().GetPlayer().Getpos();
+	D3DXMATRIX matrix = SceneManager::GetGame().GetPlayer().GetSkinModel()->GetWorldMatrix();//原点からのプレイヤーの向き
 																			   //D3DXMatrixInverse(&matrix, NULL, &matrix);
 	D3DXVECTOR3 flont;
 	flont.x = matrix.m[2][0];
@@ -239,6 +234,6 @@ void gameCamera::BossRockCamera()
 	flont.z = matrix.m[2][2];
 	D3DXVec3Add(&flont, &flont, &targetPos);
 	SpringCamera::GetInstance().SetTarPosition(flont);
-	SpringCamera::GetInstance().SetTarTarget(BossEnemy::GetInstance().Getpos());
+	SpringCamera::GetInstance().SetTarTarget(SceneManager::GetGame().GetBoss().Getpos());
 
 }

@@ -2,9 +2,9 @@
 #include "GoalObject.h"
 #include "Player.h"
 #include "game.h"
-#include "Map.h"
 #include "myEngine\Physics\Physics.h"
 #include "GameObjectManager.h"
+#include "SceneManager.h"
 
 GoalObject::~GoalObject()
 {
@@ -65,6 +65,7 @@ void GoalObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION	rot
 	param.Multipos = 0.0f;
 	param.Multispeed = {0.0f,1.0f,0.0f};
 	param.intervalTime = 0.8f;
+	param.lifeTime = 0.6f;
 	param.initSpeed = D3DXVECTOR3(0.0f, 0.5f, 0.0f);
 	D3DVECTOR Goalpos = m_position;
 	Goalpos.y += 2.0f;
@@ -78,7 +79,7 @@ void GoalObject::Init(const char* modelName, D3DXVECTOR3 pos, D3DXQUATERNION	rot
 void GoalObject::Update()
 {
 	//m_particleEmitter.Update();
-	D3DXVECTOR3 toPos = m_position - Player::GetInstance().Getpos();
+	D3DXVECTOR3 toPos = m_position - SceneManager::GetGame().GetPlayer().Getpos();
 	float len = D3DXVec3Length(&toPos);
 	const float GoalLenge = 2.5f;
 	if (len < GoalLenge||GetAsyncKeyState('N'))
@@ -98,7 +99,7 @@ void GoalObject::Draw()
 
 	m_model.Draw(&Camera::GetInstance().GetViewMatrix(), &Camera::GetInstance().GetProjectionMatrix());
 
-	//D3DXVECTOR3 toPos = m_position - Player::GetInstance().Getpos();
+	//D3DXVECTOR3 toPos = m_position - SceneManager::GetGame().GetPlayer().Getpos();
 	//float plen = D3DXVec3Length(&toPos);
 	//const float DrawLenge=50.0f;
 	//if (plen < DrawLenge)

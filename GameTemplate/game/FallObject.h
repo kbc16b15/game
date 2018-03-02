@@ -14,10 +14,14 @@ public:
 	//更新
 	void Update() override;
 	//座標の取得
-	D3DXVECTOR3 Getpos()
+	/*D3DXVECTOR3 Getpos()
 	{
 		return m_position;
-	}
+	}*/
+	/*void SetMove(bool isMove)
+	{
+		m_isMove = isMove;
+	}*/
 private:
 	enum SpeedType {
 		NONE,
@@ -28,8 +32,9 @@ private:
 	};
 
 	int m_speed=NONE;
-
-	D3DXVECTOR3		firstpos;			//初期座標
+	//bool m_isGround=false;
+	//bool m_isMove = false;
+	//D3DXVECTOR3		firstpos;			//初期座標
 	D3DXVECTOR3		RotDir;				//回転方向
 	D3DXVECTOR3		RotSpeed;			//回転速度
 	float			angle = 0.0f;		//角度

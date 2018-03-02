@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "bloom.h"
 
-Bloom *Bloom::m_bloom = NULL;
+//Bloom *Bloom::m_bloom = NULL;
 
 void Bloom::UpdateWeight(float dispersion)
 {

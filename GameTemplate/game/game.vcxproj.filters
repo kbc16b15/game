@@ -19,9 +19,6 @@
     <Filter Include="ソース ファイル\Enemy">
       <UniqueIdentifier>{ca88e02f-6f9c-432a-b8d7-017b6f1a816b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\HUD">
-      <UniqueIdentifier>{a4b1c45f-4f84-4492-b60b-494356e05a84}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Camera">
       <UniqueIdentifier>{a86cc07a-5bc0-4318-8407-259ec305f2fd}</UniqueIdentifier>
     </Filter>
@@ -120,14 +117,8 @@
     <ClCompile Include="Map.cpp">
       <Filter>ソース ファイル\Map</Filter>
     </ClCompile>
-    <ClCompile Include="myEngine\Graphics\Sprite.cpp">
-      <Filter>ソース ファイル\myEngine\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="TitleScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="HUD.cpp">
-      <Filter>ソース ファイル\HUD</Filter>
     </ClCompile>
     <ClCompile Include="gameCamera.cpp">
       <Filter>ソース ファイル\Camera</Filter>
@@ -240,9 +231,6 @@
     <ClCompile Include="BossEnemy.cpp">
       <Filter>ソース ファイル\Enemy\BossEnemy</Filter>
     </ClCompile>
-    <ClCompile Include="BossHp.cpp">
-      <Filter>ソース ファイル\Enemy\BossEnemy</Filter>
-    </ClCompile>
     <ClCompile Include="Bullet.cpp">
       <Filter>ソース ファイル\Bullet</Filter>
     </ClCompile>
@@ -255,9 +243,6 @@
     <ClCompile Include="BulletHud.cpp">
       <Filter>ソース ファイル\Bullet</Filter>
     </ClCompile>
-    <ClCompile Include="BulletWeapon.cpp">
-      <Filter>ソース ファイル\Bullet</Filter>
-    </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
@@ -266,6 +251,15 @@
     </ClCompile>
     <ClCompile Include="Silhouette.cpp">
       <Filter>ソース ファイル\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="myEngine\Graphics\Sprite.cpp">
+      <Filter>ソース ファイル\myEngine\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="BossHp.cpp">
+      <Filter>ソース ファイル\Enemy\BossEnemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -320,17 +314,11 @@
     <ClInclude Include="Map.h">
       <Filter>ソース ファイル\Map</Filter>
     </ClInclude>
-    <ClInclude Include="myEngine\Graphics\Sprite.h">
-      <Filter>ソース ファイル\myEngine\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="TitleScene.h">
       <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>ソース ファイル\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="HUD.h">
-      <Filter>ソース ファイル\HUD</Filter>
     </ClInclude>
     <ClInclude Include="gameCamera.h">
       <Filter>ソース ファイル\Camera</Filter>
@@ -440,9 +428,6 @@
     <ClInclude Include="EnemyManager.h">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClInclude>
-    <ClInclude Include="BossHp.h">
-      <Filter>ソース ファイル\Enemy\BossEnemy</Filter>
-    </ClInclude>
     <ClInclude Include="BossEnemy.h">
       <Filter>ソース ファイル\Enemy\BossEnemy</Filter>
     </ClInclude>
@@ -458,9 +443,6 @@
     <ClInclude Include="BulletHud.h">
       <Filter>ソース ファイル\Bullet</Filter>
     </ClInclude>
-    <ClInclude Include="BulletWeapon.h">
-      <Filter>ソース ファイル\Bullet</Filter>
-    </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
@@ -469,6 +451,18 @@
     </ClInclude>
     <ClInclude Include="Silhouette.h">
       <Filter>ソース ファイル\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="myEngine\Graphics\Sprite.h">
+      <Filter>ソース ファイル\myEngine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexElement.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="BossHp.h">
+      <Filter>ソース ファイル\Enemy\BossEnemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,19 +1,19 @@
 #include "stdafx.h"
 #include "Player.h"
-
 #include "PlayerHp.h"
+#include "SceneManager.h"
+#include "game.h"
 #include "Bullet.h"
-#include "BulletWeapon.h"
+//#include "BulletWeapon.h"
 #include "BulletManager.h"
 //#include "GameObjectManager.h"
-#include "gameCamera.h"
-#include "BulletHud.h"
-#include "BossEnemy.h"
-#include "SpringCamera.h"
+//#include "gameCamera.h"
+//#include "BulletHud.h"
+//#include "SpringCamera.h"
 #include "EnemyManager.h"
 #include "BossEnemy.h"
 
-Player *Player::player = NULL;
+//Player *Player::player = NULL;
 Player::Player()
 {
 	//m_JumpSound = new Sound();
@@ -183,7 +183,7 @@ void Player::move()
 	{
 		m_isBulletflg = false;
 		m_isPlayerBulletCamera = false;
-		Player::GetInstance().SetMove(false);
+		SetMove(false);
 	}
 
 }
@@ -199,69 +199,49 @@ void Player::AnimationSet()
 	//状態遷移？
 	switch (m_state)
 	{
-	case Stand://待機
+	case PlayerState::Stand://待機
 		
 		if (m_workState != Stand) { m_animation.PlayAnimation(Stand, StandInterTime);}
 		m_workState = m_state;//連続再生させないためのステート
-		if (m_isDead&&PlayerHp::GetInstance().GetPlayerHp() <= 0) { m_state = Dead; }
+		/*if (m_isDead&&SceneManager::GetGame().GetPlayerHp().GetPlayerHpNum() <= 0) { m_state = Dead; }
 		else if (m_isDamage) { m_state = Damage; }
 		else if (m_isjump) { m_state = Jump; }
 		else if (m_ismove) { m_state = Dash; }
 		else if (m_isBulletflg) { m_state = Bullets; }
-		else{ m_state = Stand;}
+		else{ m_state = Stand;}*/
+		AnimaionState();
 		break;
-	case Dash://歩行
+	case PlayerState::Dash://歩行
 		if (m_workState != Dash) { m_animation.PlayAnimation(Dash, DashInterTime); }
 		m_workState = m_state;
-		if (m_isDead&&PlayerHp::GetInstance().GetPlayerHp() <= 0) { m_state = Dead; }
-		else if (m_isDamage) { m_state = Damage; }
-		else if (m_isjump) { m_state = Jump; }
-		else if (m_ismove) { m_state = Dash; }
-		else if (m_isBulletflg) { m_state = Bullets; }
-		else { m_state = Stand; }
+		AnimaionState();
 		break;
-	case Jump://ジャンプ
+	case PlayerState::Jump://ジャンプ
 		if (m_workState != Jump){m_animation.PlayAnimation(Jump, JumpInterTime);}
 		m_workState = m_state;
-		if (m_isDead&&PlayerHp::GetInstance().GetPlayerHp() <= 0){ m_state = Dead; }
-		else if (m_isDamage) { m_state = Damage; }
-		else if (m_isjump) { m_state = Jump; }
-		else if (m_ismove) { m_state = Dash; }
-		else if (m_isBulletflg) { m_state = Bullets; }
-		else { m_state = Stand; }
+		AnimaionState();
 		if (!m_animation.IsPlay()|| m_characterController.IsOnGround())
 		{
 			m_isjump = false;
-			//m_state = Stand;
 		}
 		break;
-	case Damage://ダメージ
+	case PlayerState::Damage://ダメージ
 		if (m_workState != Damage){m_animation.PlayAnimation(Damage, DamageInterTime);}
 		m_workState = m_state;
-		if (m_isDead&&PlayerHp::GetInstance().GetPlayerHp() <= 0) { m_state = Dead; }
-		else if (m_isDamage) { m_state = Damage; }
-		else if (m_isjump) { m_state = Jump; }
-		else if (m_ismove) { m_state = Dash; }
-		else if (m_isBulletflg) { m_state = Bullets; }
-		else { m_state = Stand; }
+		AnimaionState();
 
 		if (!m_animation.IsPlay()){m_isDamage = false;}
 		break;
-	case Dead://死亡
+	case PlayerState::Dead://死亡
 		if (m_workState != Dead){m_animation.PlayAnimation(Dead, DeadInterTime);}
 		m_workState = m_state;
 
 		if (!m_animation.IsPlay()){m_isDeathflg = true;}
 		break;
-	case Bullets://歩行
+	case PlayerState::Bullets://銃構え
 		if (m_workState != Bullets) { m_animation.PlayAnimation(Bullets, BulletInterTime); }
 		m_workState = m_state;
-		if (m_isDead&&PlayerHp::GetInstance().GetPlayerHp() <= 0) { m_state = Dead; }
-		else if (m_isDamage) { m_state = Damage; }
-		else if (m_isjump) { m_state = Jump; }
-		else if (m_ismove) { m_state = Dash; }
-		else if (m_isBulletflg) { m_state = Bullets; }
-		else { m_state = Stand; }
+		AnimaionState();
 		break;
 	default:
 		break;
@@ -269,6 +249,16 @@ void Player::AnimationSet()
 	//アニメーションの更新
 	m_animation.Update(1.0f / 60.0f);
 
+}
+
+void Player::AnimaionState()
+{
+	if (m_isDead&&SceneManager::GetGame().GetPlayerHp().GetPlayerHpNum() <= 0) { m_state = Dead; }
+	else if (m_isDamage) { m_state = Damage; }
+	else if (m_isjump) { m_state = Jump; }
+	else if (m_ismove) { m_state = Dash; }
+	else if (m_isBulletflg) { m_state = Bullets; }
+	else { m_state = Stand; }
 }
 
 void Player::Setangle()
@@ -465,7 +455,7 @@ void Player::Hit()
 	}*/
 
 	//HPがなくなったら死亡
-	if (PlayerHp::GetInstance().GetPlayerHp() <= 0)
+	if (SceneManager::GetGame().GetPlayerHp().GetPlayerHpNum() <= 0)
 	{
 		m_isDead = true;
 	}
@@ -478,12 +468,12 @@ void Player::Hit()
 
 			m_isDamageflg = false;
 			m_isDamage = true;
-			PlayerHp::GetInstance().PlayerDamage(1);
+			SceneManager::GetGame().GetPlayerHp().PlayerDamage(1);
 			m_damageTime = m_damageMaxTime;
 			//構え解除
 			m_isBulletflg = false;
 			m_isPlayerBulletCamera = false;
-			Player::GetInstance().SetMove(false);
+			SetMove(false);
 		}
 		m_isDamageflg = false;
 	}
@@ -500,52 +490,52 @@ void Player::PlayerBullet()
 	std::list<trackingEnemy*> enestl;
 	
 
-	if (&BossEnemy::GetInstance() != NULL){
+	if (&SceneManager::GetGame().GetBoss() != NULL){
 		isBossExist = true;
 	}
 
 	m_bulletIntervalTime--;
 	const float bulletSpeed = 0.2f;
-	if (/*m_bulletIntervalTime < 0 && Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonB) ||*/m_bulletIntervalTime < 0 && Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonRB1)  && m_isPlayerBulletCamera|| GetAsyncKeyState('B')){
+	if (m_bulletIntervalTime < 0 && Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonRB1)  &&m_isBulletflg){
 		if (!isBossExist) {
-			if (&EnemyManager::GetInstance().GetEnemy() != NULL) {
-				std::list<trackingEnemy*> enestl = EnemyManager::GetInstance().GetEnemy();
+			std::list<trackingEnemy*> enestl = SceneManager::GetGame().GetEnemyManager().GetEnemy();
 
-				for (auto ene : enestl)
-				{
-					EnemyPos = ene->GetPos() - m_middlePosition;
-					float Enemylen = D3DXVec3Length(&EnemyPos);
-					if (Enemylen < Bulletlenge) {
+			for (auto ene : enestl)
+			{
+				if (ene == NULL || !ene->GetActive()) { continue; }
+				EnemyPos = ene->GetPos() - m_middlePosition;
+				float Enemylen = D3DXVec3Length(&EnemyPos);
+				if (Enemylen < Bulletlenge) {
 
-						//Bullet* bullet = BulletManager::GetInstance().CreateBullet(bullet->PLAYER);
-						Bullet* bullet = new Bullet;
-						BulletManager::GetInstance().AddBullets(bullet);
-						bullet->Start(ene->GetPos()/*SpringCamera::GetInstance().GetTarTarget()*/, m_middlePosition, bulletSpeed, bullet->PLAYER);
-						m_bulletIntervalTime = m_maxBulletTime;
+					//Bullet* bullet = BulletManager::GetInstance().CreateBullet(bullet->PLAYER);
+					Bullet* bullet = new Bullet;
+					SceneManager::GetGame().GetBulletManager().AddBullets(bullet);
+					bullet->Start(ene->GetPos()/*SpringCamera::GetInstance().GetTarTarget()*/, m_middlePosition, bulletSpeed, bullet->PLAYER);
+					m_bulletIntervalTime = m_maxBulletTime;
 
-						///*Sound**/ m_beamSound = new Sound();
-						m_beamSound->Init("Assets/Sound/beamgun.wav");
-						m_beamSound->SetVolume(m_beamVolume);
-						m_beamSound->Play(false);
-						break;
-					}
+					//*Sound**/ m_beamSound = new Sound();
+					m_beamSound->Init("Assets/Sound/beamgun.wav");
+					m_beamSound->SetVolume(m_beamVolume);
+					m_beamSound->Play(false);
+					break;
 				}
 			}
+			
 		}
 		else
 		{
-			BossPos = BossEnemy::GetInstance().Getpos();
+			BossPos = SceneManager::GetGame().GetBoss().Getpos();
 			BossPos = m_middlePosition - BossPos;
 			Bosslen = D3DXVec3Length(&BossPos);
 
 			if (Bosslen < Bulletlenge) {
 
 				Bullet* bullet = new Bullet;
-				BulletManager::GetInstance().AddBullets(bullet);
-				bullet->Start(BossEnemy::GetInstance().Getpos()/*SpringCamera::GetInstance().GetTarTarget()*/, m_middlePosition, bulletSpeed, bullet->PLAYER);
+				SceneManager::GetGame().GetBulletManager().AddBullets(bullet);
+				bullet->Start(SceneManager::GetGame().GetBoss().Getpos()/*SpringCamera::GetInstance().GetTarTarget()*/, m_middlePosition, bulletSpeed, bullet->PLAYER);
 				m_bulletIntervalTime = m_maxBulletTime;
 
-				///*Sound**/ m_beamSound = new Sound();
+				//*Sound**/ m_beamSound = new Sound();
 				m_beamSound->Init("Assets/Sound/beamgun.wav");
 				m_beamSound->SetVolume(m_beamVolume);
 				m_beamSound->Play(false);
@@ -553,29 +543,20 @@ void Player::PlayerBullet()
 		}
 	}
 
-	if (Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonLB1) || GetAsyncKeyState('Z'))//カメラ切り替え
+	if (Pad::GetInstance().IsTrigger(Pad::GetInstance().enButtonLB1))
 	{
-		if (!m_isPlayerBulletCamera)
+		if (!m_isBulletflg)
 		{
 		
-			m_isPlayerBullet = true;
-			m_isPlayerBulletCamera = true;
-			//ボスだけでなく2ステージめでも砲台をつかえるようにする？
-			//砲台をボスの攻撃が当たらない場所に配置する
-			//砲台をボスのバレットで破壊するようにする?
-			//gameCamera::GetInstance().SetRockCamera(true);
-			//gameCamera::GetInstance().SetonCamera(false);
-			Player::GetInstance().SetMove(true);
+			SetMove(true);
 			//BulletHud::GetInstance().SetBullet(true);
 			//m_cameraPos = Camera::GetInstance().GetEyePt();
 			//m_cameraTar = Camera::GetInstance().GetLookatPt();
 			m_isBulletflg = true;
 		}
 		else {
-			//BulletHud::GetInstance().SetBullet(false);
 			m_isBulletflg = false;
-			m_isPlayerBulletCamera = false;
-			Player::GetInstance().SetMove(false);
+			SetMove(false);
 			//SpringCamera::GetInstance().SetTarPosition(m_cameraPos);
 			//SpringCamera::GetInstance().SetTarTarget(m_cameraTar);
 		}
@@ -585,6 +566,7 @@ void Player::PlayerBullet()
 
 void Player::ShadowDraw(D3DXMATRIX* viewM, D3DXMATRIX* projM, bool shadowCaster,bool shadowRecive)
 {
+	if (m_isDeathflg)return;//死んでいたらリターン
 	//シャドウをセット
 	m_skinModel.SetCasterflg(shadowCaster);
 	m_skinModel.SetReciveflg(shadowRecive);

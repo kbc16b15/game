@@ -1,6 +1,5 @@
 #pragma once
 #include "IGameObject.h"
-#include "HUD.h"
 class BulletHud :
 	public IGameObject
 {
@@ -50,7 +49,6 @@ private:
 	BulletHud();
 	static BulletHud*	m_bulletHud;
 	bool				m_isGun = false;			//照準の表示
-	HUD					m_rock;
 	LPD3DXSPRITE		m_sprite;					//スプライト
 	D3DXVECTOR2			m_rockPos = { 700.0f, 250.0f };
 };

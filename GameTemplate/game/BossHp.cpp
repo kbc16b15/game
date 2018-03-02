@@ -1,51 +1,38 @@
 #include "stdafx.h"
 #include "BossHp.h"
-
-BossHp *BossHp::m_bossHp = NULL;
+#include "Fade.h"
+//BossHp *BossHp::m_bossHp = NULL;
 
 BossHp::BossHp()
 {
 }
 
-
 BossHp::~BossHp()
 {
+	m_bossHpTexture.Release();
 }
 
 void BossHp::Init()
 {
+	m_bossHpTexture.Load("Assets/Sprite/hp3.png");
 	//ボスのHP表示
 	for (int i = 0;i <= m_bossHpMaxNum - 1;i++)
 	{
-		m_bossHpNo[i].Initialize("Assets/Sprite/hp3.png", m_bossHpPos);
+		m_bossHpNo[i].Init(&m_bossHpTexture);
+		m_bossHpNo[i].SetPosition(m_bossHpPos);
+		m_bossHpNo[i].SetSize(m_bossHpScale);
 		m_bossHpPos.x += m_bossHpMovePos;
 	}
-	//スプライトの生成
-	CreateSprite();
 
-	//ボスHPのアップデート
-	for (int i = 0;i < m_bossHpNum;i++)
-	{
-		m_bossHpNo[i].Update();
-	}
 }
 
 void BossHp::HudDraw()
 {
+	if (Fade::GetInstance().GetActive()) { return; }
 	//ボスHPの描画
 	for (int i = 0;i < m_bossHpNum;i++)
 	{
-		m_bossHpNo[i].Draw(m_sprite);
+		m_bossHpNo[i].Draw();
 	}
 
-}
-
-HRESULT BossHp::CreateSprite()
-{
-	if (FAILED(D3DXCreateSprite(g_pd3dDevice, &m_sprite)))
-	{
-		MessageBox(0, TEXT("スプライト作成失敗"), NULL, MB_OK);
-		return E_FAIL;//失敗返却
-	}
-	return S_OK;
 }

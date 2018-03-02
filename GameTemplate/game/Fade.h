@@ -1,5 +1,4 @@
 #pragma once
-#include "HUD.h"
 class Fade:public IGameObject
 {
 public:
@@ -23,7 +22,7 @@ public:
 	//!<フェードアウト。
 	void StartFadeOut()
 	{
-		m_fadetex.Setalfa(1.0f);
+		m_fadeSprite.SetAlpha(1.0f);
 		m_timer = 0.0f;
 		m_isActive = true;
 		m_isExecute = true;
@@ -32,7 +31,7 @@ public:
 	//!<フェードイン。
 	void StartFadeIn()
 	{
-		if (m_fadetex.Getalfa() > 0)
+		if (m_fadeSprite.GetAlpha() > 0)
 		{
 			m_timer = 0.0f;
 			m_isActive = true;
@@ -72,15 +71,15 @@ private:
 		eFadeOut,	//!<フェードアウト。
 		eFadeIn		//!<フェードイン。
 	};
-	HUD					m_fadetex;						//ブラックアウト用のスプライト。
 	EnState				m_state = eFadeOut;				//フェードの状態
 	float				m_timer=1.0f;					//タイマー
 	float				m_outtimer = 0.0f;
 	bool				m_isExecute = false;			//フェードを実行中
-	//bool				m_active = false;					//アクティブフラグ
-	LPD3DXSPRITE		m_sprite;						//スプライト
+	Sprite				m_fadeSprite;					//!<背景のスプライト。
+	Texture				m_fadeTex;						//!<背景のテクスチャ。
 	const D3DXVECTOR2	m_fadepos = { 680.0f,300.0f };	//座標
-	const float			FADE_TIME = 0.13f;				//フェード時間
+	const D3DXVECTOR2	m_fadeScale = { 1300.0f,1200.0f };//拡大
+	const float			FADE_TIME = 0.3f;				//フェード時間
 	float				m_frameDeltaTime = 1.0f / 60.0f;//1フレームの時間
 };
 //extern Fade*   g_fade;

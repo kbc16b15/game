@@ -7,7 +7,7 @@ public:
 	//コンストラクタ
 	//HealItem();
 	//デストラクタ
-	~HealItem();
+	//~HealItem();
 	//初期化
 	//modelName モデル名
 	//pos		モデルの座標

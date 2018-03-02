@@ -2,26 +2,24 @@
 #include "TitleScene.h"
 #include "ResultScene.h"
 #include "Fade.h"
-#include "HUD.h"
 #include "game.h"
 #include "SceneManager.h"
 
 ResultScene::ResultScene()
 {
-	m_resultHud.Initialize("Assets/Sprite/TE.tga", m_resultHudPos);
-	CreateSprite();
-	m_resultHud.Update();
 }
 
 ResultScene::~ResultScene()
 {
-
+	m_resultTexture.Release();
 }
 
 void ResultScene::Init()
 {
-
-
+	m_resultTexture.Load("Assets/Sprite/TE.tga");
+	m_resultSprite.Init(&m_resultTexture);
+	m_resultSprite.SetPosition(m_resultPos);
+	m_resultSprite.SetSize(m_resultScale);
 }
 
 void ResultScene::Update()
@@ -37,7 +35,8 @@ void ResultScene::Draw()
 	//g_pd3dDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
 	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
-	m_resultHud.Draw(m_sprite);
+	//m_resultHud.Draw(m_sprite);
+	m_resultSprite.Draw();
 	//g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 	//g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
 	//g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
@@ -71,14 +70,4 @@ void ResultScene::SceneFade()
 	default:
 		break;
 	}
-}
-
-HRESULT ResultScene::CreateSprite()
-{
-	if (FAILED(D3DXCreateSprite(g_pd3dDevice, &m_sprite)))
-	{
-		MessageBox(0, TEXT("ÉXÉvÉâÉCÉgçÏê¨é∏îs"), NULL, MB_OK);
-		return E_FAIL;//é∏îsï‘ãp
-	}
-	return S_OK;
 }

@@ -5,7 +5,9 @@
 class BossEnemy:public IGameObject
 {
 public:
-
+	//コンストラクタ
+	BossEnemy();
+	//デストラクタ
 	~BossEnemy();
 	//解放
 	void Release();
@@ -47,32 +49,32 @@ public:
 		m_isDamageflg = true;
 	}
 
-	//インスタンスの生成
-	static void BossEnemy::Create()
-	{
-		if (!m_bossEnemy)
-		{
-			m_bossEnemy = new BossEnemy;
-		}
+	////インスタンスの生成
+	//static void BossEnemy::Create()
+	//{
+	//	if (!m_bossEnemy)
+	//	{
+	//		m_bossEnemy = new BossEnemy;
+	//	}
 
-	}
+	//}
 
-	//インスタンスの消去
-	static  void BossEnemy::Destroy()
-	{
-		delete m_bossEnemy;
-		m_bossEnemy = nullptr;
-	}
-	//インスタンスの取得
-	static BossEnemy& GetInstance()
-	{
-		return *m_bossEnemy;
-		
-		
-	}
+	////インスタンスの消去
+	//static  void BossEnemy::Destroy()
+	//{
+	//	delete m_bossEnemy;
+	//	m_bossEnemy = nullptr;
+	//}
+	////インスタンスの取得
+	//static BossEnemy& GetInstance()
+	//{
+	//	return *m_bossEnemy;
+	//	
+	//	
+	//}
 private:
-	BossEnemy();
-	static BossEnemy* m_bossEnemy;
+
+	//static BossEnemy* m_bossEnemy;
 	enum BossEnemyState
 	{
 		START,

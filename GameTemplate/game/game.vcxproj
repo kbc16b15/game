@@ -159,7 +159,6 @@
     <ClCompile Include="BoxChip.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="BulletWeapon.cpp" />
     <ClCompile Include="BulletHud.cpp" />
     <ClCompile Include="BulletManager.cpp" />
     <ClCompile Include="ClearScene.cpp" />
@@ -172,6 +171,7 @@
     <ClCompile Include="MapManager.cpp" />
     <ClCompile Include="MapObject.cpp" />
     <ClCompile Include="MoveObject.cpp" />
+    <ClCompile Include="myEngine\Graphics\Sprite.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleEmitter.cpp" />
     <ClCompile Include="PlayerHp.cpp" />
@@ -183,7 +183,6 @@
     <ClCompile Include="gameCamera.cpp" />
     <ClCompile Include="GoalObject.cpp" />
     <ClCompile Include="HealItem.cpp" />
-    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapChip.cpp" />
@@ -192,7 +191,6 @@
     <ClCompile Include="myEngine\Graphics\EffectManager.cpp" />
     <ClCompile Include="myEngine\Graphics\SkinModel.cpp" />
     <ClCompile Include="myEngine\Graphics\SkinModelData.cpp" />
-    <ClCompile Include="myEngine\Graphics\Sprite.cpp" />
     <ClCompile Include="myEngine\HID\Pad.cpp" />
     <ClCompile Include="myEngine\Physics\CapsuleCollider.cpp" />
     <ClCompile Include="myEngine\Physics\CharacterController.cpp" />
@@ -215,6 +213,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="trackingEnemy.cpp" />
     <ClCompile Include="TrapObject.cpp" />
@@ -229,7 +228,6 @@
     <ClInclude Include="BoxChip.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Bullet.h" />
-    <ClInclude Include="BulletWeapon.h" />
     <ClInclude Include="BulletHud.h" />
     <ClInclude Include="BulletManager.h" />
     <ClInclude Include="ClearScene.h" />
@@ -242,6 +240,7 @@
     <ClInclude Include="MapManager.h" />
     <ClInclude Include="MapObject.h" />
     <ClInclude Include="MoveObject.h" />
+    <ClInclude Include="myEngine\Graphics\Sprite.h" />
     <ClInclude Include="NameKey.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleEmitter.h" />
@@ -254,7 +253,6 @@
     <ClInclude Include="gameCamera.h" />
     <ClInclude Include="GoalObject.h" />
     <ClInclude Include="HealItem.h" />
-    <ClInclude Include="HUD.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapChip.h" />
     <ClInclude Include="myEngine\Graphics\Animation.h" />
@@ -263,7 +261,6 @@
     <ClInclude Include="myEngine\Graphics\Light.h" />
     <ClInclude Include="myEngine\Graphics\SkinModel.h" />
     <ClInclude Include="myEngine\Graphics\SkinModelData.h" />
-    <ClInclude Include="myEngine\Graphics\Sprite.h" />
     <ClInclude Include="myEngine\HID\Pad.h" />
     <ClInclude Include="myEngine\Physics\CapsuleCollider.h" />
     <ClInclude Include="myEngine\Physics\CharacterController.h" />
@@ -283,11 +280,13 @@
     <ClInclude Include="Spring.h" />
     <ClInclude Include="SpringCamera.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="trackingEnemy.h" />
     <ClInclude Include="TrapObject.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="Vertexbuffer.h" />
+    <ClInclude Include="VertexElement.h" />
     <ClInclude Include="WaveFile.h" />
     <ClInclude Include="WaveFileBank.h" />
   </ItemGroup>

@@ -114,7 +114,7 @@ void Bullet::BulletHit()
 {
 	const float			BossRadius = 3.0f;//ボスの半径
 	const float			PlayerRadius = 0.3f;//プレイヤーの半径
-	std::list<trackingEnemy*> enestl = EnemyManager::GetInstance().GetEnemy();
+	std::list<trackingEnemy*> enestl = SceneManager::GetGame().GetEnemyManager().GetEnemy();
 	//バレットの当たり判定
 	switch (m_chara)
 	{
@@ -122,28 +122,28 @@ void Bullet::BulletHit()
 	case CHARA::TANK:
 		m_light.SetAmbientLight(D3DXVECTOR4(8.0f, 0.0f, 8.0f, 1.0f));
 		m_skinModel.SetLight(&m_light);
-		if (CubeCollision::GetInstance().Cube(m_position, Player::GetInstance().GetMiddlepos(), m_bulletRadius, PlayerRadius))
+		if (CubeCollision::GetInstance().Cube(m_position, SceneManager::GetGame().GetPlayer().GetMiddlepos(), m_bulletRadius, PlayerRadius))
 		{
-			Player::GetInstance().SetDamage();
+			SceneManager::GetGame().GetPlayer().SetDamage();
 			m_bulletDeadflg = true;
 		}
 		break;
 	case CHARA::ENEMY:
 		m_light.SetAmbientLight(D3DXVECTOR4(7.8f, 0.8f, 0.8f, 1.0f));
 		m_skinModel.SetLight(&m_light);
-		if (CubeCollision::GetInstance().Cube(m_position, Player::GetInstance().GetMiddlepos(), m_bulletRadius, PlayerRadius))
+		if (CubeCollision::GetInstance().Cube(m_position, SceneManager::GetGame().GetPlayer().GetMiddlepos(), m_bulletRadius, PlayerRadius))
 		{
-			Player::GetInstance().SetDamage();
+			SceneManager::GetGame().GetPlayer().SetDamage();
 			m_bulletDeadflg = true;
 		}
 
-		if (&BossEnemy::GetInstance() == NULL)
+		if (&SceneManager::GetGame().GetBoss() == NULL)
 		{
 			break;
 		}
-		if (CubeCollision::GetInstance().Cube(m_position, BossEnemy::GetInstance().Getpos(), m_bulletRadius, BossRadius))
+		if (CubeCollision::GetInstance().Cube(m_position, SceneManager::GetGame().GetBoss().Getpos(), m_bulletRadius, BossRadius))
 		{
-			BossEnemy::GetInstance().SetDamage();
+			SceneManager::GetGame().GetBoss().SetDamage();
 			m_bulletDeadflg = true;
 		}
 
@@ -155,20 +155,20 @@ void Bullet::BulletHit()
 		{
 			if (CubeCollision::GetInstance().Cube(m_position,ene->GetPos(), m_bulletRadius,0.5f))
 			{
-				ene->SetDeathflg(true);
+				ene->SetActive(false);
 				m_bulletDeadflg = true;
 				m_breakSound->Init("Assets/Sound/sceneswitch2.wav");
 				m_breakSound->SetVolume(0.4f);
 				m_breakSound->Play(false);
 			}
 		}
-		if (&BossEnemy::GetInstance() == NULL)
+		if (&SceneManager::GetGame().GetBoss() == NULL)
 		{
 			break;
 		}
-		if (CubeCollision::GetInstance().Cube(m_position, BossEnemy::GetInstance().Getpos(), m_bulletRadius, BossRadius))
+		if (CubeCollision::GetInstance().Cube(m_position, SceneManager::GetGame().GetBoss().Getpos(), m_bulletRadius, BossRadius))
 		{
-			BossEnemy::GetInstance().SetDamage();
+			SceneManager::GetGame().GetBoss().SetDamage();
 			m_bulletDeadflg = true;
 		}
 		break;

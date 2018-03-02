@@ -6,6 +6,7 @@
 #include "myEngine/Physics/CharacterController.h"
 #include "myEngine/Physics/CollisionAttr.h"
 #include "Player.h"
+#include "FallObject.h"
 
 namespace {
 	
@@ -31,27 +32,29 @@ namespace {
 			}
 			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Damage)//ユーザー定義のコリジョン属性
 			{
-				Player::GetInstance().SetDamage();//プレイヤーにダメージ
+				SceneManager::GetGame().GetPlayer().SetDamage();//プレイヤーにダメージ
 			}
-			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeedR)//ユーザー定義のコリジョン属性
+			
+
+			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeedF)//ユーザー定義のコリジョン属性
 			{
-				Player::GetInstance().SetDir(3);
-			}
-			else if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeedL)//ユーザー定義のコリジョン属性
-			{
-				Player::GetInstance().SetDir(4);
-			}
-			else if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeedF)//ユーザー定義のコリジョン属性
-			{
-				Player::GetInstance().SetDir(1);
+				SceneManager::GetGame().GetPlayer().SetDir(1);
 			}
 			else if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeedB)//ユーザー定義のコリジョン属性
 			{
-				Player::GetInstance().SetDir(2);
+				SceneManager::GetGame().GetPlayer().SetDir(2);
+			}
+			else if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeedR)//ユーザー定義のコリジョン属性
+			{
+				SceneManager::GetGame().GetPlayer().SetDir(3);
+			}
+			else if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeedL)//ユーザー定義のコリジョン属性
+			{
+				SceneManager::GetGame().GetPlayer().SetDir(4);
 			}
 			else
 			{
-				Player::GetInstance().SetDir(0);
+				//SceneManager::GetGame().GetPlayer().SetDir(0);
 			}
 			
 			//if(convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_AddSpeed)//ユーザー定義のコリジョン属性

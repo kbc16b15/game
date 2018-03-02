@@ -6,7 +6,7 @@ void Spring::Update()
 {
 	D3DXVECTOR3 toPos=m_position;
 	toPos.y += 1.0f;
-	D3DXVec3Subtract(&toPos, &m_position, &Player::GetInstance().Getpos());
+	D3DXVec3Subtract(&toPos, &m_position, &SceneManager::GetGame().GetPlayer().Getpos());
 
 	float len = D3DXVec3Length(&toPos);
 

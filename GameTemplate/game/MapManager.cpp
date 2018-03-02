@@ -20,6 +20,7 @@ MapManager::~MapManager()
 	{
 		mapIt = m_mapList.erase(mapIt);
 	}*/
+	//Release();
 }
 
 void MapManager::Release()
@@ -42,9 +43,6 @@ void MapManager::Release()
 	
 	}
 	//m_mapList.clear();
-
-
-
 	MapManager::GetMapManager().Destroy();
 }
 

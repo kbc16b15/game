@@ -48,7 +48,7 @@ private:
 	SkinModel			m_skinModel;			//スキンモデル
 	SkinModelData		m_skinModelData;		//スキンモデルデータ
 	D3DXVECTOR3			m_position;				//座標
-	D3DXVECTOR3			m_sPos;					//初期座標
+	//D3DXVECTOR3			m_sPos;					//初期座標
 	D3DXVECTOR3			m_scale;				//拡大
 	D3DXQUATERNION		m_rotation;				//回転
 	Light				m_light;				//ライト

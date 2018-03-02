@@ -1,7 +1,7 @@
 #pragma once
 #include "myEngine\Graphics\Sprite.h"
 
-class HUD :public Sprite
+class HUD
 {
 public:
 	//コンストラクタ
@@ -11,9 +11,9 @@ public:
 	//初期化
 	//modelName	モデル名
 	//position	座標
-	void Initialize(LPCTSTR modelName,D3DXVECTOR2 position)override;
-	//更新
-	void Update()override;
+	//void Initialize(LPCTSTR modelName,D3DXVECTOR2 position)override;
+	////更新
+	//void Update()override;
 
 	float Getalfa()
 	{

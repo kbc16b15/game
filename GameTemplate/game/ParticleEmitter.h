@@ -12,7 +12,7 @@ struct SParticleEmitParameter
 	float w;
 	float h;
 	float intervalTime;
-	//float deleteTime;
+	float lifeTime;
 	float Multipos;
 	D3DXVECTOR3 Multispeed;;
 	//D3DXVECTOR3 random;

@@ -3,7 +3,8 @@
 class gameCamera:public IGameObject
 {
 public:
-
+	//コンストラクタ
+	gameCamera();
 	//デストラクタ
 	~gameCamera();
 	//初期化
@@ -16,8 +17,6 @@ public:
 	//追従カメラ
 	void TrackingCamera();
 
-	//照準カメラ
-	void RockCamera();
 	//ボス戦スタートカメラ　カメラ演出も入れる？
 	void BossStartCamera();
 	//ボス戦カメラ
@@ -27,30 +26,30 @@ public:
 	//ボス固定カメラ
 	void BossRockCamera();
 
-	//インスタンスの生成
-	static void gameCamera::Create()
-	{
-		if (!m_gameCamera)
-		{
-			m_gameCamera = new gameCamera;
-		}
-	}
-
-	//インスタンスの消去
-	static  void gameCamera::Destroy()
-	{
-		delete m_gameCamera;
-		m_gameCamera = nullptr;
-	}
-	//インスタンスの取得
-	static gameCamera& GetInstance()
-	{
-		return *m_gameCamera;
-	}
+//	//インスタンスの生成
+//	static void gameCamera::Create()
+//	{
+//		if (!m_gameCamera)
+//		{
+//			m_gameCamera = new gameCamera;
+//		}
+//	}
+//
+//	//インスタンスの消去
+//	static  void gameCamera::Destroy()
+//	{
+//		delete m_gameCamera;
+//		m_gameCamera = nullptr;
+//	}
+//	//インスタンスの取得
+//	static gameCamera& GetInstance()
+//	{
+//		return *m_gameCamera;
+//	}
+//private:
+//
+//	static gameCamera* m_gameCamera;			//インスタンス
 private:
-	//コンストラクタ
-	gameCamera();
-	static gameCamera* m_gameCamera;			//インスタンス
 	D3DXVECTOR3		m_position;					//カメラ座標
 	const float		m_rotSpeed = 2.0f;			//回転速度
 	bool			m_isBossStartCamera = false;//ボス戦カメラ

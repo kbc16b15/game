@@ -32,7 +32,8 @@ public:
 	void Setjump();
 	//キャラの慣性の設定
 	void SetSubmove();
-
+	void AnimaionState();
+	//プレイヤーのバレット
 	void PlayerBullet();
 	//プレイヤー座標の取得（足元？）
 	const D3DXVECTOR3 Getpos()
@@ -101,27 +102,6 @@ public:
 		return m_characterController.IsOnGround();
 	}
 
-	//インスタンスの生成
-	static void Player::Create()
-	{
-		if (!player)
-		{
-			player = new Player;
-		}
-
-	}
-
-	//インスタンスの消去
-	static void Player::Destroy()
-	{
-		delete player;
-		player = nullptr;
-	}
-	//インスタンスの取得
-	static Player& GetInstance()
-	{
-		return *player;
-	}
 	//スキンモデルの取得
 	SkinModel* GetSkinModel()
 	{
@@ -132,8 +112,6 @@ public:
 		m_isMoveStop = isMove;
 	}
 private:
-
-	static Player* player;//インスタンス
 	enum PlayerState							//プレイヤーアニメーションの状態
 	{Stand, Dash, Jump,Damage,Dead,Bullets};
 	PlayerState			m_state=Stand;

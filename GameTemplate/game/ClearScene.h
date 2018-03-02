@@ -1,7 +1,6 @@
 #pragma once
 //#include "IGameObject.h"
 #include "IScene.h"
-#include "HUD.h"
 class ClearScene :public IScene
 {
 public:
@@ -17,9 +16,6 @@ public:
 	void /*PrePost*/Draw();
 	//フェード
 	void SceneFade();
-	//スプライト生成関数
-	HRESULT CreateSprite();
-
 	
 private:
 	//フェード
@@ -29,8 +25,9 @@ private:
 		WaitFadeOut
 	};
 	EState				m_state = Run;
-	LPD3DXSPRITE		m_sprite;						//スプライト
-	HUD					m_clearHud;							//タイトル画像
-	const D3DXVECTOR2	m_clearHudPos = { 620.0f,400.0f };	//タイトル画像の座標
+	Sprite				m_clearSprite;						//スプライト。
+	Texture				m_clearTexture;						//背景のテクスチャ。
+	const D3DXVECTOR2	m_clearPos = { 0.0f,0.0f };		//画像の座標
+	const D3DXVECTOR2	m_clearScale = { 1300.0f,900.0f };//拡大
 };
 

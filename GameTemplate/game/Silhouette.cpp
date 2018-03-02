@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Silhouette.h"
+#include "game.h"
+#include "SceneManager.h"
 #include "Player.h"
 
 Silhouette::Silhouette()
@@ -16,7 +18,7 @@ void Silhouette::Draw()
 {
 	g_pd3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_GREATER);
 	g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE,FALSE);//Z’l‚ð‘‚«ž‚Ü‚È‚¢‚æ‚¤‚É‚·‚é
-	Player::GetInstance().ShadowDraw(&Camera::GetInstance().GetViewMatrix(), &Camera::GetInstance().GetProjectionMatrix(),true, false);
+	SceneManager::GetInstance().GetGame().GetPlayer().ShadowDraw(&Camera::GetInstance().GetViewMatrix(), &Camera::GetInstance().GetProjectionMatrix(),true, false);
 	g_pd3dDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESS);
 	g_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 }
