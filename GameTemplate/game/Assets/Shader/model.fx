@@ -163,8 +163,8 @@ void CalcWorldPosAndNormalFromSkinMatrix( VS_INPUT In, out float3 Pos, out float
 void CalcWorldPosAndNormal( VS_INPUT In, out float3 Pos, out float3 Normal, out float3 Tangent )
 {
 	Pos = mul(In.Pos, g_worldMatrix );
-	Normal = mul(In.Normal, g_rotationMatrix );
-	Tangent = mul(In.Tangent, g_rotationMatrix );
+	Normal = mul(In.Normal, g_worldMatrix );
+	Tangent = mul(In.Tangent, g_worldMatrix );
 }
 /*!
  *@brief	頂点シェーダー。

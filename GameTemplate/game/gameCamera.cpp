@@ -114,7 +114,7 @@ void gameCamera::TrackingCamera()
 
 	//V‚µ‚¢‹“_‚ÌŒˆ’è
 
-	float weight = 0.7f;
+	float weight = 0.3f;
 
 	NewCameraPos = NewCameraPos*weight + CameraPosXZ*(1.0f - weight);
 
